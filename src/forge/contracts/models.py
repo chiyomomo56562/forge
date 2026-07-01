@@ -90,6 +90,22 @@ class FileCandidate(ForgeBaseModel):
     symbols: list[str] = Field(default_factory=list, description="Matched symbols or keywords.")
 
 
+class LocalizerResult(ForgeBaseModel):
+    request_id: str
+    normalized_query: str
+    keywords: list[str] = Field(default_factory=list)
+    file_candidates: list[FileCandidate] = Field(default_factory=list)
+    warnings: list[str] = Field(default_factory=list)
+
+
+class PlannerInput(ForgeBaseModel):
+    user_request: UserRequest
+    file_candidates: list[FileCandidate] = Field(default_factory=list)
+    l0_constitution: PolicyDocument
+    l1_project_policy: list[PolicyDocument] = Field(default_factory=list)
+    task_context: TaskContext | None = None
+
+
 class PlanStep(ForgeBaseModel):
     step_id: str = Field(description="Stable step identifier.")
     title: str = Field(description="Short step title.")
@@ -104,12 +120,16 @@ class PlanStep(ForgeBaseModel):
 class StructuredPlan(ForgeBaseModel):
     plan_id: str = Field(description="Stable plan identifier.")
     request_id: str = Field(description="Source user request identifier.")
+    goal: str = Field(description="Concrete implementation goal for this plan.")
     summary: str = Field(description="High-level execution strategy.")
+    strategy: str = Field(description="Planner-oriented short execution strategy.")
     assumptions: list[str] = Field(default_factory=list)
     file_candidates: list[FileCandidate] = Field(default_factory=list)
     steps: list[PlanStep] = Field(default_factory=list)
     global_risks: list[str] = Field(default_factory=list)
     success_checks: list[str] = Field(default_factory=list)
+    required_context: list[str] = Field(default_factory=list)
+    review_focus: list[str] = Field(default_factory=list)
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
     @computed_field  # type: ignore[prop-decorator]
