@@ -1,0 +1,27 @@
+name: LOCALIZER
+candidate_rules:
+  - id: LOC-1
+    description: 사용자 요청의 핵심 명사/동사와 직접 매칭되는 파일을 우선한다.
+    weight: 5
+
+  - id: LOC-2
+    description: Graphify에서 해당 심볼과 연결된 caller/callee 파일을 포함한다.
+    weight: 4
+
+  - id: LOC-3
+    description: 관련 테스트 파일을 항상 후보에 포함한다.
+    weight: 4
+
+  - id: LOC-4
+    description: 문서보다 실제 실행 코드 파일을 우선한다.
+    weight: 3
+
+  - id: LOC-5
+    description: 설정/라우팅/DI 파일은 직접 관련성이 있을 때만 포함한다.
+    weight: 2
+
+limits:
+  max_file_candidates: 12
+  max_test_candidates: 5
+  max_docs: 3
+  include_metadata_only: true

@@ -1,0 +1,80 @@
+id: PLANNER
+version: 0.1
+
+input_contract:
+  required:
+    - user_request
+    - file_candidates
+    - l0_constitution
+    - l1_project_policy
+
+output_contract:
+  artifact: structured_plan
+  format: json
+  required_fields:
+    - goal
+    - target_files
+    - steps
+    - strategy
+    - risks
+    - assumptions
+    - required_context
+    - review_focus
+
+planning_rules:
+  - id: PLAN-001
+    title: stay_within_user_scope
+    severity: high
+    description: 사용자 요청 범위를 넘는 리팩터링이나 기능 추가를 계획하지 않는다.
+    action: fail
+
+  - id: PLAN-002
+    title: prefer_existing_files
+    severity: medium
+    description: 새 파일 생성보다 기존 file_candidates 내 파일 수정을 우선한다.
+    action: warn
+
+  - id: PLAN-003
+    title: explicit_target_files
+    severity: high
+    description: 수정 대상 파일은 반드시 target_files에 명시한다.
+    action: fail
+
+  - id: PLAN-004
+    title: no_code_generation
+    severity: medium
+    description: Planner는 코드를 작성하지 않고 구현 전략과 단계만 작성한다.
+    action: warn
+
+  - id: PLAN-005
+    title: identify_risks
+    severity: high
+    description: 인증, 권한, 데이터 손실, public API 변경, 마이그레이션 가능성은 risks에 명시한다.
+    action: fail
+
+  - id: PLAN-006
+    title: request_context_when_needed
+    severity: medium
+    description: 구현에 필요한 코드, 테스트, 문서가 부족하면 required_context에 명시한다.
+    action: warn
+
+target_file_rules:
+  max_target_files: 5
+  allow_new_files: true
+  new_file_requires_reason: true
+  prefer_candidate_files: true
+
+risk_policy:
+  human_required_when:
+    - destructive_change
+    - database_migration
+    - public_api_breaking_change
+    - security_sensitive_change
+    - dependency_major_upgrade
+
+replan_policy:
+  replan_when:
+    - file_candidates_are_insufficient
+    - reviewer_feedback_changes_scope
+    - target_file_missing
+    - implementation_requires_architecture_change
