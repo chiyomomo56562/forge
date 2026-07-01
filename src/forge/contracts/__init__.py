@@ -1,0 +1,41 @@
+"""Shared data contracts for the loop + memory architecture."""
+
+from .models import (
+    CodeContext,
+    CodeSnippet,
+    EpisodeCandidate,
+    FileCandidate,
+    MemoryLayer,
+    PatchChange,
+    PatchResult,
+    PlanStep,
+    PolicyDocument,
+    RetryDecision,
+    ReviewFeedback,
+    ReviewIssue,
+    StructuredPlan,
+    TaskContext,
+    TaskEvent,
+    TaskContextRef,
+    UserRequest,
+)
+
+__all__ = [
+    "CodeContext",
+    "CodeSnippet",
+    "EpisodeCandidate",
+    "FileCandidate",
+    "MemoryLayer",
+    "PatchChange",
+    "PatchResult",
+    "PlanStep",
+    "PolicyDocument",
+    "RetryDecision",
+    "ReviewFeedback",
+    "ReviewIssue",
+    "StructuredPlan",
+    "TaskContext",
+    "TaskEvent",
+    "TaskContextRef",
+    "UserRequest",
+]
