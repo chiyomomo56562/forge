@@ -217,6 +217,15 @@ class PatchResult(ForgeBaseModel):
     generated_at: datetime = Field(default_factory=datetime.utcnow)
 
 
+class ReviewerInput(ForgeBaseModel):
+    user_request: UserRequest
+    plan: StructuredPlan
+    patch: PatchResult
+    l0_constitution: PolicyDocument
+    l1_project_policy: list[PolicyDocument] = Field(default_factory=list)
+    code_context: CodeContext | None = None
+
+
 class ReviewIssue(ForgeBaseModel):
     issue_id: str = Field(description="Stable issue identifier.")
     severity: Priority
@@ -238,6 +247,13 @@ class ReviewFeedback(ForgeBaseModel):
     executed_checks: list[str] = Field(default_factory=list)
     artifacts: list[str] = Field(default_factory=list, description="Logs, reports, or test outputs.")
     reviewed_at: datetime = Field(default_factory=datetime.utcnow)
+
+
+class RetryControllerInput(ForgeBaseModel):
+    user_request: UserRequest
+    plan: StructuredPlan
+    feedback: ReviewFeedback
+    retry_count: int = Field(default=0, ge=0)
 
 
 class RetryDecision(ForgeBaseModel):
