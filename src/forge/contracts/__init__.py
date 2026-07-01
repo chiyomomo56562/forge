@@ -2,6 +2,7 @@
 
 from .models import (
     CodeContext,
+    CoderInput,
     CodeSnippet,
     EpisodeCandidate,
     FileCandidate,
@@ -26,6 +27,7 @@ from .models import (
 
 __all__ = [
     "CodeContext",
+    "CoderInput",
     "CodeSnippet",
     "EpisodeCandidate",
     "FileCandidate",

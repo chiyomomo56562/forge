@@ -193,6 +193,12 @@ class CodeContext(ForgeBaseModel):
     open_questions: list[str] = Field(default_factory=list)
 
 
+class CoderInput(ForgeBaseModel):
+    user_request: UserRequest
+    plan: StructuredPlan
+    code_context: CodeContext
+
+
 class PatchChange(ForgeBaseModel):
     path: str = Field(description="Repository-relative file path.")
     change_type: ChangeType
