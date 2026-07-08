@@ -1,0 +1,86 @@
+# ============================================================
+# Agent Configuration
+# 에이전트의 LLM, 루프 주기, 평가 기준 등 핵심 동작 파라미터
+# ============================================================
+
+version: 1
+
+# --- LLM Settings ---
+llm:
+  backend: openai              # openai | anthropic | local
+  model: gpt-4o
+  temperature: 0.3
+  max_tokens: 4096
+  timeout_seconds: 120
+  max_retries: 3
+
+# --- Embedding Settings ---
+embedding:
+  backend: local               # local (sentence-transformers) | openai
+  model: all-MiniLM-L6-v2
+  dimension: 384               # all-MiniLM-L6-v2 = 384차원
+  cache_dir: data/cache/embeddings
+
+# --- Inner Loop Settings ---
+inner_loop:
+  max_retries: 3               # 실행 단계 최대 재시도
+  eval_retries: 3              # 평가 단계 CIB 미달 시 재시도
+  context_top_k: 5             # 선택적 주입: 초기 검색 개수
+  context_expand_k: 10        # 점진적 확장 시 추가 검색 개수
+  token_budget: 6000           # 컨텍스트 주입 토큰 예산 (하드 리밋)
+
+# --- Outer Loop Settings ---
+outer_loop:
+  # 위험도별 기본 N값 (에피소드 누적 개수)
+  base_N:
+    low: 100                   # 낮은 위험도
+    medium: 50                 # 보통 위험도
+    high: 20                   # 고위험
+    critical: 10               # 치명적 위험
+  default_risk_level: medium
+  window_size: 50              # 셀프 모델 재계산 윈도우 (최근 N개 에피소드)
+  adaptive_N:
+    enabled: true
+    min_multiplier: 0.5        # base_N * 0.5 (최소)
+    max_multiplier: 2.0        # base_N * 2.0 (최대)
+    high_volatility_threshold: 0.15
+    low_volatility_threshold: 0.03
+
+# --- Meta Loop Settings ---
+meta_loop:
+  episode_threshold: 1000      # 정기 진화: 에피소드 누적 임계값
+  outer_loop_threshold: 100   # 긴급 점검: 아우터 루프 반복 횟수
+  stagnation_window: 50       # 정체 판단 윈도우
+  stagnation_delta: 0.01      # 코히어런스 변화량 임계치 (이하 → 정체)
+
+# --- CIB (Constitutional Invariant) ---
+cib:
+  threshold: 0.95             # 학습/행동 허용 임계값
+  emergency_threshold: 0.97   # 수학적 가정 위반 시 자동 상향값
+  scoring_method: direction    # direction (방향성 함수 C) | simple
+
+# --- Phoenix Auditor (M15) ---
+phoenix_auditor:
+  domain_weight: 0.6           # 도메인 점수 가중치 (60%)
+  reflection_weight: 0.4      # 성찰 점수 가중치 (40%)
+  threshold: 0.95             # Phoenix_Score 통과 임계값
+  calibration_deviation_alert: 0.2  # 수행자 vs 피닉스 편차 경고 임계값
+  separate_session: true       # 수행자와 별도 세션 사용 여부
+
+# --- Growth Rate Regulator (M16) ---
+growth_regulator:
+  crash:
+    window: 20                 # 비교 윈도우
+    delta_threshold: 0.15     # 성공률 하락 임계값
+  stagnation:
+    window: 50
+    coherence_delta: 0.01
+  overgrowth:
+    days: 7
+    coherence_rise: 0.2       # 7일 내 코히어런스 상승 임계값
+
+# --- Coherence Index (M17) ---
+coherence:
+  cib_weight: 0.5
+  calibration_weight: 0.5
+  window: 50

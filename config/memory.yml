@@ -1,0 +1,113 @@
+# ============================================================
+# Memory Configuration
+# 각 기억 계층(L1~L5)의 저장소 경로, 검색 파라미터, 캐시 정책
+# ============================================================
+
+version: 1
+
+# --- L1: Episodic Memory (Chroma DB) ---
+episodic:
+  chroma_path: data/memory/episodic/chroma
+  collection_name: episodes
+  raw_events_dir: data/memory/episodic/raw_events
+  retrieval:
+    default_top_k: 5
+    density_first: true        # reflection 데이터 우선 검색
+    expand_step: 5             # 점진적 확장 시 추가 개수
+  cache:
+    enabled: true
+    dir: data/cache/embeddings
+    max_size_mb: 500
+
+# --- L2: Semantic Memory (NetworkX Graph + JSON) ---
+semantic:
+  graph:
+    graphml_path: data/memory/semantic/graph/knowledge_graph.graphml
+    gpickle_path: data/memory/semantic/graph/knowledge_graph.gpickle
+    schema_path: data/memory/semantic/graph/schema.yml
+  json:
+    concepts_path: data/memory/semantic/json/concepts.json
+    entities_path: data/memory/semantic/json/entities.json
+    relations_path: data/memory/semantic/json/relations.json
+  snapshots_dir: data/memory/semantic/snapshots
+  storage_backend: graph       # graph (NetworkX) | json | both
+  retrieval:
+    max_depth: 3               # 그래프 탐색 최대 깊이
+    max_nodes: 50              # 검색 결과 최대 노드 수
+
+# --- L3: Procedural Memory (SQLite) ---
+procedural:
+  db_path: data/memory/procedural/skills.sqlite3
+  registry_path: data/memory/procedural/skill_registry.json
+  migrations_dir: data/memory/procedural/migrations
+  lifecycle:
+    active_threshold: 0.9      # Seed → Active 전이 조건 (success_rate)
+    degrading_threshold: 0.5   # Active → Degrading 전이 조건
+    archive_threshold: 0.2     # Degrading → Archived 전이 조건
+    archive_idle_days: 30      # 미사용 기간 기준 아카이브
+    recovery_threshold: 0.7    # Degrading → Active 복귀 조건
+  execution:
+    timeout_seconds: 30
+    sandbox: true
+    allowed_modules:           # exec() 허용 모듈 화이트리스트
+      - math
+      - json
+      - re
+      - datetime
+      - collections
+      - itertools
+      - functools
+
+# --- L4: Constitution (YAML) ---
+constitution:
+  dir: constitution
+  files:
+    base: base.yml
+    safety: safety.yml
+    interaction_policy: interaction_policy.yml
+    tool_policy: tool_policy.yml
+  scenarios:
+    drafts_dir: constitution/scenarios/drafts
+    approved_dir: constitution/scenarios/approved
+
+# --- L5: Identity (SQLite + YAML) ---
+identity:
+  dir: identity
+  db_path: identity/identity.sqlite3
+  yaml_files:
+    identity: identity/identity.yml
+    self_model: identity/self_model.yml
+    capabilities: identity/capabilities.yml
+  self_model:
+    window_size: 50             # 윈도우 통계 계산 기준
+    calibration_threshold: 0.05 # calibrated 판정 편차 임계값
+
+# --- Working Memory ---
+working:
+  dir: data/memory/working
+  sessions_dir: data/memory/working/sessions
+  scratchpad_path: data/memory/working/scratchpad.json
+  active_context_path: data/memory/working/active_context.json
+
+# --- Audit ---
+audit:
+  dir: data/memory/audit
+  writes_log: data/memory/audit/memory_writes.jsonl
+  reads_log: data/memory/audit/memory_reads.jsonl
+  deletions_log: data/memory/audit/memory_deletions.jsonl
+  adaptive_N_log: data/memory/audit/adaptive_N_log.jsonl
+
+# --- Dual Storage Strategy (이중 저장 전략) ---
+dual_storage:
+  # 반성에서 추출된 일반화 힌트의 라우팅 규칙
+  general_hint:
+    target_layer: L2           # 범용적 지식 → 시맨틱 그래프
+    storage: graph_node
+  tool_specific_hint:
+    target_layer: L3           # 도구 종속적 절차 → procedural DB
+    storage: reflection_hints_field
+
+# --- Consolidation (L1 → L2/L3 추출) ---
+consolidation:
+  batch_size: 20               # 한 번에 처리할 에피소드 수
+  min_episodes_for_generalization: 3  # 일반화에 필요한 최소 에피소드 수

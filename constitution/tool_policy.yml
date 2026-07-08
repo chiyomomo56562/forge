@@ -1,0 +1,109 @@
+# ============================================================
+# L4 Constitution — Tool Policy
+# 도구 사용 정책: 승인 필요 도구, 제한 도구, 금지 도구
+# ============================================================
+
+version: 1
+
+# --- 승인 필요 도구 (Confirmation Required Tools) ---
+# 이 도구들은 실행 전 사용자 승인 필수.
+require_confirmation_for:
+  - sending_email
+  - deleting_files
+  - external_purchase
+  - external_api_write
+  - bulk_operation
+  - memory_deletion
+
+# --- 도구 분류 (Tool Classification) ---
+tool_classes:
+  # 자율 사용 가능 (승인 불필요)
+  autonomous:
+    - id: file_read
+      description: "파일 읽기 (읽기 전용)"
+      rate_limit: null
+
+    - id: memory_search
+      description: "기억 검색 (L1/L2/L3 조회)"
+      rate_limit: null
+
+    - id: code_exec_sandboxed
+      description: "샌드박스 내 코드 실행"
+      rate_limit: "30 per minute"
+      constraints:
+        timeout: 30
+        sandbox: true
+        allowed_modules:
+          - math
+          - json
+          - re
+          - datetime
+          - collections
+          - itertools
+          - functools
+
+    - id: web_search
+      description: "웹 검색 (읽기 전용)"
+      rate_limit: "10 per minute"
+
+    - id: write_runs
+      description: "runs/ 디렉터리에 실행 결과 저장"
+      rate_limit: null
+
+  # 승인 필요 (사용자 확인 후 실행)
+  confirmation_required:
+    - id: file_write
+      description: "파일 쓰기 (새 파일 또는 기존 파일 수정)"
+      confirmation_key: external_api_write
+
+    - id: file_delete
+      description: "파일 삭제"
+      confirmation_key: deleting_files
+
+    - id: email_send
+      description: "이메일 전송"
+      confirmation_key: sending_email
+
+    - id: api_call_write
+      description: "외부 API 쓰기 호출 (POST/PUT/DELETE)"
+      confirmation_key: external_api_write
+
+    - id: purchase
+      description: "외부 결제 / 구매"
+      confirmation_key: external_purchase
+
+  # 금지 도구 (어떤 상황에서도 사용 불가)
+  forbidden:
+    - id: exec_unsandboxed
+      description: "샌드박스 외부 코드 실행"
+      reason: "보안 위험 — 시스템 전체 손상 가능"
+
+    - id: access_metadata
+      description: "클라우드 메타데이터 엔드포인트 접근"
+      reason: "인증 정보 탈취 위험"
+
+    - id: store_credentials
+      description: "인증 정보를 장기 기억에 저장"
+      reason: "민감 정보 보호"
+
+# --- 도구 사용 로깅 (Tool Usage Audit) ---
+audit:
+  log_all_tool_calls: true
+  log_path: data/memory/audit/tool_calls.jsonl
+  log_fields:
+    - timestamp
+    - tool_id
+    - tool_class
+    - input_summary
+    - output_summary
+    - success
+    - duration_ms
+    - user_approved
+
+# --- 스킬(L3) 실행 정책 ---
+skill_execution:
+  # L3 스킬을 도구로 노출할 때의 정책
+  expose_active_skills_only: true    # Active 상태 스킬만 도구로 노출
+  degrading_skills_warning: true     # Degrading 스킬 사용 시 경고
+  archived_skills_hidden: true       # Archived 스킬은 숨김
+  max_concurrent_executions: 3       # 동시 스킬 실행 수 제한

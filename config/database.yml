@@ -1,0 +1,62 @@
+# ============================================================
+# Database Configuration
+# 각 저장소의 물리적 경로 및 연결 설정
+# ============================================================
+
+version: 1
+
+# --- Chroma DB (L1: Episodic) ---
+chroma:
+  path: data/memory/episodic/chroma
+  collection_name: episodes
+  # Chroma 설정
+  settings:
+    anonymized_telemetry: false
+    allow_reset: false
+
+# --- SQLite (L3: Procedural / L5: Identity) ---
+sqlite:
+  procedural:
+    path: data/memory/procedural/skills.sqlite3
+    pragma:
+      journal_mode: WAL         # Write-Ahead Logging (동시성)
+      foreign_keys: true
+      busy_timeout: 5000         # ms
+  identity:
+    path: identity/identity.sqlite3
+    pragma:
+      journal_mode: WAL
+      foreign_keys: true
+      busy_timeout: 5000
+
+# --- NetworkX Graph (L2: Semantic) ---
+graph:
+  graphml_path: data/memory/semantic/graph/knowledge_graph.graphml
+  gpickle_path: data/memory/semantic/graph/knowledge_graph.gpickle
+  schema_path: data/memory/semantic/graph/schema.yml
+  # 그래프 속성
+  directed: true                # 방향성 그래프
+  node_attrs:
+    - id
+    - type
+    - label
+    - source_episode
+    - confidence
+    - created_at
+  edge_attrs:
+    - source
+    - target
+    - relation
+    - weight
+    - source_episode
+    - created_at
+
+# --- PostgreSQL (L3 옵션 — 사용 시 활성화) ---
+postgres:
+  enabled: false
+  host: localhost
+  port: 5432
+  database: forge
+  user: forge
+  password: ""                  # .env에서 관리 권장
+  pool_size: 5

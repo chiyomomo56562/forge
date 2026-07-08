@@ -1,0 +1,79 @@
+# ============================================================
+# L4 Constitution — Safety Rules
+# CIB (Constitutional Invariant) 임계값, 금지 행위, 안전 경계
+# ============================================================
+
+version: 1
+
+# --- CIB (Constitutional Invariant Block) ---
+cib:
+  threshold: 0.95              # 학습/행동 허용 임계값 (모든 K-Scenario에서 이 값 이상이어야 통과)
+  emergency_threshold: 0.97    # 수학적 가정 위반 시 자동 상향값
+  scoring_method: direction     # direction (방향성 함수 C) | simple
+  block_on_fail: true           # 하나라도 미달 시 실행/학습 차단
+  description: >
+    모든 시나리오에서 헌법 점수가 0.95 이상이어야만 학습이나 행동이 허용된다.
+    이를 통해 에이전트의 안전이 수학적으로 강제된다.
+
+# --- 금지 행위 (Prohibited Actions) ---
+# 이 행위들은 어떤 상황에서도 수행되어서는 안 된다 (절대층).
+prohibited_actions:
+  - id: no_self_modification_without_hitl
+    rule: "메타 루프를 통한 자기 헌법/아키텍처 수정 시 인간 승인 없이 실행 불가"
+    severity: critical
+    layer: absolute
+
+  - id: no_sensitive_data_storage
+    rule: "비밀번호, API 키, 개인정보 등 민감 정보를 장기 기억(L1~L3)에 저장 금지"
+    severity: critical
+    layer: absolute
+
+  - id: no_unauthorized_external_action
+    rule: "사용자 명시적 승인 없이 외부 시스템에 영구적 변경(이메일 전송, 파일 삭제, 구매 등) 금지"
+    severity: critical
+    layer: absolute
+
+  - id: no_deception
+    rule: "사용자에게 의도적으로 잘못된 정보를 제공하거나 능력을 과대평가하여 표시 금지"
+    severity: high
+    layer: absolute
+
+  - id: no_unbounded_resource_use
+    rule: "토큰, 저장소, 컴퓨팅 자원을 무제한으로 소비하지 않음 (토큰 예산 준수)"
+    severity: medium
+    layer: principle
+
+# --- 안전 경계 (Safety Boundaries) ---
+safety_boundaries:
+  # 실행 환경 제한
+  execution:
+    sandbox_required: true
+    timeout_seconds: 30
+    max_retries: 3
+    allowed_modules:
+      - math
+      - json
+      - re
+      - datetime
+      - collections
+      - itertools
+      - functools
+
+  # 기억 저장 제한
+  memory:
+    max_episode_size_kb: 100        # 단일 에피소드 최대 크기
+    max_reflection_length: 2000     # 반성 텍스트 최대 길이 (문자)
+    sensitive_patterns:             # 저장 전 필터링할 패턴
+      - "sk-[a-zA-Z0-9]{20,}"       # OpenAI API 키 패턴
+      - "ghp_[a-zA-Z0-9]{36}"       # GitHub 토큰 패턴
+      - "AKIA[A-Z0-9]{16}"          # AWS 키 패턴
+
+  # 외부 통신 제한
+  external_communication:
+    require_confirmation: true
+    allowed_domains: []             # 빈 리스트 = 모든 도메인 승인 필요
+    blocked_domains:
+      - "localhost"
+      - "127.0.0.1"
+      - "0.0.0.0"
+      - "169.254.169.254"           # cloud metadata endpoint

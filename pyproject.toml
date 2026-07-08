@@ -1,0 +1,76 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "forge"
+version = "0.1.0"
+description = "Gnosis — a self-evolving agent framework with layered memory, inner/outer/meta loops, and constitutional governance."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Forge Team" }]
+
+dependencies = [
+    # --- L1: Episodic Memory (Chroma DB) ---
+    "chromadb>=0.5.0,<0.7.0",
+
+    # --- L2: Semantic Memory (NetworkX) ---
+    "networkx>=3.2",
+
+    # --- L3: Procedural Memory (SQLite — 표준 라이브러리, 별도 설치 불필요) ---
+
+    # --- L4: Constitution (YAML) ---
+    "pyyaml>=6.0",
+
+    # --- Data Models ---
+    "pydantic>=2.5",
+
+    # --- LLM Clients ---
+    "openai>=1.0",
+    "anthropic>=0.20",
+
+    # --- Embeddings (로컬 폴백) ---
+    "sentence-transformers>=2.2",
+
+    # --- Utils ---
+    "python-dotenv>=1.0",
+    "rich>=13.0",          # 콘솔 출력 / 로깅 포맷
+    "click>=8.1",          # CLI
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+    "pytest-cov>=4.1",
+    "ruff>=0.3",
+    "mypy>=1.8",
+    "ipykernel>=6.0",      # notebooks
+]
+postgres = [
+    "psycopg2-binary>=2.9",  # L3 PostgreSQL 옵션
+]
+
+[project.scripts]
+forge = "agent.main:cli"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "-v --tb=short"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_return_any = true

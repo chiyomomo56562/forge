@@ -1,4 +1,56 @@
+# --- Python ---
 __pycache__/
 *.py[cod]
-data/*.db
+*.egg-info/
+*.egg
+dist/
+build/
+.eggs/
+
+# --- Virtual Environments ---
 .venv/
+venv/
+env/
+
+# --- Environment Variables (시크릿) ---
+.env
+
+# --- Data (런타임 생성 파일) ---
+data/memory/episodic/chroma/chroma.sqlite3
+data/memory/episodic/chroma/index/
+data/memory/procedural/skills.sqlite3
+data/memory/semantic/graph/*.graphml
+data/memory/semantic/graph/*.gpickle
+identity/identity.sqlite3
+data/memory/audit/*.jsonl
+data/logs/*.log
+data/cache/embeddings/*
+data/cache/tool_results/*
+data/memory/working/sessions/*
+data/memory/episodic/raw_events/*.jsonl
+data/memory/semantic/snapshots/
+
+# --- Runs (이너 루프 실행 결과) ---
+runs/plans/*
+runs/evaluations/*
+runs/reflections/*
+
+# --- IDE ---
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# --- OS ---
+.DS_Store
+Thumbs.db
+
+# --- Jupyter ---
+.ipynb_checkpoints/
+
+# --- Type Checking / Linting ---
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+htmlcov/
+.coverage

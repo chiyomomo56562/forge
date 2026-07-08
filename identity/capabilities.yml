@@ -1,0 +1,100 @@
+# ============================================================
+# L5 Identity — Capabilities Definition
+# 작업 카테고리별 초기 역량 수치
+# 아우터 루프가 에피소드 누적에 따라 동적으로 갱신
+# ============================================================
+
+version: 1
+
+# --- 작업 카테고리별 역량 ---
+# 각 카테고리의 초기 역량 수치 (0.0~1.0).
+# success_rate: 해당 카테고리의 평균 성공률
+# confidence: 자신의 능력에 대한 자신감 (예측 성공 점수)
+# effort_estimate: 예상 소요 노력 (상대적, 0.0~1.0, 낮을수록 효율적)
+# total_attempts: 해당 카테고리 총 시도 횟수
+categories:
+  - id: coding
+    label: "코딩 / 코드 작성"
+    success_rate: 0.5             # 초기값 (데이터 축적 전)
+    confidence: 0.7               # 초기 자신감 (과신 경향 반영)
+    effort_estimate: 0.6
+    total_attempts: 0
+
+  - id: translation
+    label: "번역"
+    success_rate: 0.5
+    confidence: 0.7
+    effort_estimate: 0.4
+    total_attempts: 0
+
+  - id: search
+    label: "검색 / 정보 탐색"
+    success_rate: 0.5
+    confidence: 0.7
+    effort_estimate: 0.3
+    total_attempts: 0
+
+  - id: analysis
+    label: "데이터 분석"
+    success_rate: 0.5
+    confidence: 0.7
+    effort_estimate: 0.7
+    total_attempts: 0
+
+  - id: writing
+    label: "문서 작성"
+    success_rate: 0.5
+    confidence: 0.7
+    effort_estimate: 0.5
+    total_attempts: 0
+
+  - id: reasoning
+    label: "추론 / 논리"
+    success_rate: 0.5
+    confidence: 0.7
+    effort_estimate: 0.6
+    total_attempts: 0
+
+  - id: visualization
+    label: "데이터 시각화"
+    success_rate: 0.5
+    confidence: 0.7
+    effort_estimate: 0.6
+    total_attempts: 0
+
+  - id: file_management
+    label: "파일 관리"
+    success_rate: 0.5
+    confidence: 0.7
+    effort_estimate: 0.3
+    total_attempts: 0
+
+  - id: web_interaction
+    label: "웹 상호작용"
+    success_rate: 0.5
+    confidence: 0.7
+    effort_estimate: 0.4
+    total_attempts: 0
+
+  - id: general
+    label: "일반 작업"
+    success_rate: 0.5
+    confidence: 0.7
+    effort_estimate: 0.5
+    total_attempts: 0
+
+# --- 역량 갱신 정책 ---
+update_policy:
+  # 아우터 루프가 역량 수치를 갱신하는 기준
+  window_size: 50                 # 최근 N개 에피소드 기준
+  min_attempts_for_update: 3      # 이 시도 횟수 이상이어야 통계 갱신
+  smoothing_factor: 0.3           # EMA(Exponential Moving Average) 스무딩
+  # 새 success_rate = (1-α) × 기존 + α × 최근윈도우평균, α=0.3
+
+# --- 미지원 카테고리 처리 ---
+unknown_category:
+  default_success_rate: 0.5
+  default_confidence: 0.7
+  default_effort: 0.5
+  label: "알 수 없는 작업"
+  note: "데이터가 축적되면 새 카테고리로 자동 등록"
