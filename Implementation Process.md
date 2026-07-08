@@ -85,7 +85,6 @@ forge/
 ├── scripts/
 ├── tests/
 ├── notebooks/
-└── runs/            (plans/, evaluations/, reflections/)
 ```
 
 ### 0.2 프로젝트 설정
@@ -94,7 +93,7 @@ forge/
 |------|------|------|
 | 의존성 정의 | `pyproject.toml` | chromadb, networkx, pyyaml, sqlite3(표준), pydantic, openai/anthropic SDK 등 |
 | 환경 변수 | `.env` | LLM API 키, DB 경로, 임베딩 모델명 등 |
-| Git 제외 | `.gitignore` | data/, runs/, .env, *.sqlite3, __pycache__/ |
+| Git 제외 | `.gitignore` | data/, .env, *.sqlite3, __pycache__/, working/sessions/*/ |
 | 에이전트 설정 | `config/agent.yml` | 모델명, temperature, max_tokens, 기본 N값 |
 | 메모리 설정 | `config/memory.yml` | 각 계층별 저장소 경로, 검색 top_k, 캐시 정책 |
 | DB 설정 | `config/database.yml` | Chroma 경로, SQLite 경로, 그래프 파일 경로 |
@@ -496,17 +495,17 @@ def route_hint(hint: str, hint_type: str) -> str:
 #### 단계 1: 계획 수립 (Planning)
 
 ```
-입력 → context_builder (선택적 주입) → planner (계획 수립) → /runs/plans/ 저장
+입력 → context_builder (선택적 주입) → planner (계획 수립) → working/sessions/{sid}/plan.json 저장
 ```
 
 - MemoryManager.retrieve()로 L1/L2/L3에서 관련 기억 N개 검색
 - 밀도 우선: reflection 데이터 우선, 필요시 원본 에피소드 확장
-- 계획 결과를 `runs/plans/{plan_id}.json`에 저장
+- 계획 결과를 `data/memory/working/sessions/{session_id}/plan.json`에 스테이징
 
 #### 단계 2: 실행 (Execution)
 
 ```
-계획 → tool_registry 호출 → 결과 생성 → /runs/evaluations/ 준비
+계획 → tool_registry 호출 → 결과 생성 → working/sessions/{sid}/ 준비
 ```
 
 - 실행 중 저장: 성공/실패 상태, Pain Index (실행 단계에서는 성공 점수 미정이므로 빈 값)
@@ -516,14 +515,14 @@ def route_hint(hint: str, hint_type: str) -> str:
 #### 단계 3: 평가 (Evaluation)
 
 ```
-결과 → CIBGuard.evaluate() + Phoenix Auditor 채점 → /runs/evaluations/ 저장
+결과 → CIBGuard.evaluate() + Phoenix Auditor 채점 → working/sessions/{sid}/evaluation.json 저장
 ```
 
 - **CIB 검증:** 헌법 K-Scenarios에 결과 대입, 방향성 함수 C 산출, 0.95 이상 시 통과
 - **Phoenix Auditor (M15):** 수행자와 구조적 분리된 평가
   - 별도 프롬프트/세션으로 도메인 점수(60%) + 성찰 점수(40%) = Phoenix_Score 산출
   - CIB 점수와 Phoenix_Score **둘 다 0.95 이상**이어야 학습 허용
-- 평가 결과를 `runs/evaluations/{eval_id}.json`에 저장
+- 평가 결과를 `data/memory/working/sessions/{session_id}/evaluation.json`에 스테이징
 - **평가 단계 재시도:** CIB 미달 시 계획 수정 후 재실행 (최대 3회)
 
 #### 단계 4: 반성 (Reflection)
@@ -539,7 +538,7 @@ def route_hint(hint: str, hint_type: str) -> str:
   - 범용 지식 → L2 그래프 (consolidation.py)
   - 도구 종속적 절차 → L3 reflection_hints (skill_store.py)
 - Pain Index 확정: `pain_index = 1 - success_score` (평가 단계에서 성공 점수 확정 후)
-- 반성 결과를 `runs/reflections/{reflection_id}.json`에 저장
+- 반성 결과를 `data/memory/working/sessions/{session_id}/reflection.json`에 스테이징 → L1 확정 저장 후 세션 정리
 
 **Pain Index 계산:**
 
@@ -554,7 +553,7 @@ pain_index = 1 - success_score
 ```
 
 **테스트:** `tests/` 전체
-- [ ] 계획 수립 → /runs/plans/ 파일 생성
+- [ ] 계획 수립 → working/sessions/{sid}/plan.json 스테이징
 - [ ] 실행 → 도구 호출 결과 저장
 - [ ] CIB 평가 → 0.95 미달 시 차단
 - [ ] Phoenix Auditor → 6:4 채점 정상
@@ -568,7 +567,7 @@ pain_index = 1 - success_score
 - [ ] 이너 루프 4단계 E2E 작동 (입력 → 반성 저장)
 - [ ] 선택적 주입 (밀도 우선, 점진적 확장) 작동
 - [ ] CIB 게이트 + Phoenix Auditor 이중 평가 작동
-- [ ] /runs/ 폴더에 계획/평가/반성 결과 저장
+- [ ] working/sessions/에 계획/평가/반성 결과 스테이징 → L1 확정 저장
 - [ ] 이중 저장 전략 (L2/L3) 반성 힌트 분산 저장
 - [ ] Pain Index 계산 (실행 시 빈값 → 평가 후 확정)
 - [ ] 모든 이너 루프 테스트 통과

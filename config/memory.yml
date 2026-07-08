@@ -88,6 +88,10 @@ working:
   sessions_dir: data/memory/working/sessions
   scratchpad_path: data/memory/working/scratchpad.json
   active_context_path: data/memory/working/active_context.json
+  # 이너 루프 사이클별 임시 결과 스테이징 (L1 확정 저장 후 세션 정리)
+  session_staging:
+    enabled: true
+    cleanup_after_persist: true    # L1 저장 후 세션 디렉터리 자동 정리
 
 # --- Audit ---
 audit:

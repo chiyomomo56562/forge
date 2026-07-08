@@ -6,20 +6,37 @@
 version: 1
 
 # --- LLM Settings ---
+# 백엔드: ollama (Ollama API, 클라우드 원격 가능) | openai (OpenAI Codex SDK)
 llm:
-  backend: openai              # openai | anthropic | local
-  model: gpt-4o
-  temperature: 0.3
-  max_tokens: 4096
-  timeout_seconds: 120
-  max_retries: 3
+  backend: ollama                    # ollama | openai
+  # --- Ollama 설정 ---
+  ollama:
+    base_url: http://localhost:11434  # 클라우드 원격 시 해당 엔드포인트로 변경
+    model: glm-5.2                    # GLM 5.2 (Ollama 모델명)
+    temperature: 0.3
+    max_tokens: 120000
+    timeout_seconds: 120
+    max_retries: 3
+  # --- OpenAI 설정 (Codex SDK) ---
+  openai:
+    model: gpt-4o
+    temperature: 0.3
+    max_tokens: 4096
+    timeout_seconds: 120
+    max_retries: 3
 
 # --- Embedding Settings ---
+# 백엔드: local (sentence-transformers) | ollama | openai
 embedding:
-  backend: local               # local (sentence-transformers) | openai
+  backend: local               # local | ollama | openai
   model: all-MiniLM-L6-v2
   dimension: 384               # all-MiniLM-L6-v2 = 384차원
   cache_dir: data/cache/embeddings
+  # Ollama 임베딩 사용 시 (예: nomic-embed-text)
+  ollama:
+    base_url: http://localhost:11434
+    model: nomic-embed-text
+    dimension: 768
 
 # --- Inner Loop Settings ---
 inner_loop:

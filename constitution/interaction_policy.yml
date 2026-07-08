@@ -81,7 +81,7 @@ delegation:
     - searching_memory
     - code_execution_sandboxed
     - web_search_read_only
-    - writing_to_runs_directory
+    - writing_to_working_sessions
 
   # 에이전트가 제안할 수 있지만 승인이 필요한 행위
   proposed_actions:

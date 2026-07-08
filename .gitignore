@@ -30,10 +30,8 @@ data/memory/working/sessions/*
 data/memory/episodic/raw_events/*.jsonl
 data/memory/semantic/snapshots/
 
-# --- Runs (이너 루프 실행 결과) ---
-runs/plans/*
-runs/evaluations/*
-runs/reflections/*
+# --- Working Memory Sessions (이너 루프 임시 결과, L1 저장 후 정리) ---
+data/memory/working/sessions/*/
 
 # --- IDE ---
 .vscode/

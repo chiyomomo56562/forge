@@ -46,8 +46,8 @@ tool_classes:
       description: "웹 검색 (읽기 전용)"
       rate_limit: "10 per minute"
 
-    - id: write_runs
-      description: "runs/ 디렉터리에 실행 결과 저장"
+    - id: write_working_sessions
+      description: "working/sessions/ 디렉터리에 이너 루프 임시 결과 저장"
       rate_limit: null
 
   # 승인 필요 (사용자 확인 후 실행)

@@ -52,7 +52,7 @@ forge/
 │   │   │   └── skill_registry.json
 │   │   │
 │   │   ├── working/               # 단기 작업 메모리, 세션 상태
-│   │   │   ├── sessions/
+│   │   │   ├── sessions/            # 이너 루프 사이클별 임시 결과 (plan/evaluation/reflection 스테이징)
 │   │   │   ├── scratchpad.json
 │   │   │   └── active_context.json
 │   │   │
@@ -160,11 +160,6 @@ forge/
 └── notebooks/
     ├── memory_debug.ipynb
     └── graph_inspection.ipynb
-
-runs/                               # 이너 루프 실행 결과 저장
-├── plans/                          # 계획 수립 단계 결과
-├── evaluations/                    # 평가 단계 결과
-└── reflections/                    # 반성 단계 결과
 ```
 
 # memory structure
@@ -570,7 +565,7 @@ Reflection_Score (40%): 반성의 인과 조건·힌트의 유의미성·깊이 
 | **L1 (일화)** | 반성 결과 1:1 저장 + 일반화 힌트 L2/L3 분산 저장 | Dual Storage, Reflection | ☐ |
 | **L5 (정체성)** | 셀프 모델 테이블에 칼리브레이션 에러 컬럼 포함 | M14 Self-Model | ☐ |
 | **L5 (정체성)** | 아우터 루프 = 통계 데이터 갱신, 메타 루프 = 권한으로 핵심 개조 (역할 분리) | L5 Role Separation | ☐ |
-| **Inner Loop** | `/runs/` 폴더에 계획·평가·반성 결과 저장 | Run Persistence | ☐ |
+| **Inner Loop** | `working/sessions/{session_id}/`에 계획·평가·반성 결과 스테이징 → L1 확정 저장 | Run Persistence | ☐ |
 | **Inner Loop** | Pain Index = 1 - 성공 점수, 실행 단계에서는 값 비워둠 | Pain Index | ☐ |
 | **Outer Loop** | 7단계 프로세스 구현 (집계 → 지표 → 캐시 → 셀프모델 → 감사 → 성장조절 → 트리거) | Outer Loop Pipeline | ☐ |
 | **Outer Loop** | 그로스 레이트 레귤레이터: 추락·정체·과속(7일 0.2점) 알람 + CIB 강제 호출 | M16 Growth Regulator | ☐ |
