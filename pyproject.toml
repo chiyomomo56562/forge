@@ -30,9 +30,6 @@ dependencies = [
     "openai>=1.0",          # OpenAI Codex SDK
     "ollama>=0.3",          # Ollama API (클라우드 원격 가능)
 
-    # --- Embeddings (로컬 폴백) ---
-    "sentence-transformers>=2.2",
-
     # --- Utils ---
     "python-dotenv>=1.0",
     "rich>=13.0",          # 콘솔 출력 / 로깅 포맷

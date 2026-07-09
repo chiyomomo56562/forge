@@ -325,3 +325,219 @@
 2026-07-08 17:47:53 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
 2026-07-08 17:47:53 [WARNING] agent.llm.client:_chat_fallback:268: No LLM SDK available, returning fallback response
 2026-07-08 17:47:53 [WARNING] agent.llm.client:_chat_fallback:268: No LLM SDK available, returning fallback response
+2026-07-09 10:52:12 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 10:52:12 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 10:52:12 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 10:52:12 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 10:52:12 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-09 10:52:12 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 10:52:12 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-09 10:52:12 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-09 10:52:12 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-09 10:52:12 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 10:52:12 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-09 10:52:12 [DEBUG] agent.memory.episodic.store:delete:119: Deleted episode ep_001
+2026-07-09 10:52:12 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-09 10:52:12 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 10:52:12 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-09 10:52:12 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 10:52:12 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-09 10:52:12 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-09 10:52:12 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 10:52:12 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-09 10:52:12 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 10:52:12 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-09 10:52:12 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 10:52:12 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-09 10:52:12 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 10:52:12 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-09 10:52:12 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 10:52:12 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-09 10:52:12 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 10:52:12 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-2/test_log_creates_file0/events/2026-07-09.jsonl
+2026-07-09 10:52:12 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-2/test_log_appends_to_same_day0/events/2026-07-09.jsonl
+2026-07-09 10:52:12 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_002 to /tmp/pytest-of-kkc7130/pytest-2/test_log_appends_to_same_day0/events/2026-07-09.jsonl
+2026-07-09 10:52:12 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-2/test_read_day0/events/2026-07-09.jsonl
+2026-07-09 10:52:12 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-2/test_list_days0/events/2026-07-09.jsonl
+2026-07-09 10:52:12 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-09 10:52:12 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 10:52:12 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-09 10:52:12 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 10:52:12 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-09 10:52:12 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 10:52:12 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_003
+2026-07-09 10:52:12 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 10:52:12 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-09 10:52:12 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 10:52:12 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-09 10:52:12 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 10:52:12 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-09 10:52:12 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 10:52:12 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_003
+2026-07-09 10:52:12 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 10:52:12 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-09 10:52:12 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 10:52:12 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-09 10:52:12 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 10:52:12 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-09 10:52:12 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 10:52:12 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_003
+2026-07-09 10:52:12 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 10:52:12 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-09 10:52:12 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 10:52:12 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-09 10:52:12 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 10:52:12 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-09 10:52:12 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 10:52:12 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_003
+2026-07-09 10:52:12 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 10:52:12 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:38:14 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-3/test_upsert_and_get0/chroma
+2026-07-09 11:38:14 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-3/test_get_nonexistent0/chroma
+2026-07-09 11:38:14 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-3/test_delete0/chroma
+2026-07-09 11:38:15 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-3/test_count0/chroma
+2026-07-09 11:38:15 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-3/test_query_by_similarity0/chroma
+2026-07-09 11:38:16 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-3/test_query_with_metadata_filte0/chroma
+2026-07-09 11:38:16 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-3/test_log_creates_file0/events/2026-07-09.jsonl
+2026-07-09 11:38:16 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-3/test_log_appends_to_same_day0/events/2026-07-09.jsonl
+2026-07-09 11:38:16 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_002 to /tmp/pytest-of-kkc7130/pytest-3/test_log_appends_to_same_day0/events/2026-07-09.jsonl
+2026-07-09 11:38:16 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-3/test_read_day0/events/2026-07-09.jsonl
+2026-07-09 11:38:16 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-3/test_list_days0/events/2026-07-09.jsonl
+2026-07-09 11:38:16 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-3/test_retrieve_basic0/chroma
+2026-07-09 11:38:17 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-3/test_density_first_ordering0/chroma
+2026-07-09 11:38:17 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-3/test_retrieve_with_reflection_0/chroma
+2026-07-09 11:38:17 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-3/test_retrieve_expand0/chroma
+2026-07-09 11:39:53 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:39:53 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:39:53 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:39:53 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:39:54 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-4/test_upsert_and_get0/chroma
+2026-07-09 11:39:54 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:39:54 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-09 11:39:54 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-4/test_get_nonexistent0/chroma
+2026-07-09 11:39:54 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-4/test_delete0/chroma
+2026-07-09 11:39:54 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:39:54 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-09 11:39:54 [DEBUG] agent.memory.episodic.store:delete:119: Deleted episode ep_001
+2026-07-09 11:39:54 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-4/test_count0/chroma
+2026-07-09 11:39:54 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:39:54 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-09 11:39:54 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:39:54 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-09 11:39:54 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-4/test_query_by_similarity0/chroma
+2026-07-09 11:39:54 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:39:54 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-09 11:39:54 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:39:54 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-09 11:39:54 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:39:54 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-4/test_query_with_metadata_filte0/chroma
+2026-07-09 11:39:54 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:39:54 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-09 11:39:54 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:39:54 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-09 11:39:54 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:39:54 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-4/test_log_creates_file0/events/2026-07-09.jsonl
+2026-07-09 11:39:54 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-4/test_log_appends_to_same_day0/events/2026-07-09.jsonl
+2026-07-09 11:39:54 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_002 to /tmp/pytest-of-kkc7130/pytest-4/test_log_appends_to_same_day0/events/2026-07-09.jsonl
+2026-07-09 11:39:54 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-4/test_read_day0/events/2026-07-09.jsonl
+2026-07-09 11:39:54 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-4/test_list_days0/events/2026-07-09.jsonl
+2026-07-09 11:39:54 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-4/test_retrieve_basic0/chroma
+2026-07-09 11:39:54 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:39:54 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-09 11:39:54 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:39:54 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-09 11:39:54 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:39:54 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_003
+2026-07-09 11:39:54 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:39:54 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-4/test_density_first_ordering0/chroma
+2026-07-09 11:39:54 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:39:54 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-09 11:39:54 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:39:54 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-09 11:39:54 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:39:54 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_003
+2026-07-09 11:39:54 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:39:54 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-4/test_retrieve_with_reflection_0/chroma
+2026-07-09 11:39:54 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:39:54 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-09 11:39:54 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:39:54 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-09 11:39:54 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:39:54 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_003
+2026-07-09 11:39:54 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:39:54 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-4/test_retrieve_expand0/chroma
+2026-07-09 11:39:54 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:39:54 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-09 11:39:54 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:39:54 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-09 11:39:54 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:39:54 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_003
+2026-07-09 11:39:54 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:39:54 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:40:36 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:40:36 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:40:36 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:40:36 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:40:37 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-5/test_upsert_and_get0/chroma
+2026-07-09 11:40:37 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:40:37 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-09 11:40:37 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-5/test_get_nonexistent0/chroma
+2026-07-09 11:40:37 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-5/test_delete0/chroma
+2026-07-09 11:40:37 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:40:37 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-09 11:40:37 [DEBUG] agent.memory.episodic.store:delete:119: Deleted episode ep_001
+2026-07-09 11:40:37 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-5/test_count0/chroma
+2026-07-09 11:40:37 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:40:37 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-09 11:40:37 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:40:37 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-09 11:40:37 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-5/test_query_by_similarity0/chroma
+2026-07-09 11:40:37 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:40:37 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-09 11:40:37 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:40:37 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-09 11:40:37 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:40:37 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-5/test_query_with_metadata_filte0/chroma
+2026-07-09 11:40:37 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:40:37 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-09 11:40:37 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:40:38 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-09 11:40:38 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:40:38 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-5/test_log_creates_file0/events/2026-07-09.jsonl
+2026-07-09 11:40:38 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-5/test_log_appends_to_same_day0/events/2026-07-09.jsonl
+2026-07-09 11:40:38 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_002 to /tmp/pytest-of-kkc7130/pytest-5/test_log_appends_to_same_day0/events/2026-07-09.jsonl
+2026-07-09 11:40:38 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-5/test_read_day0/events/2026-07-09.jsonl
+2026-07-09 11:40:38 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-5/test_list_days0/events/2026-07-09.jsonl
+2026-07-09 11:40:38 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-5/test_retrieve_basic0/chroma
+2026-07-09 11:40:38 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:40:38 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-09 11:40:38 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:40:38 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-09 11:40:38 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:40:38 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_003
+2026-07-09 11:40:38 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:40:38 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-5/test_density_first_ordering0/chroma
+2026-07-09 11:40:38 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:40:38 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-09 11:40:38 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:40:38 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-09 11:40:38 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:40:38 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_003
+2026-07-09 11:40:38 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:40:38 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-5/test_retrieve_with_reflection_0/chroma
+2026-07-09 11:40:38 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:40:38 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-09 11:40:38 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:40:38 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-09 11:40:38 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:40:38 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_003
+2026-07-09 11:40:38 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:40:38 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-5/test_retrieve_expand0/chroma
+2026-07-09 11:40:38 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:40:38 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-09 11:40:38 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:40:38 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-09 11:40:38 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:40:38 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_003
+2026-07-09 11:40:38 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:40:38 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
