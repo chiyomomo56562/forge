@@ -293,3 +293,66 @@ class TestResponseParser:
         assert len(result["steps"]) == 2
         assert result["estimated_success"] == 0.85
         assert result["task_category"] == "coding"
+
+
+# ===========================================================================
+# LLMClient — Retry & Timeout
+# ===========================================================================
+
+class TestLLMClientRetry:
+    def test_retry_falls_back_after_max_retries(self):
+        """When all retries fail, should return fallback response."""
+        from agent.llm.client import LLMClient, LLMConfig
+
+        cfg = LLMConfig(
+            backend="ollama",
+            ollama_base_url="http://nonexistent:99999",
+            ollama_max_retries=2,
+        )
+        client = LLMClient(config=cfg)
+        response = client.chat("Hello")
+        assert response.content is not None
+        assert response.model == "fallback"
+
+    def test_retry_with_one_attempt(self):
+        """With max_retries=1, should try once then fallback."""
+        from agent.llm.client import LLMClient, LLMConfig
+
+        cfg = LLMConfig(
+            backend="ollama",
+            ollama_base_url="http://nonexistent:99999",
+            ollama_max_retries=1,
+        )
+        client = LLMClient(config=cfg)
+        response = client.chat("Hello")
+        assert response.model == "fallback"
+
+    def test_chat_with_messages(self):
+        """chat() should accept full message list."""
+        from agent.llm.client import LLMClient, LLMConfig, ChatMessage
+
+        cfg = LLMConfig(
+            backend="ollama",
+            ollama_base_url="http://nonexistent:99999",
+            ollama_max_retries=1,
+        )
+        client = LLMClient(config=cfg)
+        messages = [
+            ChatMessage(role="system", content="You are a test bot."),
+            ChatMessage(role="user", content="Hello"),
+        ]
+        response = client.chat(prompt="", messages=messages)
+        assert response.content is not None
+
+    def test_openai_fallback_on_init_failure(self):
+        """OpenAI backend should fallback when client init fails."""
+        from agent.llm.client import LLMClient, LLMConfig
+
+        cfg = LLMConfig(
+            backend="openai",
+            openai_api_key="invalid-key",
+            openai_max_retries=1,
+        )
+        client = LLMClient(config=cfg)
+        response = client.chat("Hello")
+        assert response.content is not None

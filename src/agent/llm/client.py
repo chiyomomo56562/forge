@@ -195,11 +195,61 @@ class LLMClient:
             messages.append(ChatMessage(role="user", content=prompt))
 
         if self.config.backend == "ollama":
-            return self._chat_ollama(messages, temperature, max_tokens)
+            return self._chat_with_retry(self._chat_ollama, messages, temperature, max_tokens)
         elif self.config.backend == "openai":
-            return self._chat_openai(messages, temperature, max_tokens)
+            return self._chat_with_retry(self._chat_openai, messages, temperature, max_tokens)
         else:
             raise ValueError(f"Unknown LLM backend: {self.config.backend}")
+
+    # ------------------------------------------------------------------
+    # Retry wrapper
+    # ------------------------------------------------------------------
+
+    def _chat_with_retry(
+        self,
+        backend_fn: Any,
+        messages: list[ChatMessage],
+        temperature: float | None,
+        max_tokens: int | None,
+    ) -> ChatResponse:
+        """Wrap a chat backend call with retry and exponential backoff.
+
+        Falls back to ``_chat_fallback`` after all retries are exhausted.
+
+        Args:
+            backend_fn: ``_chat_ollama`` or ``_chat_openai``.
+            messages: Chat messages.
+            temperature: Temperature override.
+            max_tokens: Max tokens override.
+
+        Returns:
+            :class:`ChatResponse` from the backend or fallback.
+        """
+        if self.config.backend == "ollama":
+            max_retries = self.config.ollama_max_retries
+        else:
+            max_retries = self.config.openai_max_retries
+
+        base_delay = 1.0  # seconds
+
+        for attempt in range(1, max_retries + 1):
+            try:
+                return backend_fn(messages, temperature, max_tokens)
+            except Exception as e:
+                if attempt < max_retries:
+                    delay = base_delay * (2 ** (attempt - 1))
+                    logger.warning(
+                        f"Chat attempt {attempt}/{max_retries} failed: {e}. "
+                        f"Retrying in {delay:.1f}s..."
+                    )
+                    time.sleep(delay)
+                else:
+                    logger.error(
+                        f"Chat failed after {max_retries} attempts: {e}. "
+                        f"Using fallback."
+                    )
+
+        return self._chat_fallback(messages)
 
     def _chat_ollama(
         self,
@@ -248,6 +298,10 @@ class LLMClient:
                 self._openai_chat = OpenAI(api_key=self.config.openai_api_key)
                 logger.info("OpenAI chat client initialized")
             except ImportError:
+                return self._chat_fallback(messages)
+            except Exception as e:
+                logger.warning(f"Failed to initialize OpenAI client: {e}, using fallback")
+                self._openai_chat = None
                 return self._chat_fallback(messages)
 
         msgs = [{"role": m.role, "content": m.content} for m in messages]
