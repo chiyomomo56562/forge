@@ -541,3 +541,369 @@
 2026-07-09 11:40:38 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_003
 2026-07-09 11:40:38 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
 2026-07-09 11:40:38 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-09 11:46:25 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-6/test_upsert_and_get0/skills.sqlite3
+2026-07-09 11:46:25 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill skill_001
+2026-07-09 11:46:25 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-6/test_get_nonexistent0/skills.sqlite3
+2026-07-09 11:46:25 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-6/test_upsert_overwrites0/skills.sqlite3
+2026-07-09 11:46:25 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill skill_001
+2026-07-09 11:46:25 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill skill_001
+2026-07-09 11:46:25 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-6/test_delete0/skills.sqlite3
+2026-07-09 11:46:25 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill skill_001
+2026-07-09 11:46:25 [DEBUG] agent.memory.procedural.skill_store:delete:194: Deleted skill skill_001
+2026-07-09 11:46:25 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-6/test_delete_nonexistent0/skills.sqlite3
+2026-07-09 11:46:25 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-6/test_count0/skills.sqlite3
+2026-07-09 11:46:25 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s1
+2026-07-09 11:46:25 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s2
+2026-07-09 11:46:25 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s3
+2026-07-09 11:46:25 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-6/test_list_all0/skills.sqlite3
+2026-07-09 11:46:25 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s1
+2026-07-09 11:46:25 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s2
+2026-07-09 11:46:25 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-6/test_list_by_status0/skills.sqlite3
+2026-07-09 11:46:25 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s1
+2026-07-09 11:46:25 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s2
+2026-07-09 11:46:25 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s3
+2026-07-09 11:46:25 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-6/test_persistence_across_connec0/skills.sqlite3
+2026-07-09 11:46:25 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill persist_001
+2026-07-09 11:46:25 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-6/test_persistence_across_connec0/skills.sqlite3
+2026-07-09 11:46:25 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-6/test_update_status0/skills.sqlite3
+2026-07-09 11:46:25 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s1
+2026-07-09 11:46:25 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-6/test_update_status_nonexistent0/skills.sqlite3
+2026-07-09 11:46:25 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-6/test_update_success_rate0/skills.sqlite3
+2026-07-09 11:46:25 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s1
+2026-07-09 11:46:25 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-6/test_update_success_rate_with_0/skills.sqlite3
+2026-07-09 11:46:25 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s1
+2026-07-09 11:46:25 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-6/test_update_reflection_hints0/skills.sqlite3
+2026-07-09 11:46:25 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s1
+2026-07-09 11:46:25 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-6/test_update_reflection_hints_n0/skills.sqlite3
+2026-07-09 11:46:25 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-6/test_update_causal_conditions0/skills.sqlite3
+2026-07-09 11:46:25 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s1
+2026-07-09 11:46:25 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-6/test_set_protected0/skills.sqlite3
+2026-07-09 11:46:25 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s1
+2026-07-09 11:46:25 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-6/test_set_protected_nonexistent0/skills.sqlite3
+2026-07-09 11:46:25 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-6/test_load_from_store0/skills.sqlite3
+2026-07-09 11:46:25 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s1
+2026-07-09 11:46:25 [DEBUG] agent.memory.procedural.skill_loader:load:61: Loaded skill s1 (status=SkillStatus.SEED)
+2026-07-09 11:46:25 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-6/test_load_nonexistent0/skills.sqlite3
+2026-07-09 11:46:25 [WARNING] agent.memory.procedural.skill_loader:load:57: Skill not found: nonexistent
+2026-07-09 11:46:25 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-6/test_load_caches0/skills.sqlite3
+2026-07-09 11:46:25 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s1
+2026-07-09 11:46:25 [DEBUG] agent.memory.procedural.skill_loader:load:61: Loaded skill s1 (status=SkillStatus.SEED)
+2026-07-09 11:46:25 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-6/test_load_code_compiles0/skills.sqlite3
+2026-07-09 11:46:25 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s1
+2026-07-09 11:46:25 [DEBUG] agent.memory.procedural.skill_loader:load:61: Loaded skill s1 (status=SkillStatus.SEED)
+2026-07-09 11:46:25 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-6/test_load_code_invalid_syntax0/skills.sqlite3
+2026-07-09 11:46:25 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s1
+2026-07-09 11:46:25 [DEBUG] agent.memory.procedural.skill_loader:load:61: Loaded skill s1 (status=SkillStatus.SEED)
+2026-07-09 11:46:25 [ERROR] agent.memory.procedural.skill_loader:load_code:87: Failed to compile skill s1: '(' was never closed (<skill:s1>, line 1)
+2026-07-09 11:46:25 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-6/test_invalidate_cache0/skills.sqlite3
+2026-07-09 11:46:25 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s1
+2026-07-09 11:46:25 [DEBUG] agent.memory.procedural.skill_loader:load:61: Loaded skill s1 (status=SkillStatus.SEED)
+2026-07-09 11:46:25 [DEBUG] agent.memory.procedural.skill_loader:invalidate:118: Invalidated cache for skill s1
+2026-07-09 11:46:25 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-6/test_clear_cache0/skills.sqlite3
+2026-07-09 11:46:25 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s1
+2026-07-09 11:46:25 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s2
+2026-07-09 11:46:25 [DEBUG] agent.memory.procedural.skill_loader:load:61: Loaded skill s1 (status=SkillStatus.SEED)
+2026-07-09 11:46:25 [DEBUG] agent.memory.procedural.skill_loader:load:61: Loaded skill s2 (status=SkillStatus.SEED)
+2026-07-09 11:46:25 [DEBUG] agent.memory.procedural.skill_loader:clear_cache:124: Cleared skill loader cache
+2026-07-09 11:46:25 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-6/test_list_active0/skills.sqlite3
+2026-07-09 11:46:25 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s1
+2026-07-09 11:46:25 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s2
+2026-07-09 11:46:25 [ERROR] agent.memory.procedural.skill_executor:execute:207: Skill test_004 execution failed: test error
+2026-07-09 11:46:25 [ERROR] agent.memory.procedural.skill_executor:execute:207: Skill test_005 execution failed: __import__ not found
+2026-07-09 11:46:25 [ERROR] agent.memory.procedural.skill_executor:execute:207: Skill test_006 execution failed: name 'open' is not defined
+2026-07-09 11:46:25 [ERROR] agent.memory.procedural.skill_executor:execute:207: Skill test_007 execution failed: name 'exec' is not defined
+2026-07-09 11:46:25 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-6/test_seed_to_active0/skills.sqlite3
+2026-07-09 11:46:25 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s1
+2026-07-09 11:46:25 [INFO] agent.memory.procedural.skill_evaluator:evaluate:154: Skill s1 transitioned: Seed → Active
+2026-07-09 11:46:25 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-6/test_seed_stays_seed_with_low_0/skills.sqlite3
+2026-07-09 11:46:25 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s1
+2026-07-09 11:46:25 [INFO] agent.memory.procedural.skill_evaluator:evaluate:154: Skill s1 transitioned: Seed → Active
+2026-07-09 11:46:25 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-6/test_active_to_degrading0/skills.sqlite3
+2026-07-09 11:46:25 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s1
+2026-07-09 11:46:25 [INFO] agent.memory.procedural.skill_evaluator:evaluate:154: Skill s1 transitioned: Active → Degrading
+2026-07-09 11:46:25 [INFO] agent.memory.procedural.skill_evaluator:evaluate:154: Skill s1 transitioned: Degrading → Archived
+2026-07-09 11:46:25 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-6/test_degrading_to_archived0/skills.sqlite3
+2026-07-09 11:46:25 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s1
+2026-07-09 11:46:25 [INFO] agent.memory.procedural.skill_evaluator:evaluate:154: Skill s1 transitioned: Degrading → Archived
+2026-07-09 11:46:25 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-6/test_degrading_recovery_to_act0/skills.sqlite3
+2026-07-09 11:46:25 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s1
+2026-07-09 11:46:25 [INFO] agent.memory.procedural.skill_evaluator:evaluate:154: Skill s1 transitioned: Degrading → Active
+2026-07-09 11:46:25 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-6/test_archived_stays_archived0/skills.sqlite3
+2026-07-09 11:46:25 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s1
+2026-07-09 11:46:25 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-6/test_record_execution0/skills.sqlite3
+2026-07-09 11:46:25 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s1
+2026-07-09 11:46:25 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-6/test_recent_success_rate_empty0/skills.sqlite3
+2026-07-09 11:46:25 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-6/test_evaluate_updates_success_0/skills.sqlite3
+2026-07-09 11:46:25 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s1
+2026-07-09 11:46:25 [INFO] agent.memory.procedural.skill_evaluator:evaluate:154: Skill s1 transitioned: Seed → Active
+2026-07-09 11:46:25 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-6/test_evaluate_nonexistent_skil0/skills.sqlite3
+2026-07-09 11:46:25 [WARNING] agent.memory.procedural.skill_evaluator:evaluate:130: Cannot evaluate unknown skill: nonexistent
+2026-07-09 11:46:25 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-6/test_reset_history0/skills.sqlite3
+2026-07-09 11:46:25 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s1
+2026-07-09 11:46:25 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-6/test_evaluate_batch0/skills.sqlite3
+2026-07-09 11:46:25 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s1
+2026-07-09 11:46:25 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s2
+2026-07-09 11:46:25 [INFO] agent.memory.procedural.skill_evaluator:evaluate:154: Skill s1 transitioned: Seed → Active
+2026-07-09 11:47:22 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-7/test_upsert_and_get0/skills.sqlite3
+2026-07-09 11:47:22 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill skill_001
+2026-07-09 11:47:22 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-7/test_get_nonexistent0/skills.sqlite3
+2026-07-09 11:47:22 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-7/test_upsert_overwrites0/skills.sqlite3
+2026-07-09 11:47:22 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill skill_001
+2026-07-09 11:47:22 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill skill_001
+2026-07-09 11:47:22 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-7/test_delete0/skills.sqlite3
+2026-07-09 11:47:22 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill skill_001
+2026-07-09 11:47:22 [DEBUG] agent.memory.procedural.skill_store:delete:194: Deleted skill skill_001
+2026-07-09 11:47:22 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-7/test_delete_nonexistent0/skills.sqlite3
+2026-07-09 11:47:22 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-7/test_count0/skills.sqlite3
+2026-07-09 11:47:22 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s1
+2026-07-09 11:47:22 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s2
+2026-07-09 11:47:22 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s3
+2026-07-09 11:47:22 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-7/test_list_all0/skills.sqlite3
+2026-07-09 11:47:22 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s1
+2026-07-09 11:47:22 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s2
+2026-07-09 11:47:22 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-7/test_list_by_status0/skills.sqlite3
+2026-07-09 11:47:22 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s1
+2026-07-09 11:47:22 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s2
+2026-07-09 11:47:22 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s3
+2026-07-09 11:47:22 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-7/test_persistence_across_connec0/skills.sqlite3
+2026-07-09 11:47:22 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill persist_001
+2026-07-09 11:47:22 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-7/test_persistence_across_connec0/skills.sqlite3
+2026-07-09 11:47:22 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-7/test_update_status0/skills.sqlite3
+2026-07-09 11:47:22 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s1
+2026-07-09 11:47:22 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-7/test_update_status_nonexistent0/skills.sqlite3
+2026-07-09 11:47:22 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-7/test_update_success_rate0/skills.sqlite3
+2026-07-09 11:47:22 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s1
+2026-07-09 11:47:22 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-7/test_update_success_rate_with_0/skills.sqlite3
+2026-07-09 11:47:22 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s1
+2026-07-09 11:47:22 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-7/test_update_reflection_hints0/skills.sqlite3
+2026-07-09 11:47:22 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s1
+2026-07-09 11:47:22 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-7/test_update_reflection_hints_n0/skills.sqlite3
+2026-07-09 11:47:22 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-7/test_update_causal_conditions0/skills.sqlite3
+2026-07-09 11:47:22 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s1
+2026-07-09 11:47:22 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-7/test_set_protected0/skills.sqlite3
+2026-07-09 11:47:22 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s1
+2026-07-09 11:47:22 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-7/test_set_protected_nonexistent0/skills.sqlite3
+2026-07-09 11:47:22 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-7/test_load_from_store0/skills.sqlite3
+2026-07-09 11:47:22 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s1
+2026-07-09 11:47:22 [DEBUG] agent.memory.procedural.skill_loader:load:61: Loaded skill s1 (status=SkillStatus.SEED)
+2026-07-09 11:47:22 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-7/test_load_nonexistent0/skills.sqlite3
+2026-07-09 11:47:22 [WARNING] agent.memory.procedural.skill_loader:load:57: Skill not found: nonexistent
+2026-07-09 11:47:22 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-7/test_load_caches0/skills.sqlite3
+2026-07-09 11:47:22 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s1
+2026-07-09 11:47:22 [DEBUG] agent.memory.procedural.skill_loader:load:61: Loaded skill s1 (status=SkillStatus.SEED)
+2026-07-09 11:47:22 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-7/test_load_code_compiles0/skills.sqlite3
+2026-07-09 11:47:22 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s1
+2026-07-09 11:47:22 [DEBUG] agent.memory.procedural.skill_loader:load:61: Loaded skill s1 (status=SkillStatus.SEED)
+2026-07-09 11:47:22 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-7/test_load_code_invalid_syntax0/skills.sqlite3
+2026-07-09 11:47:22 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s1
+2026-07-09 11:47:22 [DEBUG] agent.memory.procedural.skill_loader:load:61: Loaded skill s1 (status=SkillStatus.SEED)
+2026-07-09 11:47:22 [ERROR] agent.memory.procedural.skill_loader:load_code:87: Failed to compile skill s1: '(' was never closed (<skill:s1>, line 1)
+2026-07-09 11:47:22 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-7/test_invalidate_cache0/skills.sqlite3
+2026-07-09 11:47:22 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s1
+2026-07-09 11:47:22 [DEBUG] agent.memory.procedural.skill_loader:load:61: Loaded skill s1 (status=SkillStatus.SEED)
+2026-07-09 11:47:22 [DEBUG] agent.memory.procedural.skill_loader:invalidate:118: Invalidated cache for skill s1
+2026-07-09 11:47:22 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-7/test_clear_cache0/skills.sqlite3
+2026-07-09 11:47:22 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s1
+2026-07-09 11:47:22 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s2
+2026-07-09 11:47:22 [DEBUG] agent.memory.procedural.skill_loader:load:61: Loaded skill s1 (status=SkillStatus.SEED)
+2026-07-09 11:47:22 [DEBUG] agent.memory.procedural.skill_loader:load:61: Loaded skill s2 (status=SkillStatus.SEED)
+2026-07-09 11:47:22 [DEBUG] agent.memory.procedural.skill_loader:clear_cache:124: Cleared skill loader cache
+2026-07-09 11:47:22 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-7/test_list_active0/skills.sqlite3
+2026-07-09 11:47:22 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s1
+2026-07-09 11:47:22 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s2
+2026-07-09 11:47:22 [ERROR] agent.memory.procedural.skill_executor:execute:207: Skill test_004 execution failed: test error
+2026-07-09 11:47:23 [WARNING] agent.memory.procedural.skill_executor:execute:195: Skill test_005 timed out after 0.5s
+2026-07-09 11:47:23 [ERROR] agent.memory.procedural.skill_executor:execute:207: Skill test_006 execution failed: name 'open' is not defined
+2026-07-09 11:47:23 [ERROR] agent.memory.procedural.skill_executor:execute:207: Skill test_007 execution failed: name 'exec' is not defined
+2026-07-09 11:47:23 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-7/test_seed_to_active0/skills.sqlite3
+2026-07-09 11:47:23 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s1
+2026-07-09 11:47:23 [INFO] agent.memory.procedural.skill_evaluator:evaluate:154: Skill s1 transitioned: Seed → Active
+2026-07-09 11:47:23 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-7/test_seed_stays_seed_with_low_0/skills.sqlite3
+2026-07-09 11:47:23 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s1
+2026-07-09 11:47:23 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-7/test_active_to_degrading0/skills.sqlite3
+2026-07-09 11:47:23 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s1
+2026-07-09 11:47:23 [INFO] agent.memory.procedural.skill_evaluator:evaluate:154: Skill s1 transitioned: Active → Degrading
+2026-07-09 11:47:23 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-7/test_degrading_to_archived0/skills.sqlite3
+2026-07-09 11:47:23 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s1
+2026-07-09 11:47:23 [INFO] agent.memory.procedural.skill_evaluator:evaluate:154: Skill s1 transitioned: Degrading → Archived
+2026-07-09 11:47:23 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-7/test_degrading_recovery_to_act0/skills.sqlite3
+2026-07-09 11:47:23 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s1
+2026-07-09 11:47:23 [INFO] agent.memory.procedural.skill_evaluator:evaluate:154: Skill s1 transitioned: Degrading → Active
+2026-07-09 11:47:23 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-7/test_archived_stays_archived0/skills.sqlite3
+2026-07-09 11:47:23 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s1
+2026-07-09 11:47:23 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-7/test_record_execution0/skills.sqlite3
+2026-07-09 11:47:23 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s1
+2026-07-09 11:47:23 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-7/test_recent_success_rate_empty0/skills.sqlite3
+2026-07-09 11:47:23 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-7/test_evaluate_updates_success_0/skills.sqlite3
+2026-07-09 11:47:23 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s1
+2026-07-09 11:47:23 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-7/test_evaluate_nonexistent_skil0/skills.sqlite3
+2026-07-09 11:47:23 [WARNING] agent.memory.procedural.skill_evaluator:evaluate:130: Cannot evaluate unknown skill: nonexistent
+2026-07-09 11:47:23 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-7/test_reset_history0/skills.sqlite3
+2026-07-09 11:47:23 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s1
+2026-07-09 11:47:23 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:80: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-7/test_evaluate_batch0/skills.sqlite3
+2026-07-09 11:47:23 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s1
+2026-07-09 11:47:23 [DEBUG] agent.memory.procedural.skill_store:upsert:165: Upserted skill s2
+2026-07-09 11:47:23 [INFO] agent.memory.procedural.skill_evaluator:evaluate:154: Skill s1 transitioned: Seed → Active
+2026-07-09 11:57:17 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-8/test_upsert_and_get0/skills.sqlite3
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-8/test_upsert_and_get0/skills/skill_001.py
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill skill_001 (code: /tmp/pytest-of-kkc7130/pytest-8/test_upsert_and_get0/skills/skill_001.py)
+2026-07-09 11:57:17 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-8/test_get_nonexistent0/skills.sqlite3
+2026-07-09 11:57:17 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-8/test_upsert_overwrites_code_fi0/skills.sqlite3
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-8/test_upsert_overwrites_code_fi0/skills/skill_001.py
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill skill_001 (code: /tmp/pytest-of-kkc7130/pytest-8/test_upsert_overwrites_code_fi0/skills/skill_001.py)
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-8/test_upsert_overwrites_code_fi0/skills/skill_001.py
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill skill_001 (code: /tmp/pytest-of-kkc7130/pytest-8/test_upsert_overwrites_code_fi0/skills/skill_001.py)
+2026-07-09 11:57:17 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-8/test_delete0/skills.sqlite3
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-8/test_delete0/skills/skill_001.py
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill skill_001 (code: /tmp/pytest-of-kkc7130/pytest-8/test_delete0/skills/skill_001.py)
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:delete:308: Deleted code file: /tmp/pytest-of-kkc7130/pytest-8/test_delete0/skills/skill_001.py
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:delete:311: Deleted skill skill_001
+2026-07-09 11:57:17 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-8/test_delete_keeps_code_file0/skills.sqlite3
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-8/test_delete_keeps_code_file0/skills/skill_001.py
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill skill_001 (code: /tmp/pytest-of-kkc7130/pytest-8/test_delete_keeps_code_file0/skills/skill_001.py)
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:delete:311: Deleted skill skill_001
+2026-07-09 11:57:17 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-8/test_delete_nonexistent0/skills.sqlite3
+2026-07-09 11:57:17 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-8/test_count0/skills.sqlite3
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-8/test_count0/skills/s1.py
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-8/test_count0/skills/s1.py)
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-8/test_count0/skills/s2.py
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s2 (code: /tmp/pytest-of-kkc7130/pytest-8/test_count0/skills/s2.py)
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-8/test_count0/skills/s3.py
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s3 (code: /tmp/pytest-of-kkc7130/pytest-8/test_count0/skills/s3.py)
+2026-07-09 11:57:17 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-8/test_list_all0/skills.sqlite3
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-8/test_list_all0/skills/s1.py
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-8/test_list_all0/skills/s1.py)
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-8/test_list_all0/skills/s2.py
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s2 (code: /tmp/pytest-of-kkc7130/pytest-8/test_list_all0/skills/s2.py)
+2026-07-09 11:57:17 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-8/test_list_by_status0/skills.sqlite3
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-8/test_list_by_status0/skills/s1.py
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-8/test_list_by_status0/skills/s1.py)
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-8/test_list_by_status0/skills/s2.py
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s2 (code: /tmp/pytest-of-kkc7130/pytest-8/test_list_by_status0/skills/s2.py)
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-8/test_list_by_status0/skills/s3.py
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s3 (code: /tmp/pytest-of-kkc7130/pytest-8/test_list_by_status0/skills/s3.py)
+2026-07-09 11:57:17 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-8/test_persistence_across_connec0/skills.sqlite3
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-8/test_persistence_across_connec0/skills/persist_001.py
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill persist_001 (code: /tmp/pytest-of-kkc7130/pytest-8/test_persistence_across_connec0/skills/persist_001.py)
+2026-07-09 11:57:17 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-8/test_persistence_across_connec0/skills.sqlite3
+2026-07-09 11:57:17 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-8/test_get_metadata_only0/skills.sqlite3
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-8/test_get_metadata_only0/skills/s1.py
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-8/test_get_metadata_only0/skills/s1.py)
+2026-07-09 11:57:17 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-8/test_update_status0/skills.sqlite3
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-8/test_update_status0/skills/s1.py
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-8/test_update_status0/skills/s1.py)
+2026-07-09 11:57:17 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-8/test_update_status_nonexistent0/skills.sqlite3
+2026-07-09 11:57:17 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-8/test_update_success_rate0/skills.sqlite3
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-8/test_update_success_rate0/skills/s1.py
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-8/test_update_success_rate0/skills/s1.py)
+2026-07-09 11:57:17 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-8/test_update_success_rate_with_0/skills.sqlite3
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-8/test_update_success_rate_with_0/skills/s1.py
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-8/test_update_success_rate_with_0/skills/s1.py)
+2026-07-09 11:57:17 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-8/test_update_reflection_hints0/skills.sqlite3
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-8/test_update_reflection_hints0/skills/s1.py
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-8/test_update_reflection_hints0/skills/s1.py)
+2026-07-09 11:57:17 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-8/test_update_reflection_hints_n0/skills.sqlite3
+2026-07-09 11:57:17 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-8/test_update_causal_conditions0/skills.sqlite3
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-8/test_update_causal_conditions0/skills/s1.py
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-8/test_update_causal_conditions0/skills/s1.py)
+2026-07-09 11:57:17 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-8/test_set_protected0/skills.sqlite3
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-8/test_set_protected0/skills/s1.py
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-8/test_set_protected0/skills/s1.py)
+2026-07-09 11:57:17 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-8/test_set_protected_nonexistent0/skills.sqlite3
+2026-07-09 11:57:17 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-8/test_update_code0/skills.sqlite3
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-8/test_update_code0/skills/s1.py
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-8/test_update_code0/skills/s1.py)
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:update_code:441: Updated code file for skill s1: /tmp/pytest-of-kkc7130/pytest-8/test_update_code0/skills/s1.py
+2026-07-09 11:57:17 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-8/test_update_code_nonexistent0/skills.sqlite3
+2026-07-09 11:57:17 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-8/test_load_from_store0/skills.sqlite3
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-8/test_load_from_store0/skills/s1.py
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-8/test_load_from_store0/skills/s1.py)
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_loader:load:72: Loaded skill s1 (status=SkillStatus.SEED, code_path=/tmp/pytest-of-kkc7130/pytest-8/test_load_from_store0/skills/s1.py)
+2026-07-09 11:57:17 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-8/test_load_nonexistent0/skills.sqlite3
+2026-07-09 11:57:17 [WARNING] agent.memory.procedural.skill_loader:load:68: Skill not found: nonexistent
+2026-07-09 11:57:17 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-8/test_load_caches0/skills.sqlite3
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-8/test_load_caches0/skills/s1.py
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-8/test_load_caches0/skills/s1.py)
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_loader:load:72: Loaded skill s1 (status=SkillStatus.SEED, code_path=/tmp/pytest-of-kkc7130/pytest-8/test_load_caches0/skills/s1.py)
+2026-07-09 11:57:17 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-8/test_load_code_compiles0/skills.sqlite3
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-8/test_load_code_compiles0/skills/s1.py
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-8/test_load_code_compiles0/skills/s1.py)
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_loader:load:72: Loaded skill s1 (status=SkillStatus.SEED, code_path=/tmp/pytest-of-kkc7130/pytest-8/test_load_code_compiles0/skills/s1.py)
+2026-07-09 11:57:17 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-8/test_load_code_invalid_syntax0/skills.sqlite3
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-8/test_load_code_invalid_syntax0/skills/s1.py
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-8/test_load_code_invalid_syntax0/skills/s1.py)
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_loader:load:72: Loaded skill s1 (status=SkillStatus.SEED, code_path=/tmp/pytest-of-kkc7130/pytest-8/test_load_code_invalid_syntax0/skills/s1.py)
+2026-07-09 11:57:17 [ERROR] agent.memory.procedural.skill_loader:load_code:115: Failed to compile skill s1 from /tmp/pytest-of-kkc7130/pytest-8/test_load_code_invalid_syntax0/skills/s1.py: '(' was never closed (s1.py, line 1)
+2026-07-09 11:57:17 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-8/test_invalidate_cache0/skills.sqlite3
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-8/test_invalidate_cache0/skills/s1.py
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-8/test_invalidate_cache0/skills/s1.py)
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_loader:load:72: Loaded skill s1 (status=SkillStatus.SEED, code_path=/tmp/pytest-of-kkc7130/pytest-8/test_invalidate_cache0/skills/s1.py)
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_loader:invalidate:146: Invalidated cache for skill s1
+2026-07-09 11:57:17 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-8/test_clear_cache0/skills.sqlite3
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-8/test_clear_cache0/skills/s1.py
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-8/test_clear_cache0/skills/s1.py)
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-8/test_clear_cache0/skills/s2.py
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s2 (code: /tmp/pytest-of-kkc7130/pytest-8/test_clear_cache0/skills/s2.py)
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_loader:load:72: Loaded skill s1 (status=SkillStatus.SEED, code_path=/tmp/pytest-of-kkc7130/pytest-8/test_clear_cache0/skills/s1.py)
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_loader:load:72: Loaded skill s2 (status=SkillStatus.SEED, code_path=/tmp/pytest-of-kkc7130/pytest-8/test_clear_cache0/skills/s2.py)
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_loader:clear_cache:152: Cleared skill loader cache
+2026-07-09 11:57:17 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-8/test_list_active0/skills.sqlite3
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-8/test_list_active0/skills/s1.py
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-8/test_list_active0/skills/s1.py)
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-8/test_list_active0/skills/s2.py
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s2 (code: /tmp/pytest-of-kkc7130/pytest-8/test_list_active0/skills/s2.py)
+2026-07-09 11:57:17 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-8/test_reload_code_after_file_ed0/skills.sqlite3
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-8/test_reload_code_after_file_ed0/skills/s1.py
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-8/test_reload_code_after_file_ed0/skills/s1.py)
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_loader:load:72: Loaded skill s1 (status=SkillStatus.SEED, code_path=/tmp/pytest-of-kkc7130/pytest-8/test_reload_code_after_file_ed0/skills/s1.py)
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:update_code:441: Updated code file for skill s1: /tmp/pytest-of-kkc7130/pytest-8/test_reload_code_after_file_ed0/skills/s1.py
+2026-07-09 11:57:17 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-8/test_load_metadata_only0/skills.sqlite3
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-8/test_load_metadata_only0/skills/s1.py
+2026-07-09 11:57:17 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-8/test_load_metadata_only0/skills/s1.py)
+2026-07-09 11:57:17 [ERROR] agent.memory.procedural.skill_executor:execute:207: Skill test_004 execution failed: test error
+2026-07-09 11:57:18 [WARNING] agent.memory.procedural.skill_executor:execute:195: Skill test_005 timed out after 0.5s
+2026-07-09 11:57:18 [ERROR] agent.memory.procedural.skill_executor:execute:207: Skill test_006 execution failed: name 'open' is not defined
+2026-07-09 11:57:18 [ERROR] agent.memory.procedural.skill_executor:execute:207: Skill test_007 execution failed: name 'exec' is not defined
+2026-07-09 11:57:18 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-8/test_execute_skill_object0/skills.sqlite3
+2026-07-09 11:57:18 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-8/test_execute_skill_object0/skills/exec_001.py
+2026-07-09 11:57:18 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill exec_001 (code: /tmp/pytest-of-kkc7130/pytest-8/test_execute_skill_object0/skills/exec_001.py)
+2026-07-09 11:57:18 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-8/test_seed_to_active0/skills.sqlite3
+2026-07-09 11:57:18 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-8/test_seed_to_active0/skills/s1.py
+2026-07-09 11:57:18 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-8/test_seed_to_active0/skills/s1.py)
+2026-07-09 11:57:18 [INFO] agent.memory.procedural.skill_evaluator:evaluate:154: Skill s1 transitioned: Seed → Active
+2026-07-09 11:57:18 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-8/test_seed_stays_seed_with_low_0/skills.sqlite3
+2026-07-09 11:57:18 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-8/test_seed_stays_seed_with_low_0/skills/s1.py
+2026-07-09 11:57:18 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-8/test_seed_stays_seed_with_low_0/skills/s1.py)
+2026-07-09 11:57:18 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-8/test_active_to_degrading0/skills.sqlite3
+2026-07-09 11:57:18 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-8/test_active_to_degrading0/skills/s1.py
+2026-07-09 11:57:18 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-8/test_active_to_degrading0/skills/s1.py)
+2026-07-09 11:57:18 [INFO] agent.memory.procedural.skill_evaluator:evaluate:154: Skill s1 transitioned: Active → Degrading
+2026-07-09 11:57:18 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-8/test_degrading_to_archived0/skills.sqlite3
+2026-07-09 11:57:18 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-8/test_degrading_to_archived0/skills/s1.py
+2026-07-09 11:57:18 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-8/test_degrading_to_archived0/skills/s1.py)
+2026-07-09 11:57:18 [INFO] agent.memory.procedural.skill_evaluator:evaluate:154: Skill s1 transitioned: Degrading → Archived
+2026-07-09 11:57:18 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-8/test_degrading_recovery_to_act0/skills.sqlite3
+2026-07-09 11:57:18 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-8/test_degrading_recovery_to_act0/skills/s1.py
+2026-07-09 11:57:18 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-8/test_degrading_recovery_to_act0/skills/s1.py)
+2026-07-09 11:57:18 [INFO] agent.memory.procedural.skill_evaluator:evaluate:154: Skill s1 transitioned: Degrading → Active
+2026-07-09 11:57:18 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-8/test_archived_stays_archived0/skills.sqlite3
+2026-07-09 11:57:18 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-8/test_archived_stays_archived0/skills/s1.py
+2026-07-09 11:57:18 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-8/test_archived_stays_archived0/skills/s1.py)
+2026-07-09 11:57:18 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-8/test_record_execution0/skills.sqlite3
+2026-07-09 11:57:18 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-8/test_record_execution0/skills/s1.py
+2026-07-09 11:57:18 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-8/test_record_execution0/skills/s1.py)
+2026-07-09 11:57:18 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-8/test_recent_success_rate_empty0/skills.sqlite3
+2026-07-09 11:57:18 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-8/test_evaluate_updates_success_0/skills.sqlite3
+2026-07-09 11:57:18 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-8/test_evaluate_updates_success_0/skills/s1.py
+2026-07-09 11:57:18 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-8/test_evaluate_updates_success_0/skills/s1.py)
+2026-07-09 11:57:18 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-8/test_evaluate_nonexistent_skil0/skills.sqlite3
+2026-07-09 11:57:18 [WARNING] agent.memory.procedural.skill_evaluator:evaluate:130: Cannot evaluate unknown skill: nonexistent
+2026-07-09 11:57:18 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-8/test_reset_history0/skills.sqlite3
+2026-07-09 11:57:18 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-8/test_reset_history0/skills/s1.py
+2026-07-09 11:57:18 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-8/test_reset_history0/skills/s1.py)
+2026-07-09 11:57:18 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-8/test_evaluate_batch0/skills.sqlite3
+2026-07-09 11:57:18 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-8/test_evaluate_batch0/skills/s1.py
+2026-07-09 11:57:18 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-8/test_evaluate_batch0/skills/s1.py)
+2026-07-09 11:57:18 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-8/test_evaluate_batch0/skills/s2.py
+2026-07-09 11:57:18 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s2 (code: /tmp/pytest-of-kkc7130/pytest-8/test_evaluate_batch0/skills/s2.py)
+2026-07-09 11:57:18 [INFO] agent.memory.procedural.skill_evaluator:evaluate:154: Skill s1 transitioned: Seed → Active

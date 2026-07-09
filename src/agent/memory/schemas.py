@@ -232,11 +232,16 @@ class SkillMetadata(BaseModel):
 class Skill(BaseModel):
     """L3 Procedural memory record — an executable skill.
 
+    Code is stored as a file on disk (``code_path``); the ``code`` field
+    is populated at load time by reading the file.  This keeps skill code
+    version-controllable and editable without touching the database.
+
     Structure mirrors the README L3 example.
     """
     skill_id: str = Field(description="Unique skill ID (e.g. extract_pdf_text_a1b2c3d4).")
     name: str = Field(default="", description="Human-readable skill name.")
-    code: str = Field(description="Executable Python code string.")
+    code_path: str = Field(default="", description="Path to the skill's Python code file (relative to project root).")
+    code: str = Field(default="", description="Executable Python code string (loaded from code_path at runtime).")
     description: str = Field(default="", description="What this skill does.")
     metadata: SkillMetadata = Field(default_factory=SkillMetadata)
     reflection_hints: list[str] = Field(
