@@ -1327,3 +1327,50 @@
 2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'pandas' (tool)
 2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'matplotlib' --depends_on--> 'numpy'
 2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'pandas' --depends_on--> 'numpy'
+2026-07-09 12:55:32 [INFO] agent.memory.constitution.loader:load:94: Loaded constitution v1: 7 principles, 10 K-Scenarios, CIB threshold=0.95
+2026-07-09 12:55:32 [INFO] agent.memory.constitution.loader:load:94: Loaded constitution v1: 7 principles, 10 K-Scenarios, CIB threshold=0.95
+2026-07-09 12:55:32 [INFO] agent.memory.constitution.loader:load:94: Loaded constitution v1: 7 principles, 10 K-Scenarios, CIB threshold=0.95
+2026-07-09 12:55:32 [INFO] agent.memory.constitution.loader:load:94: Loaded constitution v1: 7 principles, 10 K-Scenarios, CIB threshold=0.95
+2026-07-09 12:55:32 [INFO] agent.memory.constitution.loader:load:94: Loaded constitution v1: 7 principles, 10 K-Scenarios, CIB threshold=0.95
+2026-07-09 12:55:32 [INFO] agent.memory.constitution.loader:load:94: Loaded constitution v1: 7 principles, 10 K-Scenarios, CIB threshold=0.95
+2026-07-09 12:55:32 [INFO] agent.memory.constitution.loader:load:94: Loaded constitution v1: 7 principles, 10 K-Scenarios, CIB threshold=0.95
+2026-07-09 12:55:32 [INFO] agent.memory.constitution.loader:load:94: Loaded constitution v1: 7 principles, 10 K-Scenarios, CIB threshold=0.95
+2026-07-09 12:55:32 [WARNING] agent.memory.constitution.loader:_load_yaml:129: Constitution file not found: /tmp/pytest-of-kkc7130/pytest-12/test_load_optional_files_missi0/safety.yml
+2026-07-09 12:55:32 [WARNING] agent.memory.constitution.loader:_load_yaml:129: Constitution file not found: /tmp/pytest-of-kkc7130/pytest-12/test_load_optional_files_missi0/interaction_policy.yml
+2026-07-09 12:55:32 [WARNING] agent.memory.constitution.loader:_load_yaml:129: Constitution file not found: /tmp/pytest-of-kkc7130/pytest-12/test_load_optional_files_missi0/tool_policy.yml
+2026-07-09 12:55:32 [INFO] agent.memory.constitution.loader:load:94: Loaded constitution v1: 1 principles, 1 K-Scenarios, CIB threshold=0.95
+2026-07-09 12:55:32 [INFO] agent.memory.constitution.loader:load:94: Loaded constitution v1: 7 principles, 10 K-Scenarios, CIB threshold=0.95
+2026-07-09 12:55:32 [INFO] agent.memory.constitution.loader:load:94: Loaded constitution v1: 7 principles, 10 K-Scenarios, CIB threshold=0.95
+2026-07-09 12:55:32 [INFO] agent.memory.constitution.loader:load:94: Loaded constitution v1: 7 principles, 10 K-Scenarios, CIB threshold=0.95
+2026-07-09 12:55:32 [INFO] agent.memory.constitution.loader:load:94: Loaded constitution v1: 7 principles, 10 K-Scenarios, CIB threshold=0.95
+2026-07-09 12:55:32 [INFO] agent.memory.constitution.loader:load:94: Loaded constitution v1: 7 principles, 10 K-Scenarios, CIB threshold=0.95
+2026-07-09 12:55:32 [WARNING] agent.memory.constitution.guard:evaluate:128: CIB BLOCKED: min_score=0.5000 < threshold=0.95. Failed scenarios: ['ks_honesty_01', 'ks_honesty_02', 'ks_user_control_01', 'ks_user_control_02', 'ks_memory_min_01', 'ks_memory_min_02', 'ks_transparency_01', 'ks_learning_01', 'ks_resource_01', 'ks_context_01']
+2026-07-09 12:55:32 [INFO] agent.memory.constitution.loader:load:94: Loaded constitution v1: 7 principles, 10 K-Scenarios, CIB threshold=0.95
+2026-07-09 12:55:32 [WARNING] agent.memory.constitution.guard:evaluate:128: CIB BLOCKED: min_score=0.5000 < threshold=1.01. Failed scenarios: ['ks_honesty_01', 'ks_honesty_02', 'ks_user_control_01', 'ks_user_control_02', 'ks_memory_min_01', 'ks_memory_min_02', 'ks_transparency_01', 'ks_learning_01', 'ks_resource_01', 'ks_context_01']
+2026-07-09 12:55:32 [INFO] agent.memory.constitution.loader:load:94: Loaded constitution v1: 7 principles, 10 K-Scenarios, CIB threshold=0.95
+2026-07-09 12:55:32 [INFO] agent.memory.constitution.guard:evaluate:133: CIB PASSED: min_score=0.5000 >= threshold=0.0
+2026-07-09 12:55:32 [INFO] agent.memory.constitution.loader:load:94: Loaded constitution v1: 7 principles, 10 K-Scenarios, CIB threshold=0.95
+2026-07-09 12:55:32 [INFO] agent.memory.constitution.guard:evaluate:133: CIB PASSED: min_score=0.5000 >= threshold=0.0
+2026-07-09 12:55:32 [WARNING] agent.memory.constitution.guard:evaluate:128: CIB BLOCKED: min_score=0.5000 < threshold=1.01. Failed scenarios: ['ks_honesty_01', 'ks_honesty_02', 'ks_user_control_01', 'ks_user_control_02', 'ks_memory_min_01', 'ks_memory_min_02', 'ks_transparency_01', 'ks_learning_01', 'ks_resource_01', 'ks_context_01']
+2026-07-09 12:55:32 [INFO] agent.memory.constitution.loader:load:94: Loaded constitution v1: 7 principles, 10 K-Scenarios, CIB threshold=0.95
+2026-07-09 12:55:32 [INFO] agent.memory.constitution.guard:evaluate:133: CIB PASSED: min_score=0.5000 >= threshold=0.0
+2026-07-09 12:55:32 [INFO] agent.memory.constitution.loader:load:94: Loaded constitution v1: 7 principles, 10 K-Scenarios, CIB threshold=0.95
+2026-07-09 12:55:32 [WARNING] agent.memory.constitution.guard:evaluate:128: CIB BLOCKED: min_score=0.5000 < threshold=0.97. Failed scenarios: ['ks_honesty_01', 'ks_honesty_02', 'ks_user_control_01', 'ks_user_control_02', 'ks_memory_min_01', 'ks_memory_min_02', 'ks_transparency_01', 'ks_learning_01', 'ks_resource_01', 'ks_context_01']
+2026-07-09 12:55:32 [WARNING] agent.memory.constitution.guard:require_hitl_approval:218: HITL BLOCKED: Constitution layer 'absolute' requires human approval for modification. No approval granted.
+2026-07-09 12:55:32 [INFO] agent.memory.constitution.guard:require_hitl_approval:224: HITL PASSED: Constitution layer 'absolute' modification approved by human.
+2026-07-09 12:55:32 [WARNING] agent.memory.constitution.guard:require_hitl_approval:218: HITL BLOCKED: Constitution layer 'absolute' requires human approval for modification. No approval granted.
+2026-07-09 12:55:32 [WARNING] agent.memory.constitution.guard:require_hitl_approval:218: HITL BLOCKED: Constitution layer 'principle' requires human approval for modification. No approval granted.
+2026-07-09 12:55:32 [WARNING] agent.memory.constitution.guard:require_hitl_approval:218: HITL BLOCKED: Constitution layer 'strategy' requires human approval for modification. No approval granted.
+2026-07-09 12:55:32 [INFO] agent.memory.constitution.guard:require_hitl_approval:224: HITL PASSED: Constitution layer 'absolute' modification approved by human.
+2026-07-09 12:55:32 [WARNING] agent.memory.constitution.guard:require_hitl_approval:218: HITL BLOCKED: Constitution layer 'absolute' requires human approval for modification. No approval granted.
+2026-07-09 12:55:32 [INFO] agent.memory.constitution.guard:require_hitl_approval:224: HITL PASSED: Constitution layer 'absolute' modification approved by human.
+2026-07-09 12:55:32 [INFO] agent.memory.constitution.loader:load:94: Loaded constitution v1: 7 principles, 10 K-Scenarios, CIB threshold=0.95
+2026-07-09 12:55:32 [INFO] agent.memory.constitution.guard:evaluate:133: CIB PASSED: min_score=0.5000 >= threshold=0.0
+2026-07-09 12:55:32 [INFO] agent.memory.constitution.loader:load:94: Loaded constitution v1: 7 principles, 10 K-Scenarios, CIB threshold=0.95
+2026-07-09 12:55:32 [INFO] agent.memory.constitution.guard:evaluate:133: CIB PASSED: min_score=0.5000 >= threshold=0.0
+2026-07-09 12:55:32 [WARNING] agent.memory.constitution.guard:require_hitl_approval:218: HITL BLOCKED: Constitution layer 'absolute' requires human approval for modification. No approval granted.
+2026-07-09 12:55:32 [INFO] agent.memory.constitution.guard:evaluate:133: CIB PASSED: min_score=0.5000 >= threshold=0.0
+2026-07-09 12:55:32 [INFO] agent.memory.constitution.guard:require_hitl_approval:224: HITL PASSED: Constitution layer 'absolute' modification approved by human.
+2026-07-09 12:55:32 [INFO] agent.memory.constitution.loader:load:94: Loaded constitution v1: 7 principles, 10 K-Scenarios, CIB threshold=0.95
+2026-07-09 12:55:32 [WARNING] agent.memory.constitution.guard:evaluate:128: CIB BLOCKED: min_score=0.5000 < threshold=1.01. Failed scenarios: ['ks_honesty_01', 'ks_honesty_02', 'ks_user_control_01', 'ks_user_control_02', 'ks_memory_min_01', 'ks_memory_min_02', 'ks_transparency_01', 'ks_learning_01', 'ks_resource_01', 'ks_context_01']
+2026-07-09 12:55:32 [INFO] agent.memory.constitution.guard:require_hitl_approval:224: HITL PASSED: Constitution layer 'absolute' modification approved by human.
