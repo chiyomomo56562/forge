@@ -907,3 +907,423 @@
 2026-07-09 11:57:18 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-8/test_evaluate_batch0/skills/s2.py
 2026-07-09 11:57:18 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s2 (code: /tmp/pytest-of-kkc7130/pytest-8/test_evaluate_batch0/skills/s2.py)
 2026-07-09 11:57:18 [INFO] agent.memory.procedural.skill_evaluator:evaluate:154: Skill s1 transitioned: Seed → Active
+2026-07-09 12:31:58 [INFO] agent.memory.semantic.graph_store:_load:61: No existing graph found, starting fresh
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'ent_001' (tool)
+2026-07-09 12:31:58 [INFO] agent.memory.semantic.graph_store:_load:61: No existing graph found, starting fresh
+2026-07-09 12:31:58 [INFO] agent.memory.semantic.graph_store:_load:61: No existing graph found, starting fresh
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'ent_001' (tool)
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:remove_entity:132: Removed entity 'ent_001'
+2026-07-09 12:31:58 [INFO] agent.memory.semantic.graph_store:_load:61: No existing graph found, starting fresh
+2026-07-09 12:31:58 [INFO] agent.memory.semantic.graph_store:_load:61: No existing graph found, starting fresh
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'e1' (tool)
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'e2' (tool)
+2026-07-09 12:31:58 [INFO] agent.memory.semantic.graph_store:_load:61: No existing graph found, starting fresh
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'e1' (tool)
+2026-07-09 12:31:58 [INFO] agent.memory.semantic.graph_store:_load:61: No existing graph found, starting fresh
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'e1' (tool)
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'e2' (tool)
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_relation:167: Added relation 'e1' --depends_on--> 'e2'
+2026-07-09 12:31:58 [INFO] agent.memory.semantic.graph_store:_load:61: No existing graph found, starting fresh
+2026-07-09 12:31:58 [INFO] agent.memory.semantic.graph_store:_load:61: No existing graph found, starting fresh
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'e1' (tool)
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'e2' (tool)
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_relation:167: Added relation 'e1' --depends_on--> 'e2'
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:remove_relation:189: Removed relation 'e1' → 'e2'
+2026-07-09 12:31:58 [INFO] agent.memory.semantic.graph_store:_load:61: No existing graph found, starting fresh
+2026-07-09 12:31:58 [INFO] agent.memory.semantic.graph_store:_load:61: No existing graph found, starting fresh
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'e1' (tool)
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'e2' (tool)
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'e3' (tool)
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_relation:167: Added relation 'e1' --depends_on--> 'e2'
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_relation:167: Added relation 'e2' --uses--> 'e3'
+2026-07-09 12:31:58 [INFO] agent.memory.semantic.graph_store:_load:61: No existing graph found, starting fresh
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'e1' (tool)
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'e2' (tool)
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_relation:167: Added relation 'e1' --depends_on--> 'e2'
+2026-07-09 12:31:58 [INFO] agent.memory.semantic.graph_store:_load:61: No existing graph found, starting fresh
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'e1' (tool)
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'e2' (tool)
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'e3' (tool)
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_relation:167: Added relation 'e1' --depends_on--> 'e2'
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_relation:167: Added relation 'e3' --uses--> 'e1'
+2026-07-09 12:31:58 [INFO] agent.memory.semantic.graph_store:_load:61: No existing graph found, starting fresh
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'e1' (tool)
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'e2' (tool)
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_relation:167: Added relation 'e1' --depends_on--> 'e2'
+2026-07-09 12:31:58 [INFO] agent.memory.semantic.graph_store:_load:61: No existing graph found, starting fresh
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'e1' (tool)
+2026-07-09 12:31:58 [INFO] agent.memory.semantic.graph_store:_load:61: No existing graph found, starting fresh
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'e1' (tool)
+2026-07-09 12:31:58 [INFO] agent.memory.semantic.graph_store:_load:61: No existing graph found, starting fresh
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'e1' (tool)
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_knowledge_node:252: Added knowledge node 'kn_001'
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.json_store:save_entities:63: Saved 2 entities to /tmp/pytest-of-kkc7130/pytest-9/test_save_and_load_entities0/entities.json
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.json_store:save_entities:63: Saved 1 entities to /tmp/pytest-of-kkc7130/pytest-9/test_add_entity_upsert0/entities.json
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.json_store:save_entities:63: Saved 1 entities to /tmp/pytest-of-kkc7130/pytest-9/test_add_entity_upsert0/entities.json
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.json_store:save_relations:88: Saved 1 relations to /tmp/pytest-of-kkc7130/pytest-9/test_save_and_load_relations0/relations.json
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.json_store:save_relations:88: Saved 1 relations to /tmp/pytest-of-kkc7130/pytest-9/test_add_relation_upsert0/relations.json
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.json_store:save_relations:88: Saved 1 relations to /tmp/pytest-of-kkc7130/pytest-9/test_add_relation_upsert0/relations.json
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.json_store:save_concepts:114: Saved 1 concepts to /tmp/pytest-of-kkc7130/pytest-9/test_save_and_load_concepts0/concepts.json
+2026-07-09 12:31:58 [INFO] agent.memory.semantic.graph_store:_load:61: No existing graph found, starting fresh
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'e1' (tool)
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'e2' (tool)
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_relation:167: Added relation 'e1' --depends_on--> 'e2'
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.json_store:save_entities:63: Saved 2 entities to /tmp/pytest-of-kkc7130/pytest-9/test_sync_from_graph0/entities.json
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.json_store:save_relations:88: Saved 1 relations to /tmp/pytest-of-kkc7130/pytest-9/test_sync_from_graph0/relations.json
+2026-07-09 12:31:58 [INFO] agent.memory.semantic.json_store:sync_from_graph:140: Synced 2 entities and 1 relations from graph to JSON
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.resolver:add_synonym_group:233: Added synonym group: {'ct', 'custom_tool'}
+2026-07-09 12:31:58 [INFO] agent.memory.semantic.graph_store:_load:61: No existing graph found, starting fresh
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'matplotlib' (tool)
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'numpy' (tool)
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'pandas' (tool)
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_relation:167: Added relation 'matplotlib' --depends_on--> 'numpy'
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_relation:167: Added relation 'pandas' --depends_on--> 'numpy'
+2026-07-09 12:31:58 [INFO] agent.memory.semantic.graph_store:_load:61: No existing graph found, starting fresh
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'matplotlib' (tool)
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'numpy' (tool)
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'pandas' (tool)
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_relation:167: Added relation 'matplotlib' --depends_on--> 'numpy'
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_relation:167: Added relation 'pandas' --depends_on--> 'numpy'
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'isolated' (tool)
+2026-07-09 12:31:58 [INFO] agent.memory.semantic.graph_store:_load:61: No existing graph found, starting fresh
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'matplotlib' (tool)
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'numpy' (tool)
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'pandas' (tool)
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_relation:167: Added relation 'matplotlib' --depends_on--> 'numpy'
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_relation:167: Added relation 'pandas' --depends_on--> 'numpy'
+2026-07-09 12:31:58 [INFO] agent.memory.semantic.graph_store:_load:61: No existing graph found, starting fresh
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'matplotlib' (tool)
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'numpy' (tool)
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'pandas' (tool)
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_relation:167: Added relation 'matplotlib' --depends_on--> 'numpy'
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_relation:167: Added relation 'pandas' --depends_on--> 'numpy'
+2026-07-09 12:31:58 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'isolated' (tool)
+2026-07-09 12:31:59 [INFO] agent.memory.semantic.graph_store:_load:61: No existing graph found, starting fresh
+2026-07-09 12:31:59 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'matplotlib' (tool)
+2026-07-09 12:31:59 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'numpy' (tool)
+2026-07-09 12:31:59 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'pandas' (tool)
+2026-07-09 12:31:59 [DEBUG] agent.memory.semantic.graph_store:add_relation:167: Added relation 'matplotlib' --depends_on--> 'numpy'
+2026-07-09 12:31:59 [DEBUG] agent.memory.semantic.graph_store:add_relation:167: Added relation 'pandas' --depends_on--> 'numpy'
+2026-07-09 12:31:59 [INFO] agent.memory.semantic.graph_store:_load:61: No existing graph found, starting fresh
+2026-07-09 12:31:59 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'matplotlib' (tool)
+2026-07-09 12:31:59 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'numpy' (tool)
+2026-07-09 12:31:59 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'pandas' (tool)
+2026-07-09 12:31:59 [DEBUG] agent.memory.semantic.graph_store:add_relation:167: Added relation 'matplotlib' --depends_on--> 'numpy'
+2026-07-09 12:31:59 [DEBUG] agent.memory.semantic.graph_store:add_relation:167: Added relation 'pandas' --depends_on--> 'numpy'
+2026-07-09 12:31:59 [INFO] agent.memory.semantic.graph_store:_load:61: No existing graph found, starting fresh
+2026-07-09 12:31:59 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'matplotlib' (tool)
+2026-07-09 12:31:59 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'numpy' (tool)
+2026-07-09 12:31:59 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'pandas' (tool)
+2026-07-09 12:31:59 [DEBUG] agent.memory.semantic.graph_store:add_relation:167: Added relation 'matplotlib' --depends_on--> 'numpy'
+2026-07-09 12:31:59 [DEBUG] agent.memory.semantic.graph_store:add_relation:167: Added relation 'pandas' --depends_on--> 'numpy'
+2026-07-09 12:31:59 [INFO] agent.memory.semantic.graph_store:_load:61: No existing graph found, starting fresh
+2026-07-09 12:31:59 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'matplotlib' (tool)
+2026-07-09 12:31:59 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'numpy' (tool)
+2026-07-09 12:31:59 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'pandas' (tool)
+2026-07-09 12:31:59 [DEBUG] agent.memory.semantic.graph_store:add_relation:167: Added relation 'matplotlib' --depends_on--> 'numpy'
+2026-07-09 12:31:59 [DEBUG] agent.memory.semantic.graph_store:add_relation:167: Added relation 'pandas' --depends_on--> 'numpy'
+2026-07-09 12:31:59 [INFO] agent.memory.semantic.graph_store:_load:61: No existing graph found, starting fresh
+2026-07-09 12:31:59 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'matplotlib' (tool)
+2026-07-09 12:31:59 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'numpy' (tool)
+2026-07-09 12:31:59 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'pandas' (tool)
+2026-07-09 12:31:59 [DEBUG] agent.memory.semantic.graph_store:add_relation:167: Added relation 'matplotlib' --depends_on--> 'numpy'
+2026-07-09 12:31:59 [DEBUG] agent.memory.semantic.graph_store:add_relation:167: Added relation 'pandas' --depends_on--> 'numpy'
+2026-07-09 12:31:59 [DEBUG] agent.memory.semantic.graph_store:add_knowledge_node:252: Added knowledge node 'kn_001'
+2026-07-09 12:31:59 [DEBUG] agent.memory.semantic.graph_store:add_knowledge_node:252: Added knowledge node 'kn_002'
+2026-07-09 12:31:59 [INFO] agent.memory.semantic.graph_store:_load:61: No existing graph found, starting fresh
+2026-07-09 12:31:59 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'matplotlib' (tool)
+2026-07-09 12:31:59 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'numpy' (tool)
+2026-07-09 12:31:59 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'pandas' (tool)
+2026-07-09 12:31:59 [DEBUG] agent.memory.semantic.graph_store:add_relation:167: Added relation 'matplotlib' --depends_on--> 'numpy'
+2026-07-09 12:31:59 [DEBUG] agent.memory.semantic.graph_store:add_relation:167: Added relation 'pandas' --depends_on--> 'numpy'
+2026-07-09 12:31:59 [DEBUG] agent.memory.semantic.graph_store:add_knowledge_node:252: Added knowledge node 'kn_001'
+2026-07-09 12:31:59 [INFO] agent.memory.semantic.graph_store:_load:61: No existing graph found, starting fresh
+2026-07-09 12:31:59 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'matplotlib' (tool)
+2026-07-09 12:31:59 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'numpy' (tool)
+2026-07-09 12:31:59 [DEBUG] agent.memory.semantic.graph_store:add_entity:110: Added entity 'pandas' (tool)
+2026-07-09 12:31:59 [DEBUG] agent.memory.semantic.graph_store:add_relation:167: Added relation 'matplotlib' --depends_on--> 'numpy'
+2026-07-09 12:31:59 [DEBUG] agent.memory.semantic.graph_store:add_relation:167: Added relation 'pandas' --depends_on--> 'numpy'
+2026-07-09 12:32:22 [INFO] agent.memory.semantic.graph_store:_load:62: No existing graph found, starting fresh
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'ent_001' (tool)
+2026-07-09 12:32:22 [INFO] agent.memory.semantic.graph_store:_load:62: No existing graph found, starting fresh
+2026-07-09 12:32:22 [INFO] agent.memory.semantic.graph_store:_load:62: No existing graph found, starting fresh
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'ent_001' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:remove_entity:156: Removed entity 'ent_001'
+2026-07-09 12:32:22 [INFO] agent.memory.semantic.graph_store:_load:62: No existing graph found, starting fresh
+2026-07-09 12:32:22 [INFO] agent.memory.semantic.graph_store:_load:62: No existing graph found, starting fresh
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'e1' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'e2' (tool)
+2026-07-09 12:32:22 [INFO] agent.memory.semantic.graph_store:_load:62: No existing graph found, starting fresh
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'e1' (tool)
+2026-07-09 12:32:22 [INFO] agent.memory.semantic.graph_store:_load:62: No existing graph found, starting fresh
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'e1' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'e2' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_relation:191: Added relation 'e1' --depends_on--> 'e2'
+2026-07-09 12:32:22 [INFO] agent.memory.semantic.graph_store:_load:62: No existing graph found, starting fresh
+2026-07-09 12:32:22 [INFO] agent.memory.semantic.graph_store:_load:62: No existing graph found, starting fresh
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'e1' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'e2' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_relation:191: Added relation 'e1' --depends_on--> 'e2'
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:remove_relation:213: Removed relation 'e1' → 'e2'
+2026-07-09 12:32:22 [INFO] agent.memory.semantic.graph_store:_load:62: No existing graph found, starting fresh
+2026-07-09 12:32:22 [INFO] agent.memory.semantic.graph_store:_load:62: No existing graph found, starting fresh
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'e1' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'e2' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'e3' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_relation:191: Added relation 'e1' --depends_on--> 'e2'
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_relation:191: Added relation 'e2' --uses--> 'e3'
+2026-07-09 12:32:22 [INFO] agent.memory.semantic.graph_store:_load:62: No existing graph found, starting fresh
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'e1' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'e2' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_relation:191: Added relation 'e1' --depends_on--> 'e2'
+2026-07-09 12:32:22 [INFO] agent.memory.semantic.graph_store:_load:62: No existing graph found, starting fresh
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'e1' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'e2' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'e3' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_relation:191: Added relation 'e1' --depends_on--> 'e2'
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_relation:191: Added relation 'e3' --uses--> 'e1'
+2026-07-09 12:32:22 [INFO] agent.memory.semantic.graph_store:_load:62: No existing graph found, starting fresh
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'e1' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'e2' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_relation:191: Added relation 'e1' --depends_on--> 'e2'
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:save:97: Saved GraphML to /tmp/pytest-of-kkc7130/pytest-10/test_save_and_load_graphml0/graph.graphml
+2026-07-09 12:32:22 [INFO] agent.memory.semantic.graph_store:_load:60: Loaded graph from /tmp/pytest-of-kkc7130/pytest-10/test_save_and_load_graphml0/graph.graphml (2 nodes)
+2026-07-09 12:32:22 [INFO] agent.memory.semantic.graph_store:_load:62: No existing graph found, starting fresh
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'e1' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:save:97: Saved GraphML to /tmp/pytest-of-kkc7130/pytest-10/test_save_and_load_pickle0/graph.graphml
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:save:101: Saved pickle to /tmp/pytest-of-kkc7130/pytest-10/test_save_and_load_pickle0/graph.gpickle
+2026-07-09 12:32:22 [INFO] agent.memory.semantic.graph_store:_load:57: Loaded graph from /tmp/pytest-of-kkc7130/pytest-10/test_save_and_load_pickle0/graph.gpickle (1 nodes)
+2026-07-09 12:32:22 [INFO] agent.memory.semantic.graph_store:_load:62: No existing graph found, starting fresh
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'e1' (tool)
+2026-07-09 12:32:22 [INFO] agent.memory.semantic.graph_store:save_snapshot:118: Saved snapshot to /tmp/pytest-of-kkc7130/pytest-10/test_save_snapshot0/snapshots/2026-07-09/graph_2026-07-09T03-32-22Z.graphml
+2026-07-09 12:32:22 [INFO] agent.memory.semantic.graph_store:_load:62: No existing graph found, starting fresh
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'e1' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_knowledge_node:276: Added knowledge node 'kn_001'
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.json_store:save_entities:63: Saved 2 entities to /tmp/pytest-of-kkc7130/pytest-10/test_save_and_load_entities0/entities.json
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.json_store:save_entities:63: Saved 1 entities to /tmp/pytest-of-kkc7130/pytest-10/test_add_entity_upsert0/entities.json
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.json_store:save_entities:63: Saved 1 entities to /tmp/pytest-of-kkc7130/pytest-10/test_add_entity_upsert0/entities.json
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.json_store:save_relations:88: Saved 1 relations to /tmp/pytest-of-kkc7130/pytest-10/test_save_and_load_relations0/relations.json
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.json_store:save_relations:88: Saved 1 relations to /tmp/pytest-of-kkc7130/pytest-10/test_add_relation_upsert0/relations.json
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.json_store:save_relations:88: Saved 1 relations to /tmp/pytest-of-kkc7130/pytest-10/test_add_relation_upsert0/relations.json
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.json_store:save_concepts:114: Saved 1 concepts to /tmp/pytest-of-kkc7130/pytest-10/test_save_and_load_concepts0/concepts.json
+2026-07-09 12:32:22 [INFO] agent.memory.semantic.graph_store:_load:62: No existing graph found, starting fresh
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'e1' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'e2' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_relation:191: Added relation 'e1' --depends_on--> 'e2'
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.json_store:save_entities:63: Saved 2 entities to /tmp/pytest-of-kkc7130/pytest-10/test_sync_from_graph0/entities.json
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.json_store:save_relations:88: Saved 1 relations to /tmp/pytest-of-kkc7130/pytest-10/test_sync_from_graph0/relations.json
+2026-07-09 12:32:22 [INFO] agent.memory.semantic.json_store:sync_from_graph:140: Synced 2 entities and 1 relations from graph to JSON
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.resolver:add_synonym_group:233: Added synonym group: {'ct', 'custom_tool'}
+2026-07-09 12:32:22 [INFO] agent.memory.semantic.graph_store:_load:62: No existing graph found, starting fresh
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'matplotlib' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'numpy' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'pandas' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_relation:191: Added relation 'matplotlib' --depends_on--> 'numpy'
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_relation:191: Added relation 'pandas' --depends_on--> 'numpy'
+2026-07-09 12:32:22 [INFO] agent.memory.semantic.graph_store:_load:62: No existing graph found, starting fresh
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'matplotlib' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'numpy' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'pandas' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_relation:191: Added relation 'matplotlib' --depends_on--> 'numpy'
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_relation:191: Added relation 'pandas' --depends_on--> 'numpy'
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'isolated' (tool)
+2026-07-09 12:32:22 [INFO] agent.memory.semantic.graph_store:_load:62: No existing graph found, starting fresh
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'matplotlib' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'numpy' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'pandas' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_relation:191: Added relation 'matplotlib' --depends_on--> 'numpy'
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_relation:191: Added relation 'pandas' --depends_on--> 'numpy'
+2026-07-09 12:32:22 [INFO] agent.memory.semantic.graph_store:_load:62: No existing graph found, starting fresh
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'matplotlib' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'numpy' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'pandas' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_relation:191: Added relation 'matplotlib' --depends_on--> 'numpy'
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_relation:191: Added relation 'pandas' --depends_on--> 'numpy'
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'isolated' (tool)
+2026-07-09 12:32:22 [INFO] agent.memory.semantic.graph_store:_load:62: No existing graph found, starting fresh
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'matplotlib' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'numpy' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'pandas' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_relation:191: Added relation 'matplotlib' --depends_on--> 'numpy'
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_relation:191: Added relation 'pandas' --depends_on--> 'numpy'
+2026-07-09 12:32:22 [INFO] agent.memory.semantic.graph_store:_load:62: No existing graph found, starting fresh
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'matplotlib' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'numpy' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'pandas' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_relation:191: Added relation 'matplotlib' --depends_on--> 'numpy'
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_relation:191: Added relation 'pandas' --depends_on--> 'numpy'
+2026-07-09 12:32:22 [INFO] agent.memory.semantic.graph_store:_load:62: No existing graph found, starting fresh
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'matplotlib' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'numpy' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'pandas' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_relation:191: Added relation 'matplotlib' --depends_on--> 'numpy'
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_relation:191: Added relation 'pandas' --depends_on--> 'numpy'
+2026-07-09 12:32:22 [INFO] agent.memory.semantic.graph_store:_load:62: No existing graph found, starting fresh
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'matplotlib' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'numpy' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'pandas' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_relation:191: Added relation 'matplotlib' --depends_on--> 'numpy'
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_relation:191: Added relation 'pandas' --depends_on--> 'numpy'
+2026-07-09 12:32:22 [INFO] agent.memory.semantic.graph_store:_load:62: No existing graph found, starting fresh
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'matplotlib' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'numpy' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'pandas' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_relation:191: Added relation 'matplotlib' --depends_on--> 'numpy'
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_relation:191: Added relation 'pandas' --depends_on--> 'numpy'
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_knowledge_node:276: Added knowledge node 'kn_001'
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_knowledge_node:276: Added knowledge node 'kn_002'
+2026-07-09 12:32:22 [INFO] agent.memory.semantic.graph_store:_load:62: No existing graph found, starting fresh
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'matplotlib' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'numpy' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'pandas' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_relation:191: Added relation 'matplotlib' --depends_on--> 'numpy'
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_relation:191: Added relation 'pandas' --depends_on--> 'numpy'
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_knowledge_node:276: Added knowledge node 'kn_001'
+2026-07-09 12:32:22 [INFO] agent.memory.semantic.graph_store:_load:62: No existing graph found, starting fresh
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'matplotlib' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'numpy' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_entity:134: Added entity 'pandas' (tool)
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_relation:191: Added relation 'matplotlib' --depends_on--> 'numpy'
+2026-07-09 12:32:22 [DEBUG] agent.memory.semantic.graph_store:add_relation:191: Added relation 'pandas' --depends_on--> 'numpy'
+2026-07-09 12:32:35 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'ent_001' (tool)
+2026-07-09 12:32:35 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 12:32:35 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'ent_001' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:remove_entity:179: Removed entity 'ent_001'
+2026-07-09 12:32:35 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 12:32:35 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'e1' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'e2' (tool)
+2026-07-09 12:32:35 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'e1' (tool)
+2026-07-09 12:32:35 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'e1' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'e2' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'e1' --depends_on--> 'e2'
+2026-07-09 12:32:35 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 12:32:35 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'e1' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'e2' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'e1' --depends_on--> 'e2'
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:remove_relation:236: Removed relation 'e1' → 'e2'
+2026-07-09 12:32:35 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 12:32:35 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'e1' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'e2' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'e3' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'e1' --depends_on--> 'e2'
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'e2' --uses--> 'e3'
+2026-07-09 12:32:35 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'e1' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'e2' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'e1' --depends_on--> 'e2'
+2026-07-09 12:32:35 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'e1' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'e2' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'e3' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'e1' --depends_on--> 'e2'
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'e3' --uses--> 'e1'
+2026-07-09 12:32:35 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'e1' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'e2' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'e1' --depends_on--> 'e2'
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:save:120: Saved GraphML to /tmp/pytest-of-kkc7130/pytest-11/test_save_and_load_graphml0/graph.graphml
+2026-07-09 12:32:35 [INFO] agent.memory.semantic.graph_store:_load:62: Loaded graph from /tmp/pytest-of-kkc7130/pytest-11/test_save_and_load_graphml0/graph.graphml (2 nodes)
+2026-07-09 12:32:35 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'e1' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:save:120: Saved GraphML to /tmp/pytest-of-kkc7130/pytest-11/test_save_and_load_pickle0/graph.graphml
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:save:124: Saved pickle to /tmp/pytest-of-kkc7130/pytest-11/test_save_and_load_pickle0/graph.gpickle
+2026-07-09 12:32:35 [INFO] agent.memory.semantic.graph_store:_load:57: Loaded graph from /tmp/pytest-of-kkc7130/pytest-11/test_save_and_load_pickle0/graph.gpickle (1 nodes)
+2026-07-09 12:32:35 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'e1' (tool)
+2026-07-09 12:32:35 [INFO] agent.memory.semantic.graph_store:save_snapshot:141: Saved snapshot to /tmp/pytest-of-kkc7130/pytest-11/test_save_snapshot0/snapshots/2026-07-09/graph_2026-07-09T03-32-35Z.graphml
+2026-07-09 12:32:35 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'e1' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_knowledge_node:299: Added knowledge node 'kn_001'
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.json_store:save_entities:63: Saved 2 entities to /tmp/pytest-of-kkc7130/pytest-11/test_save_and_load_entities0/entities.json
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.json_store:save_entities:63: Saved 1 entities to /tmp/pytest-of-kkc7130/pytest-11/test_add_entity_upsert0/entities.json
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.json_store:save_entities:63: Saved 1 entities to /tmp/pytest-of-kkc7130/pytest-11/test_add_entity_upsert0/entities.json
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.json_store:save_relations:88: Saved 1 relations to /tmp/pytest-of-kkc7130/pytest-11/test_save_and_load_relations0/relations.json
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.json_store:save_relations:88: Saved 1 relations to /tmp/pytest-of-kkc7130/pytest-11/test_add_relation_upsert0/relations.json
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.json_store:save_relations:88: Saved 1 relations to /tmp/pytest-of-kkc7130/pytest-11/test_add_relation_upsert0/relations.json
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.json_store:save_concepts:114: Saved 1 concepts to /tmp/pytest-of-kkc7130/pytest-11/test_save_and_load_concepts0/concepts.json
+2026-07-09 12:32:35 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'e1' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'e2' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'e1' --depends_on--> 'e2'
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.json_store:save_entities:63: Saved 2 entities to /tmp/pytest-of-kkc7130/pytest-11/test_sync_from_graph0/entities.json
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.json_store:save_relations:88: Saved 1 relations to /tmp/pytest-of-kkc7130/pytest-11/test_sync_from_graph0/relations.json
+2026-07-09 12:32:35 [INFO] agent.memory.semantic.json_store:sync_from_graph:140: Synced 2 entities and 1 relations from graph to JSON
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.resolver:add_synonym_group:233: Added synonym group: {'custom_tool', 'ct'}
+2026-07-09 12:32:35 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'matplotlib' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'numpy' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'pandas' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'matplotlib' --depends_on--> 'numpy'
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'pandas' --depends_on--> 'numpy'
+2026-07-09 12:32:35 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'matplotlib' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'numpy' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'pandas' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'matplotlib' --depends_on--> 'numpy'
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'pandas' --depends_on--> 'numpy'
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'isolated' (tool)
+2026-07-09 12:32:35 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'matplotlib' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'numpy' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'pandas' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'matplotlib' --depends_on--> 'numpy'
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'pandas' --depends_on--> 'numpy'
+2026-07-09 12:32:35 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'matplotlib' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'numpy' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'pandas' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'matplotlib' --depends_on--> 'numpy'
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'pandas' --depends_on--> 'numpy'
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'isolated' (tool)
+2026-07-09 12:32:35 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'matplotlib' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'numpy' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'pandas' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'matplotlib' --depends_on--> 'numpy'
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'pandas' --depends_on--> 'numpy'
+2026-07-09 12:32:35 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'matplotlib' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'numpy' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'pandas' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'matplotlib' --depends_on--> 'numpy'
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'pandas' --depends_on--> 'numpy'
+2026-07-09 12:32:35 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'matplotlib' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'numpy' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'pandas' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'matplotlib' --depends_on--> 'numpy'
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'pandas' --depends_on--> 'numpy'
+2026-07-09 12:32:35 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'matplotlib' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'numpy' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'pandas' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'matplotlib' --depends_on--> 'numpy'
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'pandas' --depends_on--> 'numpy'
+2026-07-09 12:32:35 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'matplotlib' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'numpy' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'pandas' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'matplotlib' --depends_on--> 'numpy'
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'pandas' --depends_on--> 'numpy'
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_knowledge_node:299: Added knowledge node 'kn_001'
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_knowledge_node:299: Added knowledge node 'kn_002'
+2026-07-09 12:32:35 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'matplotlib' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'numpy' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'pandas' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'matplotlib' --depends_on--> 'numpy'
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'pandas' --depends_on--> 'numpy'
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_knowledge_node:299: Added knowledge node 'kn_001'
+2026-07-09 12:32:35 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'matplotlib' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'numpy' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'pandas' (tool)
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'matplotlib' --depends_on--> 'numpy'
+2026-07-09 12:32:35 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'pandas' --depends_on--> 'numpy'
