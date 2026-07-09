@@ -1374,3 +1374,317 @@
 2026-07-09 12:55:32 [INFO] agent.memory.constitution.loader:load:94: Loaded constitution v1: 7 principles, 10 K-Scenarios, CIB threshold=0.95
 2026-07-09 12:55:32 [WARNING] agent.memory.constitution.guard:evaluate:128: CIB BLOCKED: min_score=0.5000 < threshold=1.01. Failed scenarios: ['ks_honesty_01', 'ks_honesty_02', 'ks_user_control_01', 'ks_user_control_02', 'ks_memory_min_01', 'ks_memory_min_02', 'ks_transparency_01', 'ks_learning_01', 'ks_resource_01', 'ks_context_01']
 2026-07-09 12:55:32 [INFO] agent.memory.constitution.guard:require_hitl_approval:224: HITL PASSED: Constitution layer 'absolute' modification approved by human.
+2026-07-09 13:28:31 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-13/test_table_created0/identity.sqlite3
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_001
+2026-07-09 13:28:31 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-13/test_get_self_model0/identity.sqlite3
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_001
+2026-07-09 13:28:31 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-13/test_get_nonexistent0/identity.sqlite3
+2026-07-09 13:28:31 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-13/test_list_self_model0/identity.sqlite3
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_000
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_001
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_002
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_003
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_004
+2026-07-09 13:28:31 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-13/test_list_by_category0/identity.sqlite3
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_c0
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_c1
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_c2
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_t0
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_t1
+2026-07-09 13:28:31 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-13/test_get_recent0/identity.sqlite3
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_000
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_001
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_002
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_003
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_004
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_005
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_006
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_007
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_008
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_009
+2026-07-09 13:28:31 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-13/test_count0/identity.sqlite3
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_001
+2026-07-09 13:28:31 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-13/test_upsert_and_get0/identity.sqlite3
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 13:28:31 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-13/test_upsert_overwrites0/identity.sqlite3
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 13:28:31 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-13/test_list_capabilities0/identity.sqlite3
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability writing
+2026-07-09 13:28:31 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-13/test_delete_capability0/identity.sqlite3
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 13:28:31 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-13/test_delete_nonexistent0/identity.sqlite3
+2026-07-09 13:28:31 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-13/test_record_computes_calibrati0/identity.sqlite3
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_d3c806e57e324509b0fbe49db6ce5d25
+2026-07-09 13:28:31 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_001, category=coding, predicted=0.80, actual=0.60, cal_error=0.2000, direction=overconfident
+2026-07-09 13:28:31 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-13/test_record_calibrated0/identity.sqlite3
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_0b6d9005f3e245c5a81af072e81a8831
+2026-07-09 13:28:31 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_001, category=coding, predicted=0.70, actual=0.72, cal_error=0.0200, direction=calibrated
+2026-07-09 13:28:31 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-13/test_record_underconfident0/identity.sqlite3
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_dc1d953e585e4e13bcc89460ded360fb
+2026-07-09 13:28:31 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_001, category=coding, predicted=0.30, actual=0.90, cal_error=0.6000, direction=underconfident
+2026-07-09 13:28:31 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-13/test_window_stats_empty0/identity.sqlite3
+2026-07-09 13:28:31 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-13/test_window_stats_with_data0/identity.sqlite3
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_0c9db49a47674f31b25dac2b5d9563b5
+2026-07-09 13:28:31 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_000, category=coding, predicted=0.80, actual=0.60, cal_error=0.2000, direction=overconfident
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_d47f1240fc274cee89b6a7802bedb918
+2026-07-09 13:28:31 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_001, category=coding, predicted=0.80, actual=0.60, cal_error=0.2000, direction=overconfident
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_457a11749a0e462080e0883612149ea8
+2026-07-09 13:28:31 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_002, category=coding, predicted=0.80, actual=0.60, cal_error=0.2000, direction=overconfident
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_6026fd6545464c2cac5309731e8956ed
+2026-07-09 13:28:31 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_003, category=coding, predicted=0.80, actual=0.60, cal_error=0.2000, direction=overconfident
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_ff375ecb87034a5485b450b063120390
+2026-07-09 13:28:31 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_004, category=coding, predicted=0.80, actual=0.60, cal_error=0.2000, direction=overconfident
+2026-07-09 13:28:31 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-13/test_coherence_index0/identity.sqlite3
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_0b318e11e6d942c5a4bbdc8630694ca0
+2026-07-09 13:28:31 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_000, category=coding, predicted=0.70, actual=0.70, cal_error=0.0000, direction=calibrated
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_fb2eb7d6dfbc4286b2cb8f755a181ccb
+2026-07-09 13:28:31 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_001, category=coding, predicted=0.70, actual=0.70, cal_error=0.0000, direction=calibrated
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_98239e976a104076a902391c299b33a1
+2026-07-09 13:28:31 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_002, category=coding, predicted=0.70, actual=0.70, cal_error=0.0000, direction=calibrated
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_e39ed794a30849fbbce4c321f01407b0
+2026-07-09 13:28:31 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_003, category=coding, predicted=0.70, actual=0.70, cal_error=0.0000, direction=calibrated
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_e9359f66c36340269a3613a111f1f217
+2026-07-09 13:28:31 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_004, category=coding, predicted=0.70, actual=0.70, cal_error=0.0000, direction=calibrated
+2026-07-09 13:28:31 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-13/test_calibration_summary0/identity.sqlite3
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_b7e76cc6e67f41e89baa001693f68cdc
+2026-07-09 13:28:31 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_001, category=coding, predicted=0.80, actual=0.60, cal_error=0.2000, direction=overconfident
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_7a9efb5e53c34c1ba1313e2dd11d83d6
+2026-07-09 13:28:31 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_002, category=coding, predicted=0.30, actual=0.90, cal_error=0.6000, direction=underconfident
+2026-07-09 13:28:31 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-13/test_get_latest0/identity.sqlite3
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_74d4c372ec0540aabaf0e9890b8ea33b
+2026-07-09 13:28:31 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_001, category=coding, predicted=0.80, actual=0.60, cal_error=0.2000, direction=overconfident
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_ad83b69853f84f4c8271c884dbe39534
+2026-07-09 13:28:31 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_002, category=coding, predicted=0.70, actual=0.70, cal_error=0.0000, direction=calibrated
+2026-07-09 13:28:31 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-13/test_get_auto_registers_unknow0/identity.sqlite3
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability new_category
+2026-07-09 13:28:31 [INFO] agent.memory.identity.capability_model:get:135: Auto-registered new capability: new_category
+2026-07-09 13:28:31 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-13/test_update_from_episode_ema0/identity.sqlite3
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 13:28:31 [INFO] agent.memory.identity.capability_model:get:135: Auto-registered new capability: coding
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.capability_model:update_from_episode:187: Updated capability coding: success=0.6200, confidence=0.7600, attempts=1
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.capability_model:update_from_episode:187: Updated capability coding: success=0.6740, confidence=0.7720, attempts=2
+2026-07-09 13:28:31 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-13/test_update_with_effort0/identity.sqlite3
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 13:28:31 [INFO] agent.memory.identity.capability_model:get:135: Auto-registered new capability: coding
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.capability_model:update_from_episode:187: Updated capability coding: success=0.5900, confidence=0.7300, attempts=1
+2026-07-09 13:28:31 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-13/test_predict0/identity.sqlite3
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 13:28:31 [INFO] agent.memory.identity.capability_model:get:135: Auto-registered new capability: coding
+2026-07-09 13:28:31 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-13/test_initialize_from_yaml0/identity.sqlite3
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability writing
+2026-07-09 13:28:31 [INFO] agent.memory.identity.capability_model:initialize_from_yaml:103: Initialized 2 capabilities from /tmp/pytest-of-kkc7130/pytest-13/test_initialize_from_yaml0/capabilities.yml
+2026-07-09 13:28:31 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-13/test_initialize_yaml_skips_exi0/identity.sqlite3
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 13:28:31 [INFO] agent.memory.identity.capability_model:initialize_from_yaml:103: Initialized 0 capabilities from /tmp/pytest-of-kkc7130/pytest-13/test_initialize_yaml_skips_exi0/capabilities.yml
+2026-07-09 13:28:31 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-13/test_update_batch0/identity.sqlite3
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 13:28:31 [INFO] agent.memory.identity.capability_model:get:135: Auto-registered new capability: coding
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability writing
+2026-07-09 13:28:31 [INFO] agent.memory.identity.capability_model:get:135: Auto-registered new capability: writing
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.capability_model:update_from_episode:187: Updated capability coding: success=0.6200, confidence=0.7600, attempts=1
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability writing
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.capability_model:update_from_episode:187: Updated capability writing: success=0.5300, confidence=0.6700, attempts=1
+2026-07-09 13:28:31 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-13/test_update_statistics0/identity.sqlite3
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_ef79152929cb443abc163891ee5b93b1
+2026-07-09 13:28:31 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_001, category=coding, predicted=0.80, actual=0.60, cal_error=0.2000, direction=overconfident
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 13:28:31 [INFO] agent.memory.identity.capability_model:get:135: Auto-registered new capability: coding
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.capability_model:update_from_episode:187: Updated capability coding: success=0.5300, confidence=0.6700, attempts=1
+2026-07-09 13:28:31 [INFO] agent.memory.identity.updater:update_statistics:125: Statistics updated: episode=ep_001, category=coding, cal_error=0.2000, direction=overconfident
+2026-07-09 13:28:31 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-13/test_update_statistics_creates0/identity.sqlite3
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_994110dfd75b43d2a421a80099edfedc
+2026-07-09 13:28:31 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_001, category=new_cat, predicted=0.50, actual=0.70, cal_error=0.2000, direction=underconfident
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability new_cat
+2026-07-09 13:28:31 [INFO] agent.memory.identity.capability_model:get:135: Auto-registered new capability: new_cat
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability new_cat
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.capability_model:update_from_episode:187: Updated capability new_cat: success=0.5600, confidence=0.7000, attempts=1
+2026-07-09 13:28:31 [INFO] agent.memory.identity.updater:update_statistics:125: Statistics updated: episode=ep_001, category=new_cat, cal_error=0.2000, direction=underconfident
+2026-07-09 13:28:31 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-13/test_update_statistics_with_ef0/identity.sqlite3
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_526d3816f3764729a90b0d4eadb9c39c
+2026-07-09 13:28:31 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_001, category=coding, predicted=0.70, actual=0.80, cal_error=0.1000, direction=underconfident
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 13:28:31 [INFO] agent.memory.identity.capability_model:get:135: Auto-registered new capability: coding
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.capability_model:update_from_episode:187: Updated capability coding: success=0.5900, confidence=0.7300, attempts=1
+2026-07-09 13:28:31 [INFO] agent.memory.identity.updater:update_statistics:125: Statistics updated: episode=ep_001, category=coding, cal_error=0.1000, direction=underconfident
+2026-07-09 13:28:31 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-13/test_redesign_blocked_without_0/identity.sqlite3
+2026-07-09 13:28:31 [WARNING] agent.memory.identity.updater:redesign_identity:168: HITL BLOCKED: Identity redesign requires human approval. No approval granted.
+2026-07-09 13:28:31 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-13/test_redesign_with_hitl0/identity.sqlite3
+2026-07-09 13:28:31 [INFO] agent.memory.identity.updater:_save_identity_yaml:236: Saved identity YAML to /tmp/pytest-of-kkc7130/pytest-13/test_redesign_with_hitl0/identity.yml
+2026-07-09 13:28:31 [INFO] agent.memory.identity.updater:redesign_identity:217: Identity redesigned (v2): ['autonomy_level']
+2026-07-09 13:28:31 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-13/test_redesign_updates_identity0/identity.sqlite3
+2026-07-09 13:28:31 [INFO] agent.memory.identity.updater:_save_identity_yaml:236: Saved identity YAML to /tmp/pytest-of-kkc7130/pytest-13/test_redesign_updates_identity0/identity.yml
+2026-07-09 13:28:31 [INFO] agent.memory.identity.updater:redesign_identity:217: Identity redesigned (v1): ['identity_core']
+2026-07-09 13:28:31 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-13/test_get_identity_state0/identity.sqlite3
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_f7b9cce3349e429993998120a59882d1
+2026-07-09 13:28:31 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_001, category=coding, predicted=0.80, actual=0.60, cal_error=0.2000, direction=overconfident
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 13:28:31 [INFO] agent.memory.identity.capability_model:get:135: Auto-registered new capability: coding
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 13:28:31 [DEBUG] agent.memory.identity.capability_model:update_from_episode:187: Updated capability coding: success=0.5300, confidence=0.6700, attempts=1
+2026-07-09 13:28:31 [INFO] agent.memory.identity.updater:update_statistics:125: Statistics updated: episode=ep_001, category=coding, cal_error=0.2000, direction=overconfident
+2026-07-09 13:29:18 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-14/test_table_created0/identity.sqlite3
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_001
+2026-07-09 13:29:18 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-14/test_get_self_model0/identity.sqlite3
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_001
+2026-07-09 13:29:18 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-14/test_get_nonexistent0/identity.sqlite3
+2026-07-09 13:29:18 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-14/test_list_self_model0/identity.sqlite3
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_000
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_001
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_002
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_003
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_004
+2026-07-09 13:29:18 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-14/test_list_by_category0/identity.sqlite3
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_c0
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_c1
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_c2
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_t0
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_t1
+2026-07-09 13:29:18 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-14/test_get_recent0/identity.sqlite3
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_000
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_001
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_002
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_003
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_004
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_005
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_006
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_007
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_008
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_009
+2026-07-09 13:29:18 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-14/test_count0/identity.sqlite3
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_001
+2026-07-09 13:29:18 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-14/test_upsert_and_get0/identity.sqlite3
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 13:29:18 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-14/test_upsert_overwrites0/identity.sqlite3
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 13:29:18 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-14/test_list_capabilities0/identity.sqlite3
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability writing
+2026-07-09 13:29:18 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-14/test_delete_capability0/identity.sqlite3
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 13:29:18 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-14/test_delete_nonexistent0/identity.sqlite3
+2026-07-09 13:29:18 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-14/test_record_computes_calibrati0/identity.sqlite3
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_bcfa209bc0fa40939cc148011eda12ab
+2026-07-09 13:29:18 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_001, category=coding, predicted=0.80, actual=0.60, cal_error=0.2000, direction=overconfident
+2026-07-09 13:29:18 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-14/test_record_calibrated0/identity.sqlite3
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_04e657a629924b18ab9ef0dcc7cd0522
+2026-07-09 13:29:18 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_001, category=coding, predicted=0.70, actual=0.72, cal_error=0.0200, direction=calibrated
+2026-07-09 13:29:18 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-14/test_record_underconfident0/identity.sqlite3
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_d75e4349f5494df2b5a2f36fbdb8bcee
+2026-07-09 13:29:18 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_001, category=coding, predicted=0.30, actual=0.90, cal_error=0.6000, direction=underconfident
+2026-07-09 13:29:18 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-14/test_window_stats_empty0/identity.sqlite3
+2026-07-09 13:29:18 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-14/test_window_stats_with_data0/identity.sqlite3
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_8e431b1411a24d7d8041b5dfa55dee20
+2026-07-09 13:29:18 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_000, category=coding, predicted=0.80, actual=0.60, cal_error=0.2000, direction=overconfident
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_af12855a2bf345d4bcbb0b94786f0f68
+2026-07-09 13:29:18 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_001, category=coding, predicted=0.80, actual=0.60, cal_error=0.2000, direction=overconfident
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_69d7aa051eec4b7897ee2a3193e21d57
+2026-07-09 13:29:18 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_002, category=coding, predicted=0.80, actual=0.60, cal_error=0.2000, direction=overconfident
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_5aa81287b3ac4ee987670f2e9585547b
+2026-07-09 13:29:18 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_003, category=coding, predicted=0.80, actual=0.60, cal_error=0.2000, direction=overconfident
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_ac48521ce5c04f9e8d940bf1096da5a5
+2026-07-09 13:29:18 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_004, category=coding, predicted=0.80, actual=0.60, cal_error=0.2000, direction=overconfident
+2026-07-09 13:29:18 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-14/test_coherence_index0/identity.sqlite3
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_3922099aa1434949a2fce7f4b26693e3
+2026-07-09 13:29:18 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_000, category=coding, predicted=0.70, actual=0.70, cal_error=0.0000, direction=calibrated
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_e821bcb6baba46bd87696e8bf23c252c
+2026-07-09 13:29:18 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_001, category=coding, predicted=0.70, actual=0.70, cal_error=0.0000, direction=calibrated
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_0a84c098a06d4d2c8dea97cdaa0b3241
+2026-07-09 13:29:18 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_002, category=coding, predicted=0.70, actual=0.70, cal_error=0.0000, direction=calibrated
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_46fb739131ce45458a56afd2a485b38d
+2026-07-09 13:29:18 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_003, category=coding, predicted=0.70, actual=0.70, cal_error=0.0000, direction=calibrated
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_f24bdf0597af4c448aed2a382299236f
+2026-07-09 13:29:18 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_004, category=coding, predicted=0.70, actual=0.70, cal_error=0.0000, direction=calibrated
+2026-07-09 13:29:18 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-14/test_calibration_summary0/identity.sqlite3
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_d05a8cbb369c4acb9903f40b787c82e7
+2026-07-09 13:29:18 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_001, category=coding, predicted=0.80, actual=0.60, cal_error=0.2000, direction=overconfident
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_f04abe179ece4c2995e646d9bce02369
+2026-07-09 13:29:18 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_002, category=coding, predicted=0.30, actual=0.90, cal_error=0.6000, direction=underconfident
+2026-07-09 13:29:18 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-14/test_get_latest0/identity.sqlite3
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_eb2ffefed2674ac5b53ec7ca8f4a7310
+2026-07-09 13:29:18 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_001, category=coding, predicted=0.80, actual=0.60, cal_error=0.2000, direction=overconfident
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_a503e07a72e34335949cc46131427d49
+2026-07-09 13:29:18 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_002, category=coding, predicted=0.70, actual=0.70, cal_error=0.0000, direction=calibrated
+2026-07-09 13:29:18 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-14/test_get_auto_registers_unknow0/identity.sqlite3
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability new_category
+2026-07-09 13:29:18 [INFO] agent.memory.identity.capability_model:get:135: Auto-registered new capability: new_category
+2026-07-09 13:29:18 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-14/test_update_from_episode_ema0/identity.sqlite3
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 13:29:18 [INFO] agent.memory.identity.capability_model:get:135: Auto-registered new capability: coding
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.capability_model:update_from_episode:187: Updated capability coding: success=0.6200, confidence=0.7600, attempts=1
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.capability_model:update_from_episode:187: Updated capability coding: success=0.6740, confidence=0.7720, attempts=2
+2026-07-09 13:29:18 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-14/test_update_with_effort0/identity.sqlite3
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 13:29:18 [INFO] agent.memory.identity.capability_model:get:135: Auto-registered new capability: coding
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.capability_model:update_from_episode:187: Updated capability coding: success=0.5900, confidence=0.7300, attempts=1
+2026-07-09 13:29:18 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-14/test_predict0/identity.sqlite3
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 13:29:18 [INFO] agent.memory.identity.capability_model:get:135: Auto-registered new capability: coding
+2026-07-09 13:29:18 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-14/test_initialize_from_yaml0/identity.sqlite3
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability writing
+2026-07-09 13:29:18 [INFO] agent.memory.identity.capability_model:initialize_from_yaml:103: Initialized 2 capabilities from /tmp/pytest-of-kkc7130/pytest-14/test_initialize_from_yaml0/capabilities.yml
+2026-07-09 13:29:18 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-14/test_initialize_yaml_skips_exi0/identity.sqlite3
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 13:29:18 [INFO] agent.memory.identity.capability_model:initialize_from_yaml:103: Initialized 0 capabilities from /tmp/pytest-of-kkc7130/pytest-14/test_initialize_yaml_skips_exi0/capabilities.yml
+2026-07-09 13:29:18 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-14/test_update_batch0/identity.sqlite3
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 13:29:18 [INFO] agent.memory.identity.capability_model:get:135: Auto-registered new capability: coding
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability writing
+2026-07-09 13:29:18 [INFO] agent.memory.identity.capability_model:get:135: Auto-registered new capability: writing
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.capability_model:update_from_episode:187: Updated capability coding: success=0.6200, confidence=0.7600, attempts=1
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability writing
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.capability_model:update_from_episode:187: Updated capability writing: success=0.5300, confidence=0.6700, attempts=1
+2026-07-09 13:29:18 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-14/test_update_statistics0/identity.sqlite3
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_c9b1203b647241a8bdd4ebadfc888af0
+2026-07-09 13:29:18 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_001, category=coding, predicted=0.80, actual=0.60, cal_error=0.2000, direction=overconfident
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 13:29:18 [INFO] agent.memory.identity.capability_model:get:135: Auto-registered new capability: coding
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.capability_model:update_from_episode:187: Updated capability coding: success=0.5300, confidence=0.6700, attempts=1
+2026-07-09 13:29:18 [INFO] agent.memory.identity.updater:update_statistics:125: Statistics updated: episode=ep_001, category=coding, cal_error=0.2000, direction=overconfident
+2026-07-09 13:29:18 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-14/test_update_statistics_creates0/identity.sqlite3
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_d7eff4d90f08441188fea17b9f757962
+2026-07-09 13:29:18 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_001, category=new_cat, predicted=0.50, actual=0.70, cal_error=0.2000, direction=underconfident
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability new_cat
+2026-07-09 13:29:18 [INFO] agent.memory.identity.capability_model:get:135: Auto-registered new capability: new_cat
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability new_cat
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.capability_model:update_from_episode:187: Updated capability new_cat: success=0.5600, confidence=0.7000, attempts=1
+2026-07-09 13:29:18 [INFO] agent.memory.identity.updater:update_statistics:125: Statistics updated: episode=ep_001, category=new_cat, cal_error=0.2000, direction=underconfident
+2026-07-09 13:29:18 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-14/test_update_statistics_with_ef0/identity.sqlite3
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_5327a490458a4517a451f6f7b8ce0768
+2026-07-09 13:29:18 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_001, category=coding, predicted=0.70, actual=0.80, cal_error=0.1000, direction=underconfident
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 13:29:18 [INFO] agent.memory.identity.capability_model:get:135: Auto-registered new capability: coding
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.capability_model:update_from_episode:187: Updated capability coding: success=0.5900, confidence=0.7300, attempts=1
+2026-07-09 13:29:18 [INFO] agent.memory.identity.updater:update_statistics:125: Statistics updated: episode=ep_001, category=coding, cal_error=0.1000, direction=underconfident
+2026-07-09 13:29:18 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-14/test_redesign_blocked_without_0/identity.sqlite3
+2026-07-09 13:29:18 [WARNING] agent.memory.identity.updater:redesign_identity:168: HITL BLOCKED: Identity redesign requires human approval. No approval granted.
+2026-07-09 13:29:18 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-14/test_redesign_with_hitl0/identity.sqlite3
+2026-07-09 13:29:18 [INFO] agent.memory.identity.updater:_save_identity_yaml:236: Saved identity YAML to /tmp/pytest-of-kkc7130/pytest-14/test_redesign_with_hitl0/identity.yml
+2026-07-09 13:29:18 [INFO] agent.memory.identity.updater:redesign_identity:217: Identity redesigned (v2): ['autonomy_level']
+2026-07-09 13:29:18 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-14/test_redesign_updates_identity0/identity.sqlite3
+2026-07-09 13:29:18 [INFO] agent.memory.identity.updater:_save_identity_yaml:236: Saved identity YAML to /tmp/pytest-of-kkc7130/pytest-14/test_redesign_updates_identity0/identity.yml
+2026-07-09 13:29:18 [INFO] agent.memory.identity.updater:redesign_identity:217: Identity redesigned (v1): ['identity_core']
+2026-07-09 13:29:18 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-14/test_get_identity_state0/identity.sqlite3
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_0e9610a8367b4534a9f7b4e83feb3c70
+2026-07-09 13:29:18 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_001, category=coding, predicted=0.80, actual=0.60, cal_error=0.2000, direction=overconfident
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 13:29:18 [INFO] agent.memory.identity.capability_model:get:135: Auto-registered new capability: coding
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 13:29:18 [DEBUG] agent.memory.identity.capability_model:update_from_episode:187: Updated capability coding: success=0.5300, confidence=0.6700, attempts=1
+2026-07-09 13:29:18 [INFO] agent.memory.identity.updater:update_statistics:125: Statistics updated: episode=ep_001, category=coding, cal_error=0.2000, direction=overconfident
