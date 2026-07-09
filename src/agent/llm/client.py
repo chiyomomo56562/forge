@@ -215,6 +215,10 @@ class LLMClient:
                 logger.info(f"Ollama chat client connected: {self.config.ollama_base_url}")
             except ImportError:
                 return self._chat_fallback(messages)
+            except Exception as e:
+                logger.warning(f"Failed to connect to Ollama: {e}, using fallback")
+                self._ollama_chat = None
+                return self._chat_fallback(messages)
 
         msgs = [{"role": m.role, "content": m.content} for m in messages]
         response = self._ollama_chat.chat(
