@@ -1,0 +1,327 @@
+2026-07-08 17:41:06 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:06 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:06 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:06 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:06 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-8/test_log_creates_file0/events/2026-07-08.jsonl
+2026-07-08 17:41:06 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-8/test_log_appends_to_same_day0/events/2026-07-08.jsonl
+2026-07-08 17:41:06 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_002 to /tmp/pytest-of-kkc7130/pytest-8/test_log_appends_to_same_day0/events/2026-07-08.jsonl
+2026-07-08 17:41:06 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-8/test_read_day0/events/2026-07-08.jsonl
+2026-07-08 17:41:07 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-8/test_list_days0/events/2026-07-08.jsonl
+2026-07-08 17:41:19 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:19 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:19 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:19 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:20 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-9/test_log_creates_file0/events/2026-07-08.jsonl
+2026-07-08 17:41:20 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-9/test_log_appends_to_same_day0/events/2026-07-08.jsonl
+2026-07-08 17:41:20 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_002 to /tmp/pytest-of-kkc7130/pytest-9/test_log_appends_to_same_day0/events/2026-07-08.jsonl
+2026-07-08 17:41:20 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-9/test_read_day0/events/2026-07-08.jsonl
+2026-07-08 17:41:20 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-9/test_list_days0/events/2026-07-08.jsonl
+2026-07-08 17:41:32 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:32 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:32 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:32 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:32 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-08 17:41:32 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:32 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-08 17:41:32 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-08 17:41:32 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-08 17:41:32 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:32 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-08 17:41:32 [DEBUG] agent.memory.episodic.store:delete:119: Deleted episode ep_001
+2026-07-08 17:41:32 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-08 17:41:32 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:32 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-08 17:41:32 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:32 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-08 17:41:32 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-08 17:41:32 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:32 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-08 17:41:32 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:32 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-08 17:41:32 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:32 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-08 17:41:32 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:32 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-08 17:41:32 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:32 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-08 17:41:32 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:32 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-10/test_log_creates_file0/events/2026-07-08.jsonl
+2026-07-08 17:41:32 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-10/test_log_appends_to_same_day0/events/2026-07-08.jsonl
+2026-07-08 17:41:32 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_002 to /tmp/pytest-of-kkc7130/pytest-10/test_log_appends_to_same_day0/events/2026-07-08.jsonl
+2026-07-08 17:41:32 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-10/test_read_day0/events/2026-07-08.jsonl
+2026-07-08 17:41:32 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-10/test_list_days0/events/2026-07-08.jsonl
+2026-07-08 17:41:32 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-08 17:41:32 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:32 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-08 17:41:32 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:32 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-08 17:41:32 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:32 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_003
+2026-07-08 17:41:32 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:32 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-08 17:41:32 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:32 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-08 17:41:32 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:32 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-08 17:41:32 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:32 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_003
+2026-07-08 17:41:32 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:32 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-08 17:41:32 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:32 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-08 17:41:32 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:32 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-08 17:41:32 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:32 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_003
+2026-07-08 17:41:32 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:32 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-08 17:41:32 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:32 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-08 17:41:32 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:32 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-08 17:41:32 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:32 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_003
+2026-07-08 17:41:32 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:32 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:37 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:37 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:37 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:37 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:37 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-08 17:41:37 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:37 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-08 17:41:37 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-08 17:41:37 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-08 17:41:37 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:37 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-08 17:41:37 [DEBUG] agent.memory.episodic.store:delete:119: Deleted episode ep_001
+2026-07-08 17:41:37 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-08 17:41:37 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:37 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-08 17:41:37 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:37 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-08 17:41:38 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-08 17:41:38 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:38 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-08 17:41:38 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:38 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-08 17:41:38 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:38 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-08 17:41:38 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:38 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-08 17:41:38 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:38 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-08 17:41:38 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:38 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-11/test_log_creates_file0/events/2026-07-08.jsonl
+2026-07-08 17:41:38 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-11/test_log_appends_to_same_day0/events/2026-07-08.jsonl
+2026-07-08 17:41:38 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_002 to /tmp/pytest-of-kkc7130/pytest-11/test_log_appends_to_same_day0/events/2026-07-08.jsonl
+2026-07-08 17:41:38 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-11/test_read_day0/events/2026-07-08.jsonl
+2026-07-08 17:41:38 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-11/test_list_days0/events/2026-07-08.jsonl
+2026-07-08 17:41:38 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-08 17:41:38 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:38 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-08 17:41:38 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:38 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-08 17:41:38 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:38 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_003
+2026-07-08 17:41:38 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:38 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-08 17:41:38 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:38 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-08 17:41:38 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:38 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-08 17:41:38 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:38 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_003
+2026-07-08 17:41:38 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:38 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-08 17:41:38 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:38 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-08 17:41:38 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:38 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-08 17:41:38 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:38 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_003
+2026-07-08 17:41:38 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:38 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-08 17:41:38 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:38 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-08 17:41:38 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:38 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-08 17:41:38 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:38 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_003
+2026-07-08 17:41:38 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:41:38 [WARNING] agent.memory.episodic.encoder:_encode_local:104: sentence-transformers not installed, using hash-based fallback
+2026-07-08 17:47:20 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:20 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:20 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:20 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:20 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-08 17:47:20 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:20 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-08 17:47:20 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-08 17:47:20 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-08 17:47:20 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:20 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-08 17:47:20 [DEBUG] agent.memory.episodic.store:delete:119: Deleted episode ep_001
+2026-07-08 17:47:20 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-08 17:47:20 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:20 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-08 17:47:20 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:20 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-08 17:47:20 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-08 17:47:20 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:20 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-08 17:47:20 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:20 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-08 17:47:20 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:20 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-08 17:47:20 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:20 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-08 17:47:20 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:20 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-08 17:47:20 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:20 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-13/test_log_creates_file0/events/2026-07-08.jsonl
+2026-07-08 17:47:20 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-13/test_log_appends_to_same_day0/events/2026-07-08.jsonl
+2026-07-08 17:47:20 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_002 to /tmp/pytest-of-kkc7130/pytest-13/test_log_appends_to_same_day0/events/2026-07-08.jsonl
+2026-07-08 17:47:20 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-13/test_read_day0/events/2026-07-08.jsonl
+2026-07-08 17:47:20 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-13/test_list_days0/events/2026-07-08.jsonl
+2026-07-08 17:47:36 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:36 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:36 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:36 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:36 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-08 17:47:36 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:36 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-08 17:47:36 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-08 17:47:36 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-08 17:47:36 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:36 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-08 17:47:36 [DEBUG] agent.memory.episodic.store:delete:119: Deleted episode ep_001
+2026-07-08 17:47:36 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-08 17:47:36 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:36 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-08 17:47:36 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:36 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-08 17:47:36 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-08 17:47:36 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:36 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-08 17:47:36 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:36 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-08 17:47:36 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:36 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-08 17:47:36 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:36 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-08 17:47:36 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:36 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-08 17:47:36 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:36 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-14/test_log_creates_file0/events/2026-07-08.jsonl
+2026-07-08 17:47:36 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-14/test_log_appends_to_same_day0/events/2026-07-08.jsonl
+2026-07-08 17:47:36 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_002 to /tmp/pytest-of-kkc7130/pytest-14/test_log_appends_to_same_day0/events/2026-07-08.jsonl
+2026-07-08 17:47:36 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-14/test_read_day0/events/2026-07-08.jsonl
+2026-07-08 17:47:36 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-14/test_list_days0/events/2026-07-08.jsonl
+2026-07-08 17:47:36 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-08 17:47:36 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:36 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-08 17:47:36 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:36 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-08 17:47:36 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:36 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_003
+2026-07-08 17:47:36 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:36 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-08 17:47:36 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:36 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-08 17:47:36 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:36 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-08 17:47:36 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:36 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_003
+2026-07-08 17:47:36 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:36 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-08 17:47:36 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:36 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-08 17:47:36 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:36 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-08 17:47:36 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:36 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_003
+2026-07-08 17:47:36 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:36 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-08 17:47:36 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:36 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-08 17:47:36 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:36 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-08 17:47:36 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:36 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_003
+2026-07-08 17:47:36 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:36 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:53 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:53 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:53 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:53 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:53 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-08 17:47:53 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:53 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-08 17:47:53 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-08 17:47:53 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-08 17:47:53 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:53 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-08 17:47:53 [DEBUG] agent.memory.episodic.store:delete:119: Deleted episode ep_001
+2026-07-08 17:47:53 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-08 17:47:53 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:53 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-08 17:47:53 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:53 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-08 17:47:53 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-08 17:47:53 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:53 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-08 17:47:53 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:53 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-08 17:47:53 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:53 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-08 17:47:53 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:53 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-08 17:47:53 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:53 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-08 17:47:53 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:53 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-15/test_log_creates_file0/events/2026-07-08.jsonl
+2026-07-08 17:47:53 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-15/test_log_appends_to_same_day0/events/2026-07-08.jsonl
+2026-07-08 17:47:53 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_002 to /tmp/pytest-of-kkc7130/pytest-15/test_log_appends_to_same_day0/events/2026-07-08.jsonl
+2026-07-08 17:47:53 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-15/test_read_day0/events/2026-07-08.jsonl
+2026-07-08 17:47:53 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-15/test_list_days0/events/2026-07-08.jsonl
+2026-07-08 17:47:53 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-08 17:47:53 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:53 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-08 17:47:53 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:53 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-08 17:47:53 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:53 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_003
+2026-07-08 17:47:53 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:53 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-08 17:47:53 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:53 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-08 17:47:53 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:53 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-08 17:47:53 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:53 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_003
+2026-07-08 17:47:53 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:53 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-08 17:47:53 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:53 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-08 17:47:53 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:53 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-08 17:47:53 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:53 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_003
+2026-07-08 17:47:53 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:53 [WARNING] agent.memory.episodic.store:_ensure_initialized:59: chromadb not installed, using in-memory fallback
+2026-07-08 17:47:53 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:53 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-08 17:47:53 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:53 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-08 17:47:53 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:53 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_003
+2026-07-08 17:47:53 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:53 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:53 [WARNING] agent.llm.client:from_yaml:77: Config file not found: nonexistent.yml, using defaults
+2026-07-08 17:47:53 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:53 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:53 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:53 [WARNING] agent.llm.client:_embed_local:326: sentence-transformers not installed, using hash fallback
+2026-07-08 17:47:53 [WARNING] agent.llm.client:_chat_fallback:268: No LLM SDK available, returning fallback response
+2026-07-08 17:47:53 [WARNING] agent.llm.client:_chat_fallback:268: No LLM SDK available, returning fallback response
