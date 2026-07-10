@@ -6963,3 +6963,1460 @@ RuntimeError: boom
 2026-07-10 11:24:41 [INFO] agent.tools.base:safe_execute:225: Tool file_write finished: success=True duration=0.0032s
 2026-07-10 11:24:41 [INFO] agent.tools.base:safe_execute:206: Executing tool: file_read args=['path']
 2026-07-10 11:24:41 [INFO] agent.tools.base:safe_execute:225: Tool file_read finished: success=True duration=0.0002s
+2026-07-10 11:56:21 [INFO] agent.runtime:create_session:188: Created session sess_20260710_025621_15ed6e38 (episode ep_20260710_025621_d0b7a342)
+2026-07-10 11:56:21 [INFO] agent.runtime:create_session:188: Created session sess_20260710_025621_963381db (episode ep_20260710_025621_a5a15fb3)
+2026-07-10 11:56:21 [INFO] agent.runtime:create_session:188: Created session sess_20260710_025621_7cc60833 (episode ep_20260710_025621_8bb307bb)
+2026-07-10 11:56:21 [INFO] agent.runtime:create_session:188: Created session sess_20260710_025621_5b536b92 (episode ep_20260710_025621_086a9ed0)
+2026-07-10 11:56:21 [INFO] agent.runtime:create_session:188: Created session sess_20260710_025621_a630aa51 (episode ep_20260710_025621_d553faf4)
+2026-07-10 11:56:21 [INFO] agent.runtime:create_session:188: Created session sess_20260710_025621_f4f44a98 (episode ep_20260710_025621_232b99e3)
+2026-07-10 11:56:21 [INFO] agent.runtime:create_session:188: Created session sess_20260710_025621_a2b5b75c (episode ep_20260710_025621_22200dcb)
+2026-07-10 11:56:22 [INFO] agent.runtime:create_session:188: Created session sess_20260710_025622_494df80d (episode ep_20260710_025622_00d58732)
+2026-07-10 11:56:22 [INFO] agent.orchestrator:run:143: Starting inner loop for session sess_20260710_025622_494df80d (episode ep_20260710_025622_00d58732)
+2026-07-10 11:56:22 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 11:56:22 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 11:56:22 [ERROR] agent.orchestrator:run:152: Inner loop failed: argument should be a str or an os.PathLike object where __fspath__ returns a str, not 'dict'
+Traceback (most recent call last):
+  File "/home/kkc7130/practice/forge/src/agent/orchestrator.py", line 149, in run
+    result = self._run_loop(session, user_input, task_category, user_confirm)
+  File "/home/kkc7130/practice/forge/src/agent/orchestrator.py", line 180, in _run_loop
+    self.runtime.stage_plan(session, self._plan_to_dict(plan, user_input, task_category))
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kkc7130/practice/forge/src/agent/runtime.py", line 245, in stage_plan
+    return session.stage("plan", plan)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/home/kkc7130/practice/forge/src/agent/runtime.py", line 106, in stage
+    write_json(data, path)
+    ~~~~~~~~~~^^^^^^^^^^^^
+  File "/home/kkc7130/practice/forge/src/agent/utils/serialization.py", line 23, in write_json
+    path = Path(path)
+  File "/usr/lib/python3.14/pathlib/__init__.py", line 149, in __init__
+    raise TypeError(
+    ...<2 lines>...
+        f"not {type(path).__name__!r}")
+TypeError: argument should be a str or an os.PathLike object where __fspath__ returns a str, not 'dict'
+2026-07-10 11:56:22 [INFO] agent.runtime:cleanup:132: Cleaned up session sess_20260710_025622_494df80d
+2026-07-10 11:56:22 [INFO] agent.tools.registry:_load_policy:154: Loaded tool policy: 6 confirmation keys, 3 forbidden tools
+2026-07-10 11:56:22 [INFO] agent.tools.registry:register:219: Registered tool: file_read (class=autonomous)
+2026-07-10 11:56:22 [INFO] agent.tools.registry:register:219: Registered tool: file_write (class=confirmation_required)
+2026-07-10 11:56:22 [INFO] agent.tools.registry:register:219: Registered tool: file_delete (class=confirmation_required)
+2026-07-10 11:56:22 [INFO] agent.tools.registry:register:219: Registered tool: web_search (class=autonomous)
+2026-07-10 11:56:22 [INFO] agent.tools.registry:register:219: Registered tool: code_exec_sandboxed (class=autonomous)
+2026-07-10 11:56:22 [INFO] agent.runtime:create_session:188: Created session sess_20260710_025622_69e24694 (episode ep_20260710_025622_3ada1442)
+2026-07-10 11:56:22 [INFO] agent.orchestrator:run:143: Starting inner loop for session sess_20260710_025622_69e24694 (episode ep_20260710_025622_3ada1442)
+2026-07-10 11:56:22 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 11:56:22 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 11:56:22 [ERROR] agent.orchestrator:run:152: Inner loop failed: argument should be a str or an os.PathLike object where __fspath__ returns a str, not 'dict'
+Traceback (most recent call last):
+  File "/home/kkc7130/practice/forge/src/agent/orchestrator.py", line 149, in run
+    result = self._run_loop(session, user_input, task_category, user_confirm)
+  File "/home/kkc7130/practice/forge/src/agent/orchestrator.py", line 180, in _run_loop
+    self.runtime.stage_plan(session, self._plan_to_dict(plan, user_input, task_category))
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kkc7130/practice/forge/src/agent/runtime.py", line 245, in stage_plan
+    return session.stage("plan", plan)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/home/kkc7130/practice/forge/src/agent/runtime.py", line 106, in stage
+    write_json(data, path)
+    ~~~~~~~~~~^^^^^^^^^^^^
+  File "/home/kkc7130/practice/forge/src/agent/utils/serialization.py", line 23, in write_json
+    path = Path(path)
+  File "/usr/lib/python3.14/pathlib/__init__.py", line 149, in __init__
+    raise TypeError(
+    ...<2 lines>...
+        f"not {type(path).__name__!r}")
+TypeError: argument should be a str or an os.PathLike object where __fspath__ returns a str, not 'dict'
+2026-07-10 11:56:22 [INFO] agent.runtime:cleanup:132: Cleaned up session sess_20260710_025622_69e24694
+2026-07-10 11:56:22 [INFO] agent.tools.registry:_load_policy:154: Loaded tool policy: 6 confirmation keys, 3 forbidden tools
+2026-07-10 11:56:22 [INFO] agent.tools.registry:register:219: Registered tool: file_read (class=autonomous)
+2026-07-10 11:56:22 [INFO] agent.tools.registry:register:219: Registered tool: file_write (class=confirmation_required)
+2026-07-10 11:56:22 [INFO] agent.tools.registry:register:219: Registered tool: file_delete (class=confirmation_required)
+2026-07-10 11:56:22 [INFO] agent.tools.registry:register:219: Registered tool: web_search (class=autonomous)
+2026-07-10 11:56:22 [INFO] agent.tools.registry:register:219: Registered tool: code_exec_sandboxed (class=autonomous)
+2026-07-10 11:56:22 [INFO] agent.runtime:create_session:188: Created session sess_20260710_025622_9c60ed2c (episode ep_20260710_025622_c4261f2a)
+2026-07-10 11:56:22 [INFO] agent.orchestrator:run:143: Starting inner loop for session sess_20260710_025622_9c60ed2c (episode ep_20260710_025622_c4261f2a)
+2026-07-10 11:56:22 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 11:56:22 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 11:56:22 [ERROR] agent.orchestrator:run:152: Inner loop failed: argument should be a str or an os.PathLike object where __fspath__ returns a str, not 'dict'
+Traceback (most recent call last):
+  File "/home/kkc7130/practice/forge/src/agent/orchestrator.py", line 149, in run
+    result = self._run_loop(session, user_input, task_category, user_confirm)
+  File "/home/kkc7130/practice/forge/src/agent/orchestrator.py", line 180, in _run_loop
+    self.runtime.stage_plan(session, self._plan_to_dict(plan, user_input, task_category))
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kkc7130/practice/forge/src/agent/runtime.py", line 245, in stage_plan
+    return session.stage("plan", plan)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/home/kkc7130/practice/forge/src/agent/runtime.py", line 106, in stage
+    write_json(data, path)
+    ~~~~~~~~~~^^^^^^^^^^^^
+  File "/home/kkc7130/practice/forge/src/agent/utils/serialization.py", line 23, in write_json
+    path = Path(path)
+  File "/usr/lib/python3.14/pathlib/__init__.py", line 149, in __init__
+    raise TypeError(
+    ...<2 lines>...
+        f"not {type(path).__name__!r}")
+TypeError: argument should be a str or an os.PathLike object where __fspath__ returns a str, not 'dict'
+2026-07-10 11:56:22 [INFO] agent.runtime:cleanup:132: Cleaned up session sess_20260710_025622_9c60ed2c
+2026-07-10 11:56:22 [INFO] agent.tools.registry:_load_policy:154: Loaded tool policy: 6 confirmation keys, 3 forbidden tools
+2026-07-10 11:56:22 [INFO] agent.tools.registry:register:219: Registered tool: file_read (class=autonomous)
+2026-07-10 11:56:22 [INFO] agent.tools.registry:register:219: Registered tool: file_write (class=confirmation_required)
+2026-07-10 11:56:22 [INFO] agent.tools.registry:register:219: Registered tool: file_delete (class=confirmation_required)
+2026-07-10 11:56:22 [INFO] agent.tools.registry:register:219: Registered tool: web_search (class=autonomous)
+2026-07-10 11:56:22 [INFO] agent.tools.registry:register:219: Registered tool: code_exec_sandboxed (class=autonomous)
+2026-07-10 11:56:22 [INFO] agent.runtime:create_session:188: Created session sess_20260710_025622_363aee7b (episode ep_20260710_025622_9ca710ef)
+2026-07-10 11:56:22 [INFO] agent.orchestrator:run:143: Starting inner loop for session sess_20260710_025622_363aee7b (episode ep_20260710_025622_9ca710ef)
+2026-07-10 11:56:22 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 11:56:22 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 11:56:22 [ERROR] agent.orchestrator:run:152: Inner loop failed: argument should be a str or an os.PathLike object where __fspath__ returns a str, not 'dict'
+Traceback (most recent call last):
+  File "/home/kkc7130/practice/forge/src/agent/orchestrator.py", line 149, in run
+    result = self._run_loop(session, user_input, task_category, user_confirm)
+  File "/home/kkc7130/practice/forge/src/agent/orchestrator.py", line 180, in _run_loop
+    self.runtime.stage_plan(session, self._plan_to_dict(plan, user_input, task_category))
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kkc7130/practice/forge/src/agent/runtime.py", line 245, in stage_plan
+    return session.stage("plan", plan)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/home/kkc7130/practice/forge/src/agent/runtime.py", line 106, in stage
+    write_json(data, path)
+    ~~~~~~~~~~^^^^^^^^^^^^
+  File "/home/kkc7130/practice/forge/src/agent/utils/serialization.py", line 23, in write_json
+    path = Path(path)
+  File "/usr/lib/python3.14/pathlib/__init__.py", line 149, in __init__
+    raise TypeError(
+    ...<2 lines>...
+        f"not {type(path).__name__!r}")
+TypeError: argument should be a str or an os.PathLike object where __fspath__ returns a str, not 'dict'
+2026-07-10 11:56:22 [INFO] agent.runtime:cleanup:132: Cleaned up session sess_20260710_025622_363aee7b
+2026-07-10 11:56:22 [INFO] agent.runtime:create_session:188: Created session sess_20260710_025622_48e22336 (episode ep_20260710_025622_9dc7d84f)
+2026-07-10 11:56:22 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 11:56:22 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 11:56:22 [INFO] agent.runtime:create_session:188: Created session sess_20260710_025622_c20c6e91 (episode ep_20260710_025622_84061aa4)
+2026-07-10 11:56:22 [INFO] agent.tools.registry:_load_policy:154: Loaded tool policy: 6 confirmation keys, 3 forbidden tools
+2026-07-10 11:56:22 [INFO] agent.tools.registry:register:219: Registered tool: file_read (class=autonomous)
+2026-07-10 11:56:22 [INFO] agent.tools.registry:register:219: Registered tool: file_write (class=confirmation_required)
+2026-07-10 11:56:22 [INFO] agent.tools.registry:register:219: Registered tool: file_delete (class=confirmation_required)
+2026-07-10 11:56:22 [INFO] agent.tools.registry:register:219: Registered tool: web_search (class=autonomous)
+2026-07-10 11:56:22 [INFO] agent.tools.registry:register:219: Registered tool: code_exec_sandboxed (class=autonomous)
+2026-07-10 11:56:22 [INFO] agent.runtime:create_session:188: Created session sess_20260710_025622_261775e9 (episode ep_20260710_025622_066fbb7b)
+2026-07-10 11:56:22 [INFO] agent.tools.base:safe_execute:206: Executing tool: code_exec_sandboxed args=['input', 'query', 'code']
+2026-07-10 11:56:22 [INFO] agent.tools.base:safe_execute:225: Tool code_exec_sandboxed finished: success=True duration=0.0003s
+2026-07-10 11:56:22 [INFO] agent.tools.registry:_load_policy:154: Loaded tool policy: 6 confirmation keys, 3 forbidden tools
+2026-07-10 11:56:22 [INFO] agent.tools.registry:register:219: Registered tool: file_read (class=autonomous)
+2026-07-10 11:56:22 [INFO] agent.tools.registry:register:219: Registered tool: file_write (class=confirmation_required)
+2026-07-10 11:56:22 [INFO] agent.tools.registry:register:219: Registered tool: file_delete (class=confirmation_required)
+2026-07-10 11:56:22 [INFO] agent.tools.registry:register:219: Registered tool: web_search (class=autonomous)
+2026-07-10 11:56:22 [INFO] agent.tools.registry:register:219: Registered tool: code_exec_sandboxed (class=autonomous)
+2026-07-10 11:56:22 [INFO] agent.runtime:create_session:188: Created session sess_20260710_025622_e78fea46 (episode ep_20260710_025622_caf9bef7)
+2026-07-10 11:56:22 [DEBUG] agent.orchestrator:_stage_evaluation:394: No memory manager, skipping CIB evaluation
+2026-07-10 11:56:22 [DEBUG] agent.orchestrator:_stage_evaluation:394: No memory manager, skipping CIB evaluation
+2026-07-10 11:56:22 [INFO] agent.cognition.reflection_loop:_reflect_heuristic:204: Heuristic reflection extracted: 성공: Task completed successfully: executed successfully | 인과: High success score 
+2026-07-10 11:56:22 [INFO] agent.cognition.reflection_loop:_reflect_heuristic:204: Heuristic reflection extracted: 실패: Task failed: execution failed | 힌트: Review the execution summary and try an 
+2026-07-10 11:56:22 [INFO] agent.tools.registry:_load_policy:154: Loaded tool policy: 6 confirmation keys, 3 forbidden tools
+2026-07-10 11:56:22 [INFO] agent.tools.registry:register:219: Registered tool: file_read (class=autonomous)
+2026-07-10 11:56:22 [INFO] agent.tools.registry:register:219: Registered tool: file_write (class=confirmation_required)
+2026-07-10 11:56:22 [INFO] agent.tools.registry:register:219: Registered tool: file_delete (class=confirmation_required)
+2026-07-10 11:56:22 [INFO] agent.tools.registry:register:219: Registered tool: web_search (class=autonomous)
+2026-07-10 11:56:22 [INFO] agent.tools.registry:register:219: Registered tool: code_exec_sandboxed (class=autonomous)
+2026-07-10 11:56:22 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-10 11:56:22 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-6/test_full_loop_with_memory0/skills.sqlite3
+2026-07-10 11:56:22 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-6/test_full_loop_with_memory0/identity.sqlite3
+2026-07-10 11:56:22 [INFO] agent.memory.manager:__init__:128: MemoryManager initialized (L1–L5)
+2026-07-10 11:56:22 [INFO] agent.runtime:create_session:188: Created session sess_20260710_025622_0f3efd61 (episode ep_20260710_025622_152770fa)
+2026-07-10 11:56:22 [INFO] agent.orchestrator:run:143: Starting inner loop for session sess_20260710_025622_0f3efd61 (episode ep_20260710_025622_152770fa)
+2026-07-10 11:56:22 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-10 11:56:23 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-6/test_full_loop_with_memory0/chroma
+2026-07-10 11:56:23 [INFO] agent.cognition.context_builder:build:133: Built context: 0 blocks, ~0 tokens
+2026-07-10 11:56:23 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 11:56:23 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 11:56:23 [ERROR] agent.orchestrator:run:152: Inner loop failed: argument should be a str or an os.PathLike object where __fspath__ returns a str, not 'dict'
+Traceback (most recent call last):
+  File "/home/kkc7130/practice/forge/src/agent/orchestrator.py", line 149, in run
+    result = self._run_loop(session, user_input, task_category, user_confirm)
+  File "/home/kkc7130/practice/forge/src/agent/orchestrator.py", line 180, in _run_loop
+    self.runtime.stage_plan(session, self._plan_to_dict(plan, user_input, task_category))
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kkc7130/practice/forge/src/agent/runtime.py", line 245, in stage_plan
+    return session.stage("plan", plan)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/home/kkc7130/practice/forge/src/agent/runtime.py", line 106, in stage
+    write_json(data, path)
+    ~~~~~~~~~~^^^^^^^^^^^^
+  File "/home/kkc7130/practice/forge/src/agent/utils/serialization.py", line 23, in write_json
+    path = Path(path)
+  File "/usr/lib/python3.14/pathlib/__init__.py", line 149, in __init__
+    raise TypeError(
+    ...<2 lines>...
+        f"not {type(path).__name__!r}")
+TypeError: argument should be a str or an os.PathLike object where __fspath__ returns a str, not 'dict'
+2026-07-10 11:56:23 [INFO] agent.runtime:cleanup:132: Cleaned up session sess_20260710_025622_0f3efd61
+2026-07-10 11:56:23 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-10 11:56:23 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-6/test_persist_episode0/skills.sqlite3
+2026-07-10 11:56:23 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-6/test_persist_episode0/identity.sqlite3
+2026-07-10 11:56:23 [INFO] agent.memory.manager:__init__:128: MemoryManager initialized (L1–L5)
+2026-07-10 11:56:23 [INFO] agent.runtime:create_session:188: Created session sess_20260710_025623_d766ece5 (episode ep_20260710_025623_4551b9e2)
+2026-07-10 11:56:24 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-6/test_persist_episode0/chroma
+2026-07-10 11:56:24 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-10 11:56:24 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_20260710_025623_4551b9e2
+2026-07-10 11:56:24 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_20260710_025623_4551b9e2 to /tmp/pytest-of-kkc7130/pytest-6/test_persist_episode0/raw_events/2026-07-10.jsonl
+2026-07-10 11:56:24 [INFO] agent.memory.manager:store_episode:272: Stored episode ep_20260710_025623_4551b9e2 in L1 + raw event log
+2026-07-10 11:56:24 [INFO] agent.orchestrator:_persist_episode:580: Episode ep_20260710_025623_4551b9e2 stored in L1
+2026-07-10 11:56:24 [DEBUG] agent.memory.semantic.graph_store:add_knowledge_node:299: Added knowledge node 'ep_20260710_025623_4551b9e2_hint_0'
+2026-07-10 11:56:24 [DEBUG] agent.memory.reflection:_store_to_l2:191: Stored general hint to L2: ep_20260710_025623_4551b9e2_hint_0
+2026-07-10 11:56:24 [DEBUG] agent.memory.semantic.graph_store:add_knowledge_node:299: Added knowledge node 'ep_20260710_025623_4551b9e2_hint_2'
+2026-07-10 11:56:24 [DEBUG] agent.memory.reflection:_store_to_l2:191: Stored general hint to L2: ep_20260710_025623_4551b9e2_hint_2
+2026-07-10 11:56:24 [DEBUG] agent.memory.semantic.graph_store:add_knowledge_node:299: Added knowledge node 'ep_20260710_025623_4551b9e2_hint_3'
+2026-07-10 11:56:24 [DEBUG] agent.memory.reflection:_store_to_l2:191: Stored general hint to L2: ep_20260710_025623_4551b9e2_hint_3
+2026-07-10 11:56:24 [INFO] agent.memory.reflection:process:131: Processed reflection for ep_20260710_025623_4551b9e2: 3 hints (L2=3, L3=0)
+2026-07-10 11:56:24 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-10 11:56:24 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_20260710_025623_4551b9e2
+2026-07-10 11:56:24 [INFO] agent.memory.manager:store_reflection:308: Stored reflection for ep_20260710_025623_4551b9e2: 3 hints → L2, 0 hints → L3
+2026-07-10 11:56:24 [INFO] agent.orchestrator:_persist_episode:588: Reflection stored for ep_20260710_025623_4551b9e2 (L2/L3 dual-storage)
+2026-07-10 11:56:24 [INFO] agent.runtime:create_session:188: Created session sess_20260710_025624_3afcaccf (episode ep_20260710_025624_f56ba525)
+2026-07-10 11:56:24 [INFO] agent.orchestrator:run:143: Starting inner loop for session sess_20260710_025624_3afcaccf (episode ep_20260710_025624_f56ba525)
+2026-07-10 11:56:24 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 11:56:24 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 11:56:24 [ERROR] agent.orchestrator:run:152: Inner loop failed: argument should be a str or an os.PathLike object where __fspath__ returns a str, not 'dict'
+Traceback (most recent call last):
+  File "/home/kkc7130/practice/forge/src/agent/orchestrator.py", line 149, in run
+    result = self._run_loop(session, user_input, task_category, user_confirm)
+  File "/home/kkc7130/practice/forge/src/agent/orchestrator.py", line 180, in _run_loop
+    self.runtime.stage_plan(session, self._plan_to_dict(plan, user_input, task_category))
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kkc7130/practice/forge/src/agent/runtime.py", line 245, in stage_plan
+    return session.stage("plan", plan)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/home/kkc7130/practice/forge/src/agent/runtime.py", line 106, in stage
+    write_json(data, path)
+    ~~~~~~~~~~^^^^^^^^^^^^
+  File "/home/kkc7130/practice/forge/src/agent/utils/serialization.py", line 23, in write_json
+    path = Path(path)
+  File "/usr/lib/python3.14/pathlib/__init__.py", line 149, in __init__
+    raise TypeError(
+    ...<2 lines>...
+        f"not {type(path).__name__!r}")
+TypeError: argument should be a str or an os.PathLike object where __fspath__ returns a str, not 'dict'
+2026-07-10 11:56:24 [INFO] agent.runtime:cleanup:132: Cleaned up session sess_20260710_025624_3afcaccf
+2026-07-10 11:56:24 [INFO] agent.runtime:create_session:188: Created session sess_20260710_025624_844a047f (episode ep_20260710_025624_6ffd3636)
+2026-07-10 11:56:24 [INFO] agent.orchestrator:run:143: Starting inner loop for session sess_20260710_025624_844a047f (episode ep_20260710_025624_6ffd3636)
+2026-07-10 11:56:24 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 11:56:24 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 11:56:24 [ERROR] agent.orchestrator:run:152: Inner loop failed: argument should be a str or an os.PathLike object where __fspath__ returns a str, not 'dict'
+Traceback (most recent call last):
+  File "/home/kkc7130/practice/forge/src/agent/orchestrator.py", line 149, in run
+    result = self._run_loop(session, user_input, task_category, user_confirm)
+  File "/home/kkc7130/practice/forge/src/agent/orchestrator.py", line 180, in _run_loop
+    self.runtime.stage_plan(session, self._plan_to_dict(plan, user_input, task_category))
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kkc7130/practice/forge/src/agent/runtime.py", line 245, in stage_plan
+    return session.stage("plan", plan)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/home/kkc7130/practice/forge/src/agent/runtime.py", line 106, in stage
+    write_json(data, path)
+    ~~~~~~~~~~^^^^^^^^^^^^
+  File "/home/kkc7130/practice/forge/src/agent/utils/serialization.py", line 23, in write_json
+    path = Path(path)
+  File "/usr/lib/python3.14/pathlib/__init__.py", line 149, in __init__
+    raise TypeError(
+    ...<2 lines>...
+        f"not {type(path).__name__!r}")
+TypeError: argument should be a str or an os.PathLike object where __fspath__ returns a str, not 'dict'
+2026-07-10 11:56:24 [INFO] agent.runtime:cleanup:132: Cleaned up session sess_20260710_025624_844a047f
+2026-07-10 11:56:24 [INFO] agent.runtime:create_session:188: Created session sess_20260710_025624_4da7d3b1 (episode ep_20260710_025624_7bebaa91)
+2026-07-10 11:56:24 [INFO] agent.orchestrator:run:143: Starting inner loop for session sess_20260710_025624_4da7d3b1 (episode ep_20260710_025624_7bebaa91)
+2026-07-10 11:56:24 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 11:56:24 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 11:56:24 [ERROR] agent.orchestrator:run:152: Inner loop failed: argument should be a str or an os.PathLike object where __fspath__ returns a str, not 'dict'
+Traceback (most recent call last):
+  File "/home/kkc7130/practice/forge/src/agent/orchestrator.py", line 149, in run
+    result = self._run_loop(session, user_input, task_category, user_confirm)
+  File "/home/kkc7130/practice/forge/src/agent/orchestrator.py", line 180, in _run_loop
+    self.runtime.stage_plan(session, self._plan_to_dict(plan, user_input, task_category))
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kkc7130/practice/forge/src/agent/runtime.py", line 245, in stage_plan
+    return session.stage("plan", plan)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/home/kkc7130/practice/forge/src/agent/runtime.py", line 106, in stage
+    write_json(data, path)
+    ~~~~~~~~~~^^^^^^^^^^^^
+  File "/home/kkc7130/practice/forge/src/agent/utils/serialization.py", line 23, in write_json
+    path = Path(path)
+  File "/usr/lib/python3.14/pathlib/__init__.py", line 149, in __init__
+    raise TypeError(
+    ...<2 lines>...
+        f"not {type(path).__name__!r}")
+TypeError: argument should be a str or an os.PathLike object where __fspath__ returns a str, not 'dict'
+2026-07-10 11:56:24 [INFO] agent.runtime:cleanup:132: Cleaned up session sess_20260710_025624_4da7d3b1
+2026-07-10 11:56:24 [WARNING] agent.llm.client:from_yaml:77: Config file not found: nonexistent.yml, using defaults
+2026-07-10 11:56:24 [WARNING] agent.llm.client:from_yaml:77: Config file not found: nonexistent.yml, using defaults
+2026-07-10 11:56:24 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-10 11:56:24 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at data/memory/procedural/skills.sqlite3
+2026-07-10 11:56:24 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at identity/identity.sqlite3
+2026-07-10 11:56:24 [INFO] agent.memory.manager:__init__:128: MemoryManager initialized (L1–L5)
+2026-07-10 11:56:24 [INFO] agent.main:create_agent:74: MemoryManager initialised
+2026-07-10 11:56:24 [WARNING] agent.llm.client:from_yaml:77: Config file not found: nonexistent.yml, using defaults
+2026-07-10 11:56:24 [WARNING] agent.llm.client:from_yaml:77: Config file not found: nonexistent.yml, using defaults
+2026-07-10 11:56:24 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-10 11:56:24 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at data/memory/procedural/skills.sqlite3
+2026-07-10 11:56:24 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at identity/identity.sqlite3
+2026-07-10 11:56:24 [INFO] agent.memory.manager:__init__:128: MemoryManager initialized (L1–L5)
+2026-07-10 11:56:24 [INFO] agent.main:create_agent:74: MemoryManager initialised
+2026-07-10 11:56:24 [INFO] agent.tools.registry:_load_policy:154: Loaded tool policy: 6 confirmation keys, 3 forbidden tools
+2026-07-10 11:56:24 [INFO] agent.tools.registry:register:219: Registered tool: file_read (class=autonomous)
+2026-07-10 11:56:24 [INFO] agent.tools.registry:register:219: Registered tool: file_write (class=confirmation_required)
+2026-07-10 11:56:24 [INFO] agent.tools.registry:register:219: Registered tool: file_delete (class=confirmation_required)
+2026-07-10 11:56:24 [INFO] agent.tools.registry:register:219: Registered tool: web_search (class=autonomous)
+2026-07-10 11:56:24 [INFO] agent.tools.registry:register:219: Registered tool: code_exec_sandboxed (class=autonomous)
+2026-07-10 11:56:24 [WARNING] agent.tools.registry:register_skills:263: Failed to list active skills: 'SkillStore' object has no attribute 'list_active'
+2026-07-10 11:56:24 [INFO] agent.main:create_agent:90: Tool registry: 5 tools
+2026-07-10 11:56:24 [WARNING] agent.llm.client:from_yaml:77: Config file not found: nonexistent.yml, using defaults
+2026-07-10 11:56:24 [WARNING] agent.llm.client:from_yaml:77: Config file not found: nonexistent.yml, using defaults
+2026-07-10 11:56:24 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-10 11:56:24 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at data/memory/procedural/skills.sqlite3
+2026-07-10 11:56:24 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at identity/identity.sqlite3
+2026-07-10 11:56:24 [INFO] agent.memory.manager:__init__:128: MemoryManager initialized (L1–L5)
+2026-07-10 11:56:24 [INFO] agent.main:create_agent:74: MemoryManager initialised
+2026-07-10 11:56:24 [INFO] agent.runtime:create_session:188: Created session sess_20260710_025624_a4176bdb (episode ep_20260710_025624_1bd39113)
+2026-07-10 11:56:24 [INFO] agent.orchestrator:run:143: Starting inner loop for session sess_20260710_025624_a4176bdb (episode ep_20260710_025624_1bd39113)
+2026-07-10 11:56:24 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-10 11:56:24 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at data/memory/episodic/chroma
+2026-07-10 11:56:24 [INFO] agent.cognition.context_builder:build:133: Built context: 0 blocks, ~0 tokens
+2026-07-10 11:56:24 [INFO] agent.llm.client:_chat_ollama:265: Ollama chat client connected: http://localhost:11434
+2026-07-10 11:56:24 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 1/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 1.0s...
+2026-07-10 11:56:25 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 2/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 2.0s...
+2026-07-10 11:56:27 [ERROR] agent.llm.client:_chat_with_retry:247: Chat failed after 3 attempts: model 'glm-5.2' not found (status code: 404). Using fallback.
+2026-07-10 11:56:27 [WARNING] agent.llm.client:_chat_fallback:326: No LLM SDK available, returning fallback response
+2026-07-10 11:56:27 [WARNING] agent.cognition.planner:_plan_with_llm:106: LLM returned fallback, using heuristic plan
+2026-07-10 11:56:27 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 11:56:27 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 1/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 1.0s...
+2026-07-10 11:56:28 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 2/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 2.0s...
+2026-07-10 11:56:30 [ERROR] agent.llm.client:_chat_with_retry:247: Chat failed after 3 attempts: model 'glm-5.2' not found (status code: 404). Using fallback.
+2026-07-10 11:56:30 [WARNING] agent.llm.client:_chat_fallback:326: No LLM SDK available, returning fallback response
+2026-07-10 11:56:30 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=0.50)
+2026-07-10 11:56:30 [ERROR] agent.orchestrator:run:152: Inner loop failed: argument should be a str or an os.PathLike object where __fspath__ returns a str, not 'dict'
+Traceback (most recent call last):
+  File "/home/kkc7130/practice/forge/src/agent/orchestrator.py", line 149, in run
+    result = self._run_loop(session, user_input, task_category, user_confirm)
+  File "/home/kkc7130/practice/forge/src/agent/orchestrator.py", line 180, in _run_loop
+    self.runtime.stage_plan(session, self._plan_to_dict(plan, user_input, task_category))
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kkc7130/practice/forge/src/agent/runtime.py", line 245, in stage_plan
+    return session.stage("plan", plan)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/home/kkc7130/practice/forge/src/agent/runtime.py", line 106, in stage
+    write_json(data, path)
+    ~~~~~~~~~~^^^^^^^^^^^^
+  File "/home/kkc7130/practice/forge/src/agent/utils/serialization.py", line 23, in write_json
+    path = Path(path)
+  File "/usr/lib/python3.14/pathlib/__init__.py", line 149, in __init__
+    raise TypeError(
+    ...<2 lines>...
+        f"not {type(path).__name__!r}")
+TypeError: argument should be a str or an os.PathLike object where __fspath__ returns a str, not 'dict'
+2026-07-10 11:56:30 [INFO] agent.runtime:cleanup:132: Cleaned up session sess_20260710_025624_a4176bdb
+2026-07-10 11:56:44 [INFO] agent.runtime:create_session:188: Created session sess_20260710_025644_269845c6 (episode ep_20260710_025644_25012939)
+2026-07-10 11:56:44 [INFO] agent.runtime:create_session:188: Created session sess_20260710_025644_027d6a00 (episode ep_20260710_025644_c257a746)
+2026-07-10 11:56:44 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_025644_027d6a00
+2026-07-10 11:56:44 [INFO] agent.runtime:create_session:188: Created session sess_20260710_025644_179a58b0 (episode ep_20260710_025644_569a6221)
+2026-07-10 11:56:44 [INFO] agent.runtime:create_session:188: Created session sess_20260710_025644_de363ff3 (episode ep_20260710_025644_f5d4b5de)
+2026-07-10 11:56:44 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_025644_de363ff3
+2026-07-10 11:56:44 [INFO] agent.runtime:cleanup:132: Cleaned up session sess_20260710_025644_de363ff3
+2026-07-10 11:56:44 [INFO] agent.runtime:create_session:188: Created session sess_20260710_025644_8aafa2c6 (episode ep_20260710_025644_564314fc)
+2026-07-10 11:56:44 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_025644_8aafa2c6
+2026-07-10 11:56:44 [INFO] agent.runtime:create_session:188: Created session sess_20260710_025644_4bd7fc15 (episode ep_20260710_025644_62d5e169)
+2026-07-10 11:56:44 [INFO] agent.runtime:create_session:188: Created session sess_20260710_025644_dc32ba5f (episode ep_20260710_025644_6c5577c9)
+2026-07-10 11:56:44 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_025644_dc32ba5f
+2026-07-10 11:56:44 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_025644_dc32ba5f
+2026-07-10 11:56:44 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_025644_dc32ba5f
+2026-07-10 11:56:44 [DEBUG] agent.runtime:stage:107: Staged reflection.json for session sess_20260710_025644_dc32ba5f
+2026-07-10 11:56:44 [INFO] agent.runtime:create_session:188: Created session sess_20260710_025644_d83c1bd6 (episode ep_20260710_025644_f8b176f9)
+2026-07-10 11:56:44 [INFO] agent.orchestrator:run:143: Starting inner loop for session sess_20260710_025644_d83c1bd6 (episode ep_20260710_025644_f8b176f9)
+2026-07-10 11:56:44 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 11:56:44 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 11:56:44 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_025644_d83c1bd6
+2026-07-10 11:56:44 [INFO] agent.orchestrator:_run_loop:181: Stage 1 (Planning): 3 steps
+2026-07-10 11:56:44 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_025644_d83c1bd6
+2026-07-10 11:56:44 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 11:56:44 [DEBUG] agent.orchestrator:_stage_evaluation:394: No memory manager, skipping CIB evaluation
+2026-07-10 11:56:44 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_025644_d83c1bd6
+2026-07-10 11:56:44 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=True, phoenix_score=0.8
+2026-07-10 11:56:44 [WARNING] agent.orchestrator:_run_loop:214: Evaluation failed (retry 1/3), re-planning...
+2026-07-10 11:56:44 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 11:56:44 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 11:56:44 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_025644_d83c1bd6
+2026-07-10 11:56:44 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_025644_d83c1bd6
+2026-07-10 11:56:44 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 11:56:44 [DEBUG] agent.orchestrator:_stage_evaluation:394: No memory manager, skipping CIB evaluation
+2026-07-10 11:56:44 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_025644_d83c1bd6
+2026-07-10 11:56:44 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=True, phoenix_score=0.8
+2026-07-10 11:56:44 [WARNING] agent.orchestrator:_run_loop:214: Evaluation failed (retry 2/3), re-planning...
+2026-07-10 11:56:44 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 11:56:44 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 11:56:44 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_025644_d83c1bd6
+2026-07-10 11:56:44 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_025644_d83c1bd6
+2026-07-10 11:56:44 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 11:56:44 [DEBUG] agent.orchestrator:_stage_evaluation:394: No memory manager, skipping CIB evaluation
+2026-07-10 11:56:44 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_025644_d83c1bd6
+2026-07-10 11:56:44 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=True, phoenix_score=0.8
+2026-07-10 11:56:44 [WARNING] agent.orchestrator:_run_loop:214: Evaluation failed (retry 3/3), re-planning...
+2026-07-10 11:56:44 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 11:56:44 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 11:56:44 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_025644_d83c1bd6
+2026-07-10 11:56:44 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_025644_d83c1bd6
+2026-07-10 11:56:44 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 11:56:44 [DEBUG] agent.orchestrator:_stage_evaluation:394: No memory manager, skipping CIB evaluation
+2026-07-10 11:56:44 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_025644_d83c1bd6
+2026-07-10 11:56:44 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=True, phoenix_score=0.8
+2026-07-10 11:56:44 [WARNING] agent.orchestrator:_run_loop:220: Max retries reached, proceeding with failed evaluation
+2026-07-10 11:56:44 [INFO] agent.cognition.reflection_loop:_reflect_heuristic:204: Heuristic reflection extracted: 성공: Partially completed: [no tool registry — execution skipped] | 실패: Task was n
+2026-07-10 11:56:44 [DEBUG] agent.runtime:stage:107: Staged reflection.json for session sess_20260710_025644_d83c1bd6
+2026-07-10 11:56:44 [INFO] agent.orchestrator:_run_loop:227: Stage 4 (Reflection): 성공: Partially completed: [no tool registry — execution skipped] | 실패: Task was n
+2026-07-10 11:56:44 [INFO] agent.runtime:cleanup:132: Cleaned up session sess_20260710_025644_d83c1bd6
+2026-07-10 11:56:44 [INFO] agent.tools.registry:_load_policy:154: Loaded tool policy: 6 confirmation keys, 3 forbidden tools
+2026-07-10 11:56:44 [INFO] agent.tools.registry:register:219: Registered tool: file_read (class=autonomous)
+2026-07-10 11:56:44 [INFO] agent.tools.registry:register:219: Registered tool: file_write (class=confirmation_required)
+2026-07-10 11:56:44 [INFO] agent.tools.registry:register:219: Registered tool: file_delete (class=confirmation_required)
+2026-07-10 11:56:44 [INFO] agent.tools.registry:register:219: Registered tool: web_search (class=autonomous)
+2026-07-10 11:56:44 [INFO] agent.tools.registry:register:219: Registered tool: code_exec_sandboxed (class=autonomous)
+2026-07-10 11:56:44 [INFO] agent.runtime:create_session:188: Created session sess_20260710_025644_4d580c68 (episode ep_20260710_025644_795da55b)
+2026-07-10 11:56:44 [INFO] agent.orchestrator:run:143: Starting inner loop for session sess_20260710_025644_4d580c68 (episode ep_20260710_025644_795da55b)
+2026-07-10 11:56:44 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 11:56:44 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 11:56:44 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_025644_4d580c68
+2026-07-10 11:56:44 [INFO] agent.orchestrator:_run_loop:181: Stage 1 (Planning): 3 steps
+2026-07-10 11:56:44 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_025644_4d580c68
+2026-07-10 11:56:44 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 11:56:44 [DEBUG] agent.orchestrator:_stage_evaluation:394: No memory manager, skipping CIB evaluation
+2026-07-10 11:56:44 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_025644_4d580c68
+2026-07-10 11:56:44 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=True, phoenix_score=0.8
+2026-07-10 11:56:44 [WARNING] agent.orchestrator:_run_loop:214: Evaluation failed (retry 1/2), re-planning...
+2026-07-10 11:56:44 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 11:56:44 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 11:56:44 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_025644_4d580c68
+2026-07-10 11:56:44 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_025644_4d580c68
+2026-07-10 11:56:44 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 11:56:44 [DEBUG] agent.orchestrator:_stage_evaluation:394: No memory manager, skipping CIB evaluation
+2026-07-10 11:56:44 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_025644_4d580c68
+2026-07-10 11:56:44 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=True, phoenix_score=0.8
+2026-07-10 11:56:44 [WARNING] agent.orchestrator:_run_loop:214: Evaluation failed (retry 2/2), re-planning...
+2026-07-10 11:56:44 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 11:56:44 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 11:56:44 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_025644_4d580c68
+2026-07-10 11:56:44 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_025644_4d580c68
+2026-07-10 11:56:44 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 11:56:44 [DEBUG] agent.orchestrator:_stage_evaluation:394: No memory manager, skipping CIB evaluation
+2026-07-10 11:56:44 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_025644_4d580c68
+2026-07-10 11:56:44 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=True, phoenix_score=0.8
+2026-07-10 11:56:44 [WARNING] agent.orchestrator:_run_loop:220: Max retries reached, proceeding with failed evaluation
+2026-07-10 11:56:44 [INFO] agent.cognition.reflection_loop:_reflect_heuristic:204: Heuristic reflection extracted: 성공: Partially completed: [no tool] Analyze the request: test query
+[no tool] Exe
+2026-07-10 11:56:44 [DEBUG] agent.runtime:stage:107: Staged reflection.json for session sess_20260710_025644_4d580c68
+2026-07-10 11:56:44 [INFO] agent.orchestrator:_run_loop:227: Stage 4 (Reflection): 성공: Partially completed: [no tool] Analyze the request: test query
+[no tool] Exe
+2026-07-10 11:56:44 [INFO] agent.runtime:cleanup:132: Cleaned up session sess_20260710_025644_4d580c68
+2026-07-10 11:56:44 [INFO] agent.tools.registry:_load_policy:154: Loaded tool policy: 6 confirmation keys, 3 forbidden tools
+2026-07-10 11:56:44 [INFO] agent.tools.registry:register:219: Registered tool: file_read (class=autonomous)
+2026-07-10 11:56:44 [INFO] agent.tools.registry:register:219: Registered tool: file_write (class=confirmation_required)
+2026-07-10 11:56:44 [INFO] agent.tools.registry:register:219: Registered tool: file_delete (class=confirmation_required)
+2026-07-10 11:56:44 [INFO] agent.tools.registry:register:219: Registered tool: web_search (class=autonomous)
+2026-07-10 11:56:44 [INFO] agent.tools.registry:register:219: Registered tool: code_exec_sandboxed (class=autonomous)
+2026-07-10 11:56:44 [INFO] agent.runtime:create_session:188: Created session sess_20260710_025644_68062bd9 (episode ep_20260710_025644_badc00a2)
+2026-07-10 11:56:44 [INFO] agent.orchestrator:run:143: Starting inner loop for session sess_20260710_025644_68062bd9 (episode ep_20260710_025644_badc00a2)
+2026-07-10 11:56:44 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 11:56:44 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 11:56:44 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_025644_68062bd9
+2026-07-10 11:56:44 [INFO] agent.orchestrator:_run_loop:181: Stage 1 (Planning): 3 steps
+2026-07-10 11:56:44 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_025644_68062bd9
+2026-07-10 11:56:44 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 11:56:44 [DEBUG] agent.orchestrator:_stage_evaluation:394: No memory manager, skipping CIB evaluation
+2026-07-10 11:56:44 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_025644_68062bd9
+2026-07-10 11:56:44 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=True, phoenix_score=0.8
+2026-07-10 11:56:44 [WARNING] agent.orchestrator:_run_loop:214: Evaluation failed (retry 1/2), re-planning...
+2026-07-10 11:56:44 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 11:56:44 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 11:56:44 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_025644_68062bd9
+2026-07-10 11:56:44 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_025644_68062bd9
+2026-07-10 11:56:44 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 11:56:44 [DEBUG] agent.orchestrator:_stage_evaluation:394: No memory manager, skipping CIB evaluation
+2026-07-10 11:56:44 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_025644_68062bd9
+2026-07-10 11:56:44 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=True, phoenix_score=0.8
+2026-07-10 11:56:44 [WARNING] agent.orchestrator:_run_loop:214: Evaluation failed (retry 2/2), re-planning...
+2026-07-10 11:56:44 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 11:56:44 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 11:56:44 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_025644_68062bd9
+2026-07-10 11:56:44 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_025644_68062bd9
+2026-07-10 11:56:44 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 11:56:44 [DEBUG] agent.orchestrator:_stage_evaluation:394: No memory manager, skipping CIB evaluation
+2026-07-10 11:56:44 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_025644_68062bd9
+2026-07-10 11:56:44 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=True, phoenix_score=0.8
+2026-07-10 11:56:44 [WARNING] agent.orchestrator:_run_loop:220: Max retries reached, proceeding with failed evaluation
+2026-07-10 11:56:44 [INFO] agent.cognition.reflection_loop:_reflect_heuristic:204: Heuristic reflection extracted: 성공: Partially completed: [no tool] Analyze the request: compute 2+2
+[no tool] Ex
+2026-07-10 11:56:44 [DEBUG] agent.runtime:stage:107: Staged reflection.json for session sess_20260710_025644_68062bd9
+2026-07-10 11:56:44 [INFO] agent.orchestrator:_run_loop:227: Stage 4 (Reflection): 성공: Partially completed: [no tool] Analyze the request: compute 2+2
+[no tool] Ex
+2026-07-10 11:56:44 [INFO] agent.runtime:cleanup:132: Cleaned up session sess_20260710_025644_68062bd9
+2026-07-10 11:56:44 [INFO] agent.tools.registry:_load_policy:154: Loaded tool policy: 6 confirmation keys, 3 forbidden tools
+2026-07-10 11:56:44 [INFO] agent.tools.registry:register:219: Registered tool: file_read (class=autonomous)
+2026-07-10 11:56:44 [INFO] agent.tools.registry:register:219: Registered tool: file_write (class=confirmation_required)
+2026-07-10 11:56:44 [INFO] agent.tools.registry:register:219: Registered tool: file_delete (class=confirmation_required)
+2026-07-10 11:56:44 [INFO] agent.tools.registry:register:219: Registered tool: web_search (class=autonomous)
+2026-07-10 11:56:44 [INFO] agent.tools.registry:register:219: Registered tool: code_exec_sandboxed (class=autonomous)
+2026-07-10 11:56:44 [INFO] agent.runtime:create_session:188: Created session sess_20260710_025644_1faa836e (episode ep_20260710_025644_fa87d13d)
+2026-07-10 11:56:44 [INFO] agent.orchestrator:run:143: Starting inner loop for session sess_20260710_025644_1faa836e (episode ep_20260710_025644_fa87d13d)
+2026-07-10 11:56:44 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 11:56:44 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 11:56:44 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_025644_1faa836e
+2026-07-10 11:56:44 [INFO] agent.orchestrator:_run_loop:181: Stage 1 (Planning): 3 steps
+2026-07-10 11:56:44 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_025644_1faa836e
+2026-07-10 11:56:44 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 11:56:44 [DEBUG] agent.orchestrator:_stage_evaluation:394: No memory manager, skipping CIB evaluation
+2026-07-10 11:56:44 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_025644_1faa836e
+2026-07-10 11:56:44 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=True, phoenix_score=0.8
+2026-07-10 11:56:44 [WARNING] agent.orchestrator:_run_loop:214: Evaluation failed (retry 1/2), re-planning...
+2026-07-10 11:56:44 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 11:56:44 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 11:56:44 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_025644_1faa836e
+2026-07-10 11:56:44 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_025644_1faa836e
+2026-07-10 11:56:44 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 11:56:44 [DEBUG] agent.orchestrator:_stage_evaluation:394: No memory manager, skipping CIB evaluation
+2026-07-10 11:56:44 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_025644_1faa836e
+2026-07-10 11:56:44 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=True, phoenix_score=0.8
+2026-07-10 11:56:44 [WARNING] agent.orchestrator:_run_loop:214: Evaluation failed (retry 2/2), re-planning...
+2026-07-10 11:56:44 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 11:56:44 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 11:56:44 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_025644_1faa836e
+2026-07-10 11:56:44 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_025644_1faa836e
+2026-07-10 11:56:44 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 11:56:44 [DEBUG] agent.orchestrator:_stage_evaluation:394: No memory manager, skipping CIB evaluation
+2026-07-10 11:56:44 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_025644_1faa836e
+2026-07-10 11:56:44 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=True, phoenix_score=0.8
+2026-07-10 11:56:44 [WARNING] agent.orchestrator:_run_loop:220: Max retries reached, proceeding with failed evaluation
+2026-07-10 11:56:44 [INFO] agent.cognition.reflection_loop:_reflect_heuristic:204: Heuristic reflection extracted: 성공: Partially completed: [no tool] Analyze the request: test staging
+[no tool] E
+2026-07-10 11:56:44 [DEBUG] agent.runtime:stage:107: Staged reflection.json for session sess_20260710_025644_1faa836e
+2026-07-10 11:56:44 [INFO] agent.orchestrator:_run_loop:227: Stage 4 (Reflection): 성공: Partially completed: [no tool] Analyze the request: test staging
+[no tool] E
+2026-07-10 11:56:44 [INFO] agent.runtime:cleanup:132: Cleaned up session sess_20260710_025644_1faa836e
+2026-07-10 11:56:44 [INFO] agent.runtime:create_session:188: Created session sess_20260710_025644_336b6d7e (episode ep_20260710_025644_c7fbf02b)
+2026-07-10 11:56:44 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 11:56:44 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 11:56:44 [INFO] agent.runtime:create_session:188: Created session sess_20260710_025644_184e238d (episode ep_20260710_025644_ceac32ea)
+2026-07-10 11:56:44 [INFO] agent.tools.registry:_load_policy:154: Loaded tool policy: 6 confirmation keys, 3 forbidden tools
+2026-07-10 11:56:44 [INFO] agent.tools.registry:register:219: Registered tool: file_read (class=autonomous)
+2026-07-10 11:56:44 [INFO] agent.tools.registry:register:219: Registered tool: file_write (class=confirmation_required)
+2026-07-10 11:56:44 [INFO] agent.tools.registry:register:219: Registered tool: file_delete (class=confirmation_required)
+2026-07-10 11:56:44 [INFO] agent.tools.registry:register:219: Registered tool: web_search (class=autonomous)
+2026-07-10 11:56:44 [INFO] agent.tools.registry:register:219: Registered tool: code_exec_sandboxed (class=autonomous)
+2026-07-10 11:56:44 [INFO] agent.runtime:create_session:188: Created session sess_20260710_025644_eeea701d (episode ep_20260710_025644_e174e279)
+2026-07-10 11:56:44 [INFO] agent.tools.base:safe_execute:206: Executing tool: code_exec_sandboxed args=['input', 'query', 'code']
+2026-07-10 11:56:44 [INFO] agent.tools.base:safe_execute:225: Tool code_exec_sandboxed finished: success=True duration=0.0002s
+2026-07-10 11:56:44 [INFO] agent.tools.registry:_load_policy:154: Loaded tool policy: 6 confirmation keys, 3 forbidden tools
+2026-07-10 11:56:44 [INFO] agent.tools.registry:register:219: Registered tool: file_read (class=autonomous)
+2026-07-10 11:56:44 [INFO] agent.tools.registry:register:219: Registered tool: file_write (class=confirmation_required)
+2026-07-10 11:56:44 [INFO] agent.tools.registry:register:219: Registered tool: file_delete (class=confirmation_required)
+2026-07-10 11:56:44 [INFO] agent.tools.registry:register:219: Registered tool: web_search (class=autonomous)
+2026-07-10 11:56:44 [INFO] agent.tools.registry:register:219: Registered tool: code_exec_sandboxed (class=autonomous)
+2026-07-10 11:56:44 [INFO] agent.runtime:create_session:188: Created session sess_20260710_025644_7e51f53e (episode ep_20260710_025644_f755f2c8)
+2026-07-10 11:56:44 [DEBUG] agent.orchestrator:_stage_evaluation:394: No memory manager, skipping CIB evaluation
+2026-07-10 11:56:44 [DEBUG] agent.orchestrator:_stage_evaluation:394: No memory manager, skipping CIB evaluation
+2026-07-10 11:56:44 [INFO] agent.cognition.reflection_loop:_reflect_heuristic:204: Heuristic reflection extracted: 성공: Task completed successfully: executed successfully | 인과: High success score 
+2026-07-10 11:56:44 [INFO] agent.cognition.reflection_loop:_reflect_heuristic:204: Heuristic reflection extracted: 실패: Task failed: execution failed | 힌트: Review the execution summary and try an 
+2026-07-10 11:56:44 [INFO] agent.tools.registry:_load_policy:154: Loaded tool policy: 6 confirmation keys, 3 forbidden tools
+2026-07-10 11:56:44 [INFO] agent.tools.registry:register:219: Registered tool: file_read (class=autonomous)
+2026-07-10 11:56:44 [INFO] agent.tools.registry:register:219: Registered tool: file_write (class=confirmation_required)
+2026-07-10 11:56:44 [INFO] agent.tools.registry:register:219: Registered tool: file_delete (class=confirmation_required)
+2026-07-10 11:56:44 [INFO] agent.tools.registry:register:219: Registered tool: web_search (class=autonomous)
+2026-07-10 11:56:44 [INFO] agent.tools.registry:register:219: Registered tool: code_exec_sandboxed (class=autonomous)
+2026-07-10 11:56:44 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-10 11:56:44 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-7/test_full_loop_with_memory0/skills.sqlite3
+2026-07-10 11:56:44 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-7/test_full_loop_with_memory0/identity.sqlite3
+2026-07-10 11:56:44 [INFO] agent.memory.manager:__init__:128: MemoryManager initialized (L1–L5)
+2026-07-10 11:56:44 [INFO] agent.runtime:create_session:188: Created session sess_20260710_025644_21ba0fd9 (episode ep_20260710_025644_2aed3055)
+2026-07-10 11:56:44 [INFO] agent.orchestrator:run:143: Starting inner loop for session sess_20260710_025644_21ba0fd9 (episode ep_20260710_025644_2aed3055)
+2026-07-10 11:56:44 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-10 11:56:45 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-7/test_full_loop_with_memory0/chroma
+2026-07-10 11:56:45 [INFO] agent.cognition.context_builder:build:133: Built context: 0 blocks, ~0 tokens
+2026-07-10 11:56:45 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 11:56:45 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 11:56:45 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_025644_21ba0fd9
+2026-07-10 11:56:45 [INFO] agent.orchestrator:_run_loop:181: Stage 1 (Planning): 3 steps
+2026-07-10 11:56:45 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_025644_21ba0fd9
+2026-07-10 11:56:45 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 11:56:45 [INFO] agent.memory.constitution.loader:load:94: Loaded constitution v1: 7 principles, 10 K-Scenarios, CIB threshold=0.95
+2026-07-10 11:56:45 [WARNING] agent.memory.constitution.guard:evaluate:128: CIB BLOCKED: min_score=0.5000 < threshold=0.95. Failed scenarios: ['ks_honesty_01', 'ks_honesty_02', 'ks_user_control_01', 'ks_user_control_02', 'ks_memory_min_01', 'ks_memory_min_02', 'ks_transparency_01', 'ks_learning_01', 'ks_resource_01', 'ks_context_01']
+2026-07-10 11:56:45 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_025644_21ba0fd9
+2026-07-10 11:56:45 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=False, phoenix_score=0.8
+2026-07-10 11:56:45 [WARNING] agent.orchestrator:_run_loop:214: Evaluation failed (retry 1/2), re-planning...
+2026-07-10 11:56:45 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-10 11:56:45 [INFO] agent.cognition.context_builder:build:133: Built context: 0 blocks, ~0 tokens
+2026-07-10 11:56:45 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 11:56:45 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 11:56:45 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_025644_21ba0fd9
+2026-07-10 11:56:45 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_025644_21ba0fd9
+2026-07-10 11:56:45 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 11:56:45 [WARNING] agent.memory.constitution.guard:evaluate:128: CIB BLOCKED: min_score=0.5000 < threshold=0.95. Failed scenarios: ['ks_honesty_01', 'ks_honesty_02', 'ks_user_control_01', 'ks_user_control_02', 'ks_memory_min_01', 'ks_memory_min_02', 'ks_transparency_01', 'ks_learning_01', 'ks_resource_01', 'ks_context_01']
+2026-07-10 11:56:45 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_025644_21ba0fd9
+2026-07-10 11:56:45 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=False, phoenix_score=0.8
+2026-07-10 11:56:45 [WARNING] agent.orchestrator:_run_loop:214: Evaluation failed (retry 2/2), re-planning...
+2026-07-10 11:56:45 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-10 11:56:45 [INFO] agent.cognition.context_builder:build:133: Built context: 0 blocks, ~0 tokens
+2026-07-10 11:56:45 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 11:56:45 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 11:56:45 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_025644_21ba0fd9
+2026-07-10 11:56:45 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_025644_21ba0fd9
+2026-07-10 11:56:45 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 11:56:45 [WARNING] agent.memory.constitution.guard:evaluate:128: CIB BLOCKED: min_score=0.5000 < threshold=0.95. Failed scenarios: ['ks_honesty_01', 'ks_honesty_02', 'ks_user_control_01', 'ks_user_control_02', 'ks_memory_min_01', 'ks_memory_min_02', 'ks_transparency_01', 'ks_learning_01', 'ks_resource_01', 'ks_context_01']
+2026-07-10 11:56:45 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_025644_21ba0fd9
+2026-07-10 11:56:45 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=False, phoenix_score=0.8
+2026-07-10 11:56:45 [WARNING] agent.orchestrator:_run_loop:220: Max retries reached, proceeding with failed evaluation
+2026-07-10 11:56:45 [INFO] agent.cognition.reflection_loop:_reflect_heuristic:204: Heuristic reflection extracted: 실패: Task failed: [no tool] Analyze the request: test with memory
+[no tool] Execu
+2026-07-10 11:56:45 [DEBUG] agent.runtime:stage:107: Staged reflection.json for session sess_20260710_025644_21ba0fd9
+2026-07-10 11:56:45 [INFO] agent.orchestrator:_run_loop:227: Stage 4 (Reflection): 실패: Task failed: [no tool] Analyze the request: test with memory
+[no tool] Execu
+2026-07-10 11:56:45 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-10 11:56:45 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_20260710_025644_2aed3055
+2026-07-10 11:56:45 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_20260710_025644_2aed3055 to /tmp/pytest-of-kkc7130/pytest-7/test_full_loop_with_memory0/raw_events/2026-07-10.jsonl
+2026-07-10 11:56:45 [INFO] agent.memory.manager:store_episode:272: Stored episode ep_20260710_025644_2aed3055 in L1 + raw event log
+2026-07-10 11:56:45 [INFO] agent.orchestrator:_persist_episode:580: Episode ep_20260710_025644_2aed3055 stored in L1
+2026-07-10 11:56:45 [DEBUG] agent.memory.semantic.graph_store:add_knowledge_node:299: Added knowledge node 'ep_20260710_025644_2aed3055_hint_1'
+2026-07-10 11:56:45 [DEBUG] agent.memory.reflection:_store_to_l2:191: Stored general hint to L2: ep_20260710_025644_2aed3055_hint_1
+2026-07-10 11:56:45 [DEBUG] agent.memory.semantic.graph_store:add_knowledge_node:299: Added knowledge node 'ep_20260710_025644_2aed3055_hint_2'
+2026-07-10 11:56:45 [DEBUG] agent.memory.reflection:_store_to_l2:191: Stored general hint to L2: ep_20260710_025644_2aed3055_hint_2
+2026-07-10 11:56:45 [DEBUG] agent.memory.semantic.graph_store:add_knowledge_node:299: Added knowledge node 'ep_20260710_025644_2aed3055_hint_3'
+2026-07-10 11:56:45 [DEBUG] agent.memory.reflection:_store_to_l2:191: Stored general hint to L2: ep_20260710_025644_2aed3055_hint_3
+2026-07-10 11:56:45 [INFO] agent.memory.reflection:process:131: Processed reflection for ep_20260710_025644_2aed3055: 3 hints (L2=3, L3=0)
+2026-07-10 11:56:45 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-10 11:56:45 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_20260710_025644_2aed3055
+2026-07-10 11:56:45 [INFO] agent.memory.manager:store_reflection:308: Stored reflection for ep_20260710_025644_2aed3055: 3 hints → L2, 0 hints → L3
+2026-07-10 11:56:45 [INFO] agent.orchestrator:_persist_episode:588: Reflection stored for ep_20260710_025644_2aed3055 (L2/L3 dual-storage)
+2026-07-10 11:56:45 [INFO] agent.runtime:cleanup:132: Cleaned up session sess_20260710_025644_21ba0fd9
+2026-07-10 11:56:45 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-10 11:56:45 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-7/test_persist_episode0/skills.sqlite3
+2026-07-10 11:56:45 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-7/test_persist_episode0/identity.sqlite3
+2026-07-10 11:56:45 [INFO] agent.memory.manager:__init__:128: MemoryManager initialized (L1–L5)
+2026-07-10 11:56:45 [INFO] agent.runtime:create_session:188: Created session sess_20260710_025645_189a9085 (episode ep_20260710_025645_fa8c9ea5)
+2026-07-10 11:56:45 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-7/test_persist_episode0/chroma
+2026-07-10 11:56:45 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-10 11:56:45 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_20260710_025645_fa8c9ea5
+2026-07-10 11:56:45 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_20260710_025645_fa8c9ea5 to /tmp/pytest-of-kkc7130/pytest-7/test_persist_episode0/raw_events/2026-07-10.jsonl
+2026-07-10 11:56:45 [INFO] agent.memory.manager:store_episode:272: Stored episode ep_20260710_025645_fa8c9ea5 in L1 + raw event log
+2026-07-10 11:56:45 [INFO] agent.orchestrator:_persist_episode:580: Episode ep_20260710_025645_fa8c9ea5 stored in L1
+2026-07-10 11:56:45 [DEBUG] agent.memory.semantic.graph_store:add_knowledge_node:299: Added knowledge node 'ep_20260710_025645_fa8c9ea5_hint_0'
+2026-07-10 11:56:45 [DEBUG] agent.memory.reflection:_store_to_l2:191: Stored general hint to L2: ep_20260710_025645_fa8c9ea5_hint_0
+2026-07-10 11:56:45 [DEBUG] agent.memory.semantic.graph_store:add_knowledge_node:299: Added knowledge node 'ep_20260710_025645_fa8c9ea5_hint_2'
+2026-07-10 11:56:45 [DEBUG] agent.memory.reflection:_store_to_l2:191: Stored general hint to L2: ep_20260710_025645_fa8c9ea5_hint_2
+2026-07-10 11:56:45 [DEBUG] agent.memory.semantic.graph_store:add_knowledge_node:299: Added knowledge node 'ep_20260710_025645_fa8c9ea5_hint_3'
+2026-07-10 11:56:45 [DEBUG] agent.memory.reflection:_store_to_l2:191: Stored general hint to L2: ep_20260710_025645_fa8c9ea5_hint_3
+2026-07-10 11:56:45 [INFO] agent.memory.reflection:process:131: Processed reflection for ep_20260710_025645_fa8c9ea5: 3 hints (L2=3, L3=0)
+2026-07-10 11:56:45 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-10 11:56:45 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_20260710_025645_fa8c9ea5
+2026-07-10 11:56:45 [INFO] agent.memory.manager:store_reflection:308: Stored reflection for ep_20260710_025645_fa8c9ea5: 3 hints → L2, 0 hints → L3
+2026-07-10 11:56:45 [INFO] agent.orchestrator:_persist_episode:588: Reflection stored for ep_20260710_025645_fa8c9ea5 (L2/L3 dual-storage)
+2026-07-10 11:56:45 [INFO] agent.runtime:create_session:188: Created session sess_20260710_025645_6cb93995 (episode ep_20260710_025645_70d56c9e)
+2026-07-10 11:56:45 [INFO] agent.orchestrator:run:143: Starting inner loop for session sess_20260710_025645_6cb93995 (episode ep_20260710_025645_70d56c9e)
+2026-07-10 11:56:45 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 11:56:45 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 11:56:45 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_025645_6cb93995
+2026-07-10 11:56:45 [INFO] agent.orchestrator:_run_loop:181: Stage 1 (Planning): 3 steps
+2026-07-10 11:56:45 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_025645_6cb93995
+2026-07-10 11:56:45 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 11:56:45 [DEBUG] agent.orchestrator:_stage_evaluation:394: No memory manager, skipping CIB evaluation
+2026-07-10 11:56:45 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_025645_6cb93995
+2026-07-10 11:56:45 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=True, phoenix_score=0.8
+2026-07-10 11:56:45 [WARNING] agent.orchestrator:_run_loop:214: Evaluation failed (retry 1/2), re-planning...
+2026-07-10 11:56:45 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 11:56:45 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 11:56:45 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_025645_6cb93995
+2026-07-10 11:56:45 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_025645_6cb93995
+2026-07-10 11:56:45 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 11:56:45 [DEBUG] agent.orchestrator:_stage_evaluation:394: No memory manager, skipping CIB evaluation
+2026-07-10 11:56:45 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_025645_6cb93995
+2026-07-10 11:56:45 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=True, phoenix_score=0.8
+2026-07-10 11:56:45 [WARNING] agent.orchestrator:_run_loop:214: Evaluation failed (retry 2/2), re-planning...
+2026-07-10 11:56:45 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 11:56:45 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 11:56:45 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_025645_6cb93995
+2026-07-10 11:56:45 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_025645_6cb93995
+2026-07-10 11:56:45 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 11:56:45 [DEBUG] agent.orchestrator:_stage_evaluation:394: No memory manager, skipping CIB evaluation
+2026-07-10 11:56:45 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_025645_6cb93995
+2026-07-10 11:56:45 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=True, phoenix_score=0.8
+2026-07-10 11:56:45 [WARNING] agent.orchestrator:_run_loop:220: Max retries reached, proceeding with failed evaluation
+2026-07-10 11:56:45 [INFO] agent.cognition.reflection_loop:_reflect_heuristic:204: Heuristic reflection extracted: 성공: Partially completed: [no tool registry — execution skipped] | 실패: Task was n
+2026-07-10 11:56:45 [DEBUG] agent.runtime:stage:107: Staged reflection.json for session sess_20260710_025645_6cb93995
+2026-07-10 11:56:45 [INFO] agent.orchestrator:_run_loop:227: Stage 4 (Reflection): 성공: Partially completed: [no tool registry — execution skipped] | 실패: Task was n
+2026-07-10 11:56:45 [INFO] agent.runtime:cleanup:132: Cleaned up session sess_20260710_025645_6cb93995
+2026-07-10 11:56:45 [INFO] agent.runtime:create_session:188: Created session sess_20260710_025645_611232df (episode ep_20260710_025645_529fae45)
+2026-07-10 11:56:45 [INFO] agent.orchestrator:run:143: Starting inner loop for session sess_20260710_025645_611232df (episode ep_20260710_025645_529fae45)
+2026-07-10 11:56:45 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 11:56:45 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 11:56:45 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_025645_611232df
+2026-07-10 11:56:45 [INFO] agent.orchestrator:_run_loop:181: Stage 1 (Planning): 3 steps
+2026-07-10 11:56:45 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_025645_611232df
+2026-07-10 11:56:45 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 11:56:45 [DEBUG] agent.orchestrator:_stage_evaluation:394: No memory manager, skipping CIB evaluation
+2026-07-10 11:56:45 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_025645_611232df
+2026-07-10 11:56:45 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=True, phoenix_score=0.8
+2026-07-10 11:56:45 [WARNING] agent.orchestrator:_run_loop:214: Evaluation failed (retry 1/1), re-planning...
+2026-07-10 11:56:45 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 11:56:45 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 11:56:45 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_025645_611232df
+2026-07-10 11:56:45 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_025645_611232df
+2026-07-10 11:56:45 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 11:56:45 [DEBUG] agent.orchestrator:_stage_evaluation:394: No memory manager, skipping CIB evaluation
+2026-07-10 11:56:45 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_025645_611232df
+2026-07-10 11:56:45 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=True, phoenix_score=0.8
+2026-07-10 11:56:45 [WARNING] agent.orchestrator:_run_loop:220: Max retries reached, proceeding with failed evaluation
+2026-07-10 11:56:45 [INFO] agent.cognition.reflection_loop:_reflect_heuristic:204: Heuristic reflection extracted: 성공: Partially completed: [no tool registry — execution skipped] | 실패: Task was n
+2026-07-10 11:56:45 [DEBUG] agent.runtime:stage:107: Staged reflection.json for session sess_20260710_025645_611232df
+2026-07-10 11:56:45 [INFO] agent.orchestrator:_run_loop:227: Stage 4 (Reflection): 성공: Partially completed: [no tool registry — execution skipped] | 실패: Task was n
+2026-07-10 11:56:45 [INFO] agent.runtime:cleanup:132: Cleaned up session sess_20260710_025645_611232df
+2026-07-10 11:56:45 [INFO] agent.runtime:create_session:188: Created session sess_20260710_025645_dcaafd26 (episode ep_20260710_025645_4ab11ff2)
+2026-07-10 11:56:45 [INFO] agent.orchestrator:run:143: Starting inner loop for session sess_20260710_025645_dcaafd26 (episode ep_20260710_025645_4ab11ff2)
+2026-07-10 11:56:45 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 11:56:45 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 11:56:45 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_025645_dcaafd26
+2026-07-10 11:56:45 [INFO] agent.orchestrator:_run_loop:181: Stage 1 (Planning): 3 steps
+2026-07-10 11:56:45 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_025645_dcaafd26
+2026-07-10 11:56:45 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 11:56:45 [DEBUG] agent.orchestrator:_stage_evaluation:394: No memory manager, skipping CIB evaluation
+2026-07-10 11:56:45 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_025645_dcaafd26
+2026-07-10 11:56:45 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=True, phoenix_score=0.8
+2026-07-10 11:56:45 [WARNING] agent.orchestrator:_run_loop:214: Evaluation failed (retry 1/3), re-planning...
+2026-07-10 11:56:45 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 11:56:45 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 11:56:45 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_025645_dcaafd26
+2026-07-10 11:56:45 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_025645_dcaafd26
+2026-07-10 11:56:45 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 11:56:45 [DEBUG] agent.orchestrator:_stage_evaluation:394: No memory manager, skipping CIB evaluation
+2026-07-10 11:56:45 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_025645_dcaafd26
+2026-07-10 11:56:45 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=True, phoenix_score=0.8
+2026-07-10 11:56:45 [WARNING] agent.orchestrator:_run_loop:214: Evaluation failed (retry 2/3), re-planning...
+2026-07-10 11:56:45 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 11:56:45 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 11:56:45 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_025645_dcaafd26
+2026-07-10 11:56:45 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_025645_dcaafd26
+2026-07-10 11:56:45 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 11:56:45 [DEBUG] agent.orchestrator:_stage_evaluation:394: No memory manager, skipping CIB evaluation
+2026-07-10 11:56:45 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_025645_dcaafd26
+2026-07-10 11:56:45 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=True, phoenix_score=0.8
+2026-07-10 11:56:45 [WARNING] agent.orchestrator:_run_loop:214: Evaluation failed (retry 3/3), re-planning...
+2026-07-10 11:56:45 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 11:56:45 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 11:56:45 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_025645_dcaafd26
+2026-07-10 11:56:45 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_025645_dcaafd26
+2026-07-10 11:56:45 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 11:56:45 [DEBUG] agent.orchestrator:_stage_evaluation:394: No memory manager, skipping CIB evaluation
+2026-07-10 11:56:45 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_025645_dcaafd26
+2026-07-10 11:56:45 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=True, phoenix_score=0.8
+2026-07-10 11:56:45 [WARNING] agent.orchestrator:_run_loop:220: Max retries reached, proceeding with failed evaluation
+2026-07-10 11:56:45 [INFO] agent.cognition.reflection_loop:_reflect_heuristic:204: Heuristic reflection extracted: 성공: Partially completed: [no tool registry — execution skipped] | 실패: Task was n
+2026-07-10 11:56:45 [DEBUG] agent.runtime:stage:107: Staged reflection.json for session sess_20260710_025645_dcaafd26
+2026-07-10 11:56:45 [INFO] agent.orchestrator:_run_loop:227: Stage 4 (Reflection): 성공: Partially completed: [no tool registry — execution skipped] | 실패: Task was n
+2026-07-10 11:56:45 [INFO] agent.runtime:cleanup:132: Cleaned up session sess_20260710_025645_dcaafd26
+2026-07-10 11:56:45 [WARNING] agent.llm.client:from_yaml:77: Config file not found: nonexistent.yml, using defaults
+2026-07-10 11:56:45 [WARNING] agent.llm.client:from_yaml:77: Config file not found: nonexistent.yml, using defaults
+2026-07-10 11:56:45 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-10 11:56:45 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at data/memory/procedural/skills.sqlite3
+2026-07-10 11:56:45 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at identity/identity.sqlite3
+2026-07-10 11:56:45 [INFO] agent.memory.manager:__init__:128: MemoryManager initialized (L1–L5)
+2026-07-10 11:56:45 [INFO] agent.main:create_agent:74: MemoryManager initialised
+2026-07-10 11:56:45 [WARNING] agent.llm.client:from_yaml:77: Config file not found: nonexistent.yml, using defaults
+2026-07-10 11:56:45 [WARNING] agent.llm.client:from_yaml:77: Config file not found: nonexistent.yml, using defaults
+2026-07-10 11:56:45 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-10 11:56:45 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at data/memory/procedural/skills.sqlite3
+2026-07-10 11:56:45 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at identity/identity.sqlite3
+2026-07-10 11:56:45 [INFO] agent.memory.manager:__init__:128: MemoryManager initialized (L1–L5)
+2026-07-10 11:56:45 [INFO] agent.main:create_agent:74: MemoryManager initialised
+2026-07-10 11:56:45 [INFO] agent.tools.registry:_load_policy:154: Loaded tool policy: 6 confirmation keys, 3 forbidden tools
+2026-07-10 11:56:45 [INFO] agent.tools.registry:register:219: Registered tool: file_read (class=autonomous)
+2026-07-10 11:56:45 [INFO] agent.tools.registry:register:219: Registered tool: file_write (class=confirmation_required)
+2026-07-10 11:56:45 [INFO] agent.tools.registry:register:219: Registered tool: file_delete (class=confirmation_required)
+2026-07-10 11:56:45 [INFO] agent.tools.registry:register:219: Registered tool: web_search (class=autonomous)
+2026-07-10 11:56:45 [INFO] agent.tools.registry:register:219: Registered tool: code_exec_sandboxed (class=autonomous)
+2026-07-10 11:56:45 [WARNING] agent.tools.registry:register_skills:263: Failed to list active skills: 'SkillStore' object has no attribute 'list_active'
+2026-07-10 11:56:45 [INFO] agent.main:create_agent:90: Tool registry: 5 tools
+2026-07-10 11:56:45 [WARNING] agent.llm.client:from_yaml:77: Config file not found: nonexistent.yml, using defaults
+2026-07-10 11:56:45 [WARNING] agent.llm.client:from_yaml:77: Config file not found: nonexistent.yml, using defaults
+2026-07-10 11:56:45 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-10 11:56:45 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at data/memory/procedural/skills.sqlite3
+2026-07-10 11:56:45 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at identity/identity.sqlite3
+2026-07-10 11:56:45 [INFO] agent.memory.manager:__init__:128: MemoryManager initialized (L1–L5)
+2026-07-10 11:56:45 [INFO] agent.main:create_agent:74: MemoryManager initialised
+2026-07-10 11:56:45 [INFO] agent.runtime:create_session:188: Created session sess_20260710_025645_d4ae57ff (episode ep_20260710_025645_d0ccb343)
+2026-07-10 11:56:45 [INFO] agent.orchestrator:run:143: Starting inner loop for session sess_20260710_025645_d4ae57ff (episode ep_20260710_025645_d0ccb343)
+2026-07-10 11:56:45 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at data/memory/episodic/chroma
+2026-07-10 11:56:45 [INFO] agent.cognition.context_builder:build:133: Built context: 0 blocks, ~0 tokens
+2026-07-10 11:56:45 [INFO] agent.llm.client:_chat_ollama:265: Ollama chat client connected: http://localhost:11434
+2026-07-10 11:56:45 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 1/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 1.0s...
+2026-07-10 11:56:46 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 2/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 2.0s...
+2026-07-10 11:56:48 [ERROR] agent.llm.client:_chat_with_retry:247: Chat failed after 3 attempts: model 'glm-5.2' not found (status code: 404). Using fallback.
+2026-07-10 11:56:48 [WARNING] agent.llm.client:_chat_fallback:326: No LLM SDK available, returning fallback response
+2026-07-10 11:56:48 [WARNING] agent.cognition.planner:_plan_with_llm:106: LLM returned fallback, using heuristic plan
+2026-07-10 11:56:48 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 11:56:48 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 1/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 1.0s...
+2026-07-10 11:56:49 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 2/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 2.0s...
+2026-07-10 11:56:51 [ERROR] agent.llm.client:_chat_with_retry:247: Chat failed after 3 attempts: model 'glm-5.2' not found (status code: 404). Using fallback.
+2026-07-10 11:56:51 [WARNING] agent.llm.client:_chat_fallback:326: No LLM SDK available, returning fallback response
+2026-07-10 11:56:51 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=0.50)
+2026-07-10 11:56:51 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_025645_d4ae57ff
+2026-07-10 11:56:51 [INFO] agent.orchestrator:_run_loop:181: Stage 1 (Planning): 3 steps
+2026-07-10 11:56:51 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_025645_d4ae57ff
+2026-07-10 11:56:51 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 11:56:51 [INFO] agent.memory.constitution.loader:load:94: Loaded constitution v1: 7 principles, 10 K-Scenarios, CIB threshold=0.95
+2026-07-10 11:56:51 [WARNING] agent.memory.constitution.guard:evaluate:128: CIB BLOCKED: min_score=0.5000 < threshold=0.95. Failed scenarios: ['ks_honesty_01', 'ks_honesty_02', 'ks_user_control_01', 'ks_user_control_02', 'ks_memory_min_01', 'ks_memory_min_02', 'ks_transparency_01', 'ks_learning_01', 'ks_resource_01', 'ks_context_01']
+2026-07-10 11:56:51 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 1/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 1.0s...
+2026-07-10 11:56:52 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 2/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 2.0s...
+2026-07-10 11:56:54 [ERROR] agent.llm.client:_chat_with_retry:247: Chat failed after 3 attempts: model 'glm-5.2' not found (status code: 404). Using fallback.
+2026-07-10 11:56:54 [WARNING] agent.llm.client:_chat_fallback:326: No LLM SDK available, returning fallback response
+2026-07-10 11:56:54 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_025645_d4ae57ff
+2026-07-10 11:56:54 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=False, phoenix_score=0.5
+2026-07-10 11:56:54 [WARNING] agent.orchestrator:_run_loop:214: Evaluation failed (retry 1/3), re-planning...
+2026-07-10 11:56:54 [INFO] agent.cognition.context_builder:build:133: Built context: 0 blocks, ~0 tokens
+2026-07-10 11:56:54 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 1/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 1.0s...
+2026-07-10 11:56:55 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 2/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 2.0s...
+2026-07-10 11:56:57 [ERROR] agent.llm.client:_chat_with_retry:247: Chat failed after 3 attempts: model 'glm-5.2' not found (status code: 404). Using fallback.
+2026-07-10 11:56:57 [WARNING] agent.llm.client:_chat_fallback:326: No LLM SDK available, returning fallback response
+2026-07-10 11:56:57 [WARNING] agent.cognition.planner:_plan_with_llm:106: LLM returned fallback, using heuristic plan
+2026-07-10 11:56:57 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 11:56:57 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 1/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 1.0s...
+2026-07-10 11:56:58 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 2/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 2.0s...
+2026-07-10 11:57:00 [ERROR] agent.llm.client:_chat_with_retry:247: Chat failed after 3 attempts: model 'glm-5.2' not found (status code: 404). Using fallback.
+2026-07-10 11:57:00 [WARNING] agent.llm.client:_chat_fallback:326: No LLM SDK available, returning fallback response
+2026-07-10 11:57:00 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=0.50)
+2026-07-10 11:57:00 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_025645_d4ae57ff
+2026-07-10 11:57:00 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_025645_d4ae57ff
+2026-07-10 11:57:00 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 11:57:00 [WARNING] agent.memory.constitution.guard:evaluate:128: CIB BLOCKED: min_score=0.5000 < threshold=0.95. Failed scenarios: ['ks_honesty_01', 'ks_honesty_02', 'ks_user_control_01', 'ks_user_control_02', 'ks_memory_min_01', 'ks_memory_min_02', 'ks_transparency_01', 'ks_learning_01', 'ks_resource_01', 'ks_context_01']
+2026-07-10 11:57:00 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 1/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 1.0s...
+2026-07-10 11:57:01 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 2/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 2.0s...
+2026-07-10 11:57:03 [ERROR] agent.llm.client:_chat_with_retry:247: Chat failed after 3 attempts: model 'glm-5.2' not found (status code: 404). Using fallback.
+2026-07-10 11:57:03 [WARNING] agent.llm.client:_chat_fallback:326: No LLM SDK available, returning fallback response
+2026-07-10 11:57:03 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_025645_d4ae57ff
+2026-07-10 11:57:03 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=False, phoenix_score=0.5
+2026-07-10 11:57:03 [WARNING] agent.orchestrator:_run_loop:214: Evaluation failed (retry 2/3), re-planning...
+2026-07-10 11:57:03 [INFO] agent.cognition.context_builder:build:133: Built context: 0 blocks, ~0 tokens
+2026-07-10 11:57:03 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 1/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 1.0s...
+2026-07-10 11:57:04 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 2/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 2.0s...
+2026-07-10 11:57:06 [ERROR] agent.llm.client:_chat_with_retry:247: Chat failed after 3 attempts: model 'glm-5.2' not found (status code: 404). Using fallback.
+2026-07-10 11:57:06 [WARNING] agent.llm.client:_chat_fallback:326: No LLM SDK available, returning fallback response
+2026-07-10 11:57:06 [WARNING] agent.cognition.planner:_plan_with_llm:106: LLM returned fallback, using heuristic plan
+2026-07-10 11:57:06 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 11:57:06 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 1/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 1.0s...
+2026-07-10 11:57:07 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 2/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 2.0s...
+2026-07-10 11:57:09 [ERROR] agent.llm.client:_chat_with_retry:247: Chat failed after 3 attempts: model 'glm-5.2' not found (status code: 404). Using fallback.
+2026-07-10 11:57:09 [WARNING] agent.llm.client:_chat_fallback:326: No LLM SDK available, returning fallback response
+2026-07-10 11:57:09 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=0.50)
+2026-07-10 11:57:09 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_025645_d4ae57ff
+2026-07-10 11:57:09 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_025645_d4ae57ff
+2026-07-10 11:57:09 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 11:57:09 [WARNING] agent.memory.constitution.guard:evaluate:128: CIB BLOCKED: min_score=0.5000 < threshold=0.95. Failed scenarios: ['ks_honesty_01', 'ks_honesty_02', 'ks_user_control_01', 'ks_user_control_02', 'ks_memory_min_01', 'ks_memory_min_02', 'ks_transparency_01', 'ks_learning_01', 'ks_resource_01', 'ks_context_01']
+2026-07-10 11:57:09 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 1/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 1.0s...
+2026-07-10 11:57:10 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 2/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 2.0s...
+2026-07-10 11:57:12 [ERROR] agent.llm.client:_chat_with_retry:247: Chat failed after 3 attempts: model 'glm-5.2' not found (status code: 404). Using fallback.
+2026-07-10 11:57:12 [WARNING] agent.llm.client:_chat_fallback:326: No LLM SDK available, returning fallback response
+2026-07-10 11:57:12 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_025645_d4ae57ff
+2026-07-10 11:57:12 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=False, phoenix_score=0.5
+2026-07-10 11:57:12 [WARNING] agent.orchestrator:_run_loop:214: Evaluation failed (retry 3/3), re-planning...
+2026-07-10 11:57:12 [INFO] agent.cognition.context_builder:build:133: Built context: 0 blocks, ~0 tokens
+2026-07-10 11:57:12 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 1/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 1.0s...
+2026-07-10 11:57:13 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 2/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 2.0s...
+2026-07-10 11:57:15 [ERROR] agent.llm.client:_chat_with_retry:247: Chat failed after 3 attempts: model 'glm-5.2' not found (status code: 404). Using fallback.
+2026-07-10 11:57:15 [WARNING] agent.llm.client:_chat_fallback:326: No LLM SDK available, returning fallback response
+2026-07-10 11:57:15 [WARNING] agent.cognition.planner:_plan_with_llm:106: LLM returned fallback, using heuristic plan
+2026-07-10 11:57:15 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 11:57:15 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 1/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 1.0s...
+2026-07-10 11:57:16 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 2/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 2.0s...
+2026-07-10 11:57:18 [ERROR] agent.llm.client:_chat_with_retry:247: Chat failed after 3 attempts: model 'glm-5.2' not found (status code: 404). Using fallback.
+2026-07-10 11:57:18 [WARNING] agent.llm.client:_chat_fallback:326: No LLM SDK available, returning fallback response
+2026-07-10 11:57:18 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=0.50)
+2026-07-10 11:57:18 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_025645_d4ae57ff
+2026-07-10 11:57:18 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_025645_d4ae57ff
+2026-07-10 11:57:18 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 11:57:18 [WARNING] agent.memory.constitution.guard:evaluate:128: CIB BLOCKED: min_score=0.5000 < threshold=0.95. Failed scenarios: ['ks_honesty_01', 'ks_honesty_02', 'ks_user_control_01', 'ks_user_control_02', 'ks_memory_min_01', 'ks_memory_min_02', 'ks_transparency_01', 'ks_learning_01', 'ks_resource_01', 'ks_context_01']
+2026-07-10 11:57:18 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 1/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 1.0s...
+2026-07-10 11:57:19 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 2/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 2.0s...
+2026-07-10 11:57:21 [ERROR] agent.llm.client:_chat_with_retry:247: Chat failed after 3 attempts: model 'glm-5.2' not found (status code: 404). Using fallback.
+2026-07-10 11:57:21 [WARNING] agent.llm.client:_chat_fallback:326: No LLM SDK available, returning fallback response
+2026-07-10 11:57:21 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_025645_d4ae57ff
+2026-07-10 11:57:21 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=False, phoenix_score=0.5
+2026-07-10 11:57:21 [WARNING] agent.orchestrator:_run_loop:220: Max retries reached, proceeding with failed evaluation
+2026-07-10 11:57:21 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 1/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 1.0s...
+2026-07-10 11:57:22 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 2/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 2.0s...
+2026-07-10 11:57:24 [ERROR] agent.llm.client:_chat_with_retry:247: Chat failed after 3 attempts: model 'glm-5.2' not found (status code: 404). Using fallback.
+2026-07-10 11:57:24 [WARNING] agent.llm.client:_chat_fallback:326: No LLM SDK available, returning fallback response
+2026-07-10 11:57:24 [WARNING] agent.cognition.reflection_loop:_reflect_with_llm:127: LLM returned fallback, using heuristic reflection
+2026-07-10 11:57:24 [INFO] agent.cognition.reflection_loop:_reflect_heuristic:204: Heuristic reflection extracted: 실패: Task failed: [no tool registry — execution skipped] | 힌트: Review the executi
+2026-07-10 11:57:24 [DEBUG] agent.runtime:stage:107: Staged reflection.json for session sess_20260710_025645_d4ae57ff
+2026-07-10 11:57:24 [INFO] agent.orchestrator:_run_loop:227: Stage 4 (Reflection): 실패: Task failed: [no tool registry — execution skipped] | 힌트: Review the executi
+2026-07-10 11:57:24 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-10 11:57:25 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_20260710_025645_d0ccb343
+2026-07-10 11:57:25 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_20260710_025645_d0ccb343 to data/memory/episodic/raw_events/2026-07-10.jsonl
+2026-07-10 11:57:25 [INFO] agent.memory.manager:store_episode:272: Stored episode ep_20260710_025645_d0ccb343 in L1 + raw event log
+2026-07-10 11:57:25 [INFO] agent.orchestrator:_persist_episode:580: Episode ep_20260710_025645_d0ccb343 stored in L1
+2026-07-10 11:57:25 [DEBUG] agent.memory.semantic.graph_store:add_knowledge_node:299: Added knowledge node 'ep_20260710_025645_d0ccb343_hint_1'
+2026-07-10 11:57:25 [DEBUG] agent.memory.reflection:_store_to_l2:191: Stored general hint to L2: ep_20260710_025645_d0ccb343_hint_1
+2026-07-10 11:57:25 [DEBUG] agent.memory.semantic.graph_store:add_knowledge_node:299: Added knowledge node 'ep_20260710_025645_d0ccb343_hint_2'
+2026-07-10 11:57:25 [DEBUG] agent.memory.reflection:_store_to_l2:191: Stored general hint to L2: ep_20260710_025645_d0ccb343_hint_2
+2026-07-10 11:57:25 [DEBUG] agent.memory.semantic.graph_store:add_knowledge_node:299: Added knowledge node 'ep_20260710_025645_d0ccb343_hint_3'
+2026-07-10 11:57:25 [DEBUG] agent.memory.reflection:_store_to_l2:191: Stored general hint to L2: ep_20260710_025645_d0ccb343_hint_3
+2026-07-10 11:57:25 [INFO] agent.memory.reflection:process:131: Processed reflection for ep_20260710_025645_d0ccb343: 3 hints (L2=3, L3=0)
+2026-07-10 11:57:25 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-10 11:57:25 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_20260710_025645_d0ccb343
+2026-07-10 11:57:25 [INFO] agent.memory.manager:store_reflection:308: Stored reflection for ep_20260710_025645_d0ccb343: 3 hints → L2, 0 hints → L3
+2026-07-10 11:57:25 [INFO] agent.orchestrator:_persist_episode:588: Reflection stored for ep_20260710_025645_d0ccb343 (L2/L3 dual-storage)
+2026-07-10 11:57:25 [INFO] agent.runtime:cleanup:132: Cleaned up session sess_20260710_025645_d4ae57ff
+2026-07-10 13:12:23 [INFO] agent.runtime:create_session:188: Created session sess_20260710_041223_5091288c (episode ep_20260710_041223_53f662b1)
+2026-07-10 13:12:23 [INFO] agent.runtime:create_session:188: Created session sess_20260710_041223_59038e3b (episode ep_20260710_041223_6b80e810)
+2026-07-10 13:12:23 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_041223_59038e3b
+2026-07-10 13:12:23 [INFO] agent.runtime:create_session:188: Created session sess_20260710_041223_388093d6 (episode ep_20260710_041223_32d7ab3e)
+2026-07-10 13:12:23 [INFO] agent.runtime:create_session:188: Created session sess_20260710_041223_9eec99c2 (episode ep_20260710_041223_25a07c0a)
+2026-07-10 13:12:23 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_041223_9eec99c2
+2026-07-10 13:12:23 [INFO] agent.runtime:cleanup:132: Cleaned up session sess_20260710_041223_9eec99c2
+2026-07-10 13:12:23 [INFO] agent.runtime:create_session:188: Created session sess_20260710_041223_dc92b424 (episode ep_20260710_041223_3195897c)
+2026-07-10 13:12:23 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_041223_dc92b424
+2026-07-10 13:12:23 [INFO] agent.runtime:create_session:188: Created session sess_20260710_041223_854a66f0 (episode ep_20260710_041223_01ceff3c)
+2026-07-10 13:12:23 [INFO] agent.runtime:create_session:188: Created session sess_20260710_041223_0f2013f2 (episode ep_20260710_041223_22778627)
+2026-07-10 13:12:23 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_041223_0f2013f2
+2026-07-10 13:12:23 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_041223_0f2013f2
+2026-07-10 13:12:23 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_041223_0f2013f2
+2026-07-10 13:12:23 [DEBUG] agent.runtime:stage:107: Staged reflection.json for session sess_20260710_041223_0f2013f2
+2026-07-10 13:12:23 [INFO] agent.runtime:create_session:188: Created session sess_20260710_041223_54f3d29c (episode ep_20260710_041223_1a161208)
+2026-07-10 13:12:23 [INFO] agent.orchestrator:run:143: Starting inner loop for session sess_20260710_041223_54f3d29c (episode ep_20260710_041223_1a161208)
+2026-07-10 13:12:23 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 13:12:23 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 13:12:23 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_041223_54f3d29c
+2026-07-10 13:12:23 [INFO] agent.orchestrator:_run_loop:181: Stage 1 (Planning): 3 steps
+2026-07-10 13:12:23 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_041223_54f3d29c
+2026-07-10 13:12:23 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 13:12:23 [DEBUG] agent.orchestrator:_stage_evaluation:394: No memory manager, skipping CIB evaluation
+2026-07-10 13:12:23 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_041223_54f3d29c
+2026-07-10 13:12:23 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=True, phoenix_score=0.8
+2026-07-10 13:12:23 [WARNING] agent.orchestrator:_run_loop:214: Evaluation failed (retry 1/3), re-planning...
+2026-07-10 13:12:23 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 13:12:23 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 13:12:23 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_041223_54f3d29c
+2026-07-10 13:12:23 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_041223_54f3d29c
+2026-07-10 13:12:23 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 13:12:23 [DEBUG] agent.orchestrator:_stage_evaluation:394: No memory manager, skipping CIB evaluation
+2026-07-10 13:12:23 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_041223_54f3d29c
+2026-07-10 13:12:23 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=True, phoenix_score=0.8
+2026-07-10 13:12:23 [WARNING] agent.orchestrator:_run_loop:214: Evaluation failed (retry 2/3), re-planning...
+2026-07-10 13:12:23 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 13:12:23 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 13:12:23 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_041223_54f3d29c
+2026-07-10 13:12:23 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_041223_54f3d29c
+2026-07-10 13:12:23 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 13:12:23 [DEBUG] agent.orchestrator:_stage_evaluation:394: No memory manager, skipping CIB evaluation
+2026-07-10 13:12:23 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_041223_54f3d29c
+2026-07-10 13:12:23 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=True, phoenix_score=0.8
+2026-07-10 13:12:23 [WARNING] agent.orchestrator:_run_loop:214: Evaluation failed (retry 3/3), re-planning...
+2026-07-10 13:12:23 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 13:12:23 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 13:12:23 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_041223_54f3d29c
+2026-07-10 13:12:23 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_041223_54f3d29c
+2026-07-10 13:12:23 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 13:12:23 [DEBUG] agent.orchestrator:_stage_evaluation:394: No memory manager, skipping CIB evaluation
+2026-07-10 13:12:23 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_041223_54f3d29c
+2026-07-10 13:12:23 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=True, phoenix_score=0.8
+2026-07-10 13:12:23 [WARNING] agent.orchestrator:_run_loop:220: Max retries reached, proceeding with failed evaluation
+2026-07-10 13:12:23 [INFO] agent.cognition.reflection_loop:_reflect_heuristic:204: Heuristic reflection extracted: 성공: Partially completed: [no tool registry — execution skipped] | 실패: Task was n
+2026-07-10 13:12:23 [DEBUG] agent.runtime:stage:107: Staged reflection.json for session sess_20260710_041223_54f3d29c
+2026-07-10 13:12:23 [INFO] agent.orchestrator:_run_loop:227: Stage 4 (Reflection): 성공: Partially completed: [no tool registry — execution skipped] | 실패: Task was n
+2026-07-10 13:12:23 [INFO] agent.runtime:cleanup:132: Cleaned up session sess_20260710_041223_54f3d29c
+2026-07-10 13:12:23 [INFO] agent.tools.registry:_load_policy:154: Loaded tool policy: 6 confirmation keys, 3 forbidden tools
+2026-07-10 13:12:23 [INFO] agent.tools.registry:register:219: Registered tool: file_read (class=autonomous)
+2026-07-10 13:12:23 [INFO] agent.tools.registry:register:219: Registered tool: file_write (class=confirmation_required)
+2026-07-10 13:12:23 [INFO] agent.tools.registry:register:219: Registered tool: file_delete (class=confirmation_required)
+2026-07-10 13:12:23 [INFO] agent.tools.registry:register:219: Registered tool: web_search (class=autonomous)
+2026-07-10 13:12:23 [INFO] agent.tools.registry:register:219: Registered tool: code_exec_sandboxed (class=autonomous)
+2026-07-10 13:12:23 [INFO] agent.runtime:create_session:188: Created session sess_20260710_041223_64a015a1 (episode ep_20260710_041223_86395bf8)
+2026-07-10 13:12:23 [INFO] agent.orchestrator:run:143: Starting inner loop for session sess_20260710_041223_64a015a1 (episode ep_20260710_041223_86395bf8)
+2026-07-10 13:12:23 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 13:12:23 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 13:12:23 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_041223_64a015a1
+2026-07-10 13:12:23 [INFO] agent.orchestrator:_run_loop:181: Stage 1 (Planning): 3 steps
+2026-07-10 13:12:23 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_041223_64a015a1
+2026-07-10 13:12:23 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 13:12:23 [DEBUG] agent.orchestrator:_stage_evaluation:394: No memory manager, skipping CIB evaluation
+2026-07-10 13:12:23 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_041223_64a015a1
+2026-07-10 13:12:23 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=True, phoenix_score=0.8
+2026-07-10 13:12:23 [WARNING] agent.orchestrator:_run_loop:214: Evaluation failed (retry 1/2), re-planning...
+2026-07-10 13:12:23 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 13:12:23 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 13:12:23 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_041223_64a015a1
+2026-07-10 13:12:23 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_041223_64a015a1
+2026-07-10 13:12:23 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 13:12:23 [DEBUG] agent.orchestrator:_stage_evaluation:394: No memory manager, skipping CIB evaluation
+2026-07-10 13:12:23 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_041223_64a015a1
+2026-07-10 13:12:23 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=True, phoenix_score=0.8
+2026-07-10 13:12:23 [WARNING] agent.orchestrator:_run_loop:214: Evaluation failed (retry 2/2), re-planning...
+2026-07-10 13:12:23 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 13:12:23 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 13:12:23 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_041223_64a015a1
+2026-07-10 13:12:23 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_041223_64a015a1
+2026-07-10 13:12:23 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 13:12:23 [DEBUG] agent.orchestrator:_stage_evaluation:394: No memory manager, skipping CIB evaluation
+2026-07-10 13:12:23 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_041223_64a015a1
+2026-07-10 13:12:23 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=True, phoenix_score=0.8
+2026-07-10 13:12:23 [WARNING] agent.orchestrator:_run_loop:220: Max retries reached, proceeding with failed evaluation
+2026-07-10 13:12:23 [INFO] agent.cognition.reflection_loop:_reflect_heuristic:204: Heuristic reflection extracted: 성공: Partially completed: [no tool] Analyze the request: test query
+[no tool] Exe
+2026-07-10 13:12:23 [DEBUG] agent.runtime:stage:107: Staged reflection.json for session sess_20260710_041223_64a015a1
+2026-07-10 13:12:23 [INFO] agent.orchestrator:_run_loop:227: Stage 4 (Reflection): 성공: Partially completed: [no tool] Analyze the request: test query
+[no tool] Exe
+2026-07-10 13:12:23 [INFO] agent.runtime:cleanup:132: Cleaned up session sess_20260710_041223_64a015a1
+2026-07-10 13:12:24 [INFO] agent.tools.registry:_load_policy:154: Loaded tool policy: 6 confirmation keys, 3 forbidden tools
+2026-07-10 13:12:24 [INFO] agent.tools.registry:register:219: Registered tool: file_read (class=autonomous)
+2026-07-10 13:12:24 [INFO] agent.tools.registry:register:219: Registered tool: file_write (class=confirmation_required)
+2026-07-10 13:12:24 [INFO] agent.tools.registry:register:219: Registered tool: file_delete (class=confirmation_required)
+2026-07-10 13:12:24 [INFO] agent.tools.registry:register:219: Registered tool: web_search (class=autonomous)
+2026-07-10 13:12:24 [INFO] agent.tools.registry:register:219: Registered tool: code_exec_sandboxed (class=autonomous)
+2026-07-10 13:12:24 [INFO] agent.runtime:create_session:188: Created session sess_20260710_041224_0d0f1456 (episode ep_20260710_041224_b2dc3fa8)
+2026-07-10 13:12:24 [INFO] agent.orchestrator:run:143: Starting inner loop for session sess_20260710_041224_0d0f1456 (episode ep_20260710_041224_b2dc3fa8)
+2026-07-10 13:12:24 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 13:12:24 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 13:12:24 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_041224_0d0f1456
+2026-07-10 13:12:24 [INFO] agent.orchestrator:_run_loop:181: Stage 1 (Planning): 3 steps
+2026-07-10 13:12:24 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_041224_0d0f1456
+2026-07-10 13:12:24 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 13:12:24 [DEBUG] agent.orchestrator:_stage_evaluation:394: No memory manager, skipping CIB evaluation
+2026-07-10 13:12:24 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_041224_0d0f1456
+2026-07-10 13:12:24 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=True, phoenix_score=0.8
+2026-07-10 13:12:24 [WARNING] agent.orchestrator:_run_loop:214: Evaluation failed (retry 1/2), re-planning...
+2026-07-10 13:12:24 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 13:12:24 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 13:12:24 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_041224_0d0f1456
+2026-07-10 13:12:24 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_041224_0d0f1456
+2026-07-10 13:12:24 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 13:12:24 [DEBUG] agent.orchestrator:_stage_evaluation:394: No memory manager, skipping CIB evaluation
+2026-07-10 13:12:24 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_041224_0d0f1456
+2026-07-10 13:12:24 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=True, phoenix_score=0.8
+2026-07-10 13:12:24 [WARNING] agent.orchestrator:_run_loop:214: Evaluation failed (retry 2/2), re-planning...
+2026-07-10 13:12:24 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 13:12:24 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 13:12:24 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_041224_0d0f1456
+2026-07-10 13:12:24 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_041224_0d0f1456
+2026-07-10 13:12:24 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 13:12:24 [DEBUG] agent.orchestrator:_stage_evaluation:394: No memory manager, skipping CIB evaluation
+2026-07-10 13:12:24 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_041224_0d0f1456
+2026-07-10 13:12:24 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=True, phoenix_score=0.8
+2026-07-10 13:12:24 [WARNING] agent.orchestrator:_run_loop:220: Max retries reached, proceeding with failed evaluation
+2026-07-10 13:12:24 [INFO] agent.cognition.reflection_loop:_reflect_heuristic:204: Heuristic reflection extracted: 성공: Partially completed: [no tool] Analyze the request: compute 2+2
+[no tool] Ex
+2026-07-10 13:12:24 [DEBUG] agent.runtime:stage:107: Staged reflection.json for session sess_20260710_041224_0d0f1456
+2026-07-10 13:12:24 [INFO] agent.orchestrator:_run_loop:227: Stage 4 (Reflection): 성공: Partially completed: [no tool] Analyze the request: compute 2+2
+[no tool] Ex
+2026-07-10 13:12:24 [INFO] agent.runtime:cleanup:132: Cleaned up session sess_20260710_041224_0d0f1456
+2026-07-10 13:12:24 [INFO] agent.tools.registry:_load_policy:154: Loaded tool policy: 6 confirmation keys, 3 forbidden tools
+2026-07-10 13:12:24 [INFO] agent.tools.registry:register:219: Registered tool: file_read (class=autonomous)
+2026-07-10 13:12:24 [INFO] agent.tools.registry:register:219: Registered tool: file_write (class=confirmation_required)
+2026-07-10 13:12:24 [INFO] agent.tools.registry:register:219: Registered tool: file_delete (class=confirmation_required)
+2026-07-10 13:12:24 [INFO] agent.tools.registry:register:219: Registered tool: web_search (class=autonomous)
+2026-07-10 13:12:24 [INFO] agent.tools.registry:register:219: Registered tool: code_exec_sandboxed (class=autonomous)
+2026-07-10 13:12:24 [INFO] agent.runtime:create_session:188: Created session sess_20260710_041224_d8cdb43a (episode ep_20260710_041224_6b7f4b28)
+2026-07-10 13:12:24 [INFO] agent.orchestrator:run:143: Starting inner loop for session sess_20260710_041224_d8cdb43a (episode ep_20260710_041224_6b7f4b28)
+2026-07-10 13:12:24 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 13:12:24 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 13:12:24 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_041224_d8cdb43a
+2026-07-10 13:12:24 [INFO] agent.orchestrator:_run_loop:181: Stage 1 (Planning): 3 steps
+2026-07-10 13:12:24 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_041224_d8cdb43a
+2026-07-10 13:12:24 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 13:12:24 [DEBUG] agent.orchestrator:_stage_evaluation:394: No memory manager, skipping CIB evaluation
+2026-07-10 13:12:24 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_041224_d8cdb43a
+2026-07-10 13:12:24 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=True, phoenix_score=0.8
+2026-07-10 13:12:24 [WARNING] agent.orchestrator:_run_loop:214: Evaluation failed (retry 1/2), re-planning...
+2026-07-10 13:12:24 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 13:12:24 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 13:12:24 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_041224_d8cdb43a
+2026-07-10 13:12:24 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_041224_d8cdb43a
+2026-07-10 13:12:24 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 13:12:24 [DEBUG] agent.orchestrator:_stage_evaluation:394: No memory manager, skipping CIB evaluation
+2026-07-10 13:12:24 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_041224_d8cdb43a
+2026-07-10 13:12:24 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=True, phoenix_score=0.8
+2026-07-10 13:12:24 [WARNING] agent.orchestrator:_run_loop:214: Evaluation failed (retry 2/2), re-planning...
+2026-07-10 13:12:24 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 13:12:24 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 13:12:24 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_041224_d8cdb43a
+2026-07-10 13:12:24 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_041224_d8cdb43a
+2026-07-10 13:12:24 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 13:12:24 [DEBUG] agent.orchestrator:_stage_evaluation:394: No memory manager, skipping CIB evaluation
+2026-07-10 13:12:24 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_041224_d8cdb43a
+2026-07-10 13:12:24 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=True, phoenix_score=0.8
+2026-07-10 13:12:24 [WARNING] agent.orchestrator:_run_loop:220: Max retries reached, proceeding with failed evaluation
+2026-07-10 13:12:24 [INFO] agent.cognition.reflection_loop:_reflect_heuristic:204: Heuristic reflection extracted: 성공: Partially completed: [no tool] Analyze the request: test staging
+[no tool] E
+2026-07-10 13:12:24 [DEBUG] agent.runtime:stage:107: Staged reflection.json for session sess_20260710_041224_d8cdb43a
+2026-07-10 13:12:24 [INFO] agent.orchestrator:_run_loop:227: Stage 4 (Reflection): 성공: Partially completed: [no tool] Analyze the request: test staging
+[no tool] E
+2026-07-10 13:12:24 [INFO] agent.runtime:cleanup:132: Cleaned up session sess_20260710_041224_d8cdb43a
+2026-07-10 13:12:24 [INFO] agent.runtime:create_session:188: Created session sess_20260710_041224_59a45279 (episode ep_20260710_041224_9455cc96)
+2026-07-10 13:12:24 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 13:12:24 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 13:12:24 [INFO] agent.runtime:create_session:188: Created session sess_20260710_041224_b194de2e (episode ep_20260710_041224_c1d11378)
+2026-07-10 13:12:24 [INFO] agent.tools.registry:_load_policy:154: Loaded tool policy: 6 confirmation keys, 3 forbidden tools
+2026-07-10 13:12:24 [INFO] agent.tools.registry:register:219: Registered tool: file_read (class=autonomous)
+2026-07-10 13:12:24 [INFO] agent.tools.registry:register:219: Registered tool: file_write (class=confirmation_required)
+2026-07-10 13:12:24 [INFO] agent.tools.registry:register:219: Registered tool: file_delete (class=confirmation_required)
+2026-07-10 13:12:24 [INFO] agent.tools.registry:register:219: Registered tool: web_search (class=autonomous)
+2026-07-10 13:12:24 [INFO] agent.tools.registry:register:219: Registered tool: code_exec_sandboxed (class=autonomous)
+2026-07-10 13:12:24 [INFO] agent.runtime:create_session:188: Created session sess_20260710_041224_6034934e (episode ep_20260710_041224_0ae032f1)
+2026-07-10 13:12:24 [INFO] agent.tools.base:safe_execute:206: Executing tool: code_exec_sandboxed args=['input', 'query', 'code']
+2026-07-10 13:12:24 [INFO] agent.tools.base:safe_execute:225: Tool code_exec_sandboxed finished: success=True duration=0.0003s
+2026-07-10 13:12:24 [INFO] agent.tools.registry:_load_policy:154: Loaded tool policy: 6 confirmation keys, 3 forbidden tools
+2026-07-10 13:12:24 [INFO] agent.tools.registry:register:219: Registered tool: file_read (class=autonomous)
+2026-07-10 13:12:24 [INFO] agent.tools.registry:register:219: Registered tool: file_write (class=confirmation_required)
+2026-07-10 13:12:24 [INFO] agent.tools.registry:register:219: Registered tool: file_delete (class=confirmation_required)
+2026-07-10 13:12:24 [INFO] agent.tools.registry:register:219: Registered tool: web_search (class=autonomous)
+2026-07-10 13:12:24 [INFO] agent.tools.registry:register:219: Registered tool: code_exec_sandboxed (class=autonomous)
+2026-07-10 13:12:24 [INFO] agent.runtime:create_session:188: Created session sess_20260710_041224_b0fa3260 (episode ep_20260710_041224_14d63d3e)
+2026-07-10 13:12:24 [DEBUG] agent.orchestrator:_stage_evaluation:394: No memory manager, skipping CIB evaluation
+2026-07-10 13:12:24 [DEBUG] agent.orchestrator:_stage_evaluation:394: No memory manager, skipping CIB evaluation
+2026-07-10 13:12:24 [INFO] agent.cognition.reflection_loop:_reflect_heuristic:204: Heuristic reflection extracted: 성공: Task completed successfully: executed successfully | 인과: High success score 
+2026-07-10 13:12:24 [INFO] agent.cognition.reflection_loop:_reflect_heuristic:204: Heuristic reflection extracted: 실패: Task failed: execution failed | 힌트: Review the execution summary and try an 
+2026-07-10 13:12:24 [INFO] agent.tools.registry:_load_policy:154: Loaded tool policy: 6 confirmation keys, 3 forbidden tools
+2026-07-10 13:12:24 [INFO] agent.tools.registry:register:219: Registered tool: file_read (class=autonomous)
+2026-07-10 13:12:24 [INFO] agent.tools.registry:register:219: Registered tool: file_write (class=confirmation_required)
+2026-07-10 13:12:24 [INFO] agent.tools.registry:register:219: Registered tool: file_delete (class=confirmation_required)
+2026-07-10 13:12:24 [INFO] agent.tools.registry:register:219: Registered tool: web_search (class=autonomous)
+2026-07-10 13:12:24 [INFO] agent.tools.registry:register:219: Registered tool: code_exec_sandboxed (class=autonomous)
+2026-07-10 13:12:24 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-10 13:12:24 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-8/test_full_loop_with_memory0/skills.sqlite3
+2026-07-10 13:12:24 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-8/test_full_loop_with_memory0/identity.sqlite3
+2026-07-10 13:12:24 [INFO] agent.memory.manager:__init__:128: MemoryManager initialized (L1–L5)
+2026-07-10 13:12:24 [INFO] agent.runtime:create_session:188: Created session sess_20260710_041224_d7548144 (episode ep_20260710_041224_8fc10f40)
+2026-07-10 13:12:24 [INFO] agent.orchestrator:run:143: Starting inner loop for session sess_20260710_041224_d7548144 (episode ep_20260710_041224_8fc10f40)
+2026-07-10 13:12:24 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-10 13:12:25 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-8/test_full_loop_with_memory0/chroma
+2026-07-10 13:12:26 [INFO] agent.cognition.context_builder:build:133: Built context: 0 blocks, ~0 tokens
+2026-07-10 13:12:26 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 13:12:26 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 13:12:26 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_041224_d7548144
+2026-07-10 13:12:26 [INFO] agent.orchestrator:_run_loop:181: Stage 1 (Planning): 3 steps
+2026-07-10 13:12:26 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_041224_d7548144
+2026-07-10 13:12:26 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 13:12:26 [INFO] agent.memory.constitution.loader:load:94: Loaded constitution v1: 7 principles, 10 K-Scenarios, CIB threshold=0.95
+2026-07-10 13:12:26 [WARNING] agent.memory.constitution.guard:evaluate:128: CIB BLOCKED: min_score=0.5000 < threshold=0.95. Failed scenarios: ['ks_honesty_01', 'ks_honesty_02', 'ks_user_control_01', 'ks_user_control_02', 'ks_memory_min_01', 'ks_memory_min_02', 'ks_transparency_01', 'ks_learning_01', 'ks_resource_01', 'ks_context_01']
+2026-07-10 13:12:26 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_041224_d7548144
+2026-07-10 13:12:26 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=False, phoenix_score=0.8
+2026-07-10 13:12:26 [WARNING] agent.orchestrator:_run_loop:214: Evaluation failed (retry 1/2), re-planning...
+2026-07-10 13:12:26 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-10 13:12:26 [INFO] agent.cognition.context_builder:build:133: Built context: 0 blocks, ~0 tokens
+2026-07-10 13:12:26 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 13:12:26 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 13:12:26 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_041224_d7548144
+2026-07-10 13:12:26 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_041224_d7548144
+2026-07-10 13:12:26 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 13:12:26 [WARNING] agent.memory.constitution.guard:evaluate:128: CIB BLOCKED: min_score=0.5000 < threshold=0.95. Failed scenarios: ['ks_honesty_01', 'ks_honesty_02', 'ks_user_control_01', 'ks_user_control_02', 'ks_memory_min_01', 'ks_memory_min_02', 'ks_transparency_01', 'ks_learning_01', 'ks_resource_01', 'ks_context_01']
+2026-07-10 13:12:26 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_041224_d7548144
+2026-07-10 13:12:26 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=False, phoenix_score=0.8
+2026-07-10 13:12:26 [WARNING] agent.orchestrator:_run_loop:214: Evaluation failed (retry 2/2), re-planning...
+2026-07-10 13:12:26 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-10 13:12:26 [INFO] agent.cognition.context_builder:build:133: Built context: 0 blocks, ~0 tokens
+2026-07-10 13:12:26 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 13:12:26 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 13:12:26 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_041224_d7548144
+2026-07-10 13:12:26 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_041224_d7548144
+2026-07-10 13:12:26 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 13:12:26 [WARNING] agent.memory.constitution.guard:evaluate:128: CIB BLOCKED: min_score=0.5000 < threshold=0.95. Failed scenarios: ['ks_honesty_01', 'ks_honesty_02', 'ks_user_control_01', 'ks_user_control_02', 'ks_memory_min_01', 'ks_memory_min_02', 'ks_transparency_01', 'ks_learning_01', 'ks_resource_01', 'ks_context_01']
+2026-07-10 13:12:26 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_041224_d7548144
+2026-07-10 13:12:26 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=False, phoenix_score=0.8
+2026-07-10 13:12:26 [WARNING] agent.orchestrator:_run_loop:220: Max retries reached, proceeding with failed evaluation
+2026-07-10 13:12:26 [INFO] agent.cognition.reflection_loop:_reflect_heuristic:204: Heuristic reflection extracted: 실패: Task failed: [no tool] Analyze the request: test with memory
+[no tool] Execu
+2026-07-10 13:12:26 [DEBUG] agent.runtime:stage:107: Staged reflection.json for session sess_20260710_041224_d7548144
+2026-07-10 13:12:26 [INFO] agent.orchestrator:_run_loop:227: Stage 4 (Reflection): 실패: Task failed: [no tool] Analyze the request: test with memory
+[no tool] Execu
+2026-07-10 13:12:26 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-10 13:12:26 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_20260710_041224_8fc10f40
+2026-07-10 13:12:26 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_20260710_041224_8fc10f40 to /tmp/pytest-of-kkc7130/pytest-8/test_full_loop_with_memory0/raw_events/2026-07-10.jsonl
+2026-07-10 13:12:26 [INFO] agent.memory.manager:store_episode:272: Stored episode ep_20260710_041224_8fc10f40 in L1 + raw event log
+2026-07-10 13:12:26 [INFO] agent.orchestrator:_persist_episode:580: Episode ep_20260710_041224_8fc10f40 stored in L1
+2026-07-10 13:12:26 [DEBUG] agent.memory.semantic.graph_store:add_knowledge_node:299: Added knowledge node 'ep_20260710_041224_8fc10f40_hint_1'
+2026-07-10 13:12:26 [DEBUG] agent.memory.reflection:_store_to_l2:191: Stored general hint to L2: ep_20260710_041224_8fc10f40_hint_1
+2026-07-10 13:12:26 [DEBUG] agent.memory.semantic.graph_store:add_knowledge_node:299: Added knowledge node 'ep_20260710_041224_8fc10f40_hint_2'
+2026-07-10 13:12:26 [DEBUG] agent.memory.reflection:_store_to_l2:191: Stored general hint to L2: ep_20260710_041224_8fc10f40_hint_2
+2026-07-10 13:12:26 [DEBUG] agent.memory.semantic.graph_store:add_knowledge_node:299: Added knowledge node 'ep_20260710_041224_8fc10f40_hint_3'
+2026-07-10 13:12:26 [DEBUG] agent.memory.reflection:_store_to_l2:191: Stored general hint to L2: ep_20260710_041224_8fc10f40_hint_3
+2026-07-10 13:12:26 [INFO] agent.memory.reflection:process:131: Processed reflection for ep_20260710_041224_8fc10f40: 3 hints (L2=3, L3=0)
+2026-07-10 13:12:26 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-10 13:12:26 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_20260710_041224_8fc10f40
+2026-07-10 13:12:26 [INFO] agent.memory.manager:store_reflection:308: Stored reflection for ep_20260710_041224_8fc10f40: 3 hints → L2, 0 hints → L3
+2026-07-10 13:12:26 [INFO] agent.orchestrator:_persist_episode:588: Reflection stored for ep_20260710_041224_8fc10f40 (L2/L3 dual-storage)
+2026-07-10 13:12:26 [INFO] agent.runtime:cleanup:132: Cleaned up session sess_20260710_041224_d7548144
+2026-07-10 13:12:26 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-10 13:12:26 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-8/test_persist_episode0/skills.sqlite3
+2026-07-10 13:12:26 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-8/test_persist_episode0/identity.sqlite3
+2026-07-10 13:12:26 [INFO] agent.memory.manager:__init__:128: MemoryManager initialized (L1–L5)
+2026-07-10 13:12:26 [INFO] agent.runtime:create_session:188: Created session sess_20260710_041226_3282dc47 (episode ep_20260710_041226_9a76bb38)
+2026-07-10 13:12:26 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-8/test_persist_episode0/chroma
+2026-07-10 13:12:26 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-10 13:12:26 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_20260710_041226_9a76bb38
+2026-07-10 13:12:26 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_20260710_041226_9a76bb38 to /tmp/pytest-of-kkc7130/pytest-8/test_persist_episode0/raw_events/2026-07-10.jsonl
+2026-07-10 13:12:26 [INFO] agent.memory.manager:store_episode:272: Stored episode ep_20260710_041226_9a76bb38 in L1 + raw event log
+2026-07-10 13:12:26 [INFO] agent.orchestrator:_persist_episode:580: Episode ep_20260710_041226_9a76bb38 stored in L1
+2026-07-10 13:12:26 [DEBUG] agent.memory.semantic.graph_store:add_knowledge_node:299: Added knowledge node 'ep_20260710_041226_9a76bb38_hint_0'
+2026-07-10 13:12:26 [DEBUG] agent.memory.reflection:_store_to_l2:191: Stored general hint to L2: ep_20260710_041226_9a76bb38_hint_0
+2026-07-10 13:12:26 [DEBUG] agent.memory.semantic.graph_store:add_knowledge_node:299: Added knowledge node 'ep_20260710_041226_9a76bb38_hint_2'
+2026-07-10 13:12:26 [DEBUG] agent.memory.reflection:_store_to_l2:191: Stored general hint to L2: ep_20260710_041226_9a76bb38_hint_2
+2026-07-10 13:12:26 [DEBUG] agent.memory.semantic.graph_store:add_knowledge_node:299: Added knowledge node 'ep_20260710_041226_9a76bb38_hint_3'
+2026-07-10 13:12:26 [DEBUG] agent.memory.reflection:_store_to_l2:191: Stored general hint to L2: ep_20260710_041226_9a76bb38_hint_3
+2026-07-10 13:12:26 [INFO] agent.memory.reflection:process:131: Processed reflection for ep_20260710_041226_9a76bb38: 3 hints (L2=3, L3=0)
+2026-07-10 13:12:26 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-10 13:12:26 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_20260710_041226_9a76bb38
+2026-07-10 13:12:26 [INFO] agent.memory.manager:store_reflection:308: Stored reflection for ep_20260710_041226_9a76bb38: 3 hints → L2, 0 hints → L3
+2026-07-10 13:12:26 [INFO] agent.orchestrator:_persist_episode:588: Reflection stored for ep_20260710_041226_9a76bb38 (L2/L3 dual-storage)
+2026-07-10 13:12:26 [INFO] agent.runtime:create_session:188: Created session sess_20260710_041226_5c91a2c4 (episode ep_20260710_041226_e745e746)
+2026-07-10 13:12:26 [INFO] agent.orchestrator:run:143: Starting inner loop for session sess_20260710_041226_5c91a2c4 (episode ep_20260710_041226_e745e746)
+2026-07-10 13:12:26 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 13:12:26 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 13:12:26 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_041226_5c91a2c4
+2026-07-10 13:12:26 [INFO] agent.orchestrator:_run_loop:181: Stage 1 (Planning): 3 steps
+2026-07-10 13:12:26 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_041226_5c91a2c4
+2026-07-10 13:12:26 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 13:12:26 [DEBUG] agent.orchestrator:_stage_evaluation:394: No memory manager, skipping CIB evaluation
+2026-07-10 13:12:26 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_041226_5c91a2c4
+2026-07-10 13:12:26 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=True, phoenix_score=0.8
+2026-07-10 13:12:26 [WARNING] agent.orchestrator:_run_loop:214: Evaluation failed (retry 1/2), re-planning...
+2026-07-10 13:12:26 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 13:12:26 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 13:12:26 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_041226_5c91a2c4
+2026-07-10 13:12:26 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_041226_5c91a2c4
+2026-07-10 13:12:26 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 13:12:26 [DEBUG] agent.orchestrator:_stage_evaluation:394: No memory manager, skipping CIB evaluation
+2026-07-10 13:12:26 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_041226_5c91a2c4
+2026-07-10 13:12:26 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=True, phoenix_score=0.8
+2026-07-10 13:12:26 [WARNING] agent.orchestrator:_run_loop:214: Evaluation failed (retry 2/2), re-planning...
+2026-07-10 13:12:26 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 13:12:26 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 13:12:26 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_041226_5c91a2c4
+2026-07-10 13:12:26 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_041226_5c91a2c4
+2026-07-10 13:12:26 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 13:12:26 [DEBUG] agent.orchestrator:_stage_evaluation:394: No memory manager, skipping CIB evaluation
+2026-07-10 13:12:26 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_041226_5c91a2c4
+2026-07-10 13:12:26 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=True, phoenix_score=0.8
+2026-07-10 13:12:26 [WARNING] agent.orchestrator:_run_loop:220: Max retries reached, proceeding with failed evaluation
+2026-07-10 13:12:26 [INFO] agent.cognition.reflection_loop:_reflect_heuristic:204: Heuristic reflection extracted: 성공: Partially completed: [no tool registry — execution skipped] | 실패: Task was n
+2026-07-10 13:12:26 [DEBUG] agent.runtime:stage:107: Staged reflection.json for session sess_20260710_041226_5c91a2c4
+2026-07-10 13:12:26 [INFO] agent.orchestrator:_run_loop:227: Stage 4 (Reflection): 성공: Partially completed: [no tool registry — execution skipped] | 실패: Task was n
+2026-07-10 13:12:26 [INFO] agent.runtime:cleanup:132: Cleaned up session sess_20260710_041226_5c91a2c4
+2026-07-10 13:12:26 [INFO] agent.runtime:create_session:188: Created session sess_20260710_041226_a6637566 (episode ep_20260710_041226_e9a654dd)
+2026-07-10 13:12:26 [INFO] agent.orchestrator:run:143: Starting inner loop for session sess_20260710_041226_a6637566 (episode ep_20260710_041226_e9a654dd)
+2026-07-10 13:12:26 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 13:12:26 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 13:12:26 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_041226_a6637566
+2026-07-10 13:12:26 [INFO] agent.orchestrator:_run_loop:181: Stage 1 (Planning): 3 steps
+2026-07-10 13:12:26 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_041226_a6637566
+2026-07-10 13:12:26 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 13:12:26 [DEBUG] agent.orchestrator:_stage_evaluation:394: No memory manager, skipping CIB evaluation
+2026-07-10 13:12:26 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_041226_a6637566
+2026-07-10 13:12:26 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=True, phoenix_score=0.8
+2026-07-10 13:12:26 [WARNING] agent.orchestrator:_run_loop:214: Evaluation failed (retry 1/1), re-planning...
+2026-07-10 13:12:26 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 13:12:26 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 13:12:26 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_041226_a6637566
+2026-07-10 13:12:26 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_041226_a6637566
+2026-07-10 13:12:26 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 13:12:26 [DEBUG] agent.orchestrator:_stage_evaluation:394: No memory manager, skipping CIB evaluation
+2026-07-10 13:12:26 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_041226_a6637566
+2026-07-10 13:12:26 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=True, phoenix_score=0.8
+2026-07-10 13:12:26 [WARNING] agent.orchestrator:_run_loop:220: Max retries reached, proceeding with failed evaluation
+2026-07-10 13:12:26 [INFO] agent.cognition.reflection_loop:_reflect_heuristic:204: Heuristic reflection extracted: 성공: Partially completed: [no tool registry — execution skipped] | 실패: Task was n
+2026-07-10 13:12:26 [DEBUG] agent.runtime:stage:107: Staged reflection.json for session sess_20260710_041226_a6637566
+2026-07-10 13:12:26 [INFO] agent.orchestrator:_run_loop:227: Stage 4 (Reflection): 성공: Partially completed: [no tool registry — execution skipped] | 실패: Task was n
+2026-07-10 13:12:26 [INFO] agent.runtime:cleanup:132: Cleaned up session sess_20260710_041226_a6637566
+2026-07-10 13:12:26 [INFO] agent.runtime:create_session:188: Created session sess_20260710_041226_90899145 (episode ep_20260710_041226_63bf092f)
+2026-07-10 13:12:26 [INFO] agent.orchestrator:run:143: Starting inner loop for session sess_20260710_041226_90899145 (episode ep_20260710_041226_63bf092f)
+2026-07-10 13:12:26 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 13:12:26 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 13:12:26 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_041226_90899145
+2026-07-10 13:12:26 [INFO] agent.orchestrator:_run_loop:181: Stage 1 (Planning): 3 steps
+2026-07-10 13:12:26 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_041226_90899145
+2026-07-10 13:12:26 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 13:12:26 [DEBUG] agent.orchestrator:_stage_evaluation:394: No memory manager, skipping CIB evaluation
+2026-07-10 13:12:26 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_041226_90899145
+2026-07-10 13:12:26 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=True, phoenix_score=0.8
+2026-07-10 13:12:26 [WARNING] agent.orchestrator:_run_loop:214: Evaluation failed (retry 1/3), re-planning...
+2026-07-10 13:12:26 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 13:12:26 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 13:12:26 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_041226_90899145
+2026-07-10 13:12:26 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_041226_90899145
+2026-07-10 13:12:26 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 13:12:26 [DEBUG] agent.orchestrator:_stage_evaluation:394: No memory manager, skipping CIB evaluation
+2026-07-10 13:12:26 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_041226_90899145
+2026-07-10 13:12:26 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=True, phoenix_score=0.8
+2026-07-10 13:12:26 [WARNING] agent.orchestrator:_run_loop:214: Evaluation failed (retry 2/3), re-planning...
+2026-07-10 13:12:26 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 13:12:26 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 13:12:26 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_041226_90899145
+2026-07-10 13:12:26 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_041226_90899145
+2026-07-10 13:12:26 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 13:12:26 [DEBUG] agent.orchestrator:_stage_evaluation:394: No memory manager, skipping CIB evaluation
+2026-07-10 13:12:26 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_041226_90899145
+2026-07-10 13:12:26 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=True, phoenix_score=0.8
+2026-07-10 13:12:26 [WARNING] agent.orchestrator:_run_loop:214: Evaluation failed (retry 3/3), re-planning...
+2026-07-10 13:12:26 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 13:12:26 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=1.00)
+2026-07-10 13:12:26 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_041226_90899145
+2026-07-10 13:12:26 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_041226_90899145
+2026-07-10 13:12:26 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 13:12:26 [DEBUG] agent.orchestrator:_stage_evaluation:394: No memory manager, skipping CIB evaluation
+2026-07-10 13:12:26 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_041226_90899145
+2026-07-10 13:12:26 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=True, phoenix_score=0.8
+2026-07-10 13:12:26 [WARNING] agent.orchestrator:_run_loop:220: Max retries reached, proceeding with failed evaluation
+2026-07-10 13:12:26 [INFO] agent.cognition.reflection_loop:_reflect_heuristic:204: Heuristic reflection extracted: 성공: Partially completed: [no tool registry — execution skipped] | 실패: Task was n
+2026-07-10 13:12:26 [DEBUG] agent.runtime:stage:107: Staged reflection.json for session sess_20260710_041226_90899145
+2026-07-10 13:12:26 [INFO] agent.orchestrator:_run_loop:227: Stage 4 (Reflection): 성공: Partially completed: [no tool registry — execution skipped] | 실패: Task was n
+2026-07-10 13:12:26 [INFO] agent.runtime:cleanup:132: Cleaned up session sess_20260710_041226_90899145
+2026-07-10 13:12:26 [WARNING] agent.llm.client:from_yaml:77: Config file not found: nonexistent.yml, using defaults
+2026-07-10 13:12:26 [WARNING] agent.llm.client:from_yaml:77: Config file not found: nonexistent.yml, using defaults
+2026-07-10 13:12:26 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-10 13:12:26 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at data/memory/procedural/skills.sqlite3
+2026-07-10 13:12:26 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at identity/identity.sqlite3
+2026-07-10 13:12:26 [INFO] agent.memory.manager:__init__:128: MemoryManager initialized (L1–L5)
+2026-07-10 13:12:26 [INFO] agent.main:create_agent:74: MemoryManager initialised
+2026-07-10 13:12:26 [WARNING] agent.llm.client:from_yaml:77: Config file not found: nonexistent.yml, using defaults
+2026-07-10 13:12:26 [WARNING] agent.llm.client:from_yaml:77: Config file not found: nonexistent.yml, using defaults
+2026-07-10 13:12:26 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-10 13:12:26 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at data/memory/procedural/skills.sqlite3
+2026-07-10 13:12:26 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at identity/identity.sqlite3
+2026-07-10 13:12:26 [INFO] agent.memory.manager:__init__:128: MemoryManager initialized (L1–L5)
+2026-07-10 13:12:26 [INFO] agent.main:create_agent:74: MemoryManager initialised
+2026-07-10 13:12:26 [INFO] agent.tools.registry:_load_policy:154: Loaded tool policy: 6 confirmation keys, 3 forbidden tools
+2026-07-10 13:12:26 [INFO] agent.tools.registry:register:219: Registered tool: file_read (class=autonomous)
+2026-07-10 13:12:26 [INFO] agent.tools.registry:register:219: Registered tool: file_write (class=confirmation_required)
+2026-07-10 13:12:26 [INFO] agent.tools.registry:register:219: Registered tool: file_delete (class=confirmation_required)
+2026-07-10 13:12:26 [INFO] agent.tools.registry:register:219: Registered tool: web_search (class=autonomous)
+2026-07-10 13:12:26 [INFO] agent.tools.registry:register:219: Registered tool: code_exec_sandboxed (class=autonomous)
+2026-07-10 13:12:26 [WARNING] agent.tools.registry:register_skills:263: Failed to list active skills: 'SkillStore' object has no attribute 'list_active'
+2026-07-10 13:12:26 [INFO] agent.main:create_agent:90: Tool registry: 5 tools
+2026-07-10 13:12:26 [WARNING] agent.llm.client:from_yaml:77: Config file not found: nonexistent.yml, using defaults
+2026-07-10 13:12:26 [WARNING] agent.llm.client:from_yaml:77: Config file not found: nonexistent.yml, using defaults
+2026-07-10 13:12:26 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-10 13:12:26 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at data/memory/procedural/skills.sqlite3
+2026-07-10 13:12:26 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at identity/identity.sqlite3
+2026-07-10 13:12:26 [INFO] agent.memory.manager:__init__:128: MemoryManager initialized (L1–L5)
+2026-07-10 13:12:26 [INFO] agent.main:create_agent:74: MemoryManager initialised
+2026-07-10 13:12:26 [INFO] agent.runtime:create_session:188: Created session sess_20260710_041226_4a2db826 (episode ep_20260710_041226_4b31c4a6)
+2026-07-10 13:12:26 [INFO] agent.orchestrator:run:143: Starting inner loop for session sess_20260710_041226_4a2db826 (episode ep_20260710_041226_4b31c4a6)
+2026-07-10 13:12:26 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at data/memory/episodic/chroma
+2026-07-10 13:12:26 [INFO] agent.cognition.context_builder:build:133: Built context: 1 blocks, ~57 tokens
+2026-07-10 13:12:26 [INFO] agent.llm.client:_chat_ollama:265: Ollama chat client connected: http://localhost:11434
+2026-07-10 13:12:26 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 1/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 1.0s...
+2026-07-10 13:12:27 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 2/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 2.0s...
+2026-07-10 13:12:29 [ERROR] agent.llm.client:_chat_with_retry:247: Chat failed after 3 attempts: model 'glm-5.2' not found (status code: 404). Using fallback.
+2026-07-10 13:12:29 [WARNING] agent.llm.client:_chat_fallback:326: No LLM SDK available, returning fallback response
+2026-07-10 13:12:29 [WARNING] agent.cognition.planner:_plan_with_llm:106: LLM returned fallback, using heuristic plan
+2026-07-10 13:12:29 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 13:12:29 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 1/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 1.0s...
+2026-07-10 13:12:30 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 2/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 2.0s...
+2026-07-10 13:12:32 [ERROR] agent.llm.client:_chat_with_retry:247: Chat failed after 3 attempts: model 'glm-5.2' not found (status code: 404). Using fallback.
+2026-07-10 13:12:32 [WARNING] agent.llm.client:_chat_fallback:326: No LLM SDK available, returning fallback response
+2026-07-10 13:12:32 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=0.50)
+2026-07-10 13:12:32 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_041226_4a2db826
+2026-07-10 13:12:32 [INFO] agent.orchestrator:_run_loop:181: Stage 1 (Planning): 3 steps
+2026-07-10 13:12:32 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_041226_4a2db826
+2026-07-10 13:12:32 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 13:12:32 [INFO] agent.memory.constitution.loader:load:94: Loaded constitution v1: 7 principles, 10 K-Scenarios, CIB threshold=0.95
+2026-07-10 13:12:32 [WARNING] agent.memory.constitution.guard:evaluate:128: CIB BLOCKED: min_score=0.5000 < threshold=0.95. Failed scenarios: ['ks_honesty_01', 'ks_honesty_02', 'ks_user_control_01', 'ks_user_control_02', 'ks_memory_min_01', 'ks_memory_min_02', 'ks_transparency_01', 'ks_learning_01', 'ks_resource_01', 'ks_context_01']
+2026-07-10 13:12:32 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 1/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 1.0s...
+2026-07-10 13:12:33 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 2/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 2.0s...
+2026-07-10 13:12:35 [ERROR] agent.llm.client:_chat_with_retry:247: Chat failed after 3 attempts: model 'glm-5.2' not found (status code: 404). Using fallback.
+2026-07-10 13:12:35 [WARNING] agent.llm.client:_chat_fallback:326: No LLM SDK available, returning fallback response
+2026-07-10 13:12:35 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_041226_4a2db826
+2026-07-10 13:12:35 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=False, phoenix_score=0.5
+2026-07-10 13:12:35 [WARNING] agent.orchestrator:_run_loop:214: Evaluation failed (retry 1/3), re-planning...
+2026-07-10 13:12:35 [INFO] agent.cognition.context_builder:build:133: Built context: 1 blocks, ~57 tokens
+2026-07-10 13:12:35 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 1/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 1.0s...
+2026-07-10 13:12:36 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 2/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 2.0s...
+2026-07-10 13:12:38 [ERROR] agent.llm.client:_chat_with_retry:247: Chat failed after 3 attempts: model 'glm-5.2' not found (status code: 404). Using fallback.
+2026-07-10 13:12:38 [WARNING] agent.llm.client:_chat_fallback:326: No LLM SDK available, returning fallback response
+2026-07-10 13:12:38 [WARNING] agent.cognition.planner:_plan_with_llm:106: LLM returned fallback, using heuristic plan
+2026-07-10 13:12:38 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 13:12:38 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 1/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 1.0s...
+2026-07-10 13:12:39 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 2/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 2.0s...
+2026-07-10 13:12:41 [ERROR] agent.llm.client:_chat_with_retry:247: Chat failed after 3 attempts: model 'glm-5.2' not found (status code: 404). Using fallback.
+2026-07-10 13:12:41 [WARNING] agent.llm.client:_chat_fallback:326: No LLM SDK available, returning fallback response
+2026-07-10 13:12:41 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=0.50)
+2026-07-10 13:12:41 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_041226_4a2db826
+2026-07-10 13:12:41 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_041226_4a2db826
+2026-07-10 13:12:41 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 13:12:41 [WARNING] agent.memory.constitution.guard:evaluate:128: CIB BLOCKED: min_score=0.5000 < threshold=0.95. Failed scenarios: ['ks_honesty_01', 'ks_honesty_02', 'ks_user_control_01', 'ks_user_control_02', 'ks_memory_min_01', 'ks_memory_min_02', 'ks_transparency_01', 'ks_learning_01', 'ks_resource_01', 'ks_context_01']
+2026-07-10 13:12:41 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 1/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 1.0s...
+2026-07-10 13:12:42 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 2/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 2.0s...
+2026-07-10 13:12:44 [ERROR] agent.llm.client:_chat_with_retry:247: Chat failed after 3 attempts: model 'glm-5.2' not found (status code: 404). Using fallback.
+2026-07-10 13:12:44 [WARNING] agent.llm.client:_chat_fallback:326: No LLM SDK available, returning fallback response
+2026-07-10 13:12:44 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_041226_4a2db826
+2026-07-10 13:12:44 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=False, phoenix_score=0.5
+2026-07-10 13:12:44 [WARNING] agent.orchestrator:_run_loop:214: Evaluation failed (retry 2/3), re-planning...
+2026-07-10 13:12:44 [INFO] agent.cognition.context_builder:build:133: Built context: 1 blocks, ~57 tokens
+2026-07-10 13:12:44 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 1/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 1.0s...
+2026-07-10 13:12:45 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 2/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 2.0s...
+2026-07-10 13:12:47 [ERROR] agent.llm.client:_chat_with_retry:247: Chat failed after 3 attempts: model 'glm-5.2' not found (status code: 404). Using fallback.
+2026-07-10 13:12:47 [WARNING] agent.llm.client:_chat_fallback:326: No LLM SDK available, returning fallback response
+2026-07-10 13:12:47 [WARNING] agent.cognition.planner:_plan_with_llm:106: LLM returned fallback, using heuristic plan
+2026-07-10 13:12:47 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 13:12:47 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 1/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 1.0s...
+2026-07-10 13:12:48 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 2/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 2.0s...
+2026-07-10 13:12:50 [ERROR] agent.llm.client:_chat_with_retry:247: Chat failed after 3 attempts: model 'glm-5.2' not found (status code: 404). Using fallback.
+2026-07-10 13:12:50 [WARNING] agent.llm.client:_chat_fallback:326: No LLM SDK available, returning fallback response
+2026-07-10 13:12:50 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=0.50)
+2026-07-10 13:12:50 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_041226_4a2db826
+2026-07-10 13:12:50 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_041226_4a2db826
+2026-07-10 13:12:50 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 13:12:50 [WARNING] agent.memory.constitution.guard:evaluate:128: CIB BLOCKED: min_score=0.5000 < threshold=0.95. Failed scenarios: ['ks_honesty_01', 'ks_honesty_02', 'ks_user_control_01', 'ks_user_control_02', 'ks_memory_min_01', 'ks_memory_min_02', 'ks_transparency_01', 'ks_learning_01', 'ks_resource_01', 'ks_context_01']
+2026-07-10 13:12:50 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 1/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 1.0s...
+2026-07-10 13:12:51 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 2/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 2.0s...
+2026-07-10 13:12:53 [ERROR] agent.llm.client:_chat_with_retry:247: Chat failed after 3 attempts: model 'glm-5.2' not found (status code: 404). Using fallback.
+2026-07-10 13:12:53 [WARNING] agent.llm.client:_chat_fallback:326: No LLM SDK available, returning fallback response
+2026-07-10 13:12:53 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_041226_4a2db826
+2026-07-10 13:12:53 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=False, phoenix_score=0.5
+2026-07-10 13:12:53 [WARNING] agent.orchestrator:_run_loop:214: Evaluation failed (retry 3/3), re-planning...
+2026-07-10 13:12:53 [INFO] agent.cognition.context_builder:build:133: Built context: 1 blocks, ~57 tokens
+2026-07-10 13:12:53 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 1/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 1.0s...
+2026-07-10 13:12:54 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 2/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 2.0s...
+2026-07-10 13:12:56 [ERROR] agent.llm.client:_chat_with_retry:247: Chat failed after 3 attempts: model 'glm-5.2' not found (status code: 404). Using fallback.
+2026-07-10 13:12:56 [WARNING] agent.llm.client:_chat_fallback:326: No LLM SDK available, returning fallback response
+2026-07-10 13:12:56 [WARNING] agent.cognition.planner:_plan_with_llm:106: LLM returned fallback, using heuristic plan
+2026-07-10 13:12:56 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-10 13:12:56 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 1/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 1.0s...
+2026-07-10 13:12:57 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 2/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 2.0s...
+2026-07-10 13:12:59 [ERROR] agent.llm.client:_chat_with_retry:247: Chat failed after 3 attempts: model 'glm-5.2' not found (status code: 404). Using fallback.
+2026-07-10 13:12:59 [WARNING] agent.llm.client:_chat_fallback:326: No LLM SDK available, returning fallback response
+2026-07-10 13:12:59 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=0.50)
+2026-07-10 13:12:59 [DEBUG] agent.runtime:stage:107: Staged plan.json for session sess_20260710_041226_4a2db826
+2026-07-10 13:12:59 [DEBUG] agent.runtime:stage:107: Staged execution.json for session sess_20260710_041226_4a2db826
+2026-07-10 13:12:59 [INFO] agent.orchestrator:_run_loop:194: Stage 2 (Execution): success=True
+2026-07-10 13:12:59 [WARNING] agent.memory.constitution.guard:evaluate:128: CIB BLOCKED: min_score=0.5000 < threshold=0.95. Failed scenarios: ['ks_honesty_01', 'ks_honesty_02', 'ks_user_control_01', 'ks_user_control_02', 'ks_memory_min_01', 'ks_memory_min_02', 'ks_transparency_01', 'ks_learning_01', 'ks_resource_01', 'ks_context_01']
+2026-07-10 13:12:59 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 1/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 1.0s...
+2026-07-10 13:13:00 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 2/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 2.0s...
+2026-07-10 13:13:02 [ERROR] agent.llm.client:_chat_with_retry:247: Chat failed after 3 attempts: model 'glm-5.2' not found (status code: 404). Using fallback.
+2026-07-10 13:13:02 [WARNING] agent.llm.client:_chat_fallback:326: No LLM SDK available, returning fallback response
+2026-07-10 13:13:02 [DEBUG] agent.runtime:stage:107: Staged evaluation.json for session sess_20260710_041226_4a2db826
+2026-07-10 13:13:02 [INFO] agent.orchestrator:_run_loop:201: Stage 3 (Evaluation): CIB passed=False, phoenix_score=0.5
+2026-07-10 13:13:02 [WARNING] agent.orchestrator:_run_loop:220: Max retries reached, proceeding with failed evaluation
+2026-07-10 13:13:02 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 1/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 1.0s...
+2026-07-10 13:13:03 [WARNING] agent.llm.client:_chat_with_retry:241: Chat attempt 2/3 failed: model 'glm-5.2' not found (status code: 404). Retrying in 2.0s...
+2026-07-10 13:13:05 [ERROR] agent.llm.client:_chat_with_retry:247: Chat failed after 3 attempts: model 'glm-5.2' not found (status code: 404). Using fallback.
+2026-07-10 13:13:05 [WARNING] agent.llm.client:_chat_fallback:326: No LLM SDK available, returning fallback response
+2026-07-10 13:13:05 [WARNING] agent.cognition.reflection_loop:_reflect_with_llm:127: LLM returned fallback, using heuristic reflection
+2026-07-10 13:13:05 [INFO] agent.cognition.reflection_loop:_reflect_heuristic:204: Heuristic reflection extracted: 실패: Task failed: [no tool registry — execution skipped] | 힌트: Review the executi
+2026-07-10 13:13:05 [DEBUG] agent.runtime:stage:107: Staged reflection.json for session sess_20260710_041226_4a2db826
+2026-07-10 13:13:05 [INFO] agent.orchestrator:_run_loop:227: Stage 4 (Reflection): 실패: Task failed: [no tool registry — execution skipped] | 힌트: Review the executi
+2026-07-10 13:13:05 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_20260710_041226_4b31c4a6
+2026-07-10 13:13:05 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_20260710_041226_4b31c4a6 to data/memory/episodic/raw_events/2026-07-10.jsonl
+2026-07-10 13:13:05 [INFO] agent.memory.manager:store_episode:272: Stored episode ep_20260710_041226_4b31c4a6 in L1 + raw event log
+2026-07-10 13:13:05 [INFO] agent.orchestrator:_persist_episode:580: Episode ep_20260710_041226_4b31c4a6 stored in L1
+2026-07-10 13:13:05 [DEBUG] agent.memory.semantic.graph_store:add_knowledge_node:299: Added knowledge node 'ep_20260710_041226_4b31c4a6_hint_1'
+2026-07-10 13:13:05 [DEBUG] agent.memory.reflection:_store_to_l2:191: Stored general hint to L2: ep_20260710_041226_4b31c4a6_hint_1
+2026-07-10 13:13:05 [DEBUG] agent.memory.semantic.graph_store:add_knowledge_node:299: Added knowledge node 'ep_20260710_041226_4b31c4a6_hint_2'
+2026-07-10 13:13:05 [DEBUG] agent.memory.reflection:_store_to_l2:191: Stored general hint to L2: ep_20260710_041226_4b31c4a6_hint_2
+2026-07-10 13:13:05 [DEBUG] agent.memory.semantic.graph_store:add_knowledge_node:299: Added knowledge node 'ep_20260710_041226_4b31c4a6_hint_3'
+2026-07-10 13:13:05 [DEBUG] agent.memory.reflection:_store_to_l2:191: Stored general hint to L2: ep_20260710_041226_4b31c4a6_hint_3
+2026-07-10 13:13:05 [INFO] agent.memory.reflection:process:131: Processed reflection for ep_20260710_041226_4b31c4a6: 3 hints (L2=3, L3=0)
+2026-07-10 13:13:05 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_20260710_041226_4b31c4a6
+2026-07-10 13:13:05 [INFO] agent.memory.manager:store_reflection:308: Stored reflection for ep_20260710_041226_4b31c4a6: 3 hints → L2, 0 hints → L3
+2026-07-10 13:13:05 [INFO] agent.orchestrator:_persist_episode:588: Reflection stored for ep_20260710_041226_4b31c4a6 (L2/L3 dual-storage)
+2026-07-10 13:13:05 [INFO] agent.runtime:cleanup:132: Cleaned up session sess_20260710_041226_4a2db826
