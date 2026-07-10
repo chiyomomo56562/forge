@@ -213,8 +213,9 @@ class TestOrchestratorBasic:
         assert result.session_id.startswith("sess_")
         assert result.episode_id.startswith("ep_")
         assert isinstance(result.success, bool)
-        assert "evaluation" in result.evaluation
-        assert "reflection" in result.reflection or result.reflection == {}
+        assert "cib_passed" in result.evaluation
+        assert "phoenix_score" in result.evaluation
+        assert "what_worked" in result.reflection
 
     def test_loop_result_fields(self, tmp_path):
         orch, runtime = _make_orchestrator(tmp_path, with_tools=True)
@@ -309,7 +310,8 @@ class TestOrchestratorStages:
         from agent.cognition.planner import Plan, PlanStep
 
         plan = Plan(steps=[PlanStep(description="test")])
-        eval_dict = orch._stage_evaluation("[ERROR: something failed]", "error output", plan, 0)
+        # Pass error text as execution_output so heuristic detects failure
+        eval_dict = orch._stage_evaluation("test task", "[ERROR: something failed]", plan, 0)
 
         # With error output, phoenix score should be lower
         assert eval_dict["phoenix_score"] < 0.5
@@ -382,9 +384,11 @@ class TestOrchestratorWithMemory:
 class TestOrchestratorRetry:
     def test_retry_count_tracked(self, tmp_path):
         orch, runtime = _make_orchestrator(tmp_path, with_tools=False)
-        # With no LLM and no memory, CIB passes by default, so no retries
+        # Without LLM, heuristic phoenix_score=0.8 < 0.95, so evaluation
+        # always fails and retries happen up to max_retries.
         result = orch.run("test retry")
-        assert result.retries == 0  # no retries needed
+        # max_retries=2 in _make_orchestrator, so retries should be 2
+        assert result.retries == 2
 
     def test_max_retries_respected(self, tmp_path):
         from agent.runtime import Runtime
@@ -399,7 +403,8 @@ class TestOrchestratorRetry:
             max_retries=1,
         )
         result = orch.run("test")
-        assert result.retries <= 1
+        # Heuristic phoenix always fails (0.8 < 0.95), so retries = max_retries = 1
+        assert result.retries == 1
 
 
 # ===========================================================================
@@ -450,9 +455,25 @@ class TestMain:
         assert orchestrator.tool_registry is not None
         assert "file_read" in orchestrator.tool_registry.list_names()
 
-    def test_cli_single_query(self, tmp_path):
+    def test_cli_single_query(self, tmp_path, monkeypatch):
         """Test CLI with --query flag."""
         from agent.main import main
+
+        # Patch create_agent to avoid heavy MemoryManager init
+        from agent.runtime import Runtime
+        from agent.orchestrator import Orchestrator
+
+        def mock_create_agent(*args, **kwargs):
+            runtime = Runtime(base_working_dir=str(tmp_path / "sessions"))
+            orch = Orchestrator(
+                runtime=runtime,
+                memory_manager=None,
+                tool_registry=None,
+                llm_client=None,
+            )
+            return runtime, orch
+
+        monkeypatch.setattr("agent.main.create_agent", mock_create_agent)
 
         exit_code = main([
             "--query", "test query",

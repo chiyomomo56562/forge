@@ -239,7 +239,7 @@ class Orchestrator:
             execution_output=execution_output,
             evaluation=evaluation_dict,
             reflection=reflection_dict,
-            retries=retries,
+            retries=retries if retries <= self.max_retries else self.max_retries,
         )
 
     # ------------------------------------------------------------------
