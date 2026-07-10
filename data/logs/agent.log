@@ -4529,3 +4529,1013 @@
 2026-07-09 17:24:25 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'pandas' (tool)
 2026-07-09 17:24:25 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'matplotlib' --depends_on--> 'numpy'
 2026-07-09 17:24:25 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'pandas' --depends_on--> 'numpy'
+2026-07-09 17:37:37 [WARNING] agent.cognition.context_builder:build:96: No MemoryManager available, returning empty context
+2026-07-09 17:37:37 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:37:37 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-28/test_build_with_manager0/skills.sqlite3
+2026-07-09 17:37:37 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-28/test_build_with_manager0/identity.sqlite3
+2026-07-09 17:37:37 [INFO] agent.memory.manager:__init__:128: MemoryManager initialized (L1–L5)
+2026-07-09 17:37:39 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-28/test_build_with_manager0/chroma
+2026-07-09 17:37:39 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:37:39 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-09 17:37:39 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-28/test_build_with_manager0/raw_events/2026-07-09.jsonl
+2026-07-09 17:37:39 [INFO] agent.memory.manager:store_episode:272: Stored episode ep_001 in L1 + raw event log
+2026-07-09 17:37:39 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:37:39 [INFO] agent.cognition.context_builder:build:133: Built context: 1 blocks, ~5 tokens
+2026-07-09 17:37:39 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:37:39 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-28/test_density_first_prioritizes0/skills.sqlite3
+2026-07-09 17:37:39 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-28/test_density_first_prioritizes0/identity.sqlite3
+2026-07-09 17:37:39 [INFO] agent.memory.manager:__init__:128: MemoryManager initialized (L1–L5)
+2026-07-09 17:37:39 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-28/test_density_first_prioritizes0/chroma
+2026-07-09 17:37:39 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:37:39 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_with_refl
+2026-07-09 17:37:39 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_with_refl to /tmp/pytest-of-kkc7130/pytest-28/test_density_first_prioritizes0/raw_events/2026-07-09.jsonl
+2026-07-09 17:37:39 [INFO] agent.memory.manager:store_episode:272: Stored episode ep_with_refl in L1 + raw event log
+2026-07-09 17:37:39 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:37:39 [INFO] agent.cognition.context_builder:build:133: Built context: 1 blocks, ~4 tokens
+2026-07-09 17:37:39 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:37:39 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-28/test_token_budget_truncation0/skills.sqlite3
+2026-07-09 17:37:39 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-28/test_token_budget_truncation0/identity.sqlite3
+2026-07-09 17:37:39 [INFO] agent.memory.manager:__init__:128: MemoryManager initialized (L1–L5)
+2026-07-09 17:37:39 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-28/test_token_budget_truncation0/chroma
+2026-07-09 17:37:39 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:37:39 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_000
+2026-07-09 17:37:39 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_000 to /tmp/pytest-of-kkc7130/pytest-28/test_token_budget_truncation0/raw_events/2026-07-09.jsonl
+2026-07-09 17:37:39 [INFO] agent.memory.manager:store_episode:272: Stored episode ep_000 in L1 + raw event log
+2026-07-09 17:37:39 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:37:39 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-09 17:37:39 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-28/test_token_budget_truncation0/raw_events/2026-07-09.jsonl
+2026-07-09 17:37:39 [INFO] agent.memory.manager:store_episode:272: Stored episode ep_001 in L1 + raw event log
+2026-07-09 17:37:39 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:37:39 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-09 17:37:39 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_002 to /tmp/pytest-of-kkc7130/pytest-28/test_token_budget_truncation0/raw_events/2026-07-09.jsonl
+2026-07-09 17:37:39 [INFO] agent.memory.manager:store_episode:272: Stored episode ep_002 in L1 + raw event log
+2026-07-09 17:37:39 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:37:39 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_003
+2026-07-09 17:37:39 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_003 to /tmp/pytest-of-kkc7130/pytest-28/test_token_budget_truncation0/raw_events/2026-07-09.jsonl
+2026-07-09 17:37:39 [INFO] agent.memory.manager:store_episode:272: Stored episode ep_003 in L1 + raw event log
+2026-07-09 17:37:39 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:37:39 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_004
+2026-07-09 17:37:39 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_004 to /tmp/pytest-of-kkc7130/pytest-28/test_token_budget_truncation0/raw_events/2026-07-09.jsonl
+2026-07-09 17:37:39 [INFO] agent.memory.manager:store_episode:272: Stored episode ep_004 in L1 + raw event log
+2026-07-09 17:37:39 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:37:39 [INFO] agent.cognition.context_builder:build:133: Built context: 0 blocks, ~0 tokens (truncated)
+2026-07-09 17:37:39 [INFO] agent.cognition.planner:_plan_heuristic:166: Heuristic plan generated: 3 steps
+2026-07-09 17:37:39 [INFO] agent.cognition.planner:_plan_heuristic:166: Heuristic plan generated: 3 steps
+2026-07-09 17:37:39 [INFO] agent.cognition.planner:_plan_heuristic:166: Heuristic plan generated: 3 steps
+2026-07-09 17:37:39 [WARNING] agent.llm.client:_chat_ollama:269: Failed to connect to Ollama: Port out of range 0-65535, using fallback
+2026-07-09 17:37:39 [WARNING] agent.llm.client:_chat_fallback:326: No LLM SDK available, returning fallback response
+2026-07-09 17:37:39 [INFO] agent.cognition.planner:_plan_with_llm:120: LLM plan generated: 0 steps, estimated_success=0.50
+2026-07-09 17:37:39 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=0.70)
+2026-07-09 17:37:39 [INFO] agent.cognition.decision:decide:92: Selected alternative plan
+2026-07-09 17:37:39 [WARNING] agent.cognition.decision:decide:107: Selected primary plan with risks: Some risk
+2026-07-09 17:37:39 [INFO] agent.cognition.reflection_loop:_reflect_heuristic:194: Heuristic reflection extracted: 성공: Task completed successfully: Chart created successfully | 인과: High success s
+2026-07-09 17:37:39 [INFO] agent.cognition.reflection_loop:_reflect_heuristic:194: Heuristic reflection extracted: 실패: Task failed: Chart creation failed due to font error | 힌트: Review the execut
+2026-07-09 17:37:39 [INFO] agent.cognition.reflection_loop:_reflect_heuristic:194: Heuristic reflection extracted: 성공: Partially completed: Analysis partially completed | 실패: Task was not fully c
+2026-07-09 17:37:39 [INFO] agent.cognition.reflection_loop:_reflect_heuristic:194: Heuristic reflection extracted: 성공: Task completed successfully: Completed with issues | 실패: High pain index (0.
+2026-07-09 17:37:39 [INFO] agent.cognition.reflection_loop:_reflect_heuristic:194: Heuristic reflection extracted: 성공: Task executed: Task executed
+2026-07-09 17:37:39 [INFO] agent.cognition.reflection_loop:_reflect_heuristic:194: Heuristic reflection extracted: 성공: Task completed successfully: Executed successfully | 인과: High success score 
+2026-07-09 17:37:39 [INFO] agent.cognition.reflection_loop:_reflect_heuristic:194: Heuristic reflection extracted: 성공: Task completed successfully: Done | 인과: High success score indicates the app
+2026-07-09 17:37:39 [WARNING] agent.llm.client:_chat_ollama:269: Failed to connect to Ollama: Port out of range 0-65535, using fallback
+2026-07-09 17:37:39 [WARNING] agent.llm.client:_chat_fallback:326: No LLM SDK available, returning fallback response
+2026-07-09 17:37:39 [INFO] agent.cognition.reflection_loop:_reflect_with_llm:134: LLM reflection extracted: (empty reflection)
+2026-07-09 17:38:35 [WARNING] agent.cognition.context_builder:build:96: No MemoryManager available, returning empty context
+2026-07-09 17:38:35 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:35 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-29/test_build_with_manager0/skills.sqlite3
+2026-07-09 17:38:35 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-29/test_build_with_manager0/identity.sqlite3
+2026-07-09 17:38:35 [INFO] agent.memory.manager:__init__:128: MemoryManager initialized (L1–L5)
+2026-07-09 17:38:36 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-29/test_build_with_manager0/chroma
+2026-07-09 17:38:36 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:36 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-09 17:38:36 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-29/test_build_with_manager0/raw_events/2026-07-09.jsonl
+2026-07-09 17:38:36 [INFO] agent.memory.manager:store_episode:272: Stored episode ep_001 in L1 + raw event log
+2026-07-09 17:38:36 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:36 [INFO] agent.cognition.context_builder:build:133: Built context: 1 blocks, ~5 tokens
+2026-07-09 17:38:36 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:36 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-29/test_density_first_prioritizes0/skills.sqlite3
+2026-07-09 17:38:36 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-29/test_density_first_prioritizes0/identity.sqlite3
+2026-07-09 17:38:36 [INFO] agent.memory.manager:__init__:128: MemoryManager initialized (L1–L5)
+2026-07-09 17:38:36 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-29/test_density_first_prioritizes0/chroma
+2026-07-09 17:38:36 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:36 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_with_refl
+2026-07-09 17:38:36 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_with_refl to /tmp/pytest-of-kkc7130/pytest-29/test_density_first_prioritizes0/raw_events/2026-07-09.jsonl
+2026-07-09 17:38:36 [INFO] agent.memory.manager:store_episode:272: Stored episode ep_with_refl in L1 + raw event log
+2026-07-09 17:38:36 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:36 [INFO] agent.cognition.context_builder:build:133: Built context: 1 blocks, ~4 tokens
+2026-07-09 17:38:36 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:36 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-29/test_token_budget_truncation0/skills.sqlite3
+2026-07-09 17:38:36 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-29/test_token_budget_truncation0/identity.sqlite3
+2026-07-09 17:38:36 [INFO] agent.memory.manager:__init__:128: MemoryManager initialized (L1–L5)
+2026-07-09 17:38:36 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-29/test_token_budget_truncation0/chroma
+2026-07-09 17:38:36 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:36 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_000
+2026-07-09 17:38:36 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_000 to /tmp/pytest-of-kkc7130/pytest-29/test_token_budget_truncation0/raw_events/2026-07-09.jsonl
+2026-07-09 17:38:36 [INFO] agent.memory.manager:store_episode:272: Stored episode ep_000 in L1 + raw event log
+2026-07-09 17:38:36 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:36 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-09 17:38:36 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-29/test_token_budget_truncation0/raw_events/2026-07-09.jsonl
+2026-07-09 17:38:36 [INFO] agent.memory.manager:store_episode:272: Stored episode ep_001 in L1 + raw event log
+2026-07-09 17:38:36 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:36 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-09 17:38:36 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_002 to /tmp/pytest-of-kkc7130/pytest-29/test_token_budget_truncation0/raw_events/2026-07-09.jsonl
+2026-07-09 17:38:36 [INFO] agent.memory.manager:store_episode:272: Stored episode ep_002 in L1 + raw event log
+2026-07-09 17:38:36 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:36 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_003
+2026-07-09 17:38:36 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_003 to /tmp/pytest-of-kkc7130/pytest-29/test_token_budget_truncation0/raw_events/2026-07-09.jsonl
+2026-07-09 17:38:36 [INFO] agent.memory.manager:store_episode:272: Stored episode ep_003 in L1 + raw event log
+2026-07-09 17:38:36 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:36 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_004
+2026-07-09 17:38:36 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_004 to /tmp/pytest-of-kkc7130/pytest-29/test_token_budget_truncation0/raw_events/2026-07-09.jsonl
+2026-07-09 17:38:36 [INFO] agent.memory.manager:store_episode:272: Stored episode ep_004 in L1 + raw event log
+2026-07-09 17:38:36 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:36 [INFO] agent.cognition.context_builder:build:133: Built context: 0 blocks, ~0 tokens (truncated)
+2026-07-09 17:38:36 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-09 17:38:36 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-09 17:38:36 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-09 17:38:36 [WARNING] agent.llm.client:_chat_ollama:269: Failed to connect to Ollama: Port out of range 0-65535, using fallback
+2026-07-09 17:38:36 [WARNING] agent.llm.client:_chat_fallback:326: No LLM SDK available, returning fallback response
+2026-07-09 17:38:36 [WARNING] agent.cognition.planner:_plan_with_llm:106: LLM returned fallback, using heuristic plan
+2026-07-09 17:38:36 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-09 17:38:36 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=0.70)
+2026-07-09 17:38:36 [INFO] agent.cognition.decision:decide:92: Selected alternative plan
+2026-07-09 17:38:36 [WARNING] agent.cognition.decision:decide:107: Selected primary plan with risks: Some risk
+2026-07-09 17:38:36 [INFO] agent.cognition.reflection_loop:_reflect_heuristic:204: Heuristic reflection extracted: 성공: Task completed successfully: Chart created successfully | 인과: High success s
+2026-07-09 17:38:36 [INFO] agent.cognition.reflection_loop:_reflect_heuristic:204: Heuristic reflection extracted: 실패: Task failed: Chart creation failed due to font error | 힌트: Review the execut
+2026-07-09 17:38:36 [INFO] agent.cognition.reflection_loop:_reflect_heuristic:204: Heuristic reflection extracted: 성공: Partially completed: Analysis partially completed | 실패: Task was not fully c
+2026-07-09 17:38:36 [INFO] agent.cognition.reflection_loop:_reflect_heuristic:204: Heuristic reflection extracted: 성공: Task completed successfully: Completed with issues | 실패: High pain index (0.
+2026-07-09 17:38:36 [INFO] agent.cognition.reflection_loop:_reflect_heuristic:204: Heuristic reflection extracted: 성공: Task executed: Task executed
+2026-07-09 17:38:36 [INFO] agent.cognition.reflection_loop:_reflect_heuristic:204: Heuristic reflection extracted: 성공: Task completed successfully: Executed successfully | 인과: High success score 
+2026-07-09 17:38:36 [INFO] agent.cognition.reflection_loop:_reflect_heuristic:204: Heuristic reflection extracted: 성공: Task completed successfully: Done | 인과: High success score indicates the app
+2026-07-09 17:38:36 [WARNING] agent.llm.client:_chat_ollama:269: Failed to connect to Ollama: Port out of range 0-65535, using fallback
+2026-07-09 17:38:36 [WARNING] agent.llm.client:_chat_fallback:326: No LLM SDK available, returning fallback response
+2026-07-09 17:38:36 [WARNING] agent.cognition.reflection_loop:_reflect_with_llm:127: LLM returned fallback, using heuristic reflection
+2026-07-09 17:38:36 [INFO] agent.cognition.reflection_loop:_reflect_heuristic:204: Heuristic reflection extracted: 성공: Task completed successfully: Done | 인과: High success score indicates the app
+2026-07-09 17:38:44 [WARNING] agent.cognition.context_builder:build:96: No MemoryManager available, returning empty context
+2026-07-09 17:38:44 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:44 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_build_with_manager0/skills.sqlite3
+2026-07-09 17:38:44 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-30/test_build_with_manager0/identity.sqlite3
+2026-07-09 17:38:44 [INFO] agent.memory.manager:__init__:128: MemoryManager initialized (L1–L5)
+2026-07-09 17:38:45 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-30/test_build_with_manager0/chroma
+2026-07-09 17:38:45 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:45 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-09 17:38:45 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-30/test_build_with_manager0/raw_events/2026-07-09.jsonl
+2026-07-09 17:38:45 [INFO] agent.memory.manager:store_episode:272: Stored episode ep_001 in L1 + raw event log
+2026-07-09 17:38:45 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:45 [INFO] agent.cognition.context_builder:build:133: Built context: 1 blocks, ~5 tokens
+2026-07-09 17:38:45 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:45 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_density_first_prioritizes0/skills.sqlite3
+2026-07-09 17:38:45 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-30/test_density_first_prioritizes0/identity.sqlite3
+2026-07-09 17:38:45 [INFO] agent.memory.manager:__init__:128: MemoryManager initialized (L1–L5)
+2026-07-09 17:38:45 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-30/test_density_first_prioritizes0/chroma
+2026-07-09 17:38:45 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:45 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_with_refl
+2026-07-09 17:38:45 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_with_refl to /tmp/pytest-of-kkc7130/pytest-30/test_density_first_prioritizes0/raw_events/2026-07-09.jsonl
+2026-07-09 17:38:45 [INFO] agent.memory.manager:store_episode:272: Stored episode ep_with_refl in L1 + raw event log
+2026-07-09 17:38:45 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:45 [INFO] agent.cognition.context_builder:build:133: Built context: 1 blocks, ~4 tokens
+2026-07-09 17:38:45 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:45 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_token_budget_truncation0/skills.sqlite3
+2026-07-09 17:38:45 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-30/test_token_budget_truncation0/identity.sqlite3
+2026-07-09 17:38:45 [INFO] agent.memory.manager:__init__:128: MemoryManager initialized (L1–L5)
+2026-07-09 17:38:45 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-30/test_token_budget_truncation0/chroma
+2026-07-09 17:38:45 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:45 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_000
+2026-07-09 17:38:45 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_000 to /tmp/pytest-of-kkc7130/pytest-30/test_token_budget_truncation0/raw_events/2026-07-09.jsonl
+2026-07-09 17:38:45 [INFO] agent.memory.manager:store_episode:272: Stored episode ep_000 in L1 + raw event log
+2026-07-09 17:38:45 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:45 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-09 17:38:45 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-30/test_token_budget_truncation0/raw_events/2026-07-09.jsonl
+2026-07-09 17:38:45 [INFO] agent.memory.manager:store_episode:272: Stored episode ep_001 in L1 + raw event log
+2026-07-09 17:38:45 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:45 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-09 17:38:45 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_002 to /tmp/pytest-of-kkc7130/pytest-30/test_token_budget_truncation0/raw_events/2026-07-09.jsonl
+2026-07-09 17:38:45 [INFO] agent.memory.manager:store_episode:272: Stored episode ep_002 in L1 + raw event log
+2026-07-09 17:38:45 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:45 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_003
+2026-07-09 17:38:45 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_003 to /tmp/pytest-of-kkc7130/pytest-30/test_token_budget_truncation0/raw_events/2026-07-09.jsonl
+2026-07-09 17:38:45 [INFO] agent.memory.manager:store_episode:272: Stored episode ep_003 in L1 + raw event log
+2026-07-09 17:38:45 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:45 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_004
+2026-07-09 17:38:45 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_004 to /tmp/pytest-of-kkc7130/pytest-30/test_token_budget_truncation0/raw_events/2026-07-09.jsonl
+2026-07-09 17:38:45 [INFO] agent.memory.manager:store_episode:272: Stored episode ep_004 in L1 + raw event log
+2026-07-09 17:38:45 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:45 [INFO] agent.cognition.context_builder:build:133: Built context: 0 blocks, ~0 tokens (truncated)
+2026-07-09 17:38:45 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-09 17:38:45 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-09 17:38:45 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-09 17:38:45 [WARNING] agent.llm.client:_chat_ollama:269: Failed to connect to Ollama: Port out of range 0-65535, using fallback
+2026-07-09 17:38:45 [WARNING] agent.llm.client:_chat_fallback:326: No LLM SDK available, returning fallback response
+2026-07-09 17:38:45 [WARNING] agent.cognition.planner:_plan_with_llm:106: LLM returned fallback, using heuristic plan
+2026-07-09 17:38:45 [INFO] agent.cognition.planner:_plan_heuristic:176: Heuristic plan generated: 3 steps
+2026-07-09 17:38:45 [INFO] agent.cognition.decision:decide:75: Selected primary plan (confidence=0.70)
+2026-07-09 17:38:45 [INFO] agent.cognition.decision:decide:92: Selected alternative plan
+2026-07-09 17:38:45 [WARNING] agent.cognition.decision:decide:107: Selected primary plan with risks: Some risk
+2026-07-09 17:38:45 [INFO] agent.cognition.reflection_loop:_reflect_heuristic:204: Heuristic reflection extracted: 성공: Task completed successfully: Chart created successfully | 인과: High success s
+2026-07-09 17:38:45 [INFO] agent.cognition.reflection_loop:_reflect_heuristic:204: Heuristic reflection extracted: 실패: Task failed: Chart creation failed due to font error | 힌트: Review the execut
+2026-07-09 17:38:45 [INFO] agent.cognition.reflection_loop:_reflect_heuristic:204: Heuristic reflection extracted: 성공: Partially completed: Analysis partially completed | 실패: Task was not fully c
+2026-07-09 17:38:45 [INFO] agent.cognition.reflection_loop:_reflect_heuristic:204: Heuristic reflection extracted: 성공: Task completed successfully: Completed with issues | 실패: High pain index (0.
+2026-07-09 17:38:45 [INFO] agent.cognition.reflection_loop:_reflect_heuristic:204: Heuristic reflection extracted: 성공: Task executed: Task executed
+2026-07-09 17:38:45 [INFO] agent.cognition.reflection_loop:_reflect_heuristic:204: Heuristic reflection extracted: 성공: Task completed successfully: Executed successfully | 인과: High success score 
+2026-07-09 17:38:45 [INFO] agent.cognition.reflection_loop:_reflect_heuristic:204: Heuristic reflection extracted: 성공: Task completed successfully: Done | 인과: High success score indicates the app
+2026-07-09 17:38:45 [WARNING] agent.llm.client:_chat_ollama:269: Failed to connect to Ollama: Port out of range 0-65535, using fallback
+2026-07-09 17:38:45 [WARNING] agent.llm.client:_chat_fallback:326: No LLM SDK available, returning fallback response
+2026-07-09 17:38:45 [WARNING] agent.cognition.reflection_loop:_reflect_with_llm:127: LLM returned fallback, using heuristic reflection
+2026-07-09 17:38:45 [INFO] agent.cognition.reflection_loop:_reflect_heuristic:204: Heuristic reflection extracted: 성공: Task completed successfully: Done | 인과: High success score indicates the app
+2026-07-09 17:38:45 [INFO] agent.memory.constitution.loader:load:94: Loaded constitution v1: 7 principles, 10 K-Scenarios, CIB threshold=0.95
+2026-07-09 17:38:45 [INFO] agent.memory.constitution.loader:load:94: Loaded constitution v1: 7 principles, 10 K-Scenarios, CIB threshold=0.95
+2026-07-09 17:38:45 [INFO] agent.memory.constitution.loader:load:94: Loaded constitution v1: 7 principles, 10 K-Scenarios, CIB threshold=0.95
+2026-07-09 17:38:45 [INFO] agent.memory.constitution.loader:load:94: Loaded constitution v1: 7 principles, 10 K-Scenarios, CIB threshold=0.95
+2026-07-09 17:38:45 [INFO] agent.memory.constitution.loader:load:94: Loaded constitution v1: 7 principles, 10 K-Scenarios, CIB threshold=0.95
+2026-07-09 17:38:45 [INFO] agent.memory.constitution.loader:load:94: Loaded constitution v1: 7 principles, 10 K-Scenarios, CIB threshold=0.95
+2026-07-09 17:38:45 [INFO] agent.memory.constitution.loader:load:94: Loaded constitution v1: 7 principles, 10 K-Scenarios, CIB threshold=0.95
+2026-07-09 17:38:45 [INFO] agent.memory.constitution.loader:load:94: Loaded constitution v1: 7 principles, 10 K-Scenarios, CIB threshold=0.95
+2026-07-09 17:38:45 [WARNING] agent.memory.constitution.loader:_load_yaml:129: Constitution file not found: /tmp/pytest-of-kkc7130/pytest-30/test_load_optional_files_missi0/safety.yml
+2026-07-09 17:38:45 [WARNING] agent.memory.constitution.loader:_load_yaml:129: Constitution file not found: /tmp/pytest-of-kkc7130/pytest-30/test_load_optional_files_missi0/interaction_policy.yml
+2026-07-09 17:38:45 [WARNING] agent.memory.constitution.loader:_load_yaml:129: Constitution file not found: /tmp/pytest-of-kkc7130/pytest-30/test_load_optional_files_missi0/tool_policy.yml
+2026-07-09 17:38:45 [INFO] agent.memory.constitution.loader:load:94: Loaded constitution v1: 1 principles, 1 K-Scenarios, CIB threshold=0.95
+2026-07-09 17:38:45 [INFO] agent.memory.constitution.loader:load:94: Loaded constitution v1: 7 principles, 10 K-Scenarios, CIB threshold=0.95
+2026-07-09 17:38:45 [INFO] agent.memory.constitution.loader:load:94: Loaded constitution v1: 7 principles, 10 K-Scenarios, CIB threshold=0.95
+2026-07-09 17:38:45 [INFO] agent.memory.constitution.loader:load:94: Loaded constitution v1: 7 principles, 10 K-Scenarios, CIB threshold=0.95
+2026-07-09 17:38:45 [INFO] agent.memory.constitution.loader:load:94: Loaded constitution v1: 7 principles, 10 K-Scenarios, CIB threshold=0.95
+2026-07-09 17:38:45 [INFO] agent.memory.constitution.loader:load:94: Loaded constitution v1: 7 principles, 10 K-Scenarios, CIB threshold=0.95
+2026-07-09 17:38:45 [WARNING] agent.memory.constitution.guard:evaluate:128: CIB BLOCKED: min_score=0.5000 < threshold=0.95. Failed scenarios: ['ks_honesty_01', 'ks_honesty_02', 'ks_user_control_01', 'ks_user_control_02', 'ks_memory_min_01', 'ks_memory_min_02', 'ks_transparency_01', 'ks_learning_01', 'ks_resource_01', 'ks_context_01']
+2026-07-09 17:38:45 [INFO] agent.memory.constitution.loader:load:94: Loaded constitution v1: 7 principles, 10 K-Scenarios, CIB threshold=0.95
+2026-07-09 17:38:45 [WARNING] agent.memory.constitution.guard:evaluate:128: CIB BLOCKED: min_score=0.5000 < threshold=1.01. Failed scenarios: ['ks_honesty_01', 'ks_honesty_02', 'ks_user_control_01', 'ks_user_control_02', 'ks_memory_min_01', 'ks_memory_min_02', 'ks_transparency_01', 'ks_learning_01', 'ks_resource_01', 'ks_context_01']
+2026-07-09 17:38:45 [INFO] agent.memory.constitution.loader:load:94: Loaded constitution v1: 7 principles, 10 K-Scenarios, CIB threshold=0.95
+2026-07-09 17:38:45 [INFO] agent.memory.constitution.guard:evaluate:133: CIB PASSED: min_score=0.5000 >= threshold=0.0
+2026-07-09 17:38:45 [INFO] agent.memory.constitution.loader:load:94: Loaded constitution v1: 7 principles, 10 K-Scenarios, CIB threshold=0.95
+2026-07-09 17:38:45 [INFO] agent.memory.constitution.guard:evaluate:133: CIB PASSED: min_score=0.5000 >= threshold=0.0
+2026-07-09 17:38:45 [WARNING] agent.memory.constitution.guard:evaluate:128: CIB BLOCKED: min_score=0.5000 < threshold=1.01. Failed scenarios: ['ks_honesty_01', 'ks_honesty_02', 'ks_user_control_01', 'ks_user_control_02', 'ks_memory_min_01', 'ks_memory_min_02', 'ks_transparency_01', 'ks_learning_01', 'ks_resource_01', 'ks_context_01']
+2026-07-09 17:38:45 [INFO] agent.memory.constitution.loader:load:94: Loaded constitution v1: 7 principles, 10 K-Scenarios, CIB threshold=0.95
+2026-07-09 17:38:45 [INFO] agent.memory.constitution.guard:evaluate:133: CIB PASSED: min_score=0.5000 >= threshold=0.0
+2026-07-09 17:38:45 [INFO] agent.memory.constitution.loader:load:94: Loaded constitution v1: 7 principles, 10 K-Scenarios, CIB threshold=0.95
+2026-07-09 17:38:45 [WARNING] agent.memory.constitution.guard:evaluate:128: CIB BLOCKED: min_score=0.5000 < threshold=0.97. Failed scenarios: ['ks_honesty_01', 'ks_honesty_02', 'ks_user_control_01', 'ks_user_control_02', 'ks_memory_min_01', 'ks_memory_min_02', 'ks_transparency_01', 'ks_learning_01', 'ks_resource_01', 'ks_context_01']
+2026-07-09 17:38:45 [WARNING] agent.memory.constitution.guard:require_hitl_approval:218: HITL BLOCKED: Constitution layer 'absolute' requires human approval for modification. No approval granted.
+2026-07-09 17:38:45 [INFO] agent.memory.constitution.guard:require_hitl_approval:224: HITL PASSED: Constitution layer 'absolute' modification approved by human.
+2026-07-09 17:38:45 [WARNING] agent.memory.constitution.guard:require_hitl_approval:218: HITL BLOCKED: Constitution layer 'absolute' requires human approval for modification. No approval granted.
+2026-07-09 17:38:45 [WARNING] agent.memory.constitution.guard:require_hitl_approval:218: HITL BLOCKED: Constitution layer 'principle' requires human approval for modification. No approval granted.
+2026-07-09 17:38:45 [WARNING] agent.memory.constitution.guard:require_hitl_approval:218: HITL BLOCKED: Constitution layer 'strategy' requires human approval for modification. No approval granted.
+2026-07-09 17:38:45 [INFO] agent.memory.constitution.guard:require_hitl_approval:224: HITL PASSED: Constitution layer 'absolute' modification approved by human.
+2026-07-09 17:38:45 [WARNING] agent.memory.constitution.guard:require_hitl_approval:218: HITL BLOCKED: Constitution layer 'absolute' requires human approval for modification. No approval granted.
+2026-07-09 17:38:45 [INFO] agent.memory.constitution.guard:require_hitl_approval:224: HITL PASSED: Constitution layer 'absolute' modification approved by human.
+2026-07-09 17:38:45 [INFO] agent.memory.constitution.loader:load:94: Loaded constitution v1: 7 principles, 10 K-Scenarios, CIB threshold=0.95
+2026-07-09 17:38:45 [INFO] agent.memory.constitution.guard:evaluate:133: CIB PASSED: min_score=0.5000 >= threshold=0.0
+2026-07-09 17:38:46 [INFO] agent.memory.constitution.loader:load:94: Loaded constitution v1: 7 principles, 10 K-Scenarios, CIB threshold=0.95
+2026-07-09 17:38:46 [INFO] agent.memory.constitution.guard:evaluate:133: CIB PASSED: min_score=0.5000 >= threshold=0.0
+2026-07-09 17:38:46 [WARNING] agent.memory.constitution.guard:require_hitl_approval:218: HITL BLOCKED: Constitution layer 'absolute' requires human approval for modification. No approval granted.
+2026-07-09 17:38:46 [INFO] agent.memory.constitution.guard:evaluate:133: CIB PASSED: min_score=0.5000 >= threshold=0.0
+2026-07-09 17:38:46 [INFO] agent.memory.constitution.guard:require_hitl_approval:224: HITL PASSED: Constitution layer 'absolute' modification approved by human.
+2026-07-09 17:38:46 [INFO] agent.memory.constitution.loader:load:94: Loaded constitution v1: 7 principles, 10 K-Scenarios, CIB threshold=0.95
+2026-07-09 17:38:46 [WARNING] agent.memory.constitution.guard:evaluate:128: CIB BLOCKED: min_score=0.5000 < threshold=1.01. Failed scenarios: ['ks_honesty_01', 'ks_honesty_02', 'ks_user_control_01', 'ks_user_control_02', 'ks_memory_min_01', 'ks_memory_min_02', 'ks_transparency_01', 'ks_learning_01', 'ks_resource_01', 'ks_context_01']
+2026-07-09 17:38:46 [INFO] agent.memory.constitution.guard:require_hitl_approval:224: HITL PASSED: Constitution layer 'absolute' modification approved by human.
+2026-07-09 17:38:46 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:46 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:46 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:46 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:46 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-30/test_upsert_and_get0/chroma
+2026-07-09 17:38:46 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:46 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-09 17:38:46 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-30/test_get_nonexistent0/chroma
+2026-07-09 17:38:46 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-30/test_delete0/chroma
+2026-07-09 17:38:46 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:46 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-09 17:38:46 [DEBUG] agent.memory.episodic.store:delete:119: Deleted episode ep_001
+2026-07-09 17:38:46 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-30/test_count0/chroma
+2026-07-09 17:38:46 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:46 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-09 17:38:46 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:46 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-09 17:38:46 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-30/test_query_by_similarity0/chroma
+2026-07-09 17:38:46 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:46 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-09 17:38:46 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:46 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-09 17:38:46 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:46 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-30/test_query_with_metadata_filte0/chroma
+2026-07-09 17:38:46 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:46 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-09 17:38:46 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:46 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-09 17:38:46 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:46 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-30/test_log_creates_file0/events/2026-07-09.jsonl
+2026-07-09 17:38:46 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-30/test_log_appends_to_same_day0/events/2026-07-09.jsonl
+2026-07-09 17:38:46 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_002 to /tmp/pytest-of-kkc7130/pytest-30/test_log_appends_to_same_day0/events/2026-07-09.jsonl
+2026-07-09 17:38:46 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-30/test_read_day0/events/2026-07-09.jsonl
+2026-07-09 17:38:46 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-30/test_list_days0/events/2026-07-09.jsonl
+2026-07-09 17:38:46 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-30/test_retrieve_basic0/chroma
+2026-07-09 17:38:46 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:46 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-09 17:38:46 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:46 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-09 17:38:46 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:46 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_003
+2026-07-09 17:38:46 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:46 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-30/test_density_first_ordering0/chroma
+2026-07-09 17:38:46 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:46 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-09 17:38:46 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:46 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-09 17:38:46 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:46 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_003
+2026-07-09 17:38:46 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:46 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-30/test_retrieve_with_reflection_0/chroma
+2026-07-09 17:38:46 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:46 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-09 17:38:46 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:46 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-09 17:38:46 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:46 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_003
+2026-07-09 17:38:46 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:46 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-30/test_retrieve_expand0/chroma
+2026-07-09 17:38:46 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:46 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-09 17:38:46 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:46 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-09 17:38:46 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:46 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_003
+2026-07-09 17:38:46 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:46 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:46 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-30/test_table_created0/identity.sqlite3
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_001
+2026-07-09 17:38:46 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-30/test_get_self_model0/identity.sqlite3
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_001
+2026-07-09 17:38:46 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-30/test_get_nonexistent1/identity.sqlite3
+2026-07-09 17:38:46 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-30/test_list_self_model0/identity.sqlite3
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_000
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_001
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_002
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_003
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_004
+2026-07-09 17:38:46 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-30/test_list_by_category0/identity.sqlite3
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_c0
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_c1
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_c2
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_t0
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_t1
+2026-07-09 17:38:46 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-30/test_get_recent0/identity.sqlite3
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_000
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_001
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_002
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_003
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_004
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_005
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_006
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_007
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_008
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_009
+2026-07-09 17:38:46 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-30/test_count1/identity.sqlite3
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_001
+2026-07-09 17:38:46 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-30/test_upsert_and_get1/identity.sqlite3
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 17:38:46 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-30/test_upsert_overwrites0/identity.sqlite3
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 17:38:46 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-30/test_list_capabilities0/identity.sqlite3
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability writing
+2026-07-09 17:38:46 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-30/test_delete_capability0/identity.sqlite3
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 17:38:46 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-30/test_delete_nonexistent0/identity.sqlite3
+2026-07-09 17:38:46 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-30/test_record_computes_calibrati0/identity.sqlite3
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_52d5a941b06146a0a9cf7bbf853602ac
+2026-07-09 17:38:46 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_001, category=coding, predicted=0.80, actual=0.60, cal_error=0.2000, direction=overconfident
+2026-07-09 17:38:46 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-30/test_record_calibrated0/identity.sqlite3
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_20299e8c8b0c4a14b19a5f001fb755dc
+2026-07-09 17:38:46 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_001, category=coding, predicted=0.70, actual=0.72, cal_error=0.0200, direction=calibrated
+2026-07-09 17:38:46 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-30/test_record_underconfident0/identity.sqlite3
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_5e9e874de7b54ca2aa78ccc2aa583a57
+2026-07-09 17:38:46 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_001, category=coding, predicted=0.30, actual=0.90, cal_error=0.6000, direction=underconfident
+2026-07-09 17:38:46 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-30/test_window_stats_empty0/identity.sqlite3
+2026-07-09 17:38:46 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-30/test_window_stats_with_data0/identity.sqlite3
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_9ea5e237f0334a868e4b10b89706d14d
+2026-07-09 17:38:46 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_000, category=coding, predicted=0.80, actual=0.60, cal_error=0.2000, direction=overconfident
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_5b06957aa3b244baadf76a96e85d8521
+2026-07-09 17:38:46 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_001, category=coding, predicted=0.80, actual=0.60, cal_error=0.2000, direction=overconfident
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_f14c3c23393d474a8f35dbcdd9388cd0
+2026-07-09 17:38:46 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_002, category=coding, predicted=0.80, actual=0.60, cal_error=0.2000, direction=overconfident
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_4a4cb271c0d84e48b676b172fc97d045
+2026-07-09 17:38:46 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_003, category=coding, predicted=0.80, actual=0.60, cal_error=0.2000, direction=overconfident
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_d214facd0e07428386df727b31a4325e
+2026-07-09 17:38:46 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_004, category=coding, predicted=0.80, actual=0.60, cal_error=0.2000, direction=overconfident
+2026-07-09 17:38:46 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-30/test_coherence_index0/identity.sqlite3
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_d95ca4db7d6342609b6b6109c72d1412
+2026-07-09 17:38:46 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_000, category=coding, predicted=0.70, actual=0.70, cal_error=0.0000, direction=calibrated
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_86b4fd910fce4d9cb7b664432513f313
+2026-07-09 17:38:46 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_001, category=coding, predicted=0.70, actual=0.70, cal_error=0.0000, direction=calibrated
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_bf7e15b88a5d4420b7920d0d1c850359
+2026-07-09 17:38:46 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_002, category=coding, predicted=0.70, actual=0.70, cal_error=0.0000, direction=calibrated
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_a0f3be53905f4d03ac3b459f05f2128d
+2026-07-09 17:38:46 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_003, category=coding, predicted=0.70, actual=0.70, cal_error=0.0000, direction=calibrated
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_c183fb6037fa425086598aaf1f433e62
+2026-07-09 17:38:46 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_004, category=coding, predicted=0.70, actual=0.70, cal_error=0.0000, direction=calibrated
+2026-07-09 17:38:46 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-30/test_calibration_summary0/identity.sqlite3
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_f7912250cc6f43c798a367e0e073674b
+2026-07-09 17:38:46 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_001, category=coding, predicted=0.80, actual=0.60, cal_error=0.2000, direction=overconfident
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_c82983d40caf43d0ae123965aacb92cd
+2026-07-09 17:38:46 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_002, category=coding, predicted=0.30, actual=0.90, cal_error=0.6000, direction=underconfident
+2026-07-09 17:38:46 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-30/test_get_latest0/identity.sqlite3
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_6e96db0f5f6746c0bc4f0672060bfdfa
+2026-07-09 17:38:46 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_001, category=coding, predicted=0.80, actual=0.60, cal_error=0.2000, direction=overconfident
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_78e82791b4b64eb39edce90c3e7f33eb
+2026-07-09 17:38:46 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_002, category=coding, predicted=0.70, actual=0.70, cal_error=0.0000, direction=calibrated
+2026-07-09 17:38:46 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-30/test_get_auto_registers_unknow0/identity.sqlite3
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability new_category
+2026-07-09 17:38:46 [INFO] agent.memory.identity.capability_model:get:135: Auto-registered new capability: new_category
+2026-07-09 17:38:46 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-30/test_update_from_episode_ema0/identity.sqlite3
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 17:38:46 [INFO] agent.memory.identity.capability_model:get:135: Auto-registered new capability: coding
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.capability_model:update_from_episode:187: Updated capability coding: success=0.6200, confidence=0.7600, attempts=1
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.capability_model:update_from_episode:187: Updated capability coding: success=0.6740, confidence=0.7720, attempts=2
+2026-07-09 17:38:46 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-30/test_update_with_effort0/identity.sqlite3
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 17:38:46 [INFO] agent.memory.identity.capability_model:get:135: Auto-registered new capability: coding
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.capability_model:update_from_episode:187: Updated capability coding: success=0.5900, confidence=0.7300, attempts=1
+2026-07-09 17:38:46 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-30/test_predict0/identity.sqlite3
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 17:38:46 [INFO] agent.memory.identity.capability_model:get:135: Auto-registered new capability: coding
+2026-07-09 17:38:46 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-30/test_initialize_from_yaml0/identity.sqlite3
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 17:38:46 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability writing
+2026-07-09 17:38:46 [INFO] agent.memory.identity.capability_model:initialize_from_yaml:103: Initialized 2 capabilities from /tmp/pytest-of-kkc7130/pytest-30/test_initialize_from_yaml0/capabilities.yml
+2026-07-09 17:38:47 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-30/test_initialize_yaml_skips_exi0/identity.sqlite3
+2026-07-09 17:38:47 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 17:38:47 [INFO] agent.memory.identity.capability_model:initialize_from_yaml:103: Initialized 0 capabilities from /tmp/pytest-of-kkc7130/pytest-30/test_initialize_yaml_skips_exi0/capabilities.yml
+2026-07-09 17:38:47 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-30/test_update_batch0/identity.sqlite3
+2026-07-09 17:38:47 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 17:38:47 [INFO] agent.memory.identity.capability_model:get:135: Auto-registered new capability: coding
+2026-07-09 17:38:47 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability writing
+2026-07-09 17:38:47 [INFO] agent.memory.identity.capability_model:get:135: Auto-registered new capability: writing
+2026-07-09 17:38:47 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 17:38:47 [DEBUG] agent.memory.identity.capability_model:update_from_episode:187: Updated capability coding: success=0.6200, confidence=0.7600, attempts=1
+2026-07-09 17:38:47 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability writing
+2026-07-09 17:38:47 [DEBUG] agent.memory.identity.capability_model:update_from_episode:187: Updated capability writing: success=0.5300, confidence=0.6700, attempts=1
+2026-07-09 17:38:47 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-30/test_update_statistics0/identity.sqlite3
+2026-07-09 17:38:47 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_ed2b1b39688340099f4f592433790658
+2026-07-09 17:38:47 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_001, category=coding, predicted=0.80, actual=0.60, cal_error=0.2000, direction=overconfident
+2026-07-09 17:38:47 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 17:38:47 [INFO] agent.memory.identity.capability_model:get:135: Auto-registered new capability: coding
+2026-07-09 17:38:47 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 17:38:47 [DEBUG] agent.memory.identity.capability_model:update_from_episode:187: Updated capability coding: success=0.5300, confidence=0.6700, attempts=1
+2026-07-09 17:38:47 [INFO] agent.memory.identity.updater:update_statistics:125: Statistics updated: episode=ep_001, category=coding, cal_error=0.2000, direction=overconfident
+2026-07-09 17:38:47 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-30/test_update_statistics_creates0/identity.sqlite3
+2026-07-09 17:38:47 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_b012b42014404a36baa85e932f16ed1a
+2026-07-09 17:38:47 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_001, category=new_cat, predicted=0.50, actual=0.70, cal_error=0.2000, direction=underconfident
+2026-07-09 17:38:47 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability new_cat
+2026-07-09 17:38:47 [INFO] agent.memory.identity.capability_model:get:135: Auto-registered new capability: new_cat
+2026-07-09 17:38:47 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability new_cat
+2026-07-09 17:38:47 [DEBUG] agent.memory.identity.capability_model:update_from_episode:187: Updated capability new_cat: success=0.5600, confidence=0.7000, attempts=1
+2026-07-09 17:38:47 [INFO] agent.memory.identity.updater:update_statistics:125: Statistics updated: episode=ep_001, category=new_cat, cal_error=0.2000, direction=underconfident
+2026-07-09 17:38:47 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-30/test_update_statistics_with_ef0/identity.sqlite3
+2026-07-09 17:38:47 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_05bdcc07c9f044029d19d2647ab59cd8
+2026-07-09 17:38:47 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_001, category=coding, predicted=0.70, actual=0.80, cal_error=0.1000, direction=underconfident
+2026-07-09 17:38:47 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 17:38:47 [INFO] agent.memory.identity.capability_model:get:135: Auto-registered new capability: coding
+2026-07-09 17:38:47 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 17:38:47 [DEBUG] agent.memory.identity.capability_model:update_from_episode:187: Updated capability coding: success=0.5900, confidence=0.7300, attempts=1
+2026-07-09 17:38:47 [INFO] agent.memory.identity.updater:update_statistics:125: Statistics updated: episode=ep_001, category=coding, cal_error=0.1000, direction=underconfident
+2026-07-09 17:38:47 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-30/test_redesign_blocked_without_0/identity.sqlite3
+2026-07-09 17:38:47 [WARNING] agent.memory.identity.updater:redesign_identity:168: HITL BLOCKED: Identity redesign requires human approval. No approval granted.
+2026-07-09 17:38:47 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-30/test_redesign_with_hitl0/identity.sqlite3
+2026-07-09 17:38:47 [INFO] agent.memory.identity.updater:_save_identity_yaml:236: Saved identity YAML to /tmp/pytest-of-kkc7130/pytest-30/test_redesign_with_hitl0/identity.yml
+2026-07-09 17:38:47 [INFO] agent.memory.identity.updater:redesign_identity:217: Identity redesigned (v2): ['autonomy_level']
+2026-07-09 17:38:47 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-30/test_redesign_updates_identity0/identity.sqlite3
+2026-07-09 17:38:47 [INFO] agent.memory.identity.updater:_save_identity_yaml:236: Saved identity YAML to /tmp/pytest-of-kkc7130/pytest-30/test_redesign_updates_identity0/identity.yml
+2026-07-09 17:38:47 [INFO] agent.memory.identity.updater:redesign_identity:217: Identity redesigned (v1): ['identity_core']
+2026-07-09 17:38:47 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-30/test_get_identity_state0/identity.sqlite3
+2026-07-09 17:38:47 [DEBUG] agent.memory.identity.identity_store:insert_self_model:145: Inserted self-model record sm_9c8821d566a04f479bb7a9f76eb87245
+2026-07-09 17:38:47 [INFO] agent.memory.identity.self_model:record:135: Recorded self-model: episode=ep_001, category=coding, predicted=0.80, actual=0.60, cal_error=0.2000, direction=overconfident
+2026-07-09 17:38:47 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 17:38:47 [INFO] agent.memory.identity.capability_model:get:135: Auto-registered new capability: coding
+2026-07-09 17:38:47 [DEBUG] agent.memory.identity.identity_store:upsert_capability:240: Upserted capability coding
+2026-07-09 17:38:47 [DEBUG] agent.memory.identity.capability_model:update_from_episode:187: Updated capability coding: success=0.5300, confidence=0.6700, attempts=1
+2026-07-09 17:38:47 [INFO] agent.memory.identity.updater:update_statistics:125: Statistics updated: episode=ep_001, category=coding, cal_error=0.2000, direction=overconfident
+2026-07-09 17:38:47 [WARNING] agent.llm.client:from_yaml:77: Config file not found: nonexistent.yml, using defaults
+2026-07-09 17:38:47 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:47 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:47 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:47 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:47 [WARNING] agent.llm.client:_chat_ollama:269: Failed to connect to Ollama: Port out of range 0-65535, using fallback
+2026-07-09 17:38:47 [WARNING] agent.llm.client:_chat_fallback:326: No LLM SDK available, returning fallback response
+2026-07-09 17:38:47 [WARNING] agent.llm.client:_chat_ollama:269: Failed to connect to Ollama: Port out of range 0-65535, using fallback
+2026-07-09 17:38:47 [WARNING] agent.llm.client:_chat_fallback:326: No LLM SDK available, returning fallback response
+2026-07-09 17:38:47 [WARNING] agent.llm.client:_chat_ollama:269: Failed to connect to Ollama: Port out of range 0-65535, using fallback
+2026-07-09 17:38:47 [WARNING] agent.llm.client:_chat_fallback:326: No LLM SDK available, returning fallback response
+2026-07-09 17:38:47 [WARNING] agent.llm.client:_chat_ollama:269: Failed to connect to Ollama: Port out of range 0-65535, using fallback
+2026-07-09 17:38:47 [WARNING] agent.llm.client:_chat_fallback:326: No LLM SDK available, returning fallback response
+2026-07-09 17:38:47 [WARNING] agent.llm.client:_chat_ollama:269: Failed to connect to Ollama: Port out of range 0-65535, using fallback
+2026-07-09 17:38:47 [WARNING] agent.llm.client:_chat_fallback:326: No LLM SDK available, returning fallback response
+2026-07-09 17:38:47 [INFO] agent.llm.client:_chat_openai:299: OpenAI chat client initialized
+2026-07-09 17:38:49 [ERROR] agent.llm.client:_chat_with_retry:247: Chat failed after 1 attempts: Error code: 401 - {'error': {'message': 'Incorrect API key provided: invalid-key. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}. Using fallback.
+2026-07-09 17:38:49 [WARNING] agent.llm.client:_chat_fallback:326: No LLM SDK available, returning fallback response
+2026-07-09 17:38:49 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_consolidate_extracts_enti0/skills.sqlite3
+2026-07-09 17:38:49 [INFO] agent.memory.consolidation:consolidate:140: Extracted 2 entities, 1 relations
+2026-07-09 17:38:49 [INFO] agent.memory.consolidation:consolidate:146: After resolution: 2 entities, 1 relations
+2026-07-09 17:38:49 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'matplotlib' (tool)
+2026-07-09 17:38:49 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'numpy' (tool)
+2026-07-09 17:38:49 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'matplotlib' --depends_on--> 'numpy'
+2026-07-09 17:38:49 [DEBUG] agent.memory.consolidation:_store_hint_to_l3:222: No matching skill for tool-specific hint ep_001_hint_0, skipping L3 storage (will be picked up when skill is created)
+2026-07-09 17:38:49 [DEBUG] agent.memory.semantic.graph_store:add_knowledge_node:299: Added knowledge node 'ep_001_hint_1'
+2026-07-09 17:38:49 [DEBUG] agent.memory.consolidation:_store_hint_to_l2:199: Stored general hint to L2: ep_001_hint_1
+2026-07-09 17:38:49 [DEBUG] agent.memory.consolidation:_store_hint_to_l3:222: No matching skill for tool-specific hint ep_001_hint_2, skipping L3 storage (will be picked up when skill is created)
+2026-07-09 17:38:49 [DEBUG] agent.memory.consolidation:_store_hint_to_l3:222: No matching skill for tool-specific hint ep_001_hint_3, skipping L3 storage (will be picked up when skill is created)
+2026-07-09 17:38:49 [INFO] agent.memory.consolidation:consolidate:175: Consolidated 1 episodes: 2 entities → L2, 1 general hints → L2, 3 tool-specific hints → L3
+2026-07-09 17:38:49 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_consolidate_routes_hints0/skills.sqlite3
+2026-07-09 17:38:49 [INFO] agent.memory.consolidation:consolidate:140: Extracted 2 entities, 1 relations
+2026-07-09 17:38:49 [INFO] agent.memory.consolidation:consolidate:146: After resolution: 2 entities, 1 relations
+2026-07-09 17:38:49 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'matplotlib' (tool)
+2026-07-09 17:38:49 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'numpy' (tool)
+2026-07-09 17:38:49 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'matplotlib' --depends_on--> 'numpy'
+2026-07-09 17:38:49 [DEBUG] agent.memory.consolidation:_store_hint_to_l3:222: No matching skill for tool-specific hint ep_001_hint_0, skipping L3 storage (will be picked up when skill is created)
+2026-07-09 17:38:49 [DEBUG] agent.memory.semantic.graph_store:add_knowledge_node:299: Added knowledge node 'ep_001_hint_1'
+2026-07-09 17:38:49 [DEBUG] agent.memory.consolidation:_store_hint_to_l2:199: Stored general hint to L2: ep_001_hint_1
+2026-07-09 17:38:49 [DEBUG] agent.memory.consolidation:_store_hint_to_l3:222: No matching skill for tool-specific hint ep_001_hint_2, skipping L3 storage (will be picked up when skill is created)
+2026-07-09 17:38:49 [DEBUG] agent.memory.consolidation:_store_hint_to_l3:222: No matching skill for tool-specific hint ep_001_hint_3, skipping L3 storage (will be picked up when skill is created)
+2026-07-09 17:38:49 [INFO] agent.memory.consolidation:consolidate:175: Consolidated 1 episodes: 2 entities → L2, 1 general hints → L2, 3 tool-specific hints → L3
+2026-07-09 17:38:49 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_consolidate_empty_list0/skills.sqlite3
+2026-07-09 17:38:49 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_consolidate_stores_entiti0/skills.sqlite3
+2026-07-09 17:38:49 [INFO] agent.memory.consolidation:consolidate:140: Extracted 2 entities, 1 relations
+2026-07-09 17:38:49 [INFO] agent.memory.consolidation:consolidate:146: After resolution: 2 entities, 1 relations
+2026-07-09 17:38:49 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'matplotlib' (tool)
+2026-07-09 17:38:49 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'numpy' (tool)
+2026-07-09 17:38:49 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'matplotlib' --depends_on--> 'numpy'
+2026-07-09 17:38:49 [DEBUG] agent.memory.consolidation:_store_hint_to_l3:222: No matching skill for tool-specific hint ep_001_hint_0, skipping L3 storage (will be picked up when skill is created)
+2026-07-09 17:38:49 [DEBUG] agent.memory.semantic.graph_store:add_knowledge_node:299: Added knowledge node 'ep_001_hint_1'
+2026-07-09 17:38:49 [DEBUG] agent.memory.consolidation:_store_hint_to_l2:199: Stored general hint to L2: ep_001_hint_1
+2026-07-09 17:38:49 [DEBUG] agent.memory.consolidation:_store_hint_to_l3:222: No matching skill for tool-specific hint ep_001_hint_2, skipping L3 storage (will be picked up when skill is created)
+2026-07-09 17:38:49 [DEBUG] agent.memory.consolidation:_store_hint_to_l3:222: No matching skill for tool-specific hint ep_001_hint_3, skipping L3 storage (will be picked up when skill is created)
+2026-07-09 17:38:49 [INFO] agent.memory.consolidation:consolidate:175: Consolidated 1 episodes: 2 entities → L2, 1 general hints → L2, 3 tool-specific hints → L3
+2026-07-09 17:38:49 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_consolidate_general_hint_0/skills.sqlite3
+2026-07-09 17:38:49 [INFO] agent.memory.consolidation:consolidate:140: Extracted 1 entities, 0 relations
+2026-07-09 17:38:49 [INFO] agent.memory.consolidation:consolidate:146: After resolution: 1 entities, 0 relations
+2026-07-09 17:38:49 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'matplotlib' (tool)
+2026-07-09 17:38:49 [DEBUG] agent.memory.semantic.graph_store:add_knowledge_node:299: Added knowledge node 'ep_001_hint_0'
+2026-07-09 17:38:49 [DEBUG] agent.memory.consolidation:_store_hint_to_l2:199: Stored general hint to L2: ep_001_hint_0
+2026-07-09 17:38:49 [DEBUG] agent.memory.semantic.graph_store:add_knowledge_node:299: Added knowledge node 'ep_001_hint_2'
+2026-07-09 17:38:49 [DEBUG] agent.memory.consolidation:_store_hint_to_l2:199: Stored general hint to L2: ep_001_hint_2
+2026-07-09 17:38:49 [DEBUG] agent.memory.semantic.graph_store:add_knowledge_node:299: Added knowledge node 'ep_001_hint_3'
+2026-07-09 17:38:49 [DEBUG] agent.memory.consolidation:_store_hint_to_l2:199: Stored general hint to L2: ep_001_hint_3
+2026-07-09 17:38:49 [INFO] agent.memory.consolidation:consolidate:175: Consolidated 1 episodes: 1 entities → L2, 3 general hints → L2, 0 tool-specific hints → L3
+2026-07-09 17:38:49 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_process_extracts_hints0/skills.sqlite3
+2026-07-09 17:38:49 [DEBUG] agent.memory.reflection:_store_to_l3:208: No matching skill for hint ep_001_hint_0, skipping L3 storage
+2026-07-09 17:38:49 [DEBUG] agent.memory.semantic.graph_store:add_knowledge_node:299: Added knowledge node 'ep_001_hint_1'
+2026-07-09 17:38:49 [DEBUG] agent.memory.reflection:_store_to_l2:191: Stored general hint to L2: ep_001_hint_1
+2026-07-09 17:38:49 [DEBUG] agent.memory.reflection:_store_to_l3:208: No matching skill for hint ep_001_hint_2, skipping L3 storage
+2026-07-09 17:38:49 [DEBUG] agent.memory.reflection:_store_to_l3:208: No matching skill for hint ep_001_hint_3, skipping L3 storage
+2026-07-09 17:38:49 [INFO] agent.memory.reflection:process:131: Processed reflection for ep_001: 4 hints (L2=1, L3=3)
+2026-07-09 17:38:49 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_process_empty_reflection0/skills.sqlite3
+2026-07-09 17:38:49 [DEBUG] agent.memory.reflection:process:102: Episode ep_empty has empty reflection, skipping
+2026-07-09 17:38:49 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_process_normalises_reflec0/skills.sqlite3
+2026-07-09 17:38:49 [DEBUG] agent.memory.semantic.graph_store:add_knowledge_node:299: Added knowledge node 'ep_001_hint_0'
+2026-07-09 17:38:49 [DEBUG] agent.memory.reflection:_store_to_l2:191: Stored general hint to L2: ep_001_hint_0
+2026-07-09 17:38:49 [DEBUG] agent.memory.semantic.graph_store:add_knowledge_node:299: Added knowledge node 'ep_001_hint_1'
+2026-07-09 17:38:49 [DEBUG] agent.memory.reflection:_store_to_l2:191: Stored general hint to L2: ep_001_hint_1
+2026-07-09 17:38:49 [INFO] agent.memory.reflection:process:131: Processed reflection for ep_001: 2 hints (L2=2, L3=0)
+2026-07-09 17:38:49 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_process_generates_summary0/skills.sqlite3
+2026-07-09 17:38:49 [DEBUG] agent.memory.reflection:_store_to_l3:208: No matching skill for hint ep_001_hint_0, skipping L3 storage
+2026-07-09 17:38:49 [DEBUG] agent.memory.semantic.graph_store:add_knowledge_node:299: Added knowledge node 'ep_001_hint_1'
+2026-07-09 17:38:49 [DEBUG] agent.memory.reflection:_store_to_l2:191: Stored general hint to L2: ep_001_hint_1
+2026-07-09 17:38:49 [DEBUG] agent.memory.reflection:_store_to_l3:208: No matching skill for hint ep_001_hint_2, skipping L3 storage
+2026-07-09 17:38:49 [DEBUG] agent.memory.reflection:_store_to_l3:208: No matching skill for hint ep_001_hint_3, skipping L3 storage
+2026-07-09 17:38:49 [INFO] agent.memory.reflection:process:131: Processed reflection for ep_001: 4 hints (L2=1, L3=3)
+2026-07-09 17:38:49 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_process_marks_reflection_0/skills.sqlite3
+2026-07-09 17:38:49 [DEBUG] agent.memory.reflection:_store_to_l3:208: No matching skill for hint ep_001_hint_0, skipping L3 storage
+2026-07-09 17:38:49 [DEBUG] agent.memory.semantic.graph_store:add_knowledge_node:299: Added knowledge node 'ep_001_hint_1'
+2026-07-09 17:38:49 [DEBUG] agent.memory.reflection:_store_to_l2:191: Stored general hint to L2: ep_001_hint_1
+2026-07-09 17:38:49 [DEBUG] agent.memory.reflection:_store_to_l3:208: No matching skill for hint ep_001_hint_2, skipping L3 storage
+2026-07-09 17:38:49 [DEBUG] agent.memory.reflection:_store_to_l3:208: No matching skill for hint ep_001_hint_3, skipping L3 storage
+2026-07-09 17:38:49 [INFO] agent.memory.reflection:process:131: Processed reflection for ep_001: 4 hints (L2=1, L3=3)
+2026-07-09 17:38:49 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_init0/skills.sqlite3
+2026-07-09 17:38:49 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-30/test_init0/identity.sqlite3
+2026-07-09 17:38:49 [INFO] agent.memory.manager:__init__:128: MemoryManager initialized (L1–L5)
+2026-07-09 17:38:49 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_constitution_lazy_load0/skills.sqlite3
+2026-07-09 17:38:49 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-30/test_constitution_lazy_load0/identity.sqlite3
+2026-07-09 17:38:49 [INFO] agent.memory.manager:__init__:128: MemoryManager initialized (L1–L5)
+2026-07-09 17:38:49 [INFO] agent.memory.constitution.loader:load:94: Loaded constitution v1: 7 principles, 10 K-Scenarios, CIB threshold=0.95
+2026-07-09 17:38:49 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_store_episode0/skills.sqlite3
+2026-07-09 17:38:49 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-30/test_store_episode0/identity.sqlite3
+2026-07-09 17:38:49 [INFO] agent.memory.manager:__init__:128: MemoryManager initialized (L1–L5)
+2026-07-09 17:38:49 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-30/test_store_episode0/chroma
+2026-07-09 17:38:49 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:49 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-09 17:38:49 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-30/test_store_episode0/raw_events/2026-07-09.jsonl
+2026-07-09 17:38:49 [INFO] agent.memory.manager:store_episode:272: Stored episode ep_001 in L1 + raw event log
+2026-07-09 17:38:49 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_store_episode_logs_raw_ev0/skills.sqlite3
+2026-07-09 17:38:49 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-30/test_store_episode_logs_raw_ev0/identity.sqlite3
+2026-07-09 17:38:49 [INFO] agent.memory.manager:__init__:128: MemoryManager initialized (L1–L5)
+2026-07-09 17:38:49 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-30/test_store_episode_logs_raw_ev0/chroma
+2026-07-09 17:38:49 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:49 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-09 17:38:49 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-30/test_store_episode_logs_raw_ev0/raw_events/2026-07-09.jsonl
+2026-07-09 17:38:49 [INFO] agent.memory.manager:store_episode:272: Stored episode ep_001 in L1 + raw event log
+2026-07-09 17:38:49 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_retrieve_multi_layer0/skills.sqlite3
+2026-07-09 17:38:49 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-30/test_retrieve_multi_layer0/identity.sqlite3
+2026-07-09 17:38:49 [INFO] agent.memory.manager:__init__:128: MemoryManager initialized (L1–L5)
+2026-07-09 17:38:49 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-30/test_retrieve_multi_layer0/chroma
+2026-07-09 17:38:49 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:49 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-09 17:38:49 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-30/test_retrieve_multi_layer0/raw_events/2026-07-09.jsonl
+2026-07-09 17:38:49 [INFO] agent.memory.manager:store_episode:272: Stored episode ep_001 in L1 + raw event log
+2026-07-09 17:38:49 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'matplotlib' (tool)
+2026-07-09 17:38:49 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:49 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_store_reflection0/skills.sqlite3
+2026-07-09 17:38:49 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-30/test_store_reflection0/identity.sqlite3
+2026-07-09 17:38:49 [INFO] agent.memory.manager:__init__:128: MemoryManager initialized (L1–L5)
+2026-07-09 17:38:49 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-30/test_store_reflection0/chroma
+2026-07-09 17:38:49 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:49 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-09 17:38:49 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-30/test_store_reflection0/raw_events/2026-07-09.jsonl
+2026-07-09 17:38:49 [INFO] agent.memory.manager:store_episode:272: Stored episode ep_001 in L1 + raw event log
+2026-07-09 17:38:49 [DEBUG] agent.memory.reflection:_store_to_l3:208: No matching skill for hint ep_001_hint_0, skipping L3 storage
+2026-07-09 17:38:49 [DEBUG] agent.memory.semantic.graph_store:add_knowledge_node:299: Added knowledge node 'ep_001_hint_1'
+2026-07-09 17:38:49 [DEBUG] agent.memory.reflection:_store_to_l2:191: Stored general hint to L2: ep_001_hint_1
+2026-07-09 17:38:49 [DEBUG] agent.memory.reflection:_store_to_l3:208: No matching skill for hint ep_001_hint_2, skipping L3 storage
+2026-07-09 17:38:49 [DEBUG] agent.memory.reflection:_store_to_l3:208: No matching skill for hint ep_001_hint_3, skipping L3 storage
+2026-07-09 17:38:49 [INFO] agent.memory.reflection:process:131: Processed reflection for ep_001: 4 hints (L2=1, L3=3)
+2026-07-09 17:38:49 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:49 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-09 17:38:49 [INFO] agent.memory.manager:store_reflection:308: Stored reflection for ep_001: 1 hints → L2, 3 hints → L3
+2026-07-09 17:38:49 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_store_reflection_nonexist0/skills.sqlite3
+2026-07-09 17:38:49 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-30/test_store_reflection_nonexist0/identity.sqlite3
+2026-07-09 17:38:49 [INFO] agent.memory.manager:__init__:128: MemoryManager initialized (L1–L5)
+2026-07-09 17:38:49 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-30/test_store_reflection_nonexist0/chroma
+2026-07-09 17:38:49 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_consolidate0/skills.sqlite3
+2026-07-09 17:38:49 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-30/test_consolidate0/identity.sqlite3
+2026-07-09 17:38:49 [INFO] agent.memory.manager:__init__:128: MemoryManager initialized (L1–L5)
+2026-07-09 17:38:49 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-30/test_consolidate0/chroma
+2026-07-09 17:38:49 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:49 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-09 17:38:49 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-30/test_consolidate0/raw_events/2026-07-09.jsonl
+2026-07-09 17:38:49 [INFO] agent.memory.manager:store_episode:272: Stored episode ep_001 in L1 + raw event log
+2026-07-09 17:38:49 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:49 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_002
+2026-07-09 17:38:49 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_002 to /tmp/pytest-of-kkc7130/pytest-30/test_consolidate0/raw_events/2026-07-09.jsonl
+2026-07-09 17:38:49 [INFO] agent.memory.manager:store_episode:272: Stored episode ep_002 in L1 + raw event log
+2026-07-09 17:38:49 [INFO] agent.memory.consolidation:consolidate:140: Extracted 3 entities, 0 relations
+2026-07-09 17:38:49 [INFO] agent.memory.consolidation:consolidate:146: After resolution: 3 entities, 0 relations
+2026-07-09 17:38:49 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'matplotlib' (tool)
+2026-07-09 17:38:49 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'numpy' (tool)
+2026-07-09 17:38:49 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'pandas' (tool)
+2026-07-09 17:38:49 [INFO] agent.memory.consolidation:consolidate:175: Consolidated 2 episodes: 3 entities → L2, 0 general hints → L2, 0 tool-specific hints → L3
+2026-07-09 17:38:49 [DEBUG] agent.memory.semantic.graph_store:save:120: Saved GraphML to /tmp/pytest-of-kkc7130/pytest-30/test_consolidate0/graph.graphml
+2026-07-09 17:38:49 [DEBUG] agent.memory.semantic.graph_store:save:124: Saved pickle to /tmp/pytest-of-kkc7130/pytest-30/test_consolidate0/graph.gpickle
+2026-07-09 17:38:49 [INFO] agent.memory.manager:consolidate:348: Consolidated 2 episodes: ConsolidationResult(episodes=2, entities=3, relations=0, L2_hints=0, L3_hints=0)
+2026-07-09 17:38:49 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_consolidate_empty0/skills.sqlite3
+2026-07-09 17:38:49 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-30/test_consolidate_empty0/identity.sqlite3
+2026-07-09 17:38:49 [INFO] agent.memory.manager:__init__:128: MemoryManager initialized (L1–L5)
+2026-07-09 17:38:49 [WARNING] agent.memory.manager:consolidate:340: No episodes found to consolidate
+2026-07-09 17:38:49 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_consolidate_nonexistent0/skills.sqlite3
+2026-07-09 17:38:49 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-30/test_consolidate_nonexistent0/identity.sqlite3
+2026-07-09 17:38:49 [INFO] agent.memory.manager:__init__:128: MemoryManager initialized (L1–L5)
+2026-07-09 17:38:49 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-30/test_consolidate_nonexistent0/chroma
+2026-07-09 17:38:49 [WARNING] agent.memory.manager:consolidate:334: Episode nonexistent not found, skipping
+2026-07-09 17:38:49 [WARNING] agent.memory.manager:consolidate:340: No episodes found to consolidate
+2026-07-09 17:38:49 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_check_permission0/skills.sqlite3
+2026-07-09 17:38:49 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-30/test_check_permission0/identity.sqlite3
+2026-07-09 17:38:49 [INFO] agent.memory.manager:__init__:128: MemoryManager initialized (L1–L5)
+2026-07-09 17:38:49 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_store_reflection_general_0/skills.sqlite3
+2026-07-09 17:38:49 [INFO] agent.memory.identity.identity_store:_ensure_initialized:102: Initialized identity store at /tmp/pytest-of-kkc7130/pytest-30/test_store_reflection_general_0/identity.sqlite3
+2026-07-09 17:38:49 [INFO] agent.memory.manager:__init__:128: MemoryManager initialized (L1–L5)
+2026-07-09 17:38:49 [INFO] agent.memory.episodic.store:_ensure_initialized:57: Initialized Chroma collection 'episodes' at /tmp/pytest-of-kkc7130/pytest-30/test_store_reflection_general_0/chroma
+2026-07-09 17:38:49 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:49 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-09 17:38:49 [DEBUG] agent.memory.episodic.event_logger:log:39: Logged event ep_001 to /tmp/pytest-of-kkc7130/pytest-30/test_store_reflection_general_0/raw_events/2026-07-09.jsonl
+2026-07-09 17:38:49 [INFO] agent.memory.manager:store_episode:272: Stored episode ep_001 in L1 + raw event log
+2026-07-09 17:38:49 [DEBUG] agent.memory.semantic.graph_store:add_knowledge_node:299: Added knowledge node 'ep_001_hint_0'
+2026-07-09 17:38:49 [DEBUG] agent.memory.reflection:_store_to_l2:191: Stored general hint to L2: ep_001_hint_0
+2026-07-09 17:38:49 [DEBUG] agent.memory.semantic.graph_store:add_knowledge_node:299: Added knowledge node 'ep_001_hint_2'
+2026-07-09 17:38:49 [DEBUG] agent.memory.reflection:_store_to_l2:191: Stored general hint to L2: ep_001_hint_2
+2026-07-09 17:38:49 [DEBUG] agent.memory.semantic.graph_store:add_knowledge_node:299: Added knowledge node 'ep_001_hint_3'
+2026-07-09 17:38:49 [DEBUG] agent.memory.reflection:_store_to_l2:191: Stored general hint to L2: ep_001_hint_3
+2026-07-09 17:38:49 [INFO] agent.memory.reflection:process:131: Processed reflection for ep_001: 3 hints (L2=3, L3=0)
+2026-07-09 17:38:49 [WARNING] agent.llm.client:_embed_local:384: sentence-transformers not installed, using hash fallback
+2026-07-09 17:38:49 [DEBUG] agent.memory.episodic.store:upsert:90: Upserted episode ep_001
+2026-07-09 17:38:49 [INFO] agent.memory.manager:store_reflection:308: Stored reflection for ep_001: 3 hints → L2, 0 hints → L3
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_upsert_and_get2/skills.sqlite3
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-30/test_upsert_and_get2/skills/skill_001.py
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill skill_001 (code: /tmp/pytest-of-kkc7130/pytest-30/test_upsert_and_get2/skills/skill_001.py)
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_get_nonexistent2/skills.sqlite3
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_upsert_overwrites_code_fi0/skills.sqlite3
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-30/test_upsert_overwrites_code_fi0/skills/skill_001.py
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill skill_001 (code: /tmp/pytest-of-kkc7130/pytest-30/test_upsert_overwrites_code_fi0/skills/skill_001.py)
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-30/test_upsert_overwrites_code_fi0/skills/skill_001.py
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill skill_001 (code: /tmp/pytest-of-kkc7130/pytest-30/test_upsert_overwrites_code_fi0/skills/skill_001.py)
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_delete1/skills.sqlite3
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-30/test_delete1/skills/skill_001.py
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill skill_001 (code: /tmp/pytest-of-kkc7130/pytest-30/test_delete1/skills/skill_001.py)
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:delete:308: Deleted code file: /tmp/pytest-of-kkc7130/pytest-30/test_delete1/skills/skill_001.py
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:delete:311: Deleted skill skill_001
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_delete_keeps_code_file0/skills.sqlite3
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-30/test_delete_keeps_code_file0/skills/skill_001.py
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill skill_001 (code: /tmp/pytest-of-kkc7130/pytest-30/test_delete_keeps_code_file0/skills/skill_001.py)
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:delete:311: Deleted skill skill_001
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_delete_nonexistent1/skills.sqlite3
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_count2/skills.sqlite3
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-30/test_count2/skills/s1.py
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-30/test_count2/skills/s1.py)
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-30/test_count2/skills/s2.py
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s2 (code: /tmp/pytest-of-kkc7130/pytest-30/test_count2/skills/s2.py)
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-30/test_count2/skills/s3.py
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s3 (code: /tmp/pytest-of-kkc7130/pytest-30/test_count2/skills/s3.py)
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_list_all0/skills.sqlite3
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-30/test_list_all0/skills/s1.py
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-30/test_list_all0/skills/s1.py)
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-30/test_list_all0/skills/s2.py
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s2 (code: /tmp/pytest-of-kkc7130/pytest-30/test_list_all0/skills/s2.py)
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_list_by_status0/skills.sqlite3
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-30/test_list_by_status0/skills/s1.py
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-30/test_list_by_status0/skills/s1.py)
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-30/test_list_by_status0/skills/s2.py
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s2 (code: /tmp/pytest-of-kkc7130/pytest-30/test_list_by_status0/skills/s2.py)
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-30/test_list_by_status0/skills/s3.py
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s3 (code: /tmp/pytest-of-kkc7130/pytest-30/test_list_by_status0/skills/s3.py)
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_persistence_across_connec0/skills.sqlite3
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-30/test_persistence_across_connec0/skills/persist_001.py
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill persist_001 (code: /tmp/pytest-of-kkc7130/pytest-30/test_persistence_across_connec0/skills/persist_001.py)
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_persistence_across_connec0/skills.sqlite3
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_get_metadata_only0/skills.sqlite3
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-30/test_get_metadata_only0/skills/s1.py
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-30/test_get_metadata_only0/skills/s1.py)
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_update_status0/skills.sqlite3
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-30/test_update_status0/skills/s1.py
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-30/test_update_status0/skills/s1.py)
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_update_status_nonexistent0/skills.sqlite3
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_update_success_rate0/skills.sqlite3
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-30/test_update_success_rate0/skills/s1.py
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-30/test_update_success_rate0/skills/s1.py)
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_update_success_rate_with_0/skills.sqlite3
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-30/test_update_success_rate_with_0/skills/s1.py
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-30/test_update_success_rate_with_0/skills/s1.py)
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_update_reflection_hints0/skills.sqlite3
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-30/test_update_reflection_hints0/skills/s1.py
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-30/test_update_reflection_hints0/skills/s1.py)
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_update_reflection_hints_n0/skills.sqlite3
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_update_causal_conditions0/skills.sqlite3
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-30/test_update_causal_conditions0/skills/s1.py
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-30/test_update_causal_conditions0/skills/s1.py)
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_set_protected0/skills.sqlite3
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-30/test_set_protected0/skills/s1.py
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-30/test_set_protected0/skills/s1.py)
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_set_protected_nonexistent0/skills.sqlite3
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_update_code0/skills.sqlite3
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-30/test_update_code0/skills/s1.py
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-30/test_update_code0/skills/s1.py)
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:update_code:441: Updated code file for skill s1: /tmp/pytest-of-kkc7130/pytest-30/test_update_code0/skills/s1.py
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_update_code_nonexistent0/skills.sqlite3
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_load_from_store0/skills.sqlite3
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-30/test_load_from_store0/skills/s1.py
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-30/test_load_from_store0/skills/s1.py)
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_loader:load:72: Loaded skill s1 (status=SkillStatus.SEED, code_path=/tmp/pytest-of-kkc7130/pytest-30/test_load_from_store0/skills/s1.py)
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_load_nonexistent0/skills.sqlite3
+2026-07-09 17:38:49 [WARNING] agent.memory.procedural.skill_loader:load:68: Skill not found: nonexistent
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_load_caches0/skills.sqlite3
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-30/test_load_caches0/skills/s1.py
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-30/test_load_caches0/skills/s1.py)
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_loader:load:72: Loaded skill s1 (status=SkillStatus.SEED, code_path=/tmp/pytest-of-kkc7130/pytest-30/test_load_caches0/skills/s1.py)
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_load_code_compiles0/skills.sqlite3
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-30/test_load_code_compiles0/skills/s1.py
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-30/test_load_code_compiles0/skills/s1.py)
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_loader:load:72: Loaded skill s1 (status=SkillStatus.SEED, code_path=/tmp/pytest-of-kkc7130/pytest-30/test_load_code_compiles0/skills/s1.py)
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_load_code_invalid_syntax0/skills.sqlite3
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-30/test_load_code_invalid_syntax0/skills/s1.py
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-30/test_load_code_invalid_syntax0/skills/s1.py)
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_loader:load:72: Loaded skill s1 (status=SkillStatus.SEED, code_path=/tmp/pytest-of-kkc7130/pytest-30/test_load_code_invalid_syntax0/skills/s1.py)
+2026-07-09 17:38:49 [ERROR] agent.memory.procedural.skill_loader:load_code:115: Failed to compile skill s1 from /tmp/pytest-of-kkc7130/pytest-30/test_load_code_invalid_syntax0/skills/s1.py: '(' was never closed (s1.py, line 1)
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_invalidate_cache0/skills.sqlite3
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-30/test_invalidate_cache0/skills/s1.py
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-30/test_invalidate_cache0/skills/s1.py)
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_loader:load:72: Loaded skill s1 (status=SkillStatus.SEED, code_path=/tmp/pytest-of-kkc7130/pytest-30/test_invalidate_cache0/skills/s1.py)
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_loader:invalidate:146: Invalidated cache for skill s1
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_clear_cache0/skills.sqlite3
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-30/test_clear_cache0/skills/s1.py
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-30/test_clear_cache0/skills/s1.py)
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-30/test_clear_cache0/skills/s2.py
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s2 (code: /tmp/pytest-of-kkc7130/pytest-30/test_clear_cache0/skills/s2.py)
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_loader:load:72: Loaded skill s1 (status=SkillStatus.SEED, code_path=/tmp/pytest-of-kkc7130/pytest-30/test_clear_cache0/skills/s1.py)
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_loader:load:72: Loaded skill s2 (status=SkillStatus.SEED, code_path=/tmp/pytest-of-kkc7130/pytest-30/test_clear_cache0/skills/s2.py)
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_loader:clear_cache:152: Cleared skill loader cache
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_list_active0/skills.sqlite3
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-30/test_list_active0/skills/s1.py
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-30/test_list_active0/skills/s1.py)
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-30/test_list_active0/skills/s2.py
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s2 (code: /tmp/pytest-of-kkc7130/pytest-30/test_list_active0/skills/s2.py)
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_reload_code_after_file_ed0/skills.sqlite3
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-30/test_reload_code_after_file_ed0/skills/s1.py
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-30/test_reload_code_after_file_ed0/skills/s1.py)
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_loader:load:72: Loaded skill s1 (status=SkillStatus.SEED, code_path=/tmp/pytest-of-kkc7130/pytest-30/test_reload_code_after_file_ed0/skills/s1.py)
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:update_code:441: Updated code file for skill s1: /tmp/pytest-of-kkc7130/pytest-30/test_reload_code_after_file_ed0/skills/s1.py
+2026-07-09 17:38:49 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_load_metadata_only0/skills.sqlite3
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-30/test_load_metadata_only0/skills/s1.py
+2026-07-09 17:38:49 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-30/test_load_metadata_only0/skills/s1.py)
+2026-07-09 17:38:49 [ERROR] agent.memory.procedural.skill_executor:execute:207: Skill test_004 execution failed: test error
+2026-07-09 17:38:50 [WARNING] agent.memory.procedural.skill_executor:execute:195: Skill test_005 timed out after 0.5s
+2026-07-09 17:38:50 [ERROR] agent.memory.procedural.skill_executor:execute:207: Skill test_006 execution failed: name 'open' is not defined
+2026-07-09 17:38:50 [ERROR] agent.memory.procedural.skill_executor:execute:207: Skill test_007 execution failed: name 'exec' is not defined
+2026-07-09 17:38:50 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_execute_skill_object0/skills.sqlite3
+2026-07-09 17:38:50 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-30/test_execute_skill_object0/skills/exec_001.py
+2026-07-09 17:38:50 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill exec_001 (code: /tmp/pytest-of-kkc7130/pytest-30/test_execute_skill_object0/skills/exec_001.py)
+2026-07-09 17:38:50 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_seed_to_active0/skills.sqlite3
+2026-07-09 17:38:50 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-30/test_seed_to_active0/skills/s1.py
+2026-07-09 17:38:50 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-30/test_seed_to_active0/skills/s1.py)
+2026-07-09 17:38:50 [INFO] agent.memory.procedural.skill_evaluator:evaluate:154: Skill s1 transitioned: Seed → Active
+2026-07-09 17:38:50 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_seed_stays_seed_with_low_0/skills.sqlite3
+2026-07-09 17:38:50 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-30/test_seed_stays_seed_with_low_0/skills/s1.py
+2026-07-09 17:38:50 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-30/test_seed_stays_seed_with_low_0/skills/s1.py)
+2026-07-09 17:38:50 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_active_to_degrading0/skills.sqlite3
+2026-07-09 17:38:50 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-30/test_active_to_degrading0/skills/s1.py
+2026-07-09 17:38:50 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-30/test_active_to_degrading0/skills/s1.py)
+2026-07-09 17:38:50 [INFO] agent.memory.procedural.skill_evaluator:evaluate:154: Skill s1 transitioned: Active → Degrading
+2026-07-09 17:38:50 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_degrading_to_archived0/skills.sqlite3
+2026-07-09 17:38:50 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-30/test_degrading_to_archived0/skills/s1.py
+2026-07-09 17:38:50 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-30/test_degrading_to_archived0/skills/s1.py)
+2026-07-09 17:38:50 [INFO] agent.memory.procedural.skill_evaluator:evaluate:154: Skill s1 transitioned: Degrading → Archived
+2026-07-09 17:38:50 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_degrading_recovery_to_act0/skills.sqlite3
+2026-07-09 17:38:50 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-30/test_degrading_recovery_to_act0/skills/s1.py
+2026-07-09 17:38:50 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-30/test_degrading_recovery_to_act0/skills/s1.py)
+2026-07-09 17:38:50 [INFO] agent.memory.procedural.skill_evaluator:evaluate:154: Skill s1 transitioned: Degrading → Active
+2026-07-09 17:38:50 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_archived_stays_archived0/skills.sqlite3
+2026-07-09 17:38:50 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-30/test_archived_stays_archived0/skills/s1.py
+2026-07-09 17:38:50 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-30/test_archived_stays_archived0/skills/s1.py)
+2026-07-09 17:38:50 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_record_execution0/skills.sqlite3
+2026-07-09 17:38:50 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-30/test_record_execution0/skills/s1.py
+2026-07-09 17:38:50 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-30/test_record_execution0/skills/s1.py)
+2026-07-09 17:38:50 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_recent_success_rate_empty0/skills.sqlite3
+2026-07-09 17:38:50 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_evaluate_updates_success_0/skills.sqlite3
+2026-07-09 17:38:50 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-30/test_evaluate_updates_success_0/skills/s1.py
+2026-07-09 17:38:50 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-30/test_evaluate_updates_success_0/skills/s1.py)
+2026-07-09 17:38:50 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_evaluate_nonexistent_skil0/skills.sqlite3
+2026-07-09 17:38:50 [WARNING] agent.memory.procedural.skill_evaluator:evaluate:130: Cannot evaluate unknown skill: nonexistent
+2026-07-09 17:38:50 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_reset_history0/skills.sqlite3
+2026-07-09 17:38:50 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-30/test_reset_history0/skills/s1.py
+2026-07-09 17:38:50 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-30/test_reset_history0/skills/s1.py)
+2026-07-09 17:38:50 [INFO] agent.memory.procedural.skill_store:_ensure_initialized:95: Initialized skill store at /tmp/pytest-of-kkc7130/pytest-30/test_evaluate_batch0/skills.sqlite3
+2026-07-09 17:38:50 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-30/test_evaluate_batch0/skills/s1.py
+2026-07-09 17:38:50 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s1 (code: /tmp/pytest-of-kkc7130/pytest-30/test_evaluate_batch0/skills/s1.py)
+2026-07-09 17:38:50 [DEBUG] agent.memory.procedural.skill_store:_write_code_file:131: Wrote skill code to /tmp/pytest-of-kkc7130/pytest-30/test_evaluate_batch0/skills/s2.py
+2026-07-09 17:38:50 [DEBUG] agent.memory.procedural.skill_store:upsert:239: Upserted skill s2 (code: /tmp/pytest-of-kkc7130/pytest-30/test_evaluate_batch0/skills/s2.py)
+2026-07-09 17:38:50 [INFO] agent.memory.procedural.skill_evaluator:evaluate:154: Skill s1 transitioned: Seed → Active
+2026-07-09 17:38:50 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'ent_001' (tool)
+2026-07-09 17:38:50 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:50 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'ent_001' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:remove_entity:179: Removed entity 'ent_001'
+2026-07-09 17:38:50 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:50 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'e1' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'e2' (tool)
+2026-07-09 17:38:50 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'e1' (tool)
+2026-07-09 17:38:50 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'e1' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'e2' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'e1' --depends_on--> 'e2'
+2026-07-09 17:38:50 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:50 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'e1' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'e2' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'e1' --depends_on--> 'e2'
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:remove_relation:236: Removed relation 'e1' → 'e2'
+2026-07-09 17:38:50 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:50 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'e1' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'e2' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'e3' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'e1' --depends_on--> 'e2'
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'e2' --uses--> 'e3'
+2026-07-09 17:38:50 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'e1' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'e2' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'e1' --depends_on--> 'e2'
+2026-07-09 17:38:50 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'e1' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'e2' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'e3' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'e1' --depends_on--> 'e2'
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'e3' --uses--> 'e1'
+2026-07-09 17:38:50 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'e1' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'e2' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'e1' --depends_on--> 'e2'
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:save:120: Saved GraphML to /tmp/pytest-of-kkc7130/pytest-30/test_save_and_load_graphml0/graph.graphml
+2026-07-09 17:38:50 [INFO] agent.memory.semantic.graph_store:_load:62: Loaded graph from /tmp/pytest-of-kkc7130/pytest-30/test_save_and_load_graphml0/graph.graphml (2 nodes)
+2026-07-09 17:38:50 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'e1' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:save:120: Saved GraphML to /tmp/pytest-of-kkc7130/pytest-30/test_save_and_load_pickle0/graph.graphml
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:save:124: Saved pickle to /tmp/pytest-of-kkc7130/pytest-30/test_save_and_load_pickle0/graph.gpickle
+2026-07-09 17:38:50 [INFO] agent.memory.semantic.graph_store:_load:57: Loaded graph from /tmp/pytest-of-kkc7130/pytest-30/test_save_and_load_pickle0/graph.gpickle (1 nodes)
+2026-07-09 17:38:50 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'e1' (tool)
+2026-07-09 17:38:50 [INFO] agent.memory.semantic.graph_store:save_snapshot:141: Saved snapshot to /tmp/pytest-of-kkc7130/pytest-30/test_save_snapshot0/snapshots/2026-07-09/graph_2026-07-09T08-38-50Z.graphml
+2026-07-09 17:38:50 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'e1' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_knowledge_node:299: Added knowledge node 'kn_001'
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.json_store:save_entities:63: Saved 2 entities to /tmp/pytest-of-kkc7130/pytest-30/test_save_and_load_entities0/entities.json
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.json_store:save_entities:63: Saved 1 entities to /tmp/pytest-of-kkc7130/pytest-30/test_add_entity_upsert0/entities.json
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.json_store:save_entities:63: Saved 1 entities to /tmp/pytest-of-kkc7130/pytest-30/test_add_entity_upsert0/entities.json
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.json_store:save_relations:88: Saved 1 relations to /tmp/pytest-of-kkc7130/pytest-30/test_save_and_load_relations0/relations.json
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.json_store:save_relations:88: Saved 1 relations to /tmp/pytest-of-kkc7130/pytest-30/test_add_relation_upsert0/relations.json
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.json_store:save_relations:88: Saved 1 relations to /tmp/pytest-of-kkc7130/pytest-30/test_add_relation_upsert0/relations.json
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.json_store:save_concepts:114: Saved 1 concepts to /tmp/pytest-of-kkc7130/pytest-30/test_save_and_load_concepts0/concepts.json
+2026-07-09 17:38:50 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'e1' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'e2' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'e1' --depends_on--> 'e2'
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.json_store:save_entities:63: Saved 2 entities to /tmp/pytest-of-kkc7130/pytest-30/test_sync_from_graph0/entities.json
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.json_store:save_relations:88: Saved 1 relations to /tmp/pytest-of-kkc7130/pytest-30/test_sync_from_graph0/relations.json
+2026-07-09 17:38:50 [INFO] agent.memory.semantic.json_store:sync_from_graph:140: Synced 2 entities and 1 relations from graph to JSON
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.resolver:add_synonym_group:233: Added synonym group: {'ct', 'custom_tool'}
+2026-07-09 17:38:50 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'matplotlib' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'numpy' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'pandas' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'matplotlib' --depends_on--> 'numpy'
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'pandas' --depends_on--> 'numpy'
+2026-07-09 17:38:50 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'matplotlib' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'numpy' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'pandas' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'matplotlib' --depends_on--> 'numpy'
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'pandas' --depends_on--> 'numpy'
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'isolated' (tool)
+2026-07-09 17:38:50 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'matplotlib' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'numpy' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'pandas' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'matplotlib' --depends_on--> 'numpy'
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'pandas' --depends_on--> 'numpy'
+2026-07-09 17:38:50 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'matplotlib' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'numpy' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'pandas' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'matplotlib' --depends_on--> 'numpy'
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'pandas' --depends_on--> 'numpy'
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'isolated' (tool)
+2026-07-09 17:38:50 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'matplotlib' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'numpy' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'pandas' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'matplotlib' --depends_on--> 'numpy'
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'pandas' --depends_on--> 'numpy'
+2026-07-09 17:38:50 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'matplotlib' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'numpy' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'pandas' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'matplotlib' --depends_on--> 'numpy'
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'pandas' --depends_on--> 'numpy'
+2026-07-09 17:38:50 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'matplotlib' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'numpy' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'pandas' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'matplotlib' --depends_on--> 'numpy'
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'pandas' --depends_on--> 'numpy'
+2026-07-09 17:38:50 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'matplotlib' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'numpy' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'pandas' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'matplotlib' --depends_on--> 'numpy'
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'pandas' --depends_on--> 'numpy'
+2026-07-09 17:38:50 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'matplotlib' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'numpy' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'pandas' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'matplotlib' --depends_on--> 'numpy'
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'pandas' --depends_on--> 'numpy'
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_knowledge_node:299: Added knowledge node 'kn_001'
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_knowledge_node:299: Added knowledge node 'kn_002'
+2026-07-09 17:38:50 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'matplotlib' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'numpy' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'pandas' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'matplotlib' --depends_on--> 'numpy'
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'pandas' --depends_on--> 'numpy'
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_knowledge_node:299: Added knowledge node 'kn_001'
+2026-07-09 17:38:50 [INFO] agent.memory.semantic.graph_store:_load:64: No existing graph found, starting fresh
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'matplotlib' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'numpy' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_entity:157: Added entity 'pandas' (tool)
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'matplotlib' --depends_on--> 'numpy'
+2026-07-09 17:38:50 [DEBUG] agent.memory.semantic.graph_store:add_relation:214: Added relation 'pandas' --depends_on--> 'numpy'
