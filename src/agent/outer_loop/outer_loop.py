@@ -134,6 +134,7 @@ class OuterLoopResult:
     growth_regulation: GrowthRegulationResult = field(default_factory=GrowthRegulationResult)
     action_result: Any | None = None  # ActionResult from growth_actions.py
     coherence_record: Any | None = None  # CoherenceRecord from coherence_index.py
+    violation_result: Any | None = None  # ViolationDetectionResult from assumption_violation
     meta_trigger: TriggerResult = field(default_factory=TriggerResult)
     state: OuterLoopState = field(default_factory=OuterLoopState)
     adaptive_N: int = 50
@@ -252,6 +253,10 @@ class OuterLoop:
             graph_store=graph_store,
             constitution=constitution,
         )
+
+        # Assumption violation detector (Phase 4.3 — L3 한계 보완)
+        from ..meta_loop.assumption_violation import AssumptionViolationDetector
+        self.violation_detector = AssumptionViolationDetector()
 
         mt_config = meta_trigger_config or {}
         self.meta_trigger = MetaTrigger(**mt_config)
@@ -372,14 +377,23 @@ class OuterLoop:
             # Reset learning suspension if signal is normal
             self.state.learning_suspended = False
 
-        # Step 7: Meta Loop Trigger
+        # Step 7: Meta Loop Trigger (with assumption violation detection)
         logger.info("Step 7: Meta Loop Trigger")
+
+        # Detect mathematical assumption violations (Phase 4.3)
+        violation_result = self.violation_detector.detect(
+            success_scores=result.aggregation.phoenix_scores,
+            cib_scores=result.aggregation.cib_scores,
+        )
+        result.violation_result = violation_result
+
         total_episodes = self._get_total_episode_count()
         result.meta_trigger = self.meta_trigger.evaluate(
             episode_count=total_episodes,
             outer_loop_count=self.state.outer_loop_count + 1,
             stagnation_detected=(
                 result.growth_regulation.signal == GrowthSignal.STAGNATION
+                or violation_result.detected  # Also trigger on assumption violation
             ),
         )
 
@@ -481,6 +495,7 @@ class OuterLoop:
                 "skills_degraded": result.action_result.skills_degraded if result.action_result else 0,
                 "knowledge_degraded": result.action_result.knowledge_nodes_degraded if result.action_result else 0,
                 "meta_trigger": result.meta_trigger.trigger_type.value,
+                "assumption_violation": result.violation_result.violation_type.value if result.violation_result else "none",
                 "adaptive_N": result.adaptive_N,
             }
             write_jsonl(self.audit_log_path, entry)

@@ -507,11 +507,14 @@ class TestMetaLoopHITLIntegration:
         )
         result = meta.run(trigger_type="emergency_inspection")
 
-        # Emergency inspection proposes CIB threshold update → HIGH severity
+        # Emergency inspection proposes:
+        #   - CIB threshold update → HIGH severity
+        #   - K-Scenario for assumption violation → LOW severity
         for proposal in result.proposals_created:
             request = meta.hitl_gate.get_request(proposal.proposal_id)
             assert request is not None
-            assert request.severity == HITLSeverity.HIGH  # CIB threshold = HIGH
+            # CIB threshold = HIGH, K-Scenario = LOW
+            assert request.severity in (HITLSeverity.HIGH, HITLSeverity.LOW)
 
     def test_stagnation_response_severity(self, tmp_path):
         """Verify stagnation response assigns correct severity."""

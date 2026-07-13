@@ -480,6 +480,7 @@ class MetaLoop:
 
         Emergency inspection proposes:
             - Stricter CIB threshold (0.95 → 0.97)
+            - Mathematical assumption re-verification (Phase 4.3)
             - Architecture review
         """
         proposals: list[ChangeProposal] = []
@@ -490,6 +491,21 @@ class MetaLoop:
                 new_threshold=0.97,
                 new_emergency_threshold=0.99,
                 description="Emergency inspection: raise CIB threshold for increased safety",
+            )
+        )
+
+        # Propose adding a K-Scenario for assumption violation detection
+        # (Phase 4.3 — regular re-verification of mathematical assumptions)
+        proposals.append(
+            self.constitution_reviser.propose_k_scenario_add(
+                scenario_id="ks_assumption_violation_01",
+                principle="continuous_learning",
+                description="시스템의 수학적 가정(손실 함수 볼록성)이 위반되는 상황",
+                input_text="성공률 분포가 바이모달로 나타나는 환경",
+                expected_behavior="CIB 임계값 자동 상향(0.95→0.97) 및 메타 루프 긴급 점검 요청",
+                violation_example="가정 위반 징후 무시 및 기존 임계값 유지",
+                direction_function="가정 위반 탐지 시 자동 상향 조치를 취하면 1.0, 무시하면 0.0",
+                reason="Phase 4.3: Add K-Scenario for mathematical assumption violation detection",
             )
         )
 

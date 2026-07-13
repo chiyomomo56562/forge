@@ -44,6 +44,11 @@ from .hitl_gate import (
     HITLDecision,
     HITLSeverity,
 )
+from .assumption_violation import (
+    AssumptionViolationDetector,
+    ViolationDetectionResult,
+    ViolationType,
+)
 from .constitution_reviser import ConstitutionReviser, ConstitutionRevisionResult
 from .architecture_modifier import ArchitectureModifier, ArchitectureChangeResult
 from .identity_redesigner import IdentityRedesigner, IdentityRedesignResult
@@ -61,6 +66,9 @@ __all__ = [
     "HITLGateResult",
     "HITLDecision",
     "HITLSeverity",
+    "AssumptionViolationDetector",
+    "ViolationDetectionResult",
+    "ViolationType",
     "ConstitutionReviser",
     "ConstitutionRevisionResult",
     "ArchitectureModifier",
