@@ -37,6 +37,13 @@ from .change_proposal import (
     ProposalQueue,
     ProposalResult,
 )
+from .hitl_gate import (
+    HITLGate,
+    ApprovalRequest,
+    HITLGateResult,
+    HITLDecision,
+    HITLSeverity,
+)
 from .constitution_reviser import ConstitutionReviser, ConstitutionRevisionResult
 from .architecture_modifier import ArchitectureModifier, ArchitectureChangeResult
 from .identity_redesigner import IdentityRedesigner, IdentityRedesignResult
@@ -49,6 +56,11 @@ __all__ = [
     "ProposalStatus",
     "ProposalQueue",
     "ProposalResult",
+    "HITLGate",
+    "ApprovalRequest",
+    "HITLGateResult",
+    "HITLDecision",
+    "HITLSeverity",
     "ConstitutionReviser",
     "ConstitutionRevisionResult",
     "ArchitectureModifier",

@@ -37,6 +37,8 @@ from typing import Any
 
 from ..memory.manager import MemoryManager
 from ..memory.constitution.guard import CIBGuard
+from ..memory.constitution.loader import ConstitutionLoader
+from ..memory.schemas import ConstitutionLayer
 from ..memory.identity.updater import IdentityUpdater
 from ..utils.logging import get_logger
 from ..utils.serialization import write_jsonl
@@ -49,6 +51,7 @@ from .change_proposal import (
     ProposalType,
     ProposalResult,
 )
+from .hitl_gate import HITLGate, ApprovalRequest, HITLDecision, HITLSeverity
 from .constitution_reviser import ConstitutionReviser
 from .architecture_modifier import ArchitectureModifier
 from .identity_redesigner import IdentityRedesigner
@@ -143,6 +146,9 @@ class MetaLoop:
         state_path: str = "data/memory/audit/meta_loop_state.json",
         log_path: str = "data/memory/audit/meta_loop_log.jsonl",
         proposal_log_path: str = "data/memory/audit/meta_proposals.jsonl",
+        hitl_audit_path: str = "data/memory/audit/hitl_audit.jsonl",
+        hitl_expiry_hours: float = 72.0,
+        hitl_notification_callback: Any | None = None,
     ):
         self.memory_manager = memory_manager
         self.state_path = Path(state_path)
@@ -156,6 +162,15 @@ class MetaLoop:
 
         # Initialize CIB guard
         self.cib_guard = CIBGuard()
+
+        # Initialize HITL gate (Phase 4.2 — centralized approval)
+        self.hitl_gate = HITLGate(
+            proposal_queue=self.proposal_queue,
+            cib_guard=self.cib_guard,
+            audit_log_path=hitl_audit_path,
+            default_expiry_hours=hitl_expiry_hours,
+            notification_callback=hitl_notification_callback,
+        )
 
         # Initialize constitution directory
         constitution_dir = "constitution"
@@ -232,6 +247,11 @@ class MetaLoop:
             logger.warning(f"Unknown trigger type: {trigger_type}")
 
         result.proposals_created = proposals
+
+        # Create HITL approval requests for all proposals (Phase 4.2)
+        for proposal in proposals:
+            self._create_hitl_request(proposal)
+
         result.pending_count = len(self.proposal_queue.list_pending())
 
         # Update state
@@ -260,10 +280,15 @@ class MetaLoop:
     def execute_approved(self) -> list[ProposalResult]:
         """Execute all proposals that have been approved by a human.
 
+        Delegates to the HITL gate which checks expiry before executing.
+
         Returns:
             List of :class:`ProposalResult` for each executed proposal.
         """
-        results = self.proposal_queue.execute_approved()
+        # Check for expired requests first
+        self.hitl_gate.check_expiry()
+
+        results = self.hitl_gate.execute_approved()
         executed_count = sum(1 for r in results if r.success)
         self.state.total_proposals_executed += executed_count
         self.state.total_proposals_approved += len(results)
@@ -278,7 +303,7 @@ class MetaLoop:
         reviewer: str = "human",
         reason: str = "",
     ) -> ChangeProposal | None:
-        """Approve a pending proposal (HITL gate).
+        """Approve a pending proposal through the HITL gate.
 
         Args:
             proposal_id: The proposal to approve.
@@ -288,7 +313,10 @@ class MetaLoop:
         Returns:
             The updated proposal, or None if not found.
         """
-        return self.proposal_queue.approve(proposal_id, reviewer, reason)
+        gate_result = self.hitl_gate.approve(proposal_id, reviewer, reason)
+        if gate_result.allowed:
+            return self.proposal_queue.get(proposal_id)
+        return None
 
     def reject_proposal(
         self,
@@ -296,7 +324,7 @@ class MetaLoop:
         reviewer: str = "human",
         reason: str = "",
     ) -> ChangeProposal | None:
-        """Reject a pending proposal (HITL gate).
+        """Reject a pending proposal through the HITL gate.
 
         Args:
             proposal_id: The proposal to reject.
@@ -306,7 +334,119 @@ class MetaLoop:
         Returns:
             The updated proposal, or None if not found.
         """
-        return self.proposal_queue.reject(proposal_id, reviewer, reason)
+        gate_result = self.hitl_gate.reject(proposal_id, reviewer, reason)
+        if gate_result.decision == HITLDecision.REJECTED:
+            return self.proposal_queue.get(proposal_id)
+        return None
+
+    def approve_batch(
+        self,
+        proposal_ids: list[str],
+        reviewer: str = "human",
+        reason: str = "",
+    ) -> list:
+        """Approve multiple proposals through the HITL gate.
+
+        Args:
+            proposal_ids: List of proposal IDs to approve.
+            reviewer: Who is approving.
+            reason: Reason for batch approval.
+
+        Returns:
+            List of :class:`HITLGateResult` for each proposal.
+        """
+        return self.hitl_gate.approve_batch(proposal_ids, reviewer, reason)
+
+    def check_hitl_expiry(self) -> list[str]:
+        """Check all pending HITL requests for expiry.
+
+        Returns:
+            List of proposal IDs that were expired.
+        """
+        return self.hitl_gate.check_expiry()
+
+    def list_pending_hitl_requests(self) -> list:
+        """Return all pending HITL approval requests.
+
+        Returns:
+            List of :class:`ApprovalRequest` awaiting human review.
+        """
+        return self.hitl_gate.list_pending_requests()
+
+    # ------------------------------------------------------------------
+    # HITL request creation
+    # ------------------------------------------------------------------
+
+    def _create_hitl_request(self, proposal: ChangeProposal) -> ApprovalRequest:
+        """Create a HITL approval request for a proposal.
+
+        Determines the constitution layer and severity based on the
+        proposal type and changes.
+
+        Args:
+            proposal: The :class:`ChangeProposal` to create a request for.
+
+        Returns:
+            :class:`ApprovalRequest` with decision PENDING.
+        """
+        # Determine constitution layer and severity from proposal type
+        if proposal.type == ProposalType.CONSTITUTION_REVISION:
+            changes = proposal.changes
+            action = changes.get("action", "")
+
+            if action == "update_cib_threshold":
+                layer = ConstitutionLayer.ABSOLUTE
+                severity = HITLSeverity.HIGH
+            elif action == "add_principle":
+                layer_str = changes.get("layer", "strategy")
+                layer = ConstitutionLayer(layer_str)
+                severity = HITLSeverity.MEDIUM
+            elif action == "update_principle":
+                layer_str = changes.get("layer", "principle")
+                layer = ConstitutionLayer(layer_str)
+                severity = HITLSeverity.MEDIUM
+            elif action == "add_k_scenario":
+                layer = ConstitutionLayer.PRINCIPLE
+                severity = HITLSeverity.LOW
+            else:
+                layer = ConstitutionLayer.PRINCIPLE
+                severity = HITLSeverity.MEDIUM
+        elif proposal.type == ProposalType.IDENTITY_REDESIGN:
+            layer = ConstitutionLayer.ABSOLUTE
+            severity = HITLSeverity.CRITICAL
+        elif proposal.type == ProposalType.ARCHITECTURE_MODIFICATION:
+            layer = ConstitutionLayer.STRATEGY
+            severity = HITLSeverity.MEDIUM
+        else:
+            layer = ConstitutionLayer.PRINCIPLE
+            severity = HITLSeverity.MEDIUM
+
+        return self.hitl_gate.request_approval(
+            proposal=proposal,
+            constitution_layer=layer,
+            severity=severity,
+            impact_summary=proposal.description,
+            rollback_plan=self._generate_rollback_plan(proposal),
+        )
+
+    @staticmethod
+    def _generate_rollback_plan(proposal: ChangeProposal) -> str:
+        """Generate a human-readable rollback plan for a proposal.
+
+        Args:
+            proposal: The :class:`ChangeProposal`.
+
+        Returns:
+            String describing how to undo the change.
+        """
+        if proposal.type == ProposalType.CONSTITUTION_REVISION:
+            return "Revert the modified YAML file to the previous version."
+        elif proposal.type == ProposalType.ARCHITECTURE_MODIFICATION:
+            return "Archive or remove the added skill category / revert parameter."
+        elif proposal.type == ProposalType.IDENTITY_REDESIGN:
+            return "Restore the previous identity.yml from version history."
+        else:
+            return "Revert the change manually."
 
     # ------------------------------------------------------------------
     # Proposal generation by trigger type
