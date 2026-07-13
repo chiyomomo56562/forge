@@ -123,6 +123,47 @@ class EpisodicStore:
         self._ensure_initialized()
         return self._collection.count()
 
+    def list_recent(self, n: int = 50) -> list[dict[str, Any]]:
+        """Return the most recent *n* episodes sorted by timestamp descending.
+
+        Used by the outer loop to aggregate metrics over a recent window.
+
+        Args:
+            n: Maximum number of episodes to return.
+
+        Returns:
+            List of episode dicts (``id``, ``document``, ``metadata``),
+            sorted by timestamp descending (newest first).
+        """
+        self._ensure_initialized()
+
+        # Chroma's get() without ids returns all items (up to limit)
+        try:
+            result = self._collection.get(limit=n)
+        except TypeError:
+            # Fallback for in-memory collection without limit support
+            result = self._collection.get(ids=[])
+
+        if not result.get("ids"):
+            return []
+
+        items: list[dict[str, Any]] = []
+        metadatas = result.get("metadatas", [])
+        documents = result.get("documents", [])
+        for i, eid in enumerate(result["ids"]):
+            items.append({
+                "id": eid,
+                "document": documents[i] if documents else "",
+                "metadata": metadatas[i] if metadatas else {},
+            })
+
+        # Sort by timestamp descending (newest first)
+        items.sort(
+            key=lambda x: x["metadata"].get("timestamp", ""),
+            reverse=True,
+        )
+        return items[:n]
+
     def query(
         self,
         query_embedding: list[float],
@@ -184,6 +225,14 @@ class EpisodicStore:
             meta["success_score"] = episode.evaluation.success_score
         if episode.evaluation.pain_index is not None:
             meta["pain_index"] = episode.evaluation.pain_index
+        if episode.evaluation.cib_score is not None:
+            meta["cib_score"] = episode.evaluation.cib_score
+        if episode.evaluation.phoenix_score is not None:
+            meta["phoenix_score"] = episode.evaluation.phoenix_score
+        if episode.evaluation.domain_score is not None:
+            meta["domain_score"] = episode.evaluation.domain_score
+        if episode.evaluation.reflection_score is not None:
+            meta["reflection_score"] = episode.evaluation.reflection_score
         return meta
 
     @staticmethod
@@ -236,13 +285,23 @@ class _InMemoryCollection:
                 "metadata": metadatas[i] if metadatas else {},
             }
 
-    def get(self, ids: list[str]) -> dict[str, Any]:
+    def get(self, ids: list[str], limit: int | None = None) -> dict[str, Any]:
         result_ids, result_docs, result_metas = [], [], []
         for eid in ids:
             if eid in self._data:
                 result_ids.append(eid)
                 result_docs.append(self._data[eid]["document"])
                 result_metas.append(self._data[eid]["metadata"])
+        # If ids is empty, return all items (up to limit)
+        if not ids:
+            for eid, item in self._data.items():
+                result_ids.append(eid)
+                result_docs.append(item["document"])
+                result_metas.append(item["metadata"])
+        if limit is not None:
+            result_ids = result_ids[:limit]
+            result_docs = result_docs[:limit]
+            result_metas = result_metas[:limit]
         return {"ids": result_ids, "documents": result_docs, "metadatas": result_metas}
 
     def delete(self, ids: list[str]) -> None:
