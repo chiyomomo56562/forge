@@ -29,6 +29,7 @@ from .cache_refresher import CacheRefresher
 from .self_model_recalculator import SelfModelRecalculator, RecalculationResult
 from .auditor import IndependentAuditor, AuditResult
 from .growth_regulator import GrowthRateRegulator, GrowthSignal, GrowthRegulationResult
+from .growth_actions import GrowthActionExecutor, ActionResult
 from .meta_trigger import MetaTrigger, TriggerResult, TriggerType
 
 __all__ = [
@@ -47,6 +48,8 @@ __all__ = [
     "GrowthRateRegulator",
     "GrowthSignal",
     "GrowthRegulationResult",
+    "GrowthActionExecutor",
+    "ActionResult",
     "MetaTrigger",
     "TriggerResult",
     "TriggerType",

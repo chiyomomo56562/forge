@@ -45,6 +45,7 @@ from .cache_refresher import CacheRefresher, CacheRefreshResult
 from .self_model_recalculator import SelfModelRecalculator, RecalculationResult
 from .auditor import IndependentAuditor, AuditResult
 from .growth_regulator import GrowthRateRegulator, GrowthRegulationResult, GrowthSignal
+from .growth_actions import GrowthActionExecutor, ActionResult
 from .meta_trigger import MetaTrigger, TriggerResult, TriggerType
 
 logger = get_logger("agent.outer_loop")
@@ -66,6 +67,7 @@ class OuterLoopState:
         risk_level: Current risk level ('low' | 'medium' | 'high' | 'critical').
         last_coherence_index: Coherence index from the last run.
         last_success_rate: Success rate from the last run.
+        learning_suspended: Whether learning is currently suspended (M16 crash).
     """
     outer_loop_count: int = 0
     total_episodes_seen: int = 0
@@ -74,6 +76,7 @@ class OuterLoopState:
     risk_level: str = "medium"
     last_coherence_index: float | None = None
     last_success_rate: float | None = None
+    learning_suspended: bool = False
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -84,6 +87,7 @@ class OuterLoopState:
             "risk_level": self.risk_level,
             "last_coherence_index": self.last_coherence_index,
             "last_success_rate": self.last_success_rate,
+            "learning_suspended": self.learning_suspended,
         }
 
     @classmethod
@@ -96,6 +100,7 @@ class OuterLoopState:
             risk_level=d.get("risk_level", "medium"),
             last_coherence_index=d.get("last_coherence_index"),
             last_success_rate=d.get("last_success_rate"),
+            learning_suspended=d.get("learning_suspended", False),
         )
 
 
@@ -125,6 +130,7 @@ class OuterLoopResult:
     recalculation: RecalculationResult = field(default_factory=RecalculationResult)
     audit: AuditResult = field(default_factory=AuditResult)
     growth_regulation: GrowthRegulationResult = field(default_factory=GrowthRegulationResult)
+    action_result: Any | None = None  # ActionResult from growth_actions.py
     meta_trigger: TriggerResult = field(default_factory=TriggerResult)
     state: OuterLoopState = field(default_factory=OuterLoopState)
     adaptive_N: int = 50
@@ -217,6 +223,25 @@ class OuterLoop:
         gr_config = growth_regulator_config or {}
         self.growth_regulator = GrowthRateRegulator(**gr_config)
 
+        # Growth action executor (Phase 3.2)
+        constitution = None
+        skill_store = None
+        graph_store = None
+        if memory_manager is not None:
+            skill_store = getattr(memory_manager, "skill_store", None)
+            graph_store = getattr(memory_manager, "graph_store", None)
+            try:
+                constitution = memory_manager.constitution
+            except Exception:
+                pass
+
+        self.growth_action_executor = GrowthActionExecutor(
+            cib_guard=CIBGuard(),
+            skill_store=skill_store,
+            graph_store=graph_store,
+            constitution=constitution,
+        )
+
         mt_config = meta_trigger_config or {}
         self.meta_trigger = MetaTrigger(**mt_config)
 
@@ -283,7 +308,7 @@ class OuterLoop:
             aggregation_result=result.aggregation,
         )
 
-        # Step 6: Growth Rate Regulation (M16)
+        # Step 6: Growth Rate Regulation (M16) + Action Execution
         logger.info("Step 6: Growth Rate Regulation")
         coherence = result.recalculation.coherence_index or result.metrics.coherence_index
         result.growth_regulation = self.growth_regulator.regulate(
@@ -291,6 +316,26 @@ class OuterLoop:
             coherence_index=coherence,
             timestamp=timestamp,
         )
+
+        # Execute growth regulator actions (Phase 3.2)
+        if result.growth_regulation.signal != GrowthSignal.NORMAL:
+            logger.info(
+                f"Step 6 (Action): Executing {result.growth_regulation.signal.value} action"
+            )
+            # Collect episode texts for CIB forced evaluation
+            episode_texts = self._collect_episode_texts(result.aggregation)
+            result.action_result = self.growth_action_executor.execute(
+                regulation_result=result.growth_regulation,
+                aggregation_result=result.aggregation,
+                episode_texts=episode_texts,
+            )
+
+            # Update learning suspension flag
+            if result.action_result is not None:
+                self.state.learning_suspended = result.action_result.learning_suspended
+        else:
+            # Reset learning suspension if signal is normal
+            self.state.learning_suspended = False
 
         # Step 7: Meta Loop Trigger
         logger.info("Step 7: Meta Loop Trigger")
@@ -421,6 +466,10 @@ class OuterLoop:
                 "audit_deviation": result.audit.deviation,
                 "audit_flagged": result.audit.flagged,
                 "growth_signal": result.growth_regulation.signal.value,
+                "action_taken": result.action_result.action_taken if result.action_result else "none",
+                "learning_suspended": self.state.learning_suspended,
+                "skills_degraded": result.action_result.skills_degraded if result.action_result else 0,
+                "knowledge_degraded": result.action_result.knowledge_nodes_degraded if result.action_result else 0,
                 "meta_trigger": result.meta_trigger.trigger_type.value,
                 "adaptive_N": result.adaptive_N,
             }
@@ -441,6 +490,31 @@ class OuterLoop:
         except Exception as e:
             logger.warning(f"Failed to get episode count: {e}")
             return self.state.total_episodes_seen
+
+    def _collect_episode_texts(self, aggregation_result: Any) -> list[str]:
+        """Collect episode result texts for CIB forced evaluation.
+
+        Retrieves the document text of recent episodes from L1 for CIB
+        re-validation during growth regulator actions.
+
+        Args:
+            aggregation_result: :class:`AggregationResult` with episode IDs.
+
+        Returns:
+            List of episode text strings. Empty if no memory manager.
+        """
+        if self.memory_manager is None or not aggregation_result.episode_ids:
+            return []
+
+        texts: list[str] = []
+        for ep_id in aggregation_result.episode_ids:
+            try:
+                ep_data = self.memory_manager.episodic_store.get(ep_id)
+                if ep_data is not None:
+                    texts.append(ep_data.get("document", ""))
+            except Exception as e:
+                logger.debug(f"Failed to get episode {ep_id}: {e}")
+        return texts
 
 
 # ---------------------------------------------------------------------------
