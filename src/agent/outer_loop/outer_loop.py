@@ -47,6 +47,7 @@ from .auditor import IndependentAuditor, AuditResult
 from .growth_regulator import GrowthRateRegulator, GrowthRegulationResult, GrowthSignal
 from .growth_actions import GrowthActionExecutor, ActionResult
 from .coherence_index import CoherenceIndexTracker, CoherenceTrend
+from .adaptive_n import AdaptiveNCalculator, AdaptiveNResult, RISK_N_MAP
 from .meta_trigger import MetaTrigger, TriggerResult, TriggerType
 
 logger = get_logger("agent.outer_loop")
@@ -142,15 +143,6 @@ class OuterLoopResult:
 # ---------------------------------------------------------------------------
 # Outer Loop Orchestrator
 # ---------------------------------------------------------------------------
-
-# Risk level → base N mapping
-_RISK_N_MAP = {
-    "low": 100,
-    "medium": 50,
-    "high": 20,
-    "critical": 10,
-}
-
 
 class OuterLoop:
     """Outer Loop orchestrator — runs the 7-step health check process.
@@ -271,6 +263,20 @@ class OuterLoop:
             "high_volatility_threshold": 0.15,
             "low_volatility_threshold": 0.03,
         }
+
+        # Adaptive N calculator (Phase 3.4)
+        adaptive_n_log_path = str(
+            Path(audit_log_path).parent / "adaptive_N_log.jsonl"
+        ) if audit_log_path else "data/memory/audit/adaptive_N_log.jsonl"
+
+        self.adaptive_n_calculator = AdaptiveNCalculator(
+            log_path=adaptive_n_log_path,
+            high_volatility_threshold=self.adaptive_N_config.get("high_volatility_threshold", 0.15),
+            low_volatility_threshold=self.adaptive_N_config.get("low_volatility_threshold", 0.03),
+            min_multiplier=self.adaptive_N_config.get("min_multiplier", 0.5),
+            max_multiplier=self.adaptive_N_config.get("max_multiplier", 2.0),
+            enabled=self.adaptive_N_config.get("enabled", True),
+        )
 
     # ------------------------------------------------------------------
     # Main entry point
@@ -408,44 +414,18 @@ class OuterLoop:
     def _compute_adaptive_n(self, result: OuterLoopResult) -> int:
         """Compute adaptive N for the next outer loop cycle.
 
-        Based on CIB and Phoenix score volatility:
-            - High volatility (> 0.15): N = max(base_N // 2, 10)
-            - Low volatility (< 0.03):  N = min(base_N * 2, 200)
-            - Normal: N = base_N
+        Delegates to :class:`AdaptiveNCalculator` which handles volatility
+        computation, safety constraints, and change logging.
         """
-        config = self.adaptive_N_config
-        if not config.get("enabled", True):
-            return self.state.base_N
-
-        cib_scores = result.aggregation.cib_scores
-        phoenix_scores = result.aggregation.phoenix_scores
-
-        cib_volatility = _std_dev(cib_scores[-20:]) if cib_scores else 0.0
-        phoenix_volatility = _std_dev(phoenix_scores[-20:]) if phoenix_scores else 0.0
-
-        combined = 0.6 * cib_volatility + 0.4 * phoenix_volatility
-
-        high_threshold = config.get("high_volatility_threshold", 0.15)
-        low_threshold = config.get("low_volatility_threshold", 0.03)
-        min_mult = config.get("min_multiplier", 0.5)
-        max_mult = config.get("max_multiplier", 2.0)
-
-        base_N = self.state.base_N
-
-        if combined > high_threshold:
-            new_N = max(int(base_N * min_mult), 10)
-        elif combined < low_threshold:
-            new_N = min(int(base_N * max_mult), 200)
-        else:
-            new_N = base_N
-
-        if new_N != self.state.current_N:
-            logger.info(
-                f"Adaptive N updated: {self.state.current_N} → {new_N} "
-                f"(volatility={combined:.4f})"
-            )
-
-        return new_N
+        n_result = self.adaptive_n_calculator.compute(
+            base_N=self.state.base_N,
+            current_N=self.state.current_N,
+            cib_scores=result.aggregation.cib_scores,
+            phoenix_scores=result.aggregation.phoenix_scores,
+            risk_level=self.state.risk_level,
+            outer_loop_count=self.state.outer_loop_count,
+        )
+        return n_result.new_N
 
     # ------------------------------------------------------------------
     # State persistence
@@ -462,7 +442,7 @@ class OuterLoop:
             except Exception as e:
                 logger.warning(f"Failed to load state, initializing fresh: {e}")
 
-        base_N = _RISK_N_MAP.get(risk_level, 50)
+        base_N = RISK_N_MAP.get(risk_level, 50)
         return OuterLoopState(
             current_N=base_N,
             base_N=base_N,

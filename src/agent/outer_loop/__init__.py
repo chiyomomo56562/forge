@@ -31,6 +31,7 @@ from .auditor import IndependentAuditor, AuditResult
 from .growth_regulator import GrowthRateRegulator, GrowthSignal, GrowthRegulationResult
 from .growth_actions import GrowthActionExecutor, ActionResult
 from .coherence_index import CoherenceIndexTracker, CoherenceRecord, CoherenceTrend, TrendAnalysis
+from .adaptive_n import AdaptiveNCalculator, AdaptiveNResult, RISK_N_MAP
 from .meta_trigger import MetaTrigger, TriggerResult, TriggerType
 
 __all__ = [
@@ -55,6 +56,9 @@ __all__ = [
     "CoherenceRecord",
     "CoherenceTrend",
     "TrendAnalysis",
+    "AdaptiveNCalculator",
+    "AdaptiveNResult",
+    "RISK_N_MAP",
     "MetaTrigger",
     "TriggerResult",
     "TriggerType",
