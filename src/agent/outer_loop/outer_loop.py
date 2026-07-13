@@ -46,6 +46,7 @@ from .self_model_recalculator import SelfModelRecalculator, RecalculationResult
 from .auditor import IndependentAuditor, AuditResult
 from .growth_regulator import GrowthRateRegulator, GrowthRegulationResult, GrowthSignal
 from .growth_actions import GrowthActionExecutor, ActionResult
+from .coherence_index import CoherenceIndexTracker, CoherenceTrend
 from .meta_trigger import MetaTrigger, TriggerResult, TriggerType
 
 logger = get_logger("agent.outer_loop")
@@ -131,6 +132,7 @@ class OuterLoopResult:
     audit: AuditResult = field(default_factory=AuditResult)
     growth_regulation: GrowthRegulationResult = field(default_factory=GrowthRegulationResult)
     action_result: Any | None = None  # ActionResult from growth_actions.py
+    coherence_record: Any | None = None  # CoherenceRecord from coherence_index.py
     meta_trigger: TriggerResult = field(default_factory=TriggerResult)
     state: OuterLoopState = field(default_factory=OuterLoopState)
     adaptive_N: int = 50
@@ -221,7 +223,24 @@ class OuterLoop:
         )
 
         gr_config = growth_regulator_config or {}
-        self.growth_regulator = GrowthRateRegulator(**gr_config)
+
+        # Coherence index tracker (M17 — Phase 3.3)
+        coherence_history_path = str(
+            Path(audit_log_path).parent / "coherence_history.jsonl"
+        ) if audit_log_path else "data/memory/audit/coherence_history.jsonl"
+
+        self.coherence_tracker = CoherenceIndexTracker(
+            history_path=coherence_history_path,
+            stagnation_window=gr_config.get("stagnation_window", window_size),
+            stagnation_delta=gr_config.get("stagnation_coherence_delta", 0.01),
+            overgrowth_days=gr_config.get("overgrowth_days", 7),
+            overgrowth_coherence_rise=gr_config.get("overgrowth_coherence_rise", 0.2),
+        )
+
+        self.growth_regulator = GrowthRateRegulator(
+            **gr_config,
+            coherence_tracker=self.coherence_tracker,
+        )
 
         # Growth action executor (Phase 3.2)
         constitution = None
@@ -302,6 +321,17 @@ class OuterLoop:
             avg_cib_score=result.metrics.avg_cib_score,
         )
 
+        # Record coherence index to tracker (M17 — Phase 3.3)
+        coherence = result.recalculation.coherence_index or result.metrics.coherence_index
+        if coherence is not None:
+            result.coherence_record = self.coherence_tracker.record(
+                coherence_index=coherence,
+                avg_cib_score=result.metrics.avg_cib_score,
+                calibration_error=result.recalculation.calibration_error,
+                outer_loop_count=self.state.outer_loop_count + 1,
+                timestamp=timestamp,
+            )
+
         # Step 5: Independent Audit (M15 deviation)
         logger.info("Step 5: Independent Audit")
         result.audit = self.auditor.audit(
@@ -310,7 +340,6 @@ class OuterLoop:
 
         # Step 6: Growth Rate Regulation (M16) + Action Execution
         logger.info("Step 6: Growth Rate Regulation")
-        coherence = result.recalculation.coherence_index or result.metrics.coherence_index
         result.growth_regulation = self.growth_regulator.regulate(
             aggregation_result=result.aggregation,
             coherence_index=coherence,
@@ -463,6 +492,7 @@ class OuterLoop:
                 "avg_cib": result.metrics.avg_cib_score,
                 "coherence_index": result.recalculation.coherence_index,
                 "calibration_error": result.recalculation.calibration_error,
+                "coherence_trend": self._get_coherence_trend(),
                 "audit_deviation": result.audit.deviation,
                 "audit_flagged": result.audit.flagged,
                 "growth_signal": result.growth_regulation.signal.value,
@@ -515,6 +545,18 @@ class OuterLoop:
             except Exception as e:
                 logger.debug(f"Failed to get episode {ep_id}: {e}")
         return texts
+
+    def _get_coherence_trend(self) -> str:
+        """Get the current coherence trend for audit logging.
+
+        Returns:
+            Trend string ('rising' | 'falling' | 'stable' | 'unknown').
+        """
+        try:
+            trend = self.coherence_tracker.analyse_trend()
+            return trend.trend.value
+        except Exception:
+            return "unknown"
 
 
 # ---------------------------------------------------------------------------

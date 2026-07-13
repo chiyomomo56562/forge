@@ -30,6 +30,7 @@ from .self_model_recalculator import SelfModelRecalculator, RecalculationResult
 from .auditor import IndependentAuditor, AuditResult
 from .growth_regulator import GrowthRateRegulator, GrowthSignal, GrowthRegulationResult
 from .growth_actions import GrowthActionExecutor, ActionResult
+from .coherence_index import CoherenceIndexTracker, CoherenceRecord, CoherenceTrend, TrendAnalysis
 from .meta_trigger import MetaTrigger, TriggerResult, TriggerType
 
 __all__ = [
@@ -50,6 +51,10 @@ __all__ = [
     "GrowthRegulationResult",
     "GrowthActionExecutor",
     "ActionResult",
+    "CoherenceIndexTracker",
+    "CoherenceRecord",
+    "CoherenceTrend",
+    "TrendAnalysis",
     "MetaTrigger",
     "TriggerResult",
     "TriggerType",

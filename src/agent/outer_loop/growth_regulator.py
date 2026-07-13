@@ -76,6 +76,9 @@ class GrowthRateRegulator:
         stagnation_coherence_delta: Coherence change threshold (default 0.01).
         overgrowth_days: Days window for overgrowth detection (default 7).
         overgrowth_coherence_rise: Coherence rise threshold (default 0.2).
+        coherence_tracker: Optional :class:`CoherenceIndexTracker` for
+            persistent, time-windowed coherence analysis. If provided,
+            replaces the ad-hoc in-memory history.
     """
 
     def __init__(
@@ -86,6 +89,7 @@ class GrowthRateRegulator:
         stagnation_coherence_delta: float = 0.01,
         overgrowth_days: int = 7,
         overgrowth_coherence_rise: float = 0.2,
+        coherence_tracker: Any | None = None,
     ):
         self.crash_window = crash_window
         self.crash_delta_threshold = crash_delta_threshold
@@ -93,8 +97,9 @@ class GrowthRateRegulator:
         self.stagnation_coherence_delta = stagnation_coherence_delta
         self.overgrowth_days = overgrowth_days
         self.overgrowth_coherence_rise = overgrowth_coherence_rise
+        self.coherence_tracker = coherence_tracker
 
-        # History tracking for coherence index over time
+        # Fallback in-memory history (used when no tracker is provided)
         self._coherence_history: list[tuple[str, float]] = []  # (timestamp, coherence)
         self._success_rate_history: list[float] = []
 
@@ -114,10 +119,12 @@ class GrowthRateRegulator:
         Returns:
             :class:`GrowthRegulationResult` with detected signal and action.
         """
-        # Track coherence history
-        if coherence_index is not None and timestamp:
+        # Track coherence history (use tracker if available, else fallback)
+        if self.coherence_tracker is not None and coherence_index is not None:
+            # Tracker handles its own persistence and history
+            pass  # Recording is done by the outer loop via tracker.record()
+        elif coherence_index is not None and timestamp:
             self._coherence_history.append((timestamp, coherence_index))
-            # Keep only recent history (overgrowth_days * 2 as buffer)
             self._coherence_history = self._coherence_history[-200:]
 
         # Track success rate history
@@ -195,19 +202,36 @@ class GrowthRateRegulator:
     ) -> GrowthRegulationResult:
         """Check for overgrowth signal (coherence rises >= 0.2 in 7 days).
 
-        Compares the current coherence index against the value from
-        ``overgrowth_days`` ago.
+        Uses the :class:`CoherenceIndexTracker` for proper time-windowed
+        comparison if available; falls back to in-memory history otherwise.
         """
+        # Use coherence tracker if available (proper 7-day window)
+        if self.coherence_tracker is not None:
+            result = self.coherence_tracker.detect_overgrowth(
+                current_coherence=coherence_index,
+            )
+            if result["detected"]:
+                details = result["details"]
+                logger.warning(
+                    f"OVERGROWTH detected: coherence rose by {result['rise']:.4f} "
+                    f"({details.get('earliest_coherence', '?')} → "
+                    f"{details.get('current_coherence', '?')}) within {self.overgrowth_days} days"
+                )
+                return GrowthRegulationResult(
+                    signal=GrowthSignal.OVERGROWTH,
+                    action="Force CIB gate → suspect overfitting → enhance generalization check",
+                    details=details,
+                    cib_force_required=True,
+                )
+            return GrowthRegulationResult(signal=GrowthSignal.NORMAL)
+
+        # Fallback: in-memory history
         if coherence_index is None or not self._coherence_history:
             return GrowthRegulationResult(signal=GrowthSignal.NORMAL)
 
-        # Find coherence from ~overgrowth_days ago
-        # In practice, we compare against the earliest entry within the window
         if len(self._coherence_history) < 2:
             return GrowthRegulationResult(signal=GrowthSignal.NORMAL)
 
-        # Simple approach: compare current vs earliest in history
-        # (More sophisticated: filter by timestamp within overgrowth_days)
         earliest_coherence = self._coherence_history[0][1]
         rise = coherence_index - earliest_coherence
 
@@ -236,14 +260,37 @@ class GrowthRateRegulator:
     ) -> GrowthRegulationResult:
         """Check for stagnation signal (coherence change < 0.01 for 50+ episodes).
 
-        If the coherence index has barely changed over a long window,
-        the system may be stuck.
+        Uses the :class:`CoherenceIndexTracker` for proper windowed analysis
+        if available; falls back to in-memory history otherwise.
         """
+        # Use coherence tracker if available
+        if self.coherence_tracker is not None:
+            if self.coherence_tracker.detect_stagnation():
+                stats = self.coherence_tracker.compute_stats(
+                    self.coherence_tracker.get_recent(self.stagnation_window)
+                )
+                logger.warning(
+                    f"STAGNATION detected: coherence range {stats.get('range', 0):.4f} "
+                    f"< {self.stagnation_coherence_delta} over {self.stagnation_window} entries"
+                )
+                return GrowthRegulationResult(
+                    signal=GrowthSignal.STAGNATION,
+                    action="Trigger meta-loop stagnation response",
+                    details={
+                        "coherence_range": stats.get("range", 0.0),
+                        "threshold": self.stagnation_coherence_delta,
+                        "window_size": self.stagnation_window,
+                        "mean": stats.get("mean"),
+                        "std": stats.get("std"),
+                    },
+                    meta_trigger_required=True,
+                )
+            return GrowthRegulationResult(signal=GrowthSignal.NORMAL)
+
+        # Fallback: in-memory history
         if coherence_index is None or len(self._coherence_history) < self.stagnation_window:
             return GrowthRegulationResult(signal=GrowthSignal.NORMAL)
 
-        # Check if coherence has changed less than stagnation_coherence_delta
-        # over the recent stagnation_window entries
         recent = self._coherence_history[-self.stagnation_window:]
         coherences = [c for _, c in recent]
         if not coherences:

@@ -6,3 +6,7 @@ None
 None
 2026-07-13 11:58:40 [ERROR] agent.outer_loop.growth_actions:_degrade_low_confidence_knowledge:343: Failed to degrade knowledge nodes: GraphML writer does not support <enum 'HintType'> as data values.
 None
+2026-07-13 12:05:07 [ERROR] agent.outer_loop.growth_actions:_degrade_low_confidence_knowledge:343: Failed to degrade knowledge nodes: GraphML writer does not support <enum 'HintType'> as data values.
+None
+2026-07-13 12:05:07 [ERROR] agent.outer_loop.growth_actions:_degrade_low_confidence_knowledge:343: Failed to degrade knowledge nodes: GraphML writer does not support <enum 'HintType'> as data values.
+None
