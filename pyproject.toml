@@ -52,7 +52,7 @@ postgres = [
 ]
 
 [project.scripts]
-forge = "agent.main:cli"
+forge = "forge.adapters.inbound.cli:cli"
 
 [tool.setuptools.packages.find]
 where = ["src"]
