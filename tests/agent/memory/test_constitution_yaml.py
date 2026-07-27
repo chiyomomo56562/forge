@@ -8,7 +8,8 @@ import pytest
 import yaml
 
 
-PROJECT_ROOT = Path(__file__).parent.parent
+PROJECT_ROOT = Path(__file__).parents[3]
+TEST_ROOT = PROJECT_ROOT
 
 
 # ---------------------------------------------------------------------------
@@ -17,15 +18,15 @@ PROJECT_ROOT = Path(__file__).parent.parent
 
 class TestConstitutionBase:
     def test_loads_without_error(self):
-        data = yaml.safe_load((PROJECT_ROOT / "constitution" / "base.yml").read_text())
+        data = yaml.safe_load((TEST_ROOT / "constitution" / "base.yml").read_text())
         assert data is not None
 
     def test_version(self):
-        data = yaml.safe_load((PROJECT_ROOT / "constitution" / "base.yml").read_text())
+        data = yaml.safe_load((TEST_ROOT / "constitution" / "base.yml").read_text())
         assert data["version"] == 1
 
     def test_three_layers_defined(self):
-        data = yaml.safe_load((PROJECT_ROOT / "constitution" / "base.yml").read_text())
+        data = yaml.safe_load((TEST_ROOT / "constitution" / "base.yml").read_text())
         layers = data["layers"]
         assert "absolute" in layers
         assert "principle" in layers
@@ -36,7 +37,7 @@ class TestConstitutionBase:
             assert "HITL" in layer["update_rule"], f"Layer {layer_name} must require HITL"
 
     def test_principles_defined(self):
-        data = yaml.safe_load((PROJECT_ROOT / "constitution" / "base.yml").read_text())
+        data = yaml.safe_load((TEST_ROOT / "constitution" / "base.yml").read_text())
         principles = data["principles"]
         assert len(principles) >= 3
         ids = {p["id"] for p in principles}
@@ -45,7 +46,7 @@ class TestConstitutionBase:
         assert "memory_minimization" in ids
 
     def test_each_principle_has_layer(self):
-        data = yaml.safe_load((PROJECT_ROOT / "constitution" / "base.yml").read_text())
+        data = yaml.safe_load((TEST_ROOT / "constitution" / "base.yml").read_text())
         for p in data["principles"]:
             assert p["layer"] in ("absolute", "principle", "strategy"), \
                 f"Principle {p['id']} has invalid layer: {p['layer']}"
@@ -53,12 +54,12 @@ class TestConstitutionBase:
             assert 0.0 <= p["weight"] <= 1.0
 
     def test_k_scenarios_defined(self):
-        data = yaml.safe_load((PROJECT_ROOT / "constitution" / "base.yml").read_text())
+        data = yaml.safe_load((TEST_ROOT / "constitution" / "base.yml").read_text())
         scenarios = data["k_scenarios"]
         assert len(scenarios) >= 5, "Need at least 5 K-Scenarios"
 
     def test_each_scenario_has_required_fields(self):
-        data = yaml.safe_load((PROJECT_ROOT / "constitution" / "base.yml").read_text())
+        data = yaml.safe_load((TEST_ROOT / "constitution" / "base.yml").read_text())
         for s in data["k_scenarios"]:
             assert "id" in s, f"Scenario missing id"
             assert "principle" in s, f"Scenario {s.get('id')} missing principle"
@@ -76,18 +77,18 @@ class TestConstitutionBase:
 
 class TestConstitutionSafety:
     def test_loads_without_error(self):
-        data = yaml.safe_load((PROJECT_ROOT / "constitution" / "safety.yml").read_text())
+        data = yaml.safe_load((TEST_ROOT / "constitution" / "safety.yml").read_text())
         assert data is not None
 
     def test_cib_threshold(self):
-        data = yaml.safe_load((PROJECT_ROOT / "constitution" / "safety.yml").read_text())
+        data = yaml.safe_load((TEST_ROOT / "constitution" / "safety.yml").read_text())
         cib = data["cib"]
         assert cib["threshold"] == 0.95
         assert cib["emergency_threshold"] == 0.97
         assert cib["block_on_fail"] is True
 
     def test_prohibited_actions_defined(self):
-        data = yaml.safe_load((PROJECT_ROOT / "constitution" / "safety.yml").read_text())
+        data = yaml.safe_load((TEST_ROOT / "constitution" / "safety.yml").read_text())
         actions = data["prohibited_actions"]
         assert len(actions) >= 3
         ids = {a["id"] for a in actions}
@@ -96,7 +97,7 @@ class TestConstitutionSafety:
         assert "no_unauthorized_external_action" in ids
 
     def test_sensitive_patterns_for_filtering(self):
-        data = yaml.safe_load((PROJECT_ROOT / "constitution" / "safety.yml").read_text())
+        data = yaml.safe_load((TEST_ROOT / "constitution" / "safety.yml").read_text())
         patterns = data["safety_boundaries"]["memory"]["sensitive_patterns"]
         assert len(patterns) >= 3
         # Should include API key patterns
@@ -105,11 +106,11 @@ class TestConstitutionSafety:
 
 class TestConstitutionInteraction:
     def test_loads_without_error(self):
-        data = yaml.safe_load((PROJECT_ROOT / "constitution" / "interaction_policy.yml").read_text())
+        data = yaml.safe_load((TEST_ROOT / "constitution" / "interaction_policy.yml").read_text())
         assert data is not None
 
     def test_confirmation_actions(self):
-        data = yaml.safe_load((PROJECT_ROOT / "constitution" / "interaction_policy.yml").read_text())
+        data = yaml.safe_load((TEST_ROOT / "constitution" / "interaction_policy.yml").read_text())
         actions = data["require_confirmation_for"]
         ids = {a["id"] for a in actions}
         assert "sending_email" in ids
@@ -117,7 +118,7 @@ class TestConstitutionInteraction:
         assert "external_purchase" in ids
 
     def test_delegation_classes(self):
-        data = yaml.safe_load((PROJECT_ROOT / "constitution" / "interaction_policy.yml").read_text())
+        data = yaml.safe_load((TEST_ROOT / "constitution" / "interaction_policy.yml").read_text())
         delegation = data["delegation"]
         assert "autonomous_actions" in delegation
         assert "proposed_actions" in delegation
@@ -126,23 +127,23 @@ class TestConstitutionInteraction:
 
 class TestConstitutionToolPolicy:
     def test_loads_without_error(self):
-        data = yaml.safe_load((PROJECT_ROOT / "constitution" / "tool_policy.yml").read_text())
+        data = yaml.safe_load((TEST_ROOT / "constitution" / "tool_policy.yml").read_text())
         assert data is not None
 
     def test_require_confirmation_matches_interaction(self):
-        data = yaml.safe_load((PROJECT_ROOT / "constitution" / "tool_policy.yml").read_text())
+        data = yaml.safe_load((TEST_ROOT / "constitution" / "tool_policy.yml").read_text())
         assert "sending_email" in data["require_confirmation_for"]
         assert "deleting_files" in data["require_confirmation_for"]
 
     def test_tool_classes_defined(self):
-        data = yaml.safe_load((PROJECT_ROOT / "constitution" / "tool_policy.yml").read_text())
+        data = yaml.safe_load((TEST_ROOT / "constitution" / "tool_policy.yml").read_text())
         classes = data["tool_classes"]
         assert "autonomous" in classes
         assert "confirmation_required" in classes
         assert "forbidden" in classes
 
     def test_forbidden_tools(self):
-        data = yaml.safe_load((PROJECT_ROOT / "constitution" / "tool_policy.yml").read_text())
+        data = yaml.safe_load((TEST_ROOT / "constitution" / "tool_policy.yml").read_text())
         forbidden = data["tool_classes"]["forbidden"]
         ids = {t["id"] for t in forbidden}
         assert "exec_unsandboxed" in ids
@@ -210,15 +211,15 @@ class TestIdentity:
 
 class TestCrossFileConsistency:
     def test_tool_policy_confirmation_matches_interaction(self):
-        tool = yaml.safe_load((PROJECT_ROOT / "constitution" / "tool_policy.yml").read_text())
-        interaction = yaml.safe_load((PROJECT_ROOT / "constitution" / "interaction_policy.yml").read_text())
+        tool = yaml.safe_load((TEST_ROOT / "constitution" / "tool_policy.yml").read_text())
+        interaction = yaml.safe_load((TEST_ROOT / "constitution" / "interaction_policy.yml").read_text())
         tool_confirm = set(tool["require_confirmation_for"])
         interaction_confirm = {a["id"] for a in interaction["require_confirmation_for"]}
         assert tool_confirm == interaction_confirm, \
             f"Mismatch: tool_only={tool_confirm - interaction_confirm}, interaction_only={interaction_confirm - tool_confirm}"
 
     def test_safety_cib_matches_agent_config(self):
-        safety = yaml.safe_load((PROJECT_ROOT / "constitution" / "safety.yml").read_text())
+        safety = yaml.safe_load((TEST_ROOT / "constitution" / "safety.yml").read_text())
         agent = yaml.safe_load((PROJECT_ROOT / "config" / "agent.yml").read_text())
         assert safety["cib"]["threshold"] == agent["cib"]["threshold"]
         assert safety["cib"]["emergency_threshold"] == agent["cib"]["emergency_threshold"]

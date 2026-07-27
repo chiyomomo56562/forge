@@ -21,7 +21,8 @@ from pathlib import Path
 import pytest
 
 
-PROJECT_ROOT = Path(__file__).parent.parent
+PROJECT_ROOT = Path(__file__).parents[3]
+TEST_ROOT = PROJECT_ROOT
 
 
 # ===========================================================================
@@ -256,7 +257,7 @@ class TestCacheRefresher:
             gpickle_path=str(tmp_path / "graph.gpickle"),
             sqlite_path=str(tmp_path / "skills.sqlite3"),
             skills_dir=str(tmp_path / "skills"),
-            constitution_dir=str(PROJECT_ROOT / "constitution"),
+            constitution_dir=str(TEST_ROOT / "constitution"),
             identity_db_path=str(tmp_path / "identity.sqlite3"),
             raw_events_dir=str(tmp_path / "raw_events"),
             encoder=encoder,
@@ -558,7 +559,7 @@ class TestOuterLoop:
             gpickle_path=str(tmp_path / "graph.gpickle"),
             sqlite_path=str(tmp_path / "skills.sqlite3"),
             skills_dir=str(tmp_path / "skills"),
-            constitution_dir=str(PROJECT_ROOT / "constitution"),
+            constitution_dir=str(TEST_ROOT / "constitution"),
             identity_db_path=str(tmp_path / "identity.sqlite3"),
             raw_events_dir=str(tmp_path / "raw_events"),
             encoder=encoder,

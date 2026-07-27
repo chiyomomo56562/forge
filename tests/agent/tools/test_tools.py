@@ -15,7 +15,8 @@ from pathlib import Path
 import pytest
 
 
-PROJECT_ROOT = Path(__file__).parent.parent
+PROJECT_ROOT = Path(__file__).parents[3]
+TEST_ROOT = PROJECT_ROOT
 
 
 # ===========================================================================
@@ -163,7 +164,7 @@ class TestToolRegistry:
         from agent.tools.registry import ToolRegistry
 
         registry = ToolRegistry(
-            policy_path=str(PROJECT_ROOT / "constitution" / "tool_policy.yml")
+            policy_path=str(TEST_ROOT / "constitution" / "tool_policy.yml")
         )
         assert "deleting_files" in registry._confirmation_keys
         assert "exec_unsandboxed" in registry._forbidden_ids
@@ -181,7 +182,7 @@ class TestToolRegistry:
                 return ToolResult(success=True, output="should not see this")
 
         registry = ToolRegistry(
-            policy_path=str(PROJECT_ROOT / "constitution" / "tool_policy.yml")
+            policy_path=str(TEST_ROOT / "constitution" / "tool_policy.yml")
         )
         # register should skip forbidden tools
         registry.register(ForbiddenTool())
@@ -200,7 +201,7 @@ class TestToolRegistry:
                 return ToolResult(success=True, output="written")
 
         registry = ToolRegistry(
-            policy_path=str(PROJECT_ROOT / "constitution" / "tool_policy.yml")
+            policy_path=str(TEST_ROOT / "constitution" / "tool_policy.yml")
         )
         registry.register(WriteTool())
 
@@ -222,7 +223,7 @@ class TestToolRegistry:
                 return ToolResult(success=True, output="written")
 
         registry = ToolRegistry(
-            policy_path=str(PROJECT_ROOT / "constitution" / "tool_policy.yml")
+            policy_path=str(TEST_ROOT / "constitution" / "tool_policy.yml")
         )
         registry.register(WriteTool())
 
@@ -243,7 +244,7 @@ class TestToolRegistry:
                 return ToolResult(success=True, output="written")
 
         registry = ToolRegistry(
-            policy_path=str(PROJECT_ROOT / "constitution" / "tool_policy.yml")
+            policy_path=str(TEST_ROOT / "constitution" / "tool_policy.yml")
         )
         registry.register(WriteTool())
 
@@ -476,7 +477,7 @@ class TestRegisterBuiltin:
         from agent.tools.registry import ToolRegistry
 
         registry = ToolRegistry(
-            policy_path=str(PROJECT_ROOT / "constitution" / "tool_policy.yml")
+            policy_path=str(TEST_ROOT / "constitution" / "tool_policy.yml")
         )
         registry.register_builtin()
 
@@ -500,7 +501,7 @@ class TestRegisterBuiltin:
         from agent.tools.base import ToolContext
 
         registry = ToolRegistry(
-            policy_path=str(PROJECT_ROOT / "constitution" / "tool_policy.yml")
+            policy_path=str(TEST_ROOT / "constitution" / "tool_policy.yml")
         )
         registry.register_builtin()
 

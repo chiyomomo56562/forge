@@ -16,7 +16,8 @@ from pathlib import Path
 import pytest
 
 
-PROJECT_ROOT = Path(__file__).parent.parent
+PROJECT_ROOT = Path(__file__).parents[3]
+TEST_ROOT = PROJECT_ROOT
 
 
 # ===========================================================================
@@ -167,7 +168,7 @@ class TestConstitutionReviser:
         const_dir = tmp_path / "constitution"
         const_dir.mkdir()
         import shutil
-        shutil.copytree(str(PROJECT_ROOT / "constitution"), str(const_dir),
+        shutil.copytree(str(TEST_ROOT / "constitution"), str(const_dir),
                        dirs_exist_ok=True)
 
         reviser = ConstitutionReviser(
@@ -188,7 +189,7 @@ class TestConstitutionReviser:
         const_dir = tmp_path / "constitution"
         const_dir.mkdir()
         import shutil
-        shutil.copytree(str(PROJECT_ROOT / "constitution"), str(const_dir),
+        shutil.copytree(str(TEST_ROOT / "constitution"), str(const_dir),
                        dirs_exist_ok=True)
 
         reviser = ConstitutionReviser(constitution_dir=str(const_dir))
@@ -208,7 +209,7 @@ class TestConstitutionReviser:
         const_dir = tmp_path / "constitution"
         const_dir.mkdir()
         import shutil
-        shutil.copytree(str(PROJECT_ROOT / "constitution"), str(const_dir),
+        shutil.copytree(str(TEST_ROOT / "constitution"), str(const_dir),
                        dirs_exist_ok=True)
 
         reviser = ConstitutionReviser(constitution_dir=str(const_dir))

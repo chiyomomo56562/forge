@@ -13,7 +13,8 @@ from pathlib import Path
 import pytest
 
 
-PROJECT_ROOT = Path(__file__).parent.parent
+PROJECT_ROOT = Path(__file__).parents[3]
+TEST_ROOT = PROJECT_ROOT
 
 
 # ===========================================================================
@@ -24,7 +25,7 @@ def _load_constitution():
     """Load the real constitution from the project's constitution/ dir."""
     from agent.memory.constitution.loader import ConstitutionLoader
 
-    loader = ConstitutionLoader(constitution_dir=str(PROJECT_ROOT / "constitution"))
+    loader = ConstitutionLoader(constitution_dir=str(TEST_ROOT / "constitution"))
     return loader.load()
 
 
