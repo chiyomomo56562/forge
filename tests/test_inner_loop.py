@@ -412,6 +412,35 @@ class TestOrchestratorRetry:
 # ===========================================================================
 
 class TestMain:
+    def test_create_llm_only_client_uses_litellm_router(self, tmp_path):
+        from agent.main import create_llm_only_client
+        from agent.llm.lite import LLMLite
+
+        client = create_llm_only_client("nonexistent.yml")
+
+        assert isinstance(client, LLMLite)
+
+    def test_cli_llm_only_single_query_skips_full_bootstrap(self, monkeypatch, capsys):
+        """The first validation step must not initialize runtime, memory, or tools."""
+        from agent.main import main
+        from agent.llm.client import ChatResponse
+
+        class FakeClient:
+            def chat(self, query):
+                assert query == "hello"
+                return ChatResponse(content="chat response")
+
+        monkeypatch.setattr(
+            "agent.main.create_llm_only_client", lambda config_path: FakeClient()
+        )
+        monkeypatch.setattr(
+            "agent.main.create_agent",
+            lambda *args, **kwargs: pytest.fail("full bootstrap must not run"),
+        )
+
+        assert main(["--llm-only", "--query", "hello"]) == 0
+        assert capsys.readouterr().out == "chat response\n"
+
     def test_run_query(self, tmp_path):
         from agent.main import run_query
         from agent.runtime import Runtime

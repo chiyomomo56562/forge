@@ -16,7 +16,7 @@ class TestLLMConfig:
         cfg = LLMConfig()
         assert cfg.backend == "ollama"
         assert cfg.ollama_model == "glm-5.2"
-        assert cfg.openai_model == "gpt-4o"
+        assert cfg.openai_model == "gpt-5.6-luna"
         assert cfg.embed_backend == "local"
         assert cfg.embed_dimension == 384
 

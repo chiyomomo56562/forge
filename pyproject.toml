@@ -28,6 +28,8 @@ dependencies = [
 
     # --- LLM Clients ---
     "openai>=1.0",          # OpenAI Codex SDK
+    "openai-codex==0.144.4", # Codex SDK used for GPT requests
+    "litellm==1.93.0",       # Provider routing
     "ollama>=0.3",          # Ollama API (클라우드 원격 가능)
 
     # --- Utils ---

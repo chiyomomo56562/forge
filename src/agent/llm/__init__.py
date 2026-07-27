@@ -4,6 +4,7 @@ Re-exports the unified LLM client, prompt templates, and response parsers.
 """
 
 from .client import ChatMessage, ChatResponse, LLMClient, LLMConfig
+from .lite import LLMLite
 from .prompts import PromptTemplate, TEMPLATES, get_template
 from .response_parser import (
     extract_json,
@@ -20,6 +21,7 @@ __all__ = [
     "ChatResponse",
     "LLMClient",
     "LLMConfig",
+    "LLMLite",
     # prompts
     "PromptTemplate",
     "TEMPLATES",

@@ -15,6 +15,9 @@ Usage::
 
     # With custom config
     python -m agent.main --config config/agent.yml --query "Hello"
+
+    # Verify only the chat connection (no memory, tools, or loops)
+    python -m agent.main --llm-only --query "Hello"
 """
 
 from __future__ import annotations
@@ -103,6 +106,26 @@ def create_agent(
     return runtime, orchestrator
 
 
+def create_llm_only_client(config_path: str = "config/agent.yml") -> Any:
+    """Create a chat-only LLM client without initializing other subsystems.
+
+    This is the first validation step for a deployment: it performs only a
+    user-input-to-chat-response round trip.  In particular, it does not create
+    a runtime session, initialize memory/embeddings, register tools, or invoke
+    any Inner, Outer, or Meta Loop.
+    """
+    from .llm.lite import LLMLite
+
+    return LLMLite.from_config(config_path)
+
+
+def create_initial_input_service(config_path: str = "config/agent.yml") -> Any:
+    """Compose the first hexagonal use case without booting the full agent."""
+    from forge.bootstrap import build_initial_input_service
+
+    return build_initial_input_service(create_llm_only_client(config_path))
+
+
 # ===========================================================================
 # CLI
 # ===========================================================================
@@ -150,6 +173,13 @@ def run_query(orchestrator: Any, query: str, task_category: str = "general") -> 
     return "\n".join(lines)
 
 
+def run_llm_query(llm_client: Any, query: str) -> str:
+    """Send one user query directly to the LLM and return its text response."""
+    from forge.domain.conversation import InitialInput
+
+    return llm_client.handle(InitialInput(query)).text
+
+
 def main(argv: list[str] | None = None) -> int:
     """CLI entry point.
 
@@ -187,6 +217,11 @@ def main(argv: list[str] | None = None) -> int:
         help="Disable tool registration.",
     )
     parser.add_argument(
+        "--llm-only",
+        action="store_true",
+        help="Run only the chat client; do not initialize memory, tools, or any loop.",
+    )
+    parser.add_argument(
         "--verbose", "-v",
         action="store_true",
         help="Enable verbose logging.",
@@ -200,7 +235,38 @@ def main(argv: list[str] | None = None) -> int:
         import logging
         logging.getLogger("agent").setLevel(logging.DEBUG)
 
-    # Bootstrap
+    # Chat-only verification mode intentionally bypasses the full bootstrap.
+    if args.llm_only:
+        try:
+            llm_client = create_initial_input_service(args.config)
+        except Exception as e:
+            print(f"Failed to initialise LLM client: {e}", file=sys.stderr)
+            return 1
+
+        if args.query:
+            print(run_llm_query(llm_client, args.query))
+            return 0
+
+        print("Forge LLM-only Mode")
+        print("Memory, tools, and all loops are disabled. Type 'exit' or 'quit' to leave.\n")
+        while True:
+            try:
+                user_input = input("user> ").strip()
+            except (EOFError, KeyboardInterrupt):
+                print("\nGoodbye.")
+                break
+
+            if user_input.lower() in ("exit", "quit"):
+                print("Goodbye.")
+                break
+            if user_input:
+                try:
+                    print(run_llm_query(llm_client, user_input))
+                except Exception as e:
+                    print(f"Error: {e}", file=sys.stderr)
+        return 0
+
+    # Full-pipeline bootstrap
     try:
         runtime, orchestrator = create_agent(
             config_path=args.config,
