@@ -1,3 +1,3 @@
-from .model_gateway import ModelGateway
+from .model_gateway import ConversationRuntime
 
-__all__ = ["ModelGateway"]
+__all__ = ["ConversationRuntime"]

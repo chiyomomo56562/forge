@@ -30,6 +30,9 @@ dependencies = [
     "openai>=1.0",          # OpenAI Codex SDK
     "openai-codex==0.144.4", # Codex SDK used for GPT requests
     "litellm==1.93.0",       # Provider routing
+    "langchain>=1.2,<2",     # Runtime message/model contracts
+    "langgraph>=1.0,<2",     # Conversation state + checkpoint runtime
+    "langchain-litellm>=0.3,<1",  # LiteLLM chat-model integration
     "ollama>=0.3",          # Ollama API (클라우드 원격 가능)
 
     # --- Utils ---
@@ -45,6 +48,7 @@ dev = [
     "pytest-cov>=4.1",
     "ruff>=0.3",
     "mypy>=1.8",
+    "types-PyYAML>=6.0",
     "ipykernel>=6.0",      # notebooks
 ]
 postgres = [

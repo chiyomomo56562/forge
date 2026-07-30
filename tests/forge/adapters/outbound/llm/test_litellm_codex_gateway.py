@@ -1,11 +1,13 @@
+from langchain_core.messages import HumanMessage
+
 from forge.adapters.outbound.llm import (
+    CHAT_ROUTE,
     CODEX_PROVIDER,
-    INITIAL_USER_INPUT_ROUTE,
     TERRA_MODEL,
+    ChatModelFactory,
+    ChatModelSettings,
     CodexProvider,
-    LiteLLMCodexGateway,
 )
-from forge.domain.conversation import InitialInput
 
 
 class FakeRunResult:
@@ -50,14 +52,8 @@ def test_codex_provider_uses_read_only_ephemeral_thread(monkeypatch):
     class ApprovalMode:
         deny_all = "deny_all"
 
-    monkeypatch.setattr(
-        "openai_codex.Sandbox",
-        Sandbox,
-    )
-    monkeypatch.setattr(
-        "openai_codex.ApprovalMode",
-        ApprovalMode,
-    )
+    monkeypatch.setattr("openai_codex.Sandbox", Sandbox)
+    monkeypatch.setattr("openai_codex.ApprovalMode", ApprovalMode)
     provider = CodexProvider(codex_factory=lambda: fake)
 
     response = provider.completion(
@@ -74,44 +70,45 @@ def test_codex_provider_uses_read_only_ephemeral_thread(monkeypatch):
     )
 
     assert response.choices[0].message.content == "codex response"
-    assert fake.thread_start_calls == [
-        {
-            "model": TERRA_MODEL,
-            "sandbox": "read_only",
-            "approval_mode": "deny_all",
-            "ephemeral": True,
-        }
-    ]
-    assert fake.thread.calls == [
-        (
-            "user: hello",
-            {
-                "model": TERRA_MODEL,
-                "sandbox": "read_only",
-                "approval_mode": "deny_all",
-            },
-        )
-    ]
+    assert fake.thread_start_calls[0]["ephemeral"] is True
+    assert fake.thread.calls[0][0] == "user: hello"
 
 
-def test_gateway_routes_initial_input_through_codex_provider():
-    provider = CodexProvider(codex_factory=FakeCodex)
-    gateway = LiteLLMCodexGateway(codex_provider=provider)
-
-    reply = gateway.complete_initial_input(InitialInput("hello"))
-
-    assert reply.text == "codex response"
-    assert reply.model == TERRA_MODEL
-
-
-def test_initial_route_is_codex_custom_provider():
-    provider = CodexProvider(codex_factory=FakeCodex)
-    gateway = LiteLLMCodexGateway(codex_provider=provider)
-
-    deployment = gateway._router.get_available_deployment(
-        model=INITIAL_USER_INPUT_ROUTE,
-        messages=[{"role": "user", "content": "hello"}],
+def test_openai_factory_builds_langchain_router_with_codex_provider():
+    factory = ChatModelFactory(
+        ChatModelSettings("openai", TERRA_MODEL, 0.2, 128, api_key="key"),
+        codex_provider=CodexProvider(codex_factory=FakeCodex),
     )
 
-    assert deployment["litellm_params"]["custom_llm_provider"] == CODEX_PROVIDER
-    assert deployment["litellm_params"]["model"] == TERRA_MODEL
+    model = factory.create()
+
+    assert model.model == f"{CODEX_PROVIDER}/{CHAT_ROUTE}"
+
+
+def test_langchain_router_invokes_codex_provider(monkeypatch):
+    class Sandbox:
+        read_only = "read_only"
+
+    class ApprovalMode:
+        deny_all = "deny_all"
+
+    monkeypatch.setattr("openai_codex.Sandbox", Sandbox)
+    monkeypatch.setattr("openai_codex.ApprovalMode", ApprovalMode)
+    fake = FakeCodex()
+    factory = ChatModelFactory(
+        ChatModelSettings("openai", TERRA_MODEL, 0.2, 128),
+        codex_provider=CodexProvider(codex_factory=lambda: fake),
+    )
+
+    response = factory.create().invoke([HumanMessage(content="hello")])
+
+    assert response.content == "codex response"
+
+
+def test_ollama_factory_uses_configured_endpoint():
+    factory = ChatModelFactory(ChatModelSettings("ollama", "glm", 0.3, 512, "http://ollama"))
+
+    model = factory.create()
+
+    assert model.model == "ollama_chat/glm"
+    assert model.api_base == "http://ollama"

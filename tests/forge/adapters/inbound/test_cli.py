@@ -1,38 +1,55 @@
 import sys
 
 from forge.adapters.inbound import cli
-from forge.domain.conversation import ModelReply
+from forge.domain.conversation import AssistantReply
 
 
-class FakeInitialInputService:
+class FakeReceiveMessageService:
+    def __init__(self) -> None:
+        self.commands = []
+
     def handle(self, command):
-        assert command.text == "hello"
-        return ModelReply(text="chat response", model="gpt-5.6-terra")
+        self.commands.append(command)
+        return AssistantReply(text="chat response", model="fake-model")
 
 
 def test_cli_single_query_uses_forge_bootstrap_without_agent_import(monkeypatch, capsys):
-    before_agent_imports = {name for name in sys.modules if name == "agent" or name.startswith("agent.")}
+    before_agent_imports = {
+        name for name in sys.modules if name == "agent" or name.startswith("agent.")
+    }
+    service = FakeReceiveMessageService()
+    monkeypatch.setattr(cli, "build_receive_message_service", lambda *, config_path: service)
 
-    monkeypatch.setattr(
-        cli,
-        "build_initial_input_service",
-        lambda *, config_path: FakeInitialInputService(),
-    )
-
-    assert cli.main(["--query", "hello", "--config", "nonexistent.yml"]) == 0
+    assert cli.main(
+        [
+            "--query",
+            "hello",
+            "--conversation-id",
+            "thread-1",
+            "--system",
+            "brief",
+            "--config",
+            "none.yml",
+        ]
+    ) == 0
 
     captured = capsys.readouterr()
-    after_agent_imports = {name for name in sys.modules if name == "agent" or name.startswith("agent.")}
+    after_agent_imports = {
+        name for name in sys.modules if name == "agent" or name.startswith("agent.")
+    }
     assert captured.out == "chat response\n"
     assert captured.err == ""
     assert after_agent_imports == before_agent_imports
+    assert service.commands[0].conversation_id == "thread-1"
+    assert service.commands[0].system_instruction == "brief"
 
 
-def test_run_initial_input_prints_model_text(monkeypatch):
-    monkeypatch.setattr(
-        cli,
-        "build_initial_input_service",
-        lambda *, config_path: FakeInitialInputService(),
+def test_run_message_returns_assistant_text(monkeypatch):
+    service = FakeReceiveMessageService()
+    monkeypatch.setattr(cli, "build_receive_message_service", lambda *, config_path: service)
+
+    assert (
+        cli.run_message("hello", conversation_id="thread-1", config_path="none.yml")
+        == "chat response"
     )
-
-    assert cli.run_initial_input("hello", config_path="nonexistent.yml") == "chat response"
+    assert service.commands[0].conversation_id == "thread-1"

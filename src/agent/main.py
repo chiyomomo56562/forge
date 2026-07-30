@@ -120,10 +120,8 @@ def create_llm_only_client(config_path: str = "config/agent.yml") -> Any:
 
 
 def create_initial_input_service(config_path: str = "config/agent.yml") -> Any:
-    """Compose the first hexagonal use case without booting the full agent."""
-    from forge.bootstrap import build_initial_input_service
-
-    return build_initial_input_service(create_llm_only_client(config_path))
+    """Create the legacy chat-only client without booting the full agent."""
+    return create_llm_only_client(config_path)
 
 
 # ===========================================================================
@@ -175,9 +173,7 @@ def run_query(orchestrator: Any, query: str, task_category: str = "general") -> 
 
 def run_llm_query(llm_client: Any, query: str) -> str:
     """Send one user query directly to the LLM and return its text response."""
-    from forge.domain.conversation import InitialInput
-
-    return llm_client.handle(InitialInput(query)).text
+    return llm_client.chat(query).content
 
 
 def main(argv: list[str] | None = None) -> int:
