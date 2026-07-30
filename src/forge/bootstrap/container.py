@@ -1,20 +1,22 @@
 """The only place that knows concrete application and adapter classes."""
 
-from forge.adapters.outbound.llm import ChatClient, LiteLLMCodexGateway
-from forge.application.conversation import ReceiveInitialInputService
-from forge.ports.outbound import ModelGateway
+from typing import Any
+
+from forge.adapters.outbound.llm import ChatModelFactory
+from forge.application.conversation import ReceiveMessageService
+from forge.runtime import LangGraphConversationRuntime
 
 
-def build_initial_input_service(
-    model_client: ChatClient | None = None,
+def build_receive_message_service(
+    chat_model: Any | None = None,
     *,
-    model_gateway: ModelGateway | None = None,
     config_path: str = "config/agent.yml",
-) -> ReceiveInitialInputService:
-    if model_gateway is not None:
-        gateway = model_gateway
-    elif model_client is not None:
-        gateway = LiteLLMCodexGateway(model_client)
-    else:
-        gateway = LiteLLMCodexGateway.from_config(config_path)
-    return ReceiveInitialInputService(model_gateway=gateway)
+) -> ReceiveMessageService:
+    """프로세스 수명 동안 공유할 대화 facade와 runtime을 조립한다.
+
+    Args:
+        chat_model: 테스트 또는 별도 구성에서 주입할 LangChain 채팅 모델.
+        config_path: chat_model이 없을 때 읽을 LLM 설정 YAML 경로.
+    """
+    model = chat_model or ChatModelFactory.from_config(config_path).create()
+    return ReceiveMessageService(LangGraphConversationRuntime(model))

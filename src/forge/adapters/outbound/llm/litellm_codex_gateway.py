@@ -1,18 +1,11 @@
-"""LiteLLM routing with a Codex-SDK-backed GPT provider for forge.
-
-The router owns provider selection. The ``codex`` provider is deliberately a
-LiteLLM custom provider so GPT traffic reaches ``openai_codex`` rather than the
-generic OpenAI Python SDK.
-"""
+"""LangChain chat-model construction over LiteLLM and the Codex SDK."""
 
 from __future__ import annotations
 
 import os
 from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Any, Protocol
-
-from forge.domain.conversation import InitialInput, ModelReply
+from typing import Any
 
 # LiteLLM otherwise fetches a mutable remote cost map at import time. Routing
 # must remain offline until the selected provider is deliberately invoked.
@@ -20,41 +13,47 @@ os.environ.setdefault("LITELLM_LOCAL_MODEL_COST_MAP", "True")
 
 import litellm
 import yaml
-from litellm import Router
+from langchain_core.language_models.chat_models import BaseChatModel
+from langchain_litellm import ChatLiteLLM
 from litellm.llms.custom_llm import CustomLLM, CustomLLMError
 from litellm.types.utils import ModelResponse
 
-INITIAL_USER_INPUT_ROUTE = "initial_user_input"
+CHAT_ROUTE = "forge"
 TERRA_MODEL = "gpt-5.6-terra"
 CODEX_PROVIDER = "forge_codex"
 _CODEX_SDK_AUTH = "codex-sdk-managed"
 
 
-@dataclass(frozen=True)
-class ModelCompletion:
-    content: str
-    model: str
-    raw: object | None = None
-
-
-class ChatClient(Protocol):
-    def chat(self, prompt: str, system: str = "") -> ModelCompletion: ...
-
-
 def _messages_to_prompt(messages: list[dict[str, str]]) -> str:
-    """Preserve role boundaries for the text-only first-turn Codex route."""
+    """LangChain/LiteLLM 메시지를 Codex SDK용 단일 프롬프트로 바꾼다.
+
+    Args:
+        messages: role과 content를 가진 대화 메시지 목록.
+    """
     return "\n\n".join(f"{message['role']}: {message['content']}" for message in messages)
 
 
-class CodexProvider(CustomLLM):
-    """LiteLLM custom provider that makes the actual call through Codex SDK."""
+class CodexProvider(CustomLLM):  # type: ignore[misc]
+    """LiteLLM 요청을 Codex SDK 호출로 변환하는 custom provider다.
 
-    def __init__(self, codex_factory: Callable[[], Any] | None = None) -> None:
+    Args:
+        codex_factory: Codex SDK 클라이언트를 만드는 함수. 테스트에서 대체할 수 있다.
+        target_model: LiteLLM 내부 route 대신 Codex SDK에 전달할 실제 모델 이름.
+    """
+
+    def __init__(
+        self,
+        codex_factory: Callable[[], Any] | None = None,
+        *,
+        target_model: str | None = None,
+    ) -> None:
         super().__init__()
         self._codex_factory = codex_factory or self._default_codex_factory
+        self._target_model = target_model
 
     @staticmethod
     def _default_codex_factory() -> Any:
+        """기본 Codex SDK 클라이언트를 생성한다."""
         from openai_codex import Codex
 
         return Codex()
@@ -62,32 +61,47 @@ class CodexProvider(CustomLLM):
     def completion(
         self,
         model: str,
-        messages: list,
+        messages: list[dict[str, Any]],
         api_base: str,
-        custom_prompt_dict: dict,
+        custom_prompt_dict: dict[str, Any],
         model_response: ModelResponse,
         print_verbose: Callable[..., Any],
         encoding: Any,
         api_key: str | None,
         logging_obj: Any,
-        optional_params: dict,
+        optional_params: dict[str, Any],
         **_: Any,
     ) -> ModelResponse:
+        """LiteLLM의 동기 채팅 요청을 Codex SDK 요청으로 실행한다.
+
+        Args:
+            model: LiteLLM이 전달한 내부 모델 route.
+            messages: role과 content를 가진 LiteLLM 메시지 목록.
+            api_base: LiteLLM 호환용 API 주소 값이며 Codex SDK에서는 사용하지 않는다.
+            custom_prompt_dict: LiteLLM 프롬프트 설정이며 Codex SDK에서는 사용하지 않는다.
+            model_response: 응답 텍스트를 채워 반환할 LiteLLM 응답 객체.
+            print_verbose: LiteLLM의 상세 로그 함수.
+            encoding: LiteLLM 토큰 인코딩 정보.
+            api_key: 명시적으로 제공된 Codex API 키.
+            logging_obj: LiteLLM 요청 로그 객체.
+            optional_params: LiteLLM의 추가 모델 호출 옵션.
+        """
         from openai_codex import ApprovalMode, Sandbox
 
+        target_model = self._target_model or model
         try:
             with self._codex_factory() as codex:
                 if api_key and api_key != _CODEX_SDK_AUTH:
                     codex.login_api_key(api_key)
                 thread = codex.thread_start(
-                    model=model,
+                    model=target_model,
                     sandbox=Sandbox.read_only,
                     approval_mode=ApprovalMode.deny_all,
                     ephemeral=True,
                 )
                 result = thread.run(
                     _messages_to_prompt(messages),
-                    model=model,
+                    model=target_model,
                     sandbox=Sandbox.read_only,
                     approval_mode=ApprovalMode.deny_all,
                 )
@@ -97,132 +111,136 @@ class CodexProvider(CustomLLM):
         if not result.final_response:
             raise CustomLLMError(status_code=502, message="Codex returned no final response")
 
-        model_response.model = model
+        model_response.model = target_model
         model_response.choices[0].message.content = result.final_response
         return model_response
 
+    async def acompletion(self, *args: Any, **kwargs: Any) -> ModelResponse:
+        """LiteLLM의 비동기 요청도 같은 동기 Codex SDK 호출로 처리한다.
 
-class LiteLLMCodexGateway:
-    """Forge outbound model gateway backed by LiteLLM routing and Codex SDK."""
+        Args:
+            *args: LiteLLM이 전달하는 위치 인자.
+            **kwargs: LiteLLM이 전달하는 이름 있는 인자.
+        """
+        return self.completion(*args, **kwargs)
+
+
+@dataclass(frozen=True)
+class ChatModelSettings:
+    """설정 파일에서 읽은 채팅 모델 생성 값을 보관한다.
+
+    Args:
+        backend: 사용할 제공자 이름(openai 또는 ollama).
+        model: 제공자에 전달할 실제 모델 이름.
+        temperature: 응답 다양성을 조절하는 선택 값.
+        max_tokens: 생성할 최대 토큰 수.
+        base_url: 제공자 API의 선택 엔드포인트 주소.
+        api_key: 제공자 인증에 사용할 선택 API 키.
+    """
+    backend: str
+    model: str
+    temperature: float | None
+    max_tokens: int | None
+    base_url: str | None = None
+    api_key: str | None = None
+
+
+class ChatModelFactory:
+    """Forge 대화 runtime이 사용할 LangChain 채팅 모델을 만든다.
+
+    Args:
+        settings: 제공자와 모델 관련 설정 값.
+        codex_provider: 기본 provider 대신 주입할 Codex provider. 테스트에 사용한다.
+    """
 
     def __init__(
         self,
-        client: ChatClient | None = None,
+        settings: ChatModelSettings,
         *,
         codex_provider: CodexProvider | None = None,
-        codex_model: str = TERRA_MODEL,
-        codex_api_key: str | None = None,
-        ollama_base_url: str | None = None,
-        ollama_model: str | None = None,
     ) -> None:
-        self._client = client
-        if client is not None:
-            return
+        """테스트용 provider 주입을 포함한 모델 factory를 초기화한다.
 
-        provider = codex_provider or CodexProvider()
-        self._codex_provider = provider
-        self._codex_model = codex_model
-        self._register_codex_provider(provider)
-        model_list: list[dict[str, Any]] = [
-            {
-                "model_name": INITIAL_USER_INPUT_ROUTE,
-                "litellm_params": {
-                    "model": codex_model,
-                    "custom_llm_provider": CODEX_PROVIDER,
-                    # LiteLLM validates that a custom provider has credentials
-                    # before dispatch. The sentinel means authentication is
-                    # managed by the Codex runtime's existing login state.
-                    "api_key": codex_api_key or _CODEX_SDK_AUTH,
-                },
-            }
-        ]
-        if ollama_base_url and ollama_model:
-            model_list.append(
-                {
-                    "model_name": "ollama_cloud",
-                    "litellm_params": {
-                        "model": f"ollama_chat/{ollama_model}",
-                        "api_base": ollama_base_url,
-                    },
-                }
+        Args:
+            settings: 제공자와 모델 관련 설정 값.
+            codex_provider: 기본 provider 대신 사용할 선택 Codex provider.
+        """
+        self._settings = settings
+        self._codex_provider = codex_provider
+
+    @classmethod
+    def from_config(cls, config_path: str = "config/agent.yml") -> ChatModelFactory:
+        """YAML 설정 파일을 읽어 모델 factory를 만든다.
+
+        Args:
+            config_path: llm.backend와 제공자 설정을 읽을 YAML 파일 경로.
+        """
+        config = _load_yaml(config_path)
+        llm = config.get("llm", {})
+        backend = llm.get("backend", "ollama")
+        selected = llm.get(backend, {})
+        return cls(
+            ChatModelSettings(
+                backend=backend,
+                model=selected.get("model", TERRA_MODEL if backend == "openai" else "glm-5.2"),
+                temperature=selected.get("temperature"),
+                max_tokens=selected.get("max_tokens"),
+                base_url=selected.get("base_url"),
+                api_key=os.environ.get("OPENAI_API_KEY"),
             )
-        self._router = Router(model_list=model_list, num_retries=0, set_verbose=False)
+        )
+
+    def create(self) -> BaseChatModel:
+        """설정에 맞는 LangChain ChatLiteLLM 인스턴스를 생성한다."""
+        parameters: dict[str, Any] = {
+            "temperature": self._settings.temperature,
+            "max_tokens": self._settings.max_tokens,
+        }
+        if self._settings.backend == "openai":
+            self._register_codex_provider(
+                self._codex_provider or CodexProvider(target_model=self._settings.model)
+            )
+            return ChatLiteLLM(
+                model=f"{CODEX_PROVIDER}/{CHAT_ROUTE}",
+                api_key=self._settings.api_key or _CODEX_SDK_AUTH,
+                **parameters,
+            )
+        if self._settings.backend == "ollama":
+            if not self._settings.base_url:
+                raise ValueError("Ollama backend requires llm.ollama.base_url")
+            return ChatLiteLLM(
+                model=f"ollama_chat/{self._settings.model}",
+                api_base=self._settings.base_url,
+                **parameters,
+            )
+        raise ValueError(f"Unsupported Forge LLM backend: {self._settings.backend}")
 
     @staticmethod
     def _register_codex_provider(provider: CodexProvider) -> None:
+        """LiteLLM 전역 provider 목록에 Forge Codex provider를 등록한다.
+
+        Args:
+            provider: Codex SDK로 요청을 전달할 provider 구현체.
+        """
         litellm.custom_provider_map[:] = [
             item for item in litellm.custom_provider_map if item["provider"] != CODEX_PROVIDER
         ]
         litellm.custom_provider_map.append(
             {"provider": CODEX_PROVIDER, "custom_handler": provider}
         )
-        # Router validates providers during construction; LiteLLM only updates
-        # its provider registry when this setup hook is called.
         from litellm.utils import custom_llm_setup
 
         custom_llm_setup()
 
-    @classmethod
-    def from_config(cls, config_path: str = "config/agent.yml") -> "LiteLLMCodexGateway":
-        config = _load_yaml(config_path)
-        llm_config = config.get("llm", {})
-        ollama_config = llm_config.get("ollama", {})
-        return cls(
-            codex_model=TERRA_MODEL,
-            codex_api_key=os.environ.get("OPENAI_API_KEY"),
-            ollama_base_url=ollama_config.get("base_url"),
-            ollama_model=ollama_config.get("model"),
-        )
-
-    def complete_initial_input(self, command: InitialInput) -> ModelReply:
-        response = self.chat(command.text)
-        return ModelReply(text=response.content, model=response.model)
-
-    def chat(self, prompt: str, system: str = "") -> ModelCompletion:
-        if self._client is not None:
-            response = self._client.chat(prompt)
-            return ModelCompletion(
-                content=response.content,
-                model=response.model,
-                raw=getattr(response, "raw", None),
-            )
-
-        messages = []
-        if system:
-            messages.append({"role": "system", "content": system})
-        messages.append({"role": "user", "content": prompt})
-        # LiteLLM Router selects the deployment. Dispatching the Codex route
-        # ourselves is intentional: calling ``Router.completion`` would make
-        # LiteLLM's OpenAI transport own the GPT request, violating the Codex
-        # SDK requirement.
-        deployment = self._router.get_available_deployment(
-            model=INITIAL_USER_INPUT_ROUTE,
-            messages=messages,
-        )
-        params = deployment["litellm_params"]
-        response = self._codex_provider.completion(
-            model=params["model"],
-            messages=messages,
-            api_base="",
-            custom_prompt_dict={},
-            model_response=ModelResponse(),
-            print_verbose=lambda *_args, **_kwargs: None,
-            encoding=None,
-            api_key=params.get("api_key"),
-            logging_obj=None,
-            optional_params={},
-        )
-        content = response.choices[0].message.content
-        if not content:
-            raise RuntimeError("LiteLLM returned an empty response")
-        return ModelCompletion(content=content, model=self._codex_model, raw=response)
-
 
 def _load_yaml(config_path: str) -> dict[str, Any]:
+    """YAML 설정 파일을 안전하게 읽어 사전으로 반환한다.
+
+    Args:
+        config_path: 읽을 YAML 파일 경로. 파일이 없거나 사전 형식이 아니면 빈 사전을 반환한다.
+    """
     if not os.path.exists(config_path):
         return {}
     with open(config_path, encoding="utf-8") as config_file:
         loaded = yaml.safe_load(config_file) or {}
-    if not isinstance(loaded, dict):
-        return {}
-    return loaded
+    return loaded if isinstance(loaded, dict) else {}

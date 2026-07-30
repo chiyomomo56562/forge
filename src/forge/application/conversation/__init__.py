@@ -1,3 +1,3 @@
-from .receive_initial_input import ReceiveInitialInputService
+from .receive_initial_input import ReceiveMessageService
 
-__all__ = ["ReceiveInitialInputService"]
+__all__ = ["ReceiveMessageService"]
