@@ -48,7 +48,7 @@ class LLMConfig:
     backend: str = "ollama"               # ollama | openai
     # Ollama chat
     ollama_base_url: str = "http://localhost:11434"
-    ollama_model: str = "glm-5.2"
+    ollama_model: str = "glm-5.2:cloud"
     ollama_temperature: float = 0.3
     ollama_max_tokens: int = 120000
     ollama_timeout: int = 120
@@ -89,7 +89,7 @@ class LLMConfig:
         return cls(
             backend=llm.get("backend", "ollama"),
             ollama_base_url=ollama.get("base_url", "http://localhost:11434"),
-            ollama_model=ollama.get("model", "glm-5.2"),
+            ollama_model=ollama.get("model", "glm-5.2:cloud"),
             ollama_temperature=ollama.get("temperature", 0.3),
             ollama_max_tokens=ollama.get("max_tokens", 120000),
             ollama_timeout=ollama.get("timeout_seconds", 120),

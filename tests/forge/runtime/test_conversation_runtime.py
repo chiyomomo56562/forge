@@ -15,6 +15,17 @@ class FakeChatModel:
         )
 
 
+<<<<<<< HEAD
+=======
+class FakeBlockChatModel:
+    def invoke(self, _messages):
+        return AIMessage(
+            content=[{"type": "text", "text": "block reply"}],
+            response_metadata={"model_name": "fake"},
+        )
+
+
+>>>>>>> 46aadce (feat:make temporary memory with conversation)
 def test_runtime_preserves_thread_history_but_not_system_instruction():
     model = FakeChatModel()
     runtime = LangGraphConversationRuntime(model)
@@ -57,3 +68,11 @@ def test_runtime_isolates_threads():
     assert [(message.type, message.content) for message in model.calls[1]] == [
         ("human", "from two")
     ]
+
+
+def test_runtime_extracts_text_from_content_blocks():
+    runtime = LangGraphConversationRuntime(FakeBlockChatModel())
+
+    reply = runtime.invoke(conversation_id="thread-1", text="hello")
+
+    assert reply.text == "block reply"

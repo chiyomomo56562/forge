@@ -15,7 +15,7 @@ class TestLLMConfig:
 
         cfg = LLMConfig()
         assert cfg.backend == "ollama"
-        assert cfg.ollama_model == "glm-5.2"
+        assert cfg.ollama_model == "glm-5.2:cloud"
         assert cfg.openai_model == "gpt-5.6-luna"
         assert cfg.embed_backend == "local"
         assert cfg.embed_dimension == 384
@@ -28,7 +28,7 @@ class TestLLMConfig:
             "version": 1,
             "llm": {
                 "backend": "openai",
-                "ollama": {"base_url": "http://remote:11434", "model": "glm-5.2", "temperature": 0.5},
+                "ollama": {"base_url": "http://remote:11434", "model": "glm-5.2:cloud", "temperature": 0.5},
                 "openai": {"model": "gpt-4o-mini", "temperature": 0.7},
             },
             "embedding": {

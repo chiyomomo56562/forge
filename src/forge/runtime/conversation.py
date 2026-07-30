@@ -58,10 +58,8 @@ class LangGraphConversationRuntime:
         message = state["messages"][-1]
         if not isinstance(message, AIMessage):
             raise RuntimeError("Conversation runtime did not produce an AI message")
-        if not isinstance(message.content, str):
-            raise RuntimeError("Conversation runtime produced non-text content")
         model = str(message.response_metadata.get("model_name", ""))
-        return AssistantReply(text=message.content, model=model)
+        return AssistantReply(text=_extract_text(message.content), model=model)
 
     def _call_model(
         self,
@@ -81,3 +79,31 @@ class LangGraphConversationRuntime:
         if not isinstance(response, AIMessage):
             raise RuntimeError("Configured chat model did not return an AIMessage")
         return {"messages": [response]}
+<<<<<<< HEAD
+=======
+
+
+def _extract_text(content: str | list[str | dict[str, Any]]) -> str:
+    """LangChain assistant content에서 사용자에게 보여 줄 텍스트만 추출한다.
+
+    Args:
+        content: 제공자가 반환한 문자열 또는 text/tool 등의 content block 목록.
+
+    Raises:
+        RuntimeError: 표시 가능한 텍스트 block이 하나도 없을 때 발생한다.
+    """
+    if isinstance(content, str):
+        return content
+
+    text_parts: list[str] = []
+    for block in content:
+        if isinstance(block, str):
+            text_parts.append(block)
+        elif isinstance(block, dict) and isinstance(block.get("text"), str):
+            text_parts.append(block["text"])
+
+    text = "".join(text_parts)
+    if not text:
+        raise RuntimeError("Conversation runtime produced no displayable text")
+    return text
+>>>>>>> 46aadce (feat:make temporary memory with conversation)

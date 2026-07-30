@@ -182,7 +182,9 @@ class ChatModelFactory:
         return cls(
             ChatModelSettings(
                 backend=backend,
-                model=selected.get("model", TERRA_MODEL if backend == "openai" else "glm-5.2"),
+                model=selected.get(
+                    "model", TERRA_MODEL if backend == "openai" else "glm-5.2:cloud"
+                ),
                 temperature=selected.get("temperature"),
                 max_tokens=selected.get("max_tokens"),
                 base_url=selected.get("base_url"),
