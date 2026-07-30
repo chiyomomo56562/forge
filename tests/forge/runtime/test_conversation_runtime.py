@@ -15,8 +15,6 @@ class FakeChatModel:
         )
 
 
-<<<<<<< HEAD
-=======
 class FakeBlockChatModel:
     def invoke(self, _messages):
         return AIMessage(
@@ -24,8 +22,6 @@ class FakeBlockChatModel:
             response_metadata={"model_name": "fake"},
         )
 
-
->>>>>>> 46aadce (feat:make temporary memory with conversation)
 def test_runtime_preserves_thread_history_but_not_system_instruction():
     model = FakeChatModel()
     runtime = LangGraphConversationRuntime(model)
