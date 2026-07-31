@@ -8,7 +8,6 @@ from chromadb import PersistentClient
 
 from forge.adapters.outbound.inner_loop import (
     DeterministicEvaluator,
-    DeterministicExecutor,
     DeterministicPlanner,
     DeterministicReflector,
 )
@@ -19,6 +18,11 @@ from forge.adapters.outbound.memory import (
     MemorySettings,
     SqliteChromaEpisodeRepository,
     SqliteEpisodeStore,
+)
+from forge.adapters.outbound.tools import (
+    BuiltinToolRegistry,
+    RegistryPlanStepExecutor,
+    StaticToolAuthorizationPolicy,
 )
 from forge.application.conversation import ReceiveMessageService
 from forge.application.inner_loop import RunInnerLoopService
@@ -102,12 +106,16 @@ def build_memory_services(
 
 
 def build_inner_loop_service(
-    config_path: str = "config/memory.yml", *, max_retries: int = 3
+    config_path: str = "config/memory.yml",
+    *,
+    agent_config_path: str = "config/agent.yml",
+    max_retries: int = 3,
 ) -> RunInnerLoopService:
     """기본 deterministic producer와 L0/L1 저장소를 연결한 Inner Loop를 조립한다.
 
     Args:
         config_path: L1 SQLite/Chroma 및 L0 경로를 담은 YAML 설정 파일.
+        agent_config_path: workspace 도구의 한도와 권한을 읽을 agent 설정 파일.
         max_retries: step attempt에 허용할 최대 재시도 횟수.
 
     Returns:
@@ -117,6 +125,8 @@ def build_inner_loop_service(
     """
     with open(config_path, encoding="utf-8") as config_file:
         config = yaml.safe_load(config_file) or {}
+    with open(agent_config_path, encoding="utf-8") as config_file:
+        agent_config = yaml.safe_load(config_file) or {}
     episodic = config["episodic"]
     settings = MemorySettings(
         sqlite_path=Path(episodic["sqlite_path"]),
@@ -132,12 +142,25 @@ def build_inner_loop_service(
         settings,
     )
     store = build_l0_event_store(config["working"]["l0"]["root_path"])
+    tool_config = agent_config.get("tools", {})
+    registry = BuiltinToolRegistry(
+        tool_config.get("workspace_root", "."),
+        max_read_bytes=tool_config.get("max_read_bytes", 32_768),
+        max_search_results=tool_config.get("max_search_results", 100),
+        max_output_bytes=tool_config.get("max_output_bytes", 32_768),
+        timeout_seconds=tool_config.get("timeout_seconds", 30),
+    )
     return RunInnerLoopService(
         StartInnerLoopSessionService(store),
         RecordInnerLoopEventService(store),
         FinalizeEpisodeService(store, repository),
-        DeterministicPlanner(),
-        DeterministicExecutor(),
+        DeterministicPlanner(tool_name="workspace.list_files", tool_arguments={"path": "."}),
+        RegistryPlanStepExecutor(
+            registry,
+            StaticToolAuthorizationPolicy(
+                allow_verification=bool(tool_config.get("allow_verification", True))
+            ),
+        ),
         DeterministicEvaluator(),
         DeterministicReflector(),
         max_retries=max_retries,
