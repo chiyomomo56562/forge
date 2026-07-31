@@ -18,6 +18,7 @@ class L0EventType(StrEnum):
     EXECUTION_STARTED = "execution.started"
     EXECUTION_COMPLETED = "execution.completed"
     EXECUTION_FAILED = "execution.failed"
+    EXECUTION_SUMMARY_COMPLETED = "execution.summary.completed"
     EVALUATION_COMPLETED = "evaluation.completed"
     REFLECTION_COMPLETED = "reflection.completed"
     EPISODE_PERSISTED = "episode.persisted"

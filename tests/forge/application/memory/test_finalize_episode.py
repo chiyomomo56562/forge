@@ -31,7 +31,7 @@ def _record_ready_session(tmp_path):
     )
     record.handle(
         session_id=session.session_id,
-        event_type=L0EventType.EXECUTION_COMPLETED,
+        event_type=L0EventType.EXECUTION_SUMMARY_COMPLETED,
         payload={
             "summary": "done",
             "outcome": "completed",
