@@ -137,6 +137,7 @@ class ChatModelSettings:
         base_url: 제공자 API의 선택 엔드포인트 주소.
         api_key: 제공자 인증에 사용할 선택 API 키.
     """
+
     backend: str
     model: str
     temperature: float | None
@@ -227,9 +228,7 @@ class ChatModelFactory:
         litellm.custom_provider_map[:] = [
             item for item in litellm.custom_provider_map if item["provider"] != CODEX_PROVIDER
         ]
-        litellm.custom_provider_map.append(
-            {"provider": CODEX_PROVIDER, "custom_handler": provider}
-        )
+        litellm.custom_provider_map.append({"provider": CODEX_PROVIDER, "custom_handler": provider})
         from litellm.utils import custom_llm_setup
 
         custom_llm_setup()

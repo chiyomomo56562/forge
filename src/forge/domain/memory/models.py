@@ -1,4 +1,7 @@
-"""Immutable domain values for L1 episodic memory."""
+"""L0 근거로부터 복원하는 불변 L1 episodic-memory 값.
+
+최종 수정일: 2026-07-31
+"""
 
 from __future__ import annotations
 
@@ -57,17 +60,29 @@ _NULLABLE_METRICS = frozenset(
 
 
 def _require_utc(value: datetime, field_name: str) -> None:
-    if value.tzinfo is None or value.utcoffset() is None:
-        raise MemoryValidationError(
-            code=f"episode.invalid_{field_name}", safe_message=f"{field_name} must be UTC."
-        )
-    if value.utcoffset().total_seconds() != 0:
+    """datetime 값이 UTC aware인지 검증한다.
+
+    Args:
+        value: 검사할 시각.
+        field_name: 오류 코드에 쓸 field 이름.
+
+    최종 수정일: 2026-07-31
+    """
+    if value.tzinfo is None or value.utcoffset() is None or value.utcoffset().total_seconds() != 0:
         raise MemoryValidationError(
             code=f"episode.invalid_{field_name}", safe_message=f"{field_name} must be UTC."
         )
 
 
 def _validate_score(value: float | None, field_name: str) -> None:
+    """선택 평가 점수가 0~1 범위인지 검증한다.
+
+    Args:
+        value: 검사할 점수 또는 평가 미완료를 의미하는 ``None``.
+        field_name: 오류 추적을 위한 metric 이름.
+
+    최종 수정일: 2026-07-31
+    """
     if value is not None and not 0.0 <= value <= 1.0:
         raise MemoryValidationError(
             code="episode.invalid_score", safe_message="Evaluation score must be between 0 and 1."
@@ -81,6 +96,13 @@ class EvaluationReason:
     detail: str
 
     def __post_init__(self) -> None:
+        """값이 없는 metric의 근거를 검증한다.
+
+        Args:
+            없음. dataclass field를 직접 검증한다.
+
+        최종 수정일: 2026-07-31
+        """
         if self.metric not in _NULLABLE_METRICS:
             raise MemoryValidationError(
                 code="episode.invalid_evaluation_metric",
@@ -100,6 +122,13 @@ class ExecutionResult:
     tool_names: tuple[str, ...] = ()
 
     def __post_init__(self) -> None:
+        """실행 요약이 비어 있지 않은지 검증한다.
+
+        Args:
+            없음. dataclass field를 직접 검증한다.
+
+        최종 수정일: 2026-07-31
+        """
         if not self.summary.strip():
             raise MemoryValidationError(
                 code="episode.invalid_execution", safe_message="Execution summary is required."
@@ -126,26 +155,28 @@ class Evaluation:
     reasons: tuple[EvaluationReason, ...] = ()
 
     def __post_init__(self) -> None:
+        """점수, CIB 상태, nullable metric의 값/근거 상호배타성을 검증한다.
+
+        Args:
+            없음. dataclass field를 직접 검증한다.
+
+        최종 수정일: 2026-07-31
+        """
         for metric in _NULLABLE_METRICS:
             _validate_score(getattr(self, metric), metric)
         if self.cib_evaluation_status is CibEvaluationStatus.NOT_EVALUATED:
-            if (
-                self.cib_score is not None
-                or self.promotion_eligibility is not PromotionEligibility.QUARANTINED
-            ):
-                raise MemoryValidationError(
-                    code="episode.invalid_cib", safe_message="Unevaluated CIB is inconsistent."
-                )
-        elif self.cib_evaluation_status is CibEvaluationStatus.PASSED:
-            if self.cib_score is None or self.cib_score < 0.95:
-                raise MemoryValidationError(
-                    code="episode.invalid_cib", safe_message="Passed CIB is invalid."
-                )
-        elif self.cib_score is None or self.cib_score >= 0.95:
-            raise MemoryValidationError(
-                code="episode.invalid_cib", safe_message="Failed CIB is invalid."
+            valid_cib = (
+                self.cib_score is None
+                and self.promotion_eligibility is PromotionEligibility.QUARANTINED
             )
-
+        elif self.cib_evaluation_status is CibEvaluationStatus.PASSED:
+            valid_cib = self.cib_score is not None and self.cib_score >= 0.95
+        else:
+            valid_cib = self.cib_score is not None and self.cib_score < 0.95
+        if not valid_cib:
+            raise MemoryValidationError(
+                code="episode.invalid_cib", safe_message="CIB evaluation is inconsistent."
+            )
         reason_metrics = [reason.metric for reason in self.reasons]
         if len(reason_metrics) != len(set(reason_metrics)):
             raise MemoryValidationError(
@@ -153,9 +184,7 @@ class Evaluation:
                 safe_message="Evaluation reasons are invalid.",
             )
         for metric in _NULLABLE_METRICS:
-            has_value = getattr(self, metric) is not None
-            has_reason = metric in reason_metrics
-            if has_value == has_reason:
+            if (getattr(self, metric) is not None) == (metric in reason_metrics):
                 raise MemoryValidationError(
                     code="episode.invalid_evaluation_reason",
                     safe_message="Evaluation reasons are invalid.",
@@ -171,6 +200,13 @@ class Reflection:
 
     @property
     def has_content(self) -> bool:
+        """네 reflection field 중 하나라도 비어 있지 않은지 반환한다.
+
+        Returns:
+            의미 있는 reflection이 있으면 ``True``.
+
+        최종 수정일: 2026-07-31
+        """
         return any(
             value.strip()
             for value in (self.what_worked, self.what_failed, self.next_hint, self.causal_condition)
@@ -195,6 +231,13 @@ class Episode:
     schema_version: int = 1
 
     def __post_init__(self) -> None:
+        """L1 식별자, UTC 시각, 근거 참조 및 outcome/evaluation 정합성을 검증한다.
+
+        Args:
+            없음. dataclass field를 직접 검증한다.
+
+        최종 수정일: 2026-07-31
+        """
         if not self.episode_id.startswith("ep_"):
             raise MemoryValidationError(
                 code="episode.invalid_id", safe_message="Episode ID is invalid."

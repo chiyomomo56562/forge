@@ -1,18 +1,21 @@
 """Adapter-owned L1 memory errors and internal index control signals."""
 
-from forge.domain.memory.errors import MemoryOperationError, RetryDisposition
+from forge.domain.memory.errors import (
+    MemoryInfrastructureError,
+    MemoryIntegrityError,
+    RetryableMemoryOperationError,
+)
+
+__all__ = [
+    "EpisodeIndexUnavailableError",
+    "EpisodeIntegrityError",
+    "MemoryInfrastructureError",
+    "RetryableMemoryOperationError",
+]
 
 
-class EpisodeIntegrityError(MemoryOperationError):
-    retry_disposition = RetryDisposition.DO_NOT_RETRY
-
-
-class RetryableMemoryOperationError(MemoryOperationError):
-    retry_disposition = RetryDisposition.RETRY_LATER
-
-
-class MemoryInfrastructureError(MemoryOperationError):
-    retry_disposition = RetryDisposition.DO_NOT_RETRY
+class EpisodeIntegrityError(MemoryIntegrityError):
+    """L1 repository가 정규화해 노출하는 정본 무결성 오류."""
 
 
 class EpisodeIndexUnavailableError(Exception):

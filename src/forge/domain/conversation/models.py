@@ -29,5 +29,6 @@ class AssistantReply:
         text: 모델이 생성한 텍스트 답변.
         model: 답변 생성에 사용된 모델 이름.
     """
+
     text: str
     model: str

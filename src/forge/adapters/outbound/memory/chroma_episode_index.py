@@ -24,11 +24,7 @@ def make_search_document(episode: Episode) -> str:
         (
             f"[TASK]\n{episode.task_request}",
             f"[CONDITION]\n{episode.reflection.causal_condition}",
-            (
-                "[RESULT]\n"
-                f"{episode.evaluation.status.value}: "
-                f"{episode.execution.summary}"
-            ),
+            (f"[RESULT]\n{episode.evaluation.status.value}: {episode.execution.summary}"),
             f"[WHAT_WORKED]\n{episode.reflection.what_worked}",
             f"[WHAT_FAILED]\n{episode.reflection.what_failed}",
             f"[NEXT_HINT]\n{episode.reflection.next_hint}",
