@@ -22,6 +22,7 @@ class FakeBlockChatModel:
             response_metadata={"model_name": "fake"},
         )
 
+
 def test_runtime_preserves_thread_history_but_not_system_instruction():
     model = FakeChatModel()
     runtime = LangGraphConversationRuntime(model)

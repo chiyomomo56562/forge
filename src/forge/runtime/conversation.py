@@ -79,6 +79,8 @@ class LangGraphConversationRuntime:
         if not isinstance(response, AIMessage):
             raise RuntimeError("Configured chat model did not return an AIMessage")
         return {"messages": [response]}
+
+
 def _extract_text(content: str | list[str | dict[str, Any]]) -> str:
     """LangChain assistant content에서 사용자에게 보여 줄 텍스트만 추출한다.
 

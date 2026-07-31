@@ -3,6 +3,7 @@
 from typing import Any
 
 from forge.adapters.outbound.llm import ChatModelFactory
+from forge.adapters.outbound.memory import JsonlL0EventStore
 from forge.application.conversation import ReceiveMessageService
 from forge.runtime import LangGraphConversationRuntime
 
@@ -20,3 +21,8 @@ def build_receive_message_service(
     """
     model = chat_model or ChatModelFactory.from_config(config_path).create()
     return ReceiveMessageService(LangGraphConversationRuntime(model))
+
+
+def build_l0_event_store(root_path: str = "data/memory/working/sessions") -> JsonlL0EventStore:
+    """Build the standalone L0 store; conversation CLI does not invoke it implicitly."""
+    return JsonlL0EventStore(root_path)

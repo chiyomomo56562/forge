@@ -20,18 +20,21 @@ def test_cli_single_query_uses_forge_bootstrap_without_agent_import(monkeypatch,
     service = FakeReceiveMessageService()
     monkeypatch.setattr(cli, "build_receive_message_service", lambda *, config_path: service)
 
-    assert cli.main(
-        [
-            "--query",
-            "hello",
-            "--conversation-id",
-            "thread-1",
-            "--system",
-            "brief",
-            "--config",
-            "none.yml",
-        ]
-    ) == 0
+    assert (
+        cli.main(
+            [
+                "--query",
+                "hello",
+                "--conversation-id",
+                "thread-1",
+                "--system",
+                "brief",
+                "--config",
+                "none.yml",
+            ]
+        )
+        == 0
+    )
 
     captured = capsys.readouterr()
     after_agent_imports = {
