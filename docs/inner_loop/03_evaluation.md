@@ -116,7 +116,7 @@ function evaluate_attempt(session, plan, execution, constraints):
         promotion_eligibility = eligibility,
         retryable = retryable
     )
-    append_l0(session, "evaluation_completed", evaluation)
+    append_l0(session, "evaluation.completed", evaluation)
 
     return evaluation
 ```

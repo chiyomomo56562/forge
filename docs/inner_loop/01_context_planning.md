@@ -9,7 +9,7 @@
 
 | 입력 | 산출물 |
 | --- | --- |
-| 사용자 요청, L1/L2/L3 검색 결과, Session Constraints | Injected Context, Plan, `plan_created` L0 이벤트 |
+| 사용자 요청, L1/L2/L3 검색 결과, Session Constraints | Injected Context, Plan, `plan.completed` L0 이벤트 |
 
 ## 의사 코드
 
@@ -43,7 +43,7 @@ function build_context_and_plan(session, constraints):
             failed_checks = preflight.failed_scenarios
         )
 
-    append_l0(session, "plan_created", {
+    append_l0(session, "plan.completed", {
         plan: plan.summary,
         retrieved_episode_ids: ids(l1),
         retrieved_knowledge_ids: ids(l2),
