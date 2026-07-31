@@ -46,3 +46,6 @@ function start_session(user_request, runtime_config):
 - 세션 도중 L4/L5의 최신값을 다시 읽어 권한을 넓히지 않는다.
 - 제약 변경이 필요하면 현재 세션을 안전하게 끝내고 Meta Loop/HITL 경로로
   처리한다.
+- Forge의 L0 구현은 `ses_`/`ep_` ID를 사전 할당하고 첫 이벤트로
+  `session.started`를 JSONL에 append한다. 이후 sequence는 0부터 단조 증가한다.
+- 이벤트 payload에는 비밀값이나 대형 원문 대신 안전한 요약·hash·artifact 참조만 둔다.

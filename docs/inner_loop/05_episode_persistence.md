@@ -84,3 +84,8 @@ function persist_episode(session, execution, evaluation, reflection):
 - ChromaDB의 ID와 `episode_id`가 일치한다.
 - CIB 실패 Episode는 저장되지만 Candidate 증거에 연결되지 않는다.
 - Candidate 연결 실패 시에도 Episode는 저장하고 실패 이유를 L0에 남긴다.
+- `raw_event_refs`에는 Finalize 시점까지의 근거 이벤트(`session.started`, 계획,
+  실행, 평가, 반성)만 sequence 순으로 넣는다. `episode.persisted`와 세션 종료
+  이벤트는 해당 Episode의 근거가 아니므로 포함하지 않는다.
+- 여러 실행 이벤트가 있으면 terminal `execution.completed`의 summary/outcome을 쓰고,
+  모든 완료·실패 이벤트의 tool name은 순서 보존 중복 제거해 합친다.

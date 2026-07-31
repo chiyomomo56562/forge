@@ -31,6 +31,8 @@ L0 JSONL 원본 이벤트 ── raw_event_refs ──→ L1 Episode
   저장해 검색·감사는 가능하지만 L2/L3 승격 증거에서는 제외한다.
 - ChromaDB metadata에는 문자열·숫자·불리언만 둔다. 배열, 중첩 객체, 큰 원문은
   `document` 또는 L0 참조로 분리한다.
+- L0의 JSONL 마지막 불완전 행은 재시작 시 무시할 수 있지만, 중간 행 손상이나
+  sequence gap은 저장소 오류로 취급한다. 같은 `event_id`의 동일 append는 idempotent하다.
 
 ## 논리적 Episode 정본
 
