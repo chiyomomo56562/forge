@@ -6,6 +6,12 @@ from typing import Any
 import yaml
 from chromadb import PersistentClient
 
+from forge.adapters.outbound.inner_loop import (
+    DeterministicEvaluator,
+    DeterministicExecutor,
+    DeterministicPlanner,
+    DeterministicReflector,
+)
 from forge.adapters.outbound.llm import ChatModelFactory
 from forge.adapters.outbound.memory import (
     ChromaEpisodeIndex,
@@ -15,10 +21,14 @@ from forge.adapters.outbound.memory import (
     SqliteEpisodeStore,
 )
 from forge.application.conversation import ReceiveMessageService
+from forge.application.inner_loop import RunInnerLoopService
 from forge.application.memory import (
+    FinalizeEpisodeService,
     PersistEpisodeService,
+    RecordInnerLoopEventService,
     ReindexEpisodesService,
     SearchEpisodesService,
+    StartInnerLoopSessionService,
 )
 from forge.runtime import LangGraphConversationRuntime
 
@@ -88,4 +98,47 @@ def build_memory_services(
         PersistEpisodeService(repository),
         SearchEpisodesService(repository),
         ReindexEpisodesService(repository),
+    )
+
+
+def build_inner_loop_service(
+    config_path: str = "config/memory.yml", *, max_retries: int = 3
+) -> RunInnerLoopService:
+    """기본 deterministic producer와 L0/L1 저장소를 연결한 Inner Loop를 조립한다.
+
+    Args:
+        config_path: L1 SQLite/Chroma 및 L0 경로를 담은 YAML 설정 파일.
+        max_retries: step attempt에 허용할 최대 재시도 횟수.
+
+    Returns:
+        명시적으로 호출할 수 있는 Inner Loop application service.
+
+    최종 수정일: 2026-07-31
+    """
+    with open(config_path, encoding="utf-8") as config_file:
+        config = yaml.safe_load(config_file) or {}
+    episodic = config["episodic"]
+    settings = MemorySettings(
+        sqlite_path=Path(episodic["sqlite_path"]),
+        chroma_path=Path(episodic["chroma_path"]),
+        collection_name=episodic["collection_name"],
+    )
+    collection = PersistentClient(path=str(settings.chroma_path)).get_or_create_collection(
+        settings.collection_name
+    )
+    repository = SqliteChromaEpisodeRepository(
+        SqliteEpisodeStore(settings.sqlite_path),
+        ChromaEpisodeIndex(collection, settings.projection_version, settings.embedding_model_id),
+        settings,
+    )
+    store = build_l0_event_store(config["working"]["l0"]["root_path"])
+    return RunInnerLoopService(
+        StartInnerLoopSessionService(store),
+        RecordInnerLoopEventService(store),
+        FinalizeEpisodeService(store, repository),
+        DeterministicPlanner(),
+        DeterministicExecutor(),
+        DeterministicEvaluator(),
+        DeterministicReflector(),
+        max_retries=max_retries,
     )

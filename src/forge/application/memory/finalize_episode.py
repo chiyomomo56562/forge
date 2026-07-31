@@ -37,6 +37,7 @@ class FinalizeEpisodeService:
         L0EventType.EXECUTION_STARTED,
         L0EventType.EXECUTION_COMPLETED,
         L0EventType.EXECUTION_FAILED,
+        L0EventType.EXECUTION_SUMMARY_COMPLETED,
         L0EventType.EVALUATION_COMPLETED,
         L0EventType.REFLECTION_COMPLETED,
     }
@@ -110,7 +111,7 @@ class FinalizeEpisodeService:
         terminals = [
             event
             for event in events
-            if event.event_type == L0EventType.EXECUTION_COMPLETED
+            if event.event_type == L0EventType.EXECUTION_SUMMARY_COMPLETED
             and event.payload.get("is_terminal") is True
         ]
         if len(terminals) != 1:
@@ -124,7 +125,11 @@ class FinalizeEpisodeService:
         terminal = terminals[0]
         tools: list[str] = []
         for event in events:
-            if event.event_type in {L0EventType.EXECUTION_COMPLETED, L0EventType.EXECUTION_FAILED}:
+            if event.event_type in {
+                L0EventType.EXECUTION_COMPLETED,
+                L0EventType.EXECUTION_FAILED,
+                L0EventType.EXECUTION_SUMMARY_COMPLETED,
+            }:
                 for name in self._required(event.payload, "tool_names"):
                     if not isinstance(name, str):
                         raise MemoryValidationError(
