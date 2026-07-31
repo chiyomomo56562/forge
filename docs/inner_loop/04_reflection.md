@@ -9,7 +9,7 @@
 
 | 입력 | 산출물 |
 | --- | --- |
-| 사용자 요청, Execution Result, Evaluation, L0 이벤트 | Reflection, `reflection_completed` L0 이벤트 |
+| 사용자 요청, Execution Result, Evaluation, L0 이벤트 | Reflection, `reflection.completed` L0 이벤트 |
 
 ## 필수 필드
 
@@ -46,7 +46,7 @@ function create_reflection(session, execution, evaluation):
         rules = ["specific", "evidence-grounded", "not-universal"]
     )
 
-    append_l0(session, "reflection_completed", {reflection: reflection})
+    append_l0(session, "reflection.completed", {reflection: reflection})
     return reflection
 ```
 

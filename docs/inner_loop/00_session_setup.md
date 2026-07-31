@@ -10,7 +10,7 @@
 
 | 입력 | 산출물 |
 | --- | --- |
-| 사용자 요청, 현재 L4 헌법, 현재 L5 권한, 실행 설정 | Session, Constraints, `session_started` L0 이벤트 |
+| 사용자 요청, 현재 L4 헌법, 현재 L5 권한, 실행 설정 | Session, Constraints, `session.started` L0 이벤트 |
 
 ## 의사 코드
 
@@ -31,7 +31,7 @@ function start_session(user_request, runtime_config):
         budgets: resolve_budgets(runtime_config, user_request)
     }
 
-    append_l0(session, "session_started", {
+    append_l0(session, "session.started", {
         request: user_request,
         risk_level: constraints.risk_level,
         authority_summary: constraints.authority.summary,

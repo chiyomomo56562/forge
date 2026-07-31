@@ -87,5 +87,5 @@ function persist_episode(session, execution, evaluation, reflection):
 - `raw_event_refs`에는 Finalize 시점까지의 근거 이벤트(`session.started`, 계획,
   실행, 평가, 반성)만 sequence 순으로 넣는다. `episode.persisted`와 세션 종료
   이벤트는 해당 Episode의 근거가 아니므로 포함하지 않는다.
-- 여러 실행 이벤트가 있으면 terminal `execution.completed`의 summary/outcome을 쓰고,
+- 여러 실행 이벤트가 있으면 유일한 `execution.summary.completed`의 summary/outcome을 쓰고,
   모든 완료·실패 이벤트의 tool name은 순서 보존 중복 제거해 합친다.

@@ -7,7 +7,7 @@ import sys
 from collections.abc import Sequence
 from uuid import uuid4
 
-from forge.bootstrap import build_receive_message_service
+from forge.bootstrap import build_inner_loop_service, build_receive_message_service
 from forge.domain.conversation import SendMessageCommand
 
 
@@ -36,6 +36,30 @@ def run_message(
     ).text
 
 
+def run_inner_loop(
+    query: str,
+    *,
+    task_category: str = "general",
+    memory_config_path: str = "config/memory.yml",
+) -> str:
+    """명시적으로 요청한 deterministic Inner Loop 한 회를 실행한다.
+
+    Args:
+        query: Inner Loop가 계획·실행·기억할 작업 요청.
+        task_category: L1 Episode에 기록할 작업 분류.
+        memory_config_path: L0/L1 저장소 설정 파일.
+
+    Returns:
+        사용자에게 표시할 session/episode/outcome 요약.
+
+    최종 수정일: 2026-07-31
+    """
+    result = build_inner_loop_service(memory_config_path).handle(
+        task_request=query, task_category=task_category
+    )
+    return f"session={result.session_id} episode={result.episode_id} outcome={result.outcome.value}"
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     """CLI 인자를 해석해 단일 호출 또는 REPL을 실행한다.
 
@@ -52,6 +76,20 @@ def main(argv: Sequence[str] | None = None) -> int:
         type=str,
         default=None,
         help="Run a single message and exit. If omitted, starts a conversation REPL.",
+    )
+    parser.add_argument(
+        "--inner-loop",
+        action="store_true",
+        help="Run the deterministic Inner Loop for --query instead of the conversation runtime.",
+    )
+    parser.add_argument(
+        "--task-category", type=str, default="general", help="L1 category used with --inner-loop."
+    )
+    parser.add_argument(
+        "--memory-config",
+        type=str,
+        default="config/memory.yml",
+        help="Memory config for --inner-loop.",
     )
     parser.add_argument(
         "--config",
@@ -76,6 +114,15 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     if args.query is not None:
         try:
+            if args.inner_loop:
+                print(
+                    run_inner_loop(
+                        args.query,
+                        task_category=args.task_category,
+                        memory_config_path=args.memory_config,
+                    )
+                )
+                return 0
             print(
                 run_message(
                     args.query,
