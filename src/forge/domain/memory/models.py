@@ -1,4 +1,7 @@
-"""L1 episodic-memory values reconstructed from L0 evidence."""
+"""L0 근거로부터 복원하는 L1 episodic-memory 값.
+
+최종 수정일: 2026-07-31
+"""
 
 from dataclasses import dataclass
 from datetime import datetime
@@ -62,6 +65,11 @@ class Reflection:
 
 @dataclass(frozen=True)
 class Episode:
+    """한 Inner Loop를 요약한 불변 L1 경험 단위.
+
+    최종 수정일: 2026-07-31
+    """
+
     episode_id: str
     session_id: str
     task_request: str
@@ -76,6 +84,13 @@ class Episode:
     schema_version: int = 1
 
     def __post_init__(self) -> None:
+        """L1 식별자, UTC 생성 시각, 중복 없는 L0 근거 참조를 검증한다.
+
+        Args:
+            없음. dataclass field를 직접 검증한다.
+
+        최종 수정일: 2026-07-31
+        """
         if not self.episode_id.startswith("ep_"):
             raise MemoryValidationError(
                 code="episode.invalid_id", safe_message="Episode ID is invalid."

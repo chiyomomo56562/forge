@@ -24,5 +24,14 @@ def build_receive_message_service(
 
 
 def build_l0_event_store(root_path: str = "data/memory/working/sessions") -> JsonlL0EventStore:
-    """Build the standalone L0 store; conversation CLI does not invoke it implicitly."""
+    """대화 CLI와 분리된 L0 JSONL 저장소를 조립한다.
+
+    Args:
+        root_path: session별 JSONL 및 manifest를 저장할 기준 경로.
+
+    Returns:
+        Inner Loop 서비스에 주입할 ``JsonlL0EventStore`` 인스턴스.
+
+    최종 수정일: 2026-07-31
+    """
     return JsonlL0EventStore(root_path)
