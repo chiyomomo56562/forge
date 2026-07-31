@@ -6,7 +6,7 @@ from forge.application.memory import (
     RecordInnerLoopEventService,
     StartInnerLoopSessionService,
 )
-from forge.domain.memory import L0EventType, MemoryValidationError
+from forge.domain.memory import IndexState, L0EventType, MemoryValidationError, PersistEpisodeResult
 
 
 class Repository:
@@ -15,7 +15,7 @@ class Repository:
 
     def save(self, episode):
         self.saved = episode
-        return episode
+        return PersistEpisodeResult(episode.episode_id, IndexState.INDEXED)
 
 
 def _record_ready_session(tmp_path):
@@ -34,7 +34,7 @@ def _record_ready_session(tmp_path):
         event_type=L0EventType.EXECUTION_COMPLETED,
         payload={
             "summary": "done",
-            "outcome": "success",
+            "outcome": "completed",
             "tool_names": ["shell", "editor"],
             "attempt": 2,
             "is_terminal": True,
@@ -44,10 +44,19 @@ def _record_ready_session(tmp_path):
         session_id=session.session_id,
         event_type=L0EventType.EVALUATION_COMPLETED,
         payload={
+            "result_quality": 1.0,
+            "requirement_coverage": 1.0,
+            "verification_confidence": 1.0,
             "success_score": 1.0,
-            "cib_score": 0.9,
-            "cib_evaluation_status": "evaluated",
-            "status": "completed",
+            "pain_index": 0.0,
+            "retry_ratio": 0.0,
+            "tool_error_ratio": 0.0,
+            "budget_overrun_ratio": 0.0,
+            "rework_ratio": 0.0,
+            "human_intervention_ratio": 0.0,
+            "cib_score": 1.0,
+            "cib_evaluation_status": "passed",
+            "status": "Success",
             "retryable": False,
             "promotion_eligibility": "eligible",
             "reasons": [],

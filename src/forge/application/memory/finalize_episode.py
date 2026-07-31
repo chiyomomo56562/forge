@@ -10,9 +10,9 @@ from typing import Any
 from forge.domain.memory import (
     CibEvaluationStatus,
     Episode,
+    EpisodeStatus,
     Evaluation,
     EvaluationReason,
-    EvaluationStatus,
     ExecutionOutcome,
     ExecutionResult,
     L0Event,
@@ -82,7 +82,7 @@ class FinalizeEpisodeService:
             raise
         event_type = (
             L0EventType.EPISODE_PERSISTED
-            if getattr(saved, "index_state", "indexed") == "indexed"
+            if saved.index_state.value == "indexed"
             else L0EventType.EPISODE_INDEX_DEFERRED
         )
         self._record_terminal(session_id, event_type, {"episode_id": saved.episode_id})
@@ -90,7 +90,7 @@ class FinalizeEpisodeService:
             session_id, L0EventType.SESSION_COMPLETED, {"episode_id": saved.episode_id}
         )
         self._store.mark_completed(session_id)
-        return saved
+        return episode
 
     def _build_episode(
         self, events: tuple[L0Event, ...], episode_id: str, session_id: str
@@ -133,8 +133,7 @@ class FinalizeEpisodeService:
                     if name not in tools:
                         tools.append(name)
         reasons = tuple(
-            EvaluationReason(metric=item["metric"], reason=item["reason"])
-            for item in self._required(evaluation.payload, "reasons")
+            EvaluationReason(**item) for item in self._required(evaluation.payload, "reasons")
         )
         pattern_events = [
             event for event in events if event.event_type == L0EventType.PLAN_COMPLETED
@@ -153,17 +152,30 @@ class FinalizeEpisodeService:
                 tool_names=tuple(tools),
             ),
             evaluation=Evaluation(
+                result_quality=self._required(evaluation.payload, "result_quality"),
+                requirement_coverage=self._required(evaluation.payload, "requirement_coverage"),
+                verification_confidence=self._required(
+                    evaluation.payload, "verification_confidence"
+                ),
                 success_score=self._required(evaluation.payload, "success_score"),
+                pain_index=self._required(evaluation.payload, "pain_index"),
+                retry_ratio=self._required(evaluation.payload, "retry_ratio"),
+                tool_error_ratio=self._required(evaluation.payload, "tool_error_ratio"),
+                budget_overrun_ratio=self._required(evaluation.payload, "budget_overrun_ratio"),
+                rework_ratio=self._required(evaluation.payload, "rework_ratio"),
+                human_intervention_ratio=self._required(
+                    evaluation.payload, "human_intervention_ratio"
+                ),
                 cib_score=self._required(evaluation.payload, "cib_score"),
                 cib_evaluation_status=self._enum(
                     CibEvaluationStatus, self._required(evaluation.payload, "cib_evaluation_status")
                 ),
-                status=self._enum(EvaluationStatus, self._required(evaluation.payload, "status")),
-                retryable=self._required(evaluation.payload, "retryable"),
+                status=self._enum(EpisodeStatus, self._required(evaluation.payload, "status")),
                 promotion_eligibility=self._enum(
                     PromotionEligibility,
                     self._required(evaluation.payload, "promotion_eligibility"),
                 ),
+                retryable=self._required(evaluation.payload, "retryable"),
                 reasons=reasons,
             ),
             reflection=Reflection(

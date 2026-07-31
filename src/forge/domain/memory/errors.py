@@ -1,7 +1,9 @@
-"""메모리 하위 시스템의 공개 오류 계약.
+"""L0/L1 메모리 하위 시스템의 공개 오류 계약.
 
 최종 수정일: 2026-07-31
 """
+
+from __future__ import annotations
 
 from enum import StrEnum
 
@@ -13,19 +15,16 @@ class RetryDisposition(StrEnum):
 
 
 class MemoryOperationError(Exception):
-    """모든 공개 메모리 오류가 제공하는 안정 code와 안전 메시지의 기반 타입.
-
-    최종 수정일: 2026-07-31
-    """
+    """안정 오류 code와 안전한 외부 메시지를 제공하는 메모리 오류 기반 타입."""
 
     retry_disposition: RetryDisposition
 
     def __init__(self, *, code: str, safe_message: str) -> None:
-        """오류 코드와 호출자에게 노출 가능한 메시지를 초기화한다.
+        """오류의 복구 코드와 민감정보 없는 메시지를 초기화한다.
 
         Args:
-            code: programmatic retry/복구 판단에 쓰는 안정 오류 코드.
-            safe_message: 비밀값·내부 원인을 제외한 외부 노출 메시지.
+            code: 호출자의 retry/repair 결정을 위한 안정 코드.
+            safe_message: 외부에 노출해도 되는 오류 설명.
 
         최종 수정일: 2026-07-31
         """
