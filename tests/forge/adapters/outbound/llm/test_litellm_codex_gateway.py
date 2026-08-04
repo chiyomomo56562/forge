@@ -112,3 +112,42 @@ def test_ollama_factory_uses_configured_endpoint():
 
     assert model.model == "ollama_chat/glm"
     assert model.api_base == "http://ollama"
+
+
+def test_create_with_tools_ollama_binds_tools():
+    """Ollama backend에서 create_with_tools가 bind_tools를 호출하는지 검증한다.
+
+    최종 수정일: 2026-08-04
+    """
+    factory = ChatModelFactory(ChatModelSettings("ollama", "glm", 0.3, 512, "http://ollama"))
+    tool_schemas = [
+        {
+            "type": "function",
+            "function": {
+                "name": "workspace.list_files",
+                "description": "List files.",
+                "parameters": {"type": "object", "properties": {}},
+            },
+        }
+    ]
+
+    model = factory.create_with_tools(tool_schemas)
+
+    # bind_tools가 적용되면 kwargs에 tools가 설정되어 있어야 한다
+    assert model.kwargs.get("tools") is not None
+
+
+def test_create_with_tools_codex_raises_not_implemented():
+    """Codex backend에서 create_with_tools가 NotImplementedError를 발생시키는지 검증한다.
+
+    최종 수정일: 2026-07-31
+    """
+    factory = ChatModelFactory(
+        ChatModelSettings("openai", TERRA_MODEL, 0.2, 128, api_key="key"),
+        codex_provider=CodexProvider(codex_factory=FakeCodex),
+    )
+
+    import pytest
+
+    with pytest.raises(NotImplementedError, match="Codex"):
+        factory.create_with_tools([{"type": "function", "function": {"name": "x"}}])

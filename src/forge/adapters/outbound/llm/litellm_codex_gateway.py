@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import os
-from collections.abc import Callable
+from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 from typing import Any
 
@@ -217,6 +217,33 @@ class ChatModelFactory:
                 **parameters,
             )
         raise ValueError(f"Unsupported Forge LLM backend: {self._settings.backend}")
+
+    def create_with_tools(
+        self, tool_schemas: Sequence[dict[str, Any]]
+    ) -> BaseChatModel:
+        """도구 호출이 가능한 LangChain 채팅 모델을 생성한다.
+
+        Ollama backend는 ``bind_tools``로 JSON Schema를 전달한다.
+        Codex(openai) backend는 prompt 기반 flattening으로 구조적 tool_calls
+        반환을 지원하지 않으므로 ``NotImplementedError``를 발생시킨다.
+
+        Args:
+            tool_schemas: OpenAI function-calling 형식의 도구 정의 목록.
+                각 항목은 ``type``, ``function`` 키를 가진 dict이다.
+
+        Raises:
+            NotImplementedError: Codex backend에서 tool calling을 요청한 경우.
+            ValueError: Ollama backend에 base_url이 없는 경우.
+
+        최종 수정일: 2026-07-31
+        """
+        model = self.create()
+        if self._settings.backend == "openai":
+            raise NotImplementedError(
+                "Tool calling is not supported for the Codex (openai) backend. "
+                "Use the Ollama backend for tool-calling capabilities."
+            )
+        return model.bind_tools(tool_schemas)
 
     @staticmethod
     def _register_codex_provider(provider: CodexProvider) -> None:

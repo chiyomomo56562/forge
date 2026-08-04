@@ -37,6 +37,26 @@ class ToolStatus(StrEnum):
 
 
 @dataclass(frozen=True)
+class ToolSchema:
+    """LLM에 전달할 단일 도구의 JSON Schema 투영.
+
+    `parameters`는 OpenAI/Ollama function-calling이 요구하는 JSON Schema dict다.
+    registry adapter가 validator에서 canonical 형태로 구성한다.
+
+    Args:
+        name: 도구의 registry 식별자.
+        description: LLM이 도구 선택에 사용할 용도 설명.
+        parameters: JSON Schema ``object`` 형태의 입력 정의.
+
+    최종 수정일: 2026-07-31
+    """
+
+    name: str
+    description: str
+    parameters: Mapping[str, Any]
+
+
+@dataclass(frozen=True)
 class ToolDefinition:
     """레지스트리에 노출되는 도구의 안정적인 정책 메타데이터.
 

@@ -9,7 +9,7 @@ from langgraph.checkpoint.memory import InMemorySaver
 from langgraph.graph import START, MessagesState, StateGraph
 from langgraph.runtime import Runtime
 
-from forge.domain.conversation import AssistantReply
+from forge.domain.conversation import AssistantReply, ToolCall
 
 from .context import ConversationContext
 
@@ -59,7 +59,10 @@ class LangGraphConversationRuntime:
         if not isinstance(message, AIMessage):
             raise RuntimeError("Conversation runtime did not produce an AI message")
         model = str(message.response_metadata.get("model_name", ""))
-        return AssistantReply(text=_extract_text(message.content), model=model)
+        tool_calls = _extract_tool_calls(message)
+        return AssistantReply(
+            text=_extract_text(message.content), model=model, tool_calls=tool_calls
+        )
 
     def _call_model(
         self,
@@ -79,6 +82,29 @@ class LangGraphConversationRuntime:
         if not isinstance(response, AIMessage):
             raise RuntimeError("Configured chat model did not return an AIMessage")
         return {"messages": [response]}
+
+
+def _extract_tool_calls(message: AIMessage) -> tuple[ToolCall, ...]:
+    """LangChain AIMessage에서 도구 호출 목록을 추출한다.
+
+    Args:
+        message: 모델이 반환한 AIMessage.
+
+    Returns:
+        도구 호출이 없으면 빈 튜플, 있으면 ToolCall 튜플.
+
+    최종 수정일: 2026-08-04
+    """
+    raw_calls = getattr(message, "tool_calls", None) or []
+    calls: list[ToolCall] = []
+    for call in raw_calls:
+        name = call.get("name", "")
+        if not name:
+            continue
+        arguments = call.get("args") or call.get("arguments") or {}
+        call_id = call.get("id", "")
+        calls.append(ToolCall(name=name, arguments=dict(arguments), id=call_id))
+    return tuple(calls)
 
 
 def _extract_text(content: str | list[str | dict[str, Any]]) -> str:
