@@ -1,3 +1,4 @@
+from .conversation_bridge import DomainChatModelBridge
 from .factory import UnifiedChatModelFactory
 from .litellm_codex_gateway import (
     CHAT_ROUTE,
@@ -8,7 +9,8 @@ from .litellm_codex_gateway import (
     CodexProvider,
 )
 from .providers import LiteLLMChatModel, ProviderAdapter
-from .providers.codex import CodexLLMProvider, CodexProvider as CodexProviderAdapter, CodexSettings
+from .providers.codex import CodexLLMProvider, CodexSettings
+from .providers.codex import CodexProvider as CodexProviderAdapter
 from .providers.ollama import OllamaProvider, OllamaSettings
 from .strategies import (
     PromptStructuredOutputStrategy,
@@ -28,6 +30,7 @@ __all__ = [
     "CodexProvider",
     "CodexProviderAdapter",
     "CodexSettings",
+    "DomainChatModelBridge",
     "LiteLLMChatModel",
     "OllamaProvider",
     "OllamaSettings",

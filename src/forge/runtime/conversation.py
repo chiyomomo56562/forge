@@ -2,16 +2,43 @@
 
 from __future__ import annotations
 
+import json
+from collections.abc import Callable, Sequence
+from pathlib import Path
 from typing import Any
 
-from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
+from langchain_core.messages import AIMessage, HumanMessage, SystemMessage, ToolMessage
 from langgraph.checkpoint.memory import InMemorySaver
-from langgraph.graph import START, MessagesState, StateGraph
+from langgraph.graph import END, START, MessagesState, StateGraph
 from langgraph.runtime import Runtime
 
+from forge.adapters.outbound.inner_loop import ToolCallConversionError, convert_tool_calls_to_plan
+from forge.adapters.outbound.llm.strategies import ToolCallingError
+from forge.application.conversation.tool_feedback import (
+    ToolFeedbackPayload,
+    protocol_failure_feedback,
+    serialize_tool_execution,
+)
 from forge.domain.conversation import AssistantReply, ToolCall
+from forge.domain.inner_loop import InnerLoopPlan, ToolExecution
+from forge.domain.llm import ToolCallData
+from forge.ports.outbound import PlanStepExecutor
 
 from .context import ConversationContext
+
+ToolCallConverter = Callable[[Sequence[ToolCallData]], InnerLoopPlan]
+FeedbackSerializer = Callable[[ToolExecution], ToolFeedbackPayload]
+
+DEFAULT_MAX_TOOL_ROUNDS = 3
+DEFAULT_MAX_PROTOCOL_FAILURES = 2
+DEFAULT_MAX_TOOL_FEEDBACK_BYTES = 4096
+_PROTOCOL_TOOL_CALL_ID = "tool_protocol"
+_PROTOCOL_FINAL_RESPONSE = (
+    "I could not safely process the malformed tool-call request. Please try again."
+)
+_TOOL_ROUND_LIMIT_RESPONSE = (
+    "I stopped because the tool-call round limit was reached. Please try again."
+)
 
 
 class LangGraphConversationRuntime:
@@ -22,7 +49,19 @@ class LangGraphConversationRuntime:
         checkpointer: 대화 상태를 보관할 저장소. 생략하면 메모리 저장소를 만든다.
     """
 
-    def __init__(self, model: Any, *, checkpointer: InMemorySaver | None = None) -> None:
+    def __init__(
+        self,
+        model: Any,
+        *,
+        checkpointer: InMemorySaver | None = None,
+        executor: PlanStepExecutor | None = None,
+        tool_call_converter: ToolCallConverter | None = None,
+        feedback_serializer: FeedbackSerializer | None = None,
+        max_tool_rounds: int = DEFAULT_MAX_TOOL_ROUNDS,
+        max_protocol_failures: int = DEFAULT_MAX_PROTOCOL_FAILURES,
+        max_tool_feedback_bytes: int = DEFAULT_MAX_TOOL_FEEDBACK_BYTES,
+        workspace_root: Path | str | None = None,
+    ) -> None:
         """모델과 checkpoint 저장소로 LangGraph 실행 그래프를 초기화한다.
 
         Args:
@@ -31,9 +70,37 @@ class LangGraphConversationRuntime:
         """
         self._model = model
         self._checkpointer = checkpointer or InMemorySaver()
+        self._executor = executor
+        self._tool_call_converter = tool_call_converter or convert_tool_calls_to_plan
+        self._feedback_serializer = feedback_serializer or (
+            lambda execution: serialize_tool_execution(
+                execution,
+                max_output_bytes=max_tool_feedback_bytes,
+                workspace_root=workspace_root,
+            )
+        )
+        self._max_tool_rounds = max_tool_rounds
+        self._max_protocol_failures = max_protocol_failures
+        self._max_tool_feedback_bytes = max_tool_feedback_bytes
+        self._workspace_root = workspace_root
         builder = StateGraph(MessagesState, context_schema=ConversationContext)
         builder.add_node("call_model", self._call_model)
         builder.add_edge(START, "call_model")
+        if self._executor is not None:
+            builder.add_node("execute_tools", self._execute_tools)
+            builder.add_node("tool_round_limit", self._tool_round_limit)
+            builder.add_conditional_edges(
+                "call_model",
+                self._route_after_model,
+                {
+                    "execute_tools": "execute_tools",
+                    "call_model": "call_model",
+                    "tool_round_limit": "tool_round_limit",
+                    END: END,
+                },
+            )
+            builder.add_edge("execute_tools", "call_model")
+            builder.add_edge("tool_round_limit", END)
         self._graph = builder.compile(checkpointer=self._checkpointer)
 
     def invoke(
@@ -53,7 +120,10 @@ class LangGraphConversationRuntime:
         state = self._graph.invoke(
             {"messages": [HumanMessage(content=text)]},
             {"configurable": {"thread_id": conversation_id}},
-            context=ConversationContext(system_instruction=system_instruction),
+            context=ConversationContext(
+                system_instruction=system_instruction,
+                conversation_id=conversation_id,
+            ),
         )
         message = state["messages"][-1]
         if not isinstance(message, AIMessage):
@@ -68,7 +138,7 @@ class LangGraphConversationRuntime:
         self,
         state: MessagesState,
         runtime: Runtime[ConversationContext],
-    ) -> dict[str, list[AIMessage]]:
+    ) -> dict[str, list[AIMessage | ToolMessage]]:
         """저장된 문맥에 현재 지시문을 임시로 붙여 모델을 호출한다.
 
         Args:
@@ -78,10 +148,68 @@ class LangGraphConversationRuntime:
         messages = list(state["messages"])
         if runtime.context.system_instruction.strip():
             messages.insert(0, SystemMessage(content=runtime.context.system_instruction))
-        response = self._model.invoke(messages)
+        try:
+            response = self._model.invoke(messages)
+        except ToolCallingError as exc:
+            return {"messages": [self._protocol_failure_message(state, str(exc))]}
         if not isinstance(response, AIMessage):
             raise RuntimeError("Configured chat model did not return an AIMessage")
         return {"messages": [response]}
+
+    def _execute_tools(
+        self,
+        state: MessagesState,
+        runtime: Runtime[ConversationContext],
+    ) -> dict[str, list[ToolMessage]]:
+        """Execute the latest AI tool calls sequentially and expose safe results."""
+        if self._executor is None:
+            return {"messages": []}
+        latest = state["messages"][-1]
+        if not isinstance(latest, AIMessage):
+            return {"messages": []}
+        tool_calls = _extract_tool_call_data(latest)
+        if not tool_calls:
+            return {"messages": []}
+        try:
+            plan = self._tool_call_converter(tool_calls)
+        except ToolCallConversionError as exc:
+            return {"messages": [self._protocol_failure_message(state, str(exc))]}
+
+        messages: list[ToolMessage] = []
+        for step in plan.steps:
+            execution = self._executor.execute(step, session_id=runtime.context.conversation_id)
+            payload = self._feedback_serializer(execution)
+            messages.append(_tool_message(payload))
+        return {"messages": messages}
+
+    def _route_after_model(self, state: MessagesState) -> str:
+        latest = state["messages"][-1]
+        if isinstance(latest, ToolMessage) and latest.tool_call_id == _PROTOCOL_TOOL_CALL_ID:
+            if _current_turn_protocol_failures(state) > self._max_protocol_failures:
+                return END
+            return "call_model"
+        if not isinstance(latest, AIMessage) or not _has_raw_tool_calls(latest):
+            return END
+        if _current_turn_tool_rounds(state) > self._max_tool_rounds:
+            return "tool_round_limit"
+        return "execute_tools"
+
+    def _protocol_failure_message(
+        self, state: MessagesState, reason: str
+    ) -> AIMessage | ToolMessage:
+        if _current_turn_protocol_failures(state) >= self._max_protocol_failures:
+            return AIMessage(content=_PROTOCOL_FINAL_RESPONSE)
+        payload = protocol_failure_feedback(
+            tool_call_id=_PROTOCOL_TOOL_CALL_ID,
+            safe_error_code="tool.protocol_failure",
+            summary=f"Malformed tool-call envelope. {reason}",
+            max_output_bytes=self._max_tool_feedback_bytes,
+            workspace_root=self._workspace_root,
+        )
+        return _tool_message(payload)
+
+    def _tool_round_limit(self, _state: MessagesState) -> dict[str, list[AIMessage]]:
+        return {"messages": [AIMessage(content=_TOOL_ROUND_LIMIT_RESPONSE)]}
 
 
 def _extract_tool_calls(message: AIMessage) -> tuple[ToolCall, ...]:
@@ -105,6 +233,51 @@ def _extract_tool_calls(message: AIMessage) -> tuple[ToolCall, ...]:
         call_id = call.get("id", "")
         calls.append(ToolCall(name=name, arguments=dict(arguments), id=call_id))
     return tuple(calls)
+
+
+def _extract_tool_call_data(message: AIMessage) -> tuple[ToolCallData, ...]:
+    raw_calls = getattr(message, "tool_calls", None) or []
+    result: list[ToolCallData] = []
+    for call in raw_calls:
+        name = call.get("name", "")
+        arguments = call.get("args") or call.get("arguments") or {}
+        call_id = call.get("id", "")
+        result.append(ToolCallData(name=name, arguments=arguments, id=call_id))
+    return tuple(result)
+
+
+def _has_raw_tool_calls(message: AIMessage) -> bool:
+    return bool(getattr(message, "tool_calls", None) or [])
+
+
+def _tool_message(payload: ToolFeedbackPayload) -> ToolMessage:
+    return ToolMessage(
+        content=json.dumps(payload, ensure_ascii=False, sort_keys=True),
+        tool_call_id=payload["tool_call_id"],
+        name=payload["name"],
+    )
+
+
+def _current_turn_messages(state: MessagesState) -> list[Any]:
+    messages = list(state["messages"])
+    for index in range(len(messages) - 1, -1, -1):
+        if isinstance(messages[index], HumanMessage):
+            return messages[index + 1 :]
+    return messages
+
+
+def _current_turn_tool_rounds(state: MessagesState) -> int:
+    return sum(
+        isinstance(message, AIMessage) and bool(_extract_tool_calls(message))
+        for message in _current_turn_messages(state)
+    )
+
+
+def _current_turn_protocol_failures(state: MessagesState) -> int:
+    return sum(
+        isinstance(message, ToolMessage) and message.tool_call_id == _PROTOCOL_TOOL_CALL_ID
+        for message in _current_turn_messages(state)
+    )
 
 
 def _extract_text(content: str | list[str | dict[str, Any]]) -> str:
