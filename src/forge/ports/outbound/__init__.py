@@ -8,9 +8,11 @@ from .inner_loop import (
     ToolRegistry,
 )
 from .l0_event_store import L0EventStore
-from .model_gateway import ConversationRuntime
+from .model_gateway import ChatModel, ChatModelFactory, ConversationRuntime, StructuredChatModel
 
 __all__ = [
+    "ChatModel",
+    "ChatModelFactory",
     "ConversationRuntime",
     "EpisodeRepository",
     "InnerLoopEvaluator",
@@ -18,6 +20,7 @@ __all__ = [
     "InnerLoopReflector",
     "L0EventStore",
     "PlanStepExecutor",
+    "StructuredChatModel",
     "ToolAuthorizationPolicy",
     "ToolRegistry",
 ]

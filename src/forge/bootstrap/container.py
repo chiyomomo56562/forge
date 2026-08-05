@@ -10,8 +10,19 @@ from forge.adapters.outbound.inner_loop import (
     DeterministicEvaluator,
     DeterministicPlanner,
     DeterministicReflector,
+    LLMPlanner,
+    PLAN_SCHEMA,
 )
-from forge.adapters.outbound.llm import ChatModelFactory
+from forge.adapters.outbound.llm import (
+    ChatModelFactory,
+    CodexProviderAdapter,
+    CodexSettings,
+    OllamaProvider,
+    OllamaSettings,
+    PromptStructuredOutputStrategy,
+    UnifiedChatModelFactory,
+)
+from forge.adapters.outbound.llm.strategies import ToolCallingStrategy
 from forge.adapters.outbound.memory import (
     ChromaEpisodeIndex,
     JsonlL0EventStore,
@@ -34,6 +45,7 @@ from forge.application.memory import (
     SearchEpisodesService,
     StartInnerLoopSessionService,
 )
+from forge.ports.outbound import InnerLoopPlanner
 from forge.runtime import LangGraphConversationRuntime
 
 
@@ -154,7 +166,7 @@ def build_inner_loop_service(
         StartInnerLoopSessionService(store),
         RecordInnerLoopEventService(store),
         FinalizeEpisodeService(store, repository),
-        DeterministicPlanner(tool_name="workspace.list_files", tool_arguments={"path": "."}),
+        _build_planner(agent_config, registry),
         RegistryPlanStepExecutor(
             registry,
             StaticToolAuthorizationPolicy(
@@ -164,4 +176,111 @@ def build_inner_loop_service(
         DeterministicEvaluator(),
         DeterministicReflector(),
         max_retries=max_retries,
+    )
+
+
+def _build_provider(config: dict[str, Any]):
+    """llm 설정에서 provider adapter를 생성한다.
+
+    provider 이름으로 기능을 분기하지 않고, 설정에 따라 adapter를 선택한다.
+
+    최종 수정일: 2026-08-04
+    """
+    llm = config.get("llm", {})
+    backend = llm.get("backend", "ollama")
+    selected = llm.get(backend, {})
+    if backend == "ollama":
+        return OllamaProvider(
+            OllamaSettings(
+                model=selected.get("model", "glm-5.2:cloud"),
+                base_url=selected.get("base_url", "http://localhost:11434"),
+                temperature=selected.get("temperature"),
+                max_tokens=selected.get("max_tokens"),
+            )
+        )
+    if backend == "openai":
+        return CodexProviderAdapter(
+            CodexSettings(
+                model=selected.get("model", "gpt-5.6-luna"),
+                temperature=selected.get("temperature"),
+                max_tokens=selected.get("max_tokens"),
+            )
+        )
+    raise ValueError(f"Unsupported LLM backend: {backend}")
+
+
+def _build_chat_model_factory(config: dict[str, Any]) -> UnifiedChatModelFactory:
+    """provider와 전략을 조합해 ``UnifiedChatModelFactory`` 를 생성한다.
+
+    전략 선택은 config의 ``model.tool_calling_strategy`` 와
+    ``model.structured_output_strategy`` 에 따른다.
+    초기 기본값은 ``prompt`` 로 모든 모델에 적용 가능하다.
+
+    최종 수정일: 2026-08-04
+    """
+    model_config = config.get("model", {})
+    tool_strategy_name = model_config.get("tool_calling_strategy", "prompt")
+    structured_strategy_name = model_config.get("structured_output_strategy", "prompt")
+
+    if tool_strategy_name != "prompt":
+        raise ValueError(
+            f"Tool calling strategy '{tool_strategy_name}' is not yet supported. "
+            "Use 'prompt' for the initial implementation."
+        )
+    if structured_strategy_name != "prompt":
+        raise ValueError(
+            f"Structured output strategy '{structured_strategy_name}' is not yet supported. "
+            "Use 'prompt' for the initial implementation."
+        )
+
+    return UnifiedChatModelFactory(
+        provider=_build_provider(config),
+        tool_strategy=_PlaceholderToolCallingStrategy(),
+        structured_strategy=PromptStructuredOutputStrategy(),
+    )
+
+
+class _PlaceholderToolCallingStrategy:
+    """tool-calling 전략 구현 전까지 사용하는 placeholder.
+
+    Step 6에서 ``PromptToolCallingStrategy`` 로 교체된다.
+
+    최종 수정일: 2026-08-04
+    """
+
+    def apply(self, base_model, tools):
+        raise NotImplementedError(
+            "Tool calling strategy is not yet implemented. "
+            "Use 'prompt' structured output for planning."
+        )
+
+
+def _build_planner(
+    agent_config: dict[str, Any], registry: BuiltinToolRegistry
+) -> InnerLoopPlanner:
+    """config에 따라 deterministic 또는 LLM planner를 생성한다.
+
+    기본값은 ``deterministic`` 이며, ``inner_loop.planner.type: llm`` 인 경우
+    ``UnifiedChatModelFactory`` 로 structured model을 만들어 ``LLMPlanner`` 를 조립한다.
+
+    최종 수정일: 2026-08-04
+    """
+    planner_config = agent_config.get("inner_loop", {}).get("planner", {})
+    planner_type = planner_config.get("type", "deterministic")
+
+    if planner_type == "deterministic":
+        return DeterministicPlanner(
+            tool_name=planner_config.get("tool_name", "workspace.list_files"),
+            tool_arguments=planner_config.get("tool_arguments", {"path": "."}),
+        )
+    if planner_type == "llm":
+        factory = _build_chat_model_factory(agent_config)
+        model = factory.create_structured_model(PLAN_SCHEMA)
+        return LLMPlanner(
+            model,
+            tool_schemas=registry.tool_schemas(),
+            system_prompt=planner_config.get("system_prompt"),
+        )
+    raise ValueError(
+        f"Unsupported planner type: {planner_type}. Use 'deterministic' or 'llm'."
     )
