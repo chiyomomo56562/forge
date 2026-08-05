@@ -58,6 +58,22 @@ class DeterministicPlanner:
             ),
         )
 
+    def create_plan_after_feedback(
+        self,
+        *,
+        task_request: str,
+        context_episode_ids: tuple[str, ...],
+        last_execution: ToolExecution,
+        feedback: dict[str, object],
+        feedback_count: int,
+    ) -> InnerLoopPlan:
+        """기본 deterministic planner는 feedback 후에도 같은 계획 계약을 유지한다."""
+        del last_execution, feedback, feedback_count
+        return self.create_plan(
+            task_request=task_request,
+            context_episode_ids=context_episode_ids,
+        )
+
 
 class DeterministicExecutor:
     def execute(self, step: PlanStep, *, session_id: str = "", attempt: int = 0) -> ToolExecution:

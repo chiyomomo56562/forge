@@ -1,5 +1,6 @@
 from .episode_repository import EpisodeRepository
 from .inner_loop import (
+    FeedbackAwareInnerLoopPlanner,
     InnerLoopEvaluator,
     InnerLoopPlanner,
     InnerLoopReflector,
@@ -15,6 +16,7 @@ __all__ = [
     "ChatModelFactory",
     "ConversationRuntime",
     "EpisodeRepository",
+    "FeedbackAwareInnerLoopPlanner",
     "InnerLoopEvaluator",
     "InnerLoopPlanner",
     "InnerLoopReflector",

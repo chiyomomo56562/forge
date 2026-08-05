@@ -14,13 +14,18 @@ from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from typing import Any
 
-from forge.domain.inner_loop import InnerLoopPlan, PlanStep, ToolSchema
+from forge.domain.inner_loop import InnerLoopPlan, PlanStep, ToolExecution, ToolSchema
 from forge.domain.llm import ChatMessage
 from forge.ports.outbound.model_gateway import ChatModel, StructuredChatModel
 
 from .tool_call_converter import ToolCallConversionError, convert_tool_calls_to_plan
 
-__all__ = ["LLMPlanner", "NativeToolCallPlanner", "PlanGenerationError", "PLAN_SCHEMA"]
+__all__ = [
+    "LLMPlanner",
+    "NativeToolCallPlanner",
+    "PlanGenerationError",
+    "PLAN_SCHEMA",
+]
 
 
 PLAN_SCHEMA: dict[str, Any] = {
@@ -140,7 +145,31 @@ class LLMPlanner:
             ChatMessage(role="system", content=self._system_prompt),
             ChatMessage(role="user", content=task_request),
         ]
-        data = self._model.invoke(messages)
+        return self._plan_from_structured_data(self._model.invoke(messages))
+
+    def create_plan_after_feedback(
+        self,
+        *,
+        task_request: str,
+        context_episode_ids: Sequence[str],
+        last_execution: ToolExecution,
+        feedback: Mapping[str, object],
+        feedback_count: int,
+    ) -> InnerLoopPlan:
+        """이전 실행 결과를 user feedback으로 전달해 수정 계획을 생성한다."""
+        del context_episode_ids, last_execution
+
+        messages = [
+            ChatMessage(role="system", content=self._system_prompt),
+            ChatMessage(role="user", content=task_request),
+            ChatMessage(
+                role="user",
+                content=_feedback_prompt(feedback=feedback, feedback_count=feedback_count),
+            ),
+        ]
+        return self._plan_from_structured_data(self._model.invoke(messages))
+
+    def _plan_from_structured_data(self, data: Mapping[str, Any]) -> InnerLoopPlan:
         steps = self._parse_steps(data)
         if not steps:
             raise PlanGenerationError("Planner returned no tool calls")
@@ -246,6 +275,32 @@ class NativeToolCallPlanner:
         except ToolCallConversionError as exc:
             raise PlanGenerationError(str(exc)) from exc
 
+    def create_plan_after_feedback(
+        self,
+        *,
+        task_request: str,
+        context_episode_ids: Sequence[str],
+        last_execution: ToolExecution,
+        feedback: Mapping[str, object],
+        feedback_count: int,
+    ) -> InnerLoopPlan:
+        """이전 tool execution feedback을 포함해 tool-calling 계획을 재생성한다."""
+        del context_episode_ids, last_execution
+
+        messages = [
+            ChatMessage(role="system", content=self._system_prompt),
+            ChatMessage(role="user", content=task_request),
+            ChatMessage(
+                role="user",
+                content=_feedback_prompt(feedback=feedback, feedback_count=feedback_count),
+            ),
+        ]
+        response = self._model.invoke(messages)
+        try:
+            return convert_tool_calls_to_plan(response.tool_calls)
+        except ToolCallConversionError as exc:
+            raise PlanGenerationError(str(exc)) from exc
+
 
 def _build_default_prompt(tool_schemas: Sequence[ToolSchema]) -> str:
     """도구 schema 목록으로 default system prompt를 구성한다.
@@ -259,3 +314,15 @@ def _build_default_prompt(tool_schemas: Sequence[ToolSchema]) -> str:
     return DEFAULT_PLANNER_PROMPT.format(
         tool_descriptions="\n".join(descriptions),
     )
+
+
+def _feedback_prompt(*, feedback: Mapping[str, object], feedback_count: int) -> str:
+    """이전 tool execution 결과를 다음 planner 호출에 전달하는 안정적인 prompt."""
+    return (
+        "Previous plan execution did not complete the task. "
+        f"This is feedback cycle {feedback_count}. "
+        "Create a revised plan that addresses the safe tool feedback below. "
+        "Do not repeat an identical failing step unless the feedback shows it is retryable.\n"
+        f"{json.dumps(dict(feedback), ensure_ascii=False, sort_keys=True)}"
+    )
+

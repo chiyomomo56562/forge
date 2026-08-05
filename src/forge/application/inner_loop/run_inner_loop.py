@@ -8,6 +8,7 @@ from typing import Any, TypedDict
 
 from langgraph.graph import END, START, StateGraph
 
+from forge.application.conversation.tool_feedback import serialize_tool_execution
 from forge.application.memory import (
     FinalizeEpisodeService,
     RecordInnerLoopEventService,
@@ -16,6 +17,7 @@ from forge.application.memory import (
 from forge.domain.inner_loop import InnerLoopPlan, ToolExecution
 from forge.domain.memory import Evaluation, ExecutionOutcome, L0EventType
 from forge.ports.outbound import (
+    FeedbackAwareInnerLoopPlanner,
     InnerLoopEvaluator,
     InnerLoopPlanner,
     InnerLoopReflector,
@@ -34,7 +36,10 @@ class InnerLoopState(TypedDict, total=False):
     step_index: int
     attempt: int
     retry_count: int
+    feedback_count: int
     tool_names: tuple[str, ...]
+    last_execution: ToolExecution
+    needs_replan: bool
     execution: ToolExecution
     evaluation: Evaluation
 
@@ -60,6 +65,8 @@ class RunInnerLoopService:
         reflector: InnerLoopReflector,
         *,
         max_retries: int = 3,
+        max_feedback_cycles: int = 0,
+        max_tool_feedback_bytes: int = 8_192,
     ) -> None:
         self._starter = starter
         self._recorder = recorder
@@ -69,6 +76,8 @@ class RunInnerLoopService:
         self._evaluator = evaluator
         self._reflector = reflector
         self._max_retries = max_retries
+        self._max_feedback_cycles = max_feedback_cycles
+        self._max_tool_feedback_bytes = max_tool_feedback_bytes
         self._graph = self._build_graph()
 
     def handle(self, *, task_request: str, task_category: str = "general") -> InnerLoopResult:
@@ -102,7 +111,11 @@ class RunInnerLoopService:
         builder.add_conditional_edges(
             "execute_attempt",
             self._next_after_attempt,
-            {"attempt": "execute_attempt", "summarize": "summarize_execution"},
+            {
+                "attempt": "execute_attempt",
+                "re_plan": "plan",
+                "summarize": "summarize_execution",
+            },
         )
         builder.add_edge("summarize_execution", "evaluate")
         builder.add_edge("evaluate", "reflect")
@@ -118,15 +131,34 @@ class RunInnerLoopService:
             "session_id": session.session_id,
             "episode_id": session.episode_id,
             "retry_count": 0,
+            "feedback_count": 0,
+            "needs_replan": False,
         }
 
     def _plan(self, state: InnerLoopState) -> InnerLoopState:
         try:
-            plan = self._planner.create_plan(
-                task_request=state["task_request"], context_episode_ids=()
-            )
+            if state.get("needs_replan") and isinstance(
+                self._planner, FeedbackAwareInnerLoopPlanner
+            ):
+                feedback_count = state["feedback_count"]
+                last_execution = state["last_execution"]
+                plan = self._planner.create_plan_after_feedback(
+                    task_request=state["task_request"],
+                    context_episode_ids=(),
+                    last_execution=last_execution,
+                    feedback=self._planner_feedback(last_execution),
+                    feedback_count=feedback_count,
+                )
+            else:
+                plan = self._planner.create_plan(
+                    task_request=state["task_request"], context_episode_ids=()
+                )
         except Exception:
-            return {"plan": InnerLoopPlan("Planning failed before execution.", ()), "step_index": 0}
+            return {
+                "plan": InnerLoopPlan("Planning failed before execution.", ()),
+                "step_index": 0,
+                "needs_replan": False,
+            }
         self._recorder.handle(
             session_id=state["session_id"],
             event_type=L0EventType.PLAN_COMPLETED,
@@ -140,12 +172,21 @@ class RunInnerLoopService:
                 "pattern_candidate_id": plan.pattern_candidate_id,
             },
         )
-        return {"plan": plan, "step_index": 0, "attempt": 0, "tool_names": ()}
+        return {
+            "plan": plan,
+            "step_index": 0,
+            "attempt": 0,
+            "tool_names": (),
+            "needs_replan": False,
+        }
 
     def _execute_attempt(self, state: InnerLoopState) -> InnerLoopState:
         plan = state["plan"]
         if not plan.steps:
-            return {"execution": ToolExecution("planner", plan.summary, ExecutionOutcome.FAILED)}
+            return {
+                "execution": ToolExecution("planner", plan.summary, ExecutionOutcome.FAILED),
+                "needs_replan": False,
+            }
         step = plan.steps[state["step_index"]]
         attempt = state.get("attempt", 0)
         self._recorder.handle(
@@ -185,15 +226,49 @@ class RunInnerLoopService:
                     "attempt": attempt + 1,
                     "retry_count": state["retry_count"] + 1,
                     "tool_names": tools,
+                    "needs_replan": False,
                 }
-            return {"execution": ToolExecution(step.step_id, result.summary, result.outcome, tools)}
+            execution = _execution_with_tools(result, tools)
+            if self._should_replan(execution, state):
+                return {
+                    "last_execution": execution,
+                    "feedback_count": state["feedback_count"] + 1,
+                    "needs_replan": True,
+                    "tool_names": tools,
+                }
+            return {"execution": execution, "needs_replan": False}
         if state["step_index"] + 1 < len(plan.steps):
-            return {"step_index": state["step_index"] + 1, "attempt": 0, "tool_names": tools}
-        return {"execution": ToolExecution(step.step_id, result.summary, result.outcome, tools)}
+            return {
+                "step_index": state["step_index"] + 1,
+                "attempt": 0,
+                "tool_names": tools,
+                "needs_replan": False,
+            }
+        return {"execution": _execution_with_tools(result, tools), "needs_replan": False}
 
     @staticmethod
     def _next_after_attempt(state: InnerLoopState) -> str:
-        return "summarize" if "execution" in state else "attempt"
+        if "execution" in state:
+            return "summarize"
+        if state.get("needs_replan"):
+            return "re_plan"
+        return "attempt"
+
+    def _should_replan(self, execution: ToolExecution, state: InnerLoopState) -> bool:
+        return (
+            isinstance(self._planner, FeedbackAwareInnerLoopPlanner)
+            and execution.outcome is ExecutionOutcome.FAILED
+            and execution.safe_error_code != "tool.protocol_failure"
+            and state["feedback_count"] < self._max_feedback_cycles
+        )
+
+    def _planner_feedback(self, execution: ToolExecution) -> dict[str, object]:
+        return dict(
+            serialize_tool_execution(
+                execution,
+                max_output_bytes=self._max_tool_feedback_bytes,
+            )
+        )
 
     def _summarize_execution(self, state: InnerLoopState) -> InnerLoopState:
         execution = state["execution"]
@@ -250,3 +325,19 @@ def _evaluation_payload(evaluation: Evaluation, *, evidence_complete: bool) -> d
     payload["reasons"] = [asdict(reason) for reason in evaluation.reasons]
     payload["evidence_complete"] = evidence_complete
     return payload
+
+
+def _execution_with_tools(execution: ToolExecution, tools: tuple[str, ...]) -> ToolExecution:
+    """Preserve execution detail while carrying accumulated tool names forward."""
+    return ToolExecution(
+        execution.step_id,
+        execution.summary,
+        execution.outcome,
+        tools,
+        retryable=execution.retryable,
+        safe_error_code=execution.safe_error_code,
+        audit_details=execution.audit_details,
+        output=execution.output,
+        output_artifact_refs=execution.output_artifact_refs,
+        truncated=execution.truncated,
+    )
