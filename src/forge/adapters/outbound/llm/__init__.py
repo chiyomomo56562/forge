@@ -12,8 +12,10 @@ from .providers.codex import CodexLLMProvider, CodexProvider as CodexProviderAda
 from .providers.ollama import OllamaProvider, OllamaSettings
 from .strategies import (
     PromptStructuredOutputStrategy,
+    PromptToolCallingStrategy,
     StructuredOutputError,
     StructuredOutputStrategy,
+    ToolCallingError,
     ToolCallingStrategy,
 )
 
@@ -30,10 +32,12 @@ __all__ = [
     "OllamaProvider",
     "OllamaSettings",
     "PromptStructuredOutputStrategy",
+    "PromptToolCallingStrategy",
     "ProviderAdapter",
     "StructuredOutputError",
     "StructuredOutputStrategy",
     "TERRA_MODEL",
+    "ToolCallingError",
     "ToolCallingStrategy",
     "UnifiedChatModelFactory",
 ]

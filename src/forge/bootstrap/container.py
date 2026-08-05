@@ -7,11 +7,11 @@ import yaml
 from chromadb import PersistentClient
 
 from forge.adapters.outbound.inner_loop import (
+    PLAN_SCHEMA,
     DeterministicEvaluator,
     DeterministicPlanner,
     DeterministicReflector,
     LLMPlanner,
-    PLAN_SCHEMA,
 )
 from forge.adapters.outbound.llm import (
     ChatModelFactory,
@@ -20,9 +20,9 @@ from forge.adapters.outbound.llm import (
     OllamaProvider,
     OllamaSettings,
     PromptStructuredOutputStrategy,
+    PromptToolCallingStrategy,
     UnifiedChatModelFactory,
 )
-from forge.adapters.outbound.llm.strategies import ToolCallingStrategy
 from forge.adapters.outbound.memory import (
     ChromaEpisodeIndex,
     JsonlL0EventStore,
@@ -235,24 +235,9 @@ def _build_chat_model_factory(config: dict[str, Any]) -> UnifiedChatModelFactory
 
     return UnifiedChatModelFactory(
         provider=_build_provider(config),
-        tool_strategy=_PlaceholderToolCallingStrategy(),
+        tool_strategy=PromptToolCallingStrategy(),
         structured_strategy=PromptStructuredOutputStrategy(),
     )
-
-
-class _PlaceholderToolCallingStrategy:
-    """tool-calling 전략 구현 전까지 사용하는 placeholder.
-
-    Step 6에서 ``PromptToolCallingStrategy`` 로 교체된다.
-
-    최종 수정일: 2026-08-04
-    """
-
-    def apply(self, base_model, tools):
-        raise NotImplementedError(
-            "Tool calling strategy is not yet implemented. "
-            "Use 'prompt' structured output for planning."
-        )
 
 
 def _build_planner(
