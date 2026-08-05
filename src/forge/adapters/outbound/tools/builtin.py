@@ -6,6 +6,7 @@
 from __future__ import annotations
 
 import os
+import re
 import subprocess
 import time
 from collections.abc import Callable, Mapping, Sequence
@@ -335,7 +336,7 @@ class BuiltinToolRegistry:
                     self._max_output_bytes,
                 ),
                 self._validate_patch,
-                None,
+                self._apply_patch,
             ),
             "project.verify": _RegisteredTool(
                 ToolDefinition(
@@ -418,9 +419,9 @@ class BuiltinToolRegistry:
         return {"query": query, "path": path}
 
     def _validate_patch(self, arguments: object) -> dict[str, object]:
-        """아직 실행하지 않는 patch 도구의 입력 형식만 검사한다.
+        """patch 도구의 입력 형식을 검사한다.
 
-        최종 수정일: 2026-07-31
+        최종 수정일: 2026-08-05
         """
         values = self._require_mapping(arguments, allowed={"patch"})
         if not isinstance(values.get("patch"), str) or not values["patch"]:
@@ -631,6 +632,236 @@ class BuiltinToolRegistry:
             "mypy": ["python", "-m", "mypy", "src"],
         }
         return self._run_command(commands[str(invocation.arguments["template"])])
+
+    _HUNK_HEADER_RE = re.compile(r"^@@ -(\d+)(?:,(\d+))? \+(\d+)(?:,(\d+))? @@")
+
+    def _apply_patch(self, invocation: ToolInvocation) -> ToolResult:
+        """unified diff patch를 workspace 내 파일에 적용한다.
+
+        각 hunk의 대상 파일 경로가 workspace root 내부인지 검증한 뒤,
+        파일을 읽어 hunk를 순서대로 적용하고 다시 쓴다.
+
+        Args:
+            invocation: tool_name="workspace.apply_patch",
+                arguments={"patch": "<unified diff text>"}.
+
+        Returns:
+            적용된 파일 수와 상태를 포함한 ToolResult.
+
+        최종 수정일: 2026-08-05
+        """
+        started = time.monotonic()
+        patch_text = str(invocation.arguments["patch"])
+        try:
+            file_patches = self._parse_unified_diff(patch_text)
+        except ToolInvocationError:
+            return self._failed("tool.invalid_patch_format", started)
+
+        if not file_patches:
+            return self._failed("tool.invalid_patch_format", started)
+
+        applied: list[str] = []
+        for relative_path, hunks in file_patches:
+            try:
+                target = self._resolve_path(relative_path)
+            except ToolInvocationError:
+                return self._failed("tool.path_outside_workspace", started)
+
+            try:
+                if target.exists():
+                    if target.is_symlink():
+                        return self._failed("tool.symlink_not_allowed", started)
+                    original = target.read_text(encoding="utf-8")
+                else:
+                    original = ""
+                patched = self._apply_hunks(original, hunks)
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_text(patched, encoding="utf-8")
+            except (OSError, UnicodeDecodeError):
+                return self._failed("tool.patch_failed", started)
+            except ToolInvocationError as exc:
+                return self._failed(exc.code, started)
+            applied.append(relative_path)
+
+        return ToolResult(
+            ToolStatus.COMPLETED,
+            f"Patched {len(applied)} file(s).",
+            output={"patched_files": applied},
+            audit_details={"file_count": len(applied), "files": applied},
+            duration_ms=self._duration_ms(started),
+        )
+
+    def _parse_unified_diff(
+        self, patch_text: str
+    ) -> list[tuple[str, list[list[str]]]]:
+        """unified diff 텍스트를 파일별 hunk 목록으로 파싱한다.
+
+        Args:
+            patch_text: unified diff 형식의 patch 문자열.
+
+        Returns:
+            (상대 경로, hunk 라인 목록)의 리스트.
+
+        Raises:
+            ToolInvocationError: patch 형식이 유효하지 않을 때.
+
+        최종 수정일: 2026-08-05
+        """
+        lines = patch_text.splitlines()
+        result: list[tuple[str, list[list[str]]]] = []
+        current_file: str | None = None
+        current_hunks: list[list[str]] = []
+        current_hunk: list[str] | None = None
+
+        for line in lines:
+            if line.startswith("--- "):
+                if current_hunk is not None:
+                    current_hunks.append(current_hunk)
+                    current_hunk = None
+                if current_file is not None:
+                    result.append((current_file, current_hunks))
+                    current_hunks = []
+                # --- a/path 또는 --- path 형식에서 경로 추출
+                path = line[4:].strip()
+                if path == "/dev/null":
+                    # /dev/null은 새 파일 생성을 의미하므로 +++ 헤더에서 경로를 가져온다
+                    current_file = None
+                else:
+                    current_file = self._strip_prefix(path)
+            elif line.startswith("+++ "):
+                if current_hunk is not None:
+                    current_hunks.append(current_hunk)
+                    current_hunk = None
+                path = line[4:].strip()
+                if current_file is None:
+                    # --- /dev/null이었으므로 +++에서 경로를 가져온다
+                    current_file = self._strip_prefix(path)
+                # --- 헤더에서 추출한 경로가 있으면 그것을 유지, 없으면 +++ 사용
+                if current_file is None or current_file == "/dev/null":
+                    current_file = self._strip_prefix(path)
+            elif line.startswith("@@"):
+                if current_hunk is not None:
+                    current_hunks.append(current_hunk)
+                current_hunk = [line]
+            elif current_hunk is not None:
+                if line.startswith((" ", "-", "+", "\\")):
+                    current_hunk.append(line)
+                elif line.strip() == "":
+                    current_hunk.append(" ")
+                else:
+                    # hunk 내부가 아닌 일반 텍스트는 무시
+                    pass
+
+        if current_hunk is not None:
+            current_hunks.append(current_hunk)
+        if current_file is not None:
+            result.append((current_file, current_hunks))
+
+        return result
+
+    @staticmethod
+    def _strip_prefix(path: str) -> str:
+        """diff 경로에서 a/ b/ 접두어를 제거한다.
+
+        Args:
+            path: diff 헤더의 파일 경로.
+
+        Returns:
+            접두어가 제거된 상대 경로.
+
+        최종 수정일: 2026-08-05
+        """
+        if path == "/dev/null":
+            return path
+        if path.startswith(("a/", "b/")):
+            return path[2:]
+        return path
+
+    def _apply_hunks(self, original: str, hunks: list[list[str]]) -> str:
+        """원본 텍스트에 hunk 목록을 순서대로 적용한다.
+
+        Args:
+            original: 패치 전 파일 내용.
+            hunks: 각 hunk를 구성하는 라인 목록의 리스트.
+
+        Returns:
+            패치가 적용된 파일 내용.
+
+        Raises:
+            ToolInvocationError: hunk가 원본과 매칭되지 않을 때.
+
+        최종 수정일: 2026-08-05
+        """
+        lines = original.splitlines(keepends=True)
+        result_lines: list[str] = []
+        consumed = 0
+
+        for hunk_lines in hunks:
+            header = hunk_lines[0]
+            match = self._HUNK_HEADER_RE.match(header)
+            if match is None:
+                raise ToolInvocationError("tool.invalid_patch_format")
+
+            old_start = int(match.group(1))
+            old_count = int(match.group(2) or 1)
+
+            # hunk 헤더 이후의 라인들을 분류
+            context_and_removed: list[str] = []
+            added: list[str] = []
+            for hunk_line in hunk_lines[1:]:
+                if hunk_line.startswith("\\"):
+                    # \ No newline at end of file 등의 메타데이터 — 무시
+                    continue
+                if hunk_line.startswith("-"):
+                    context_and_removed.append(hunk_line[1:])
+                elif hunk_line.startswith("+"):
+                    added.append(hunk_line[1:])
+                elif hunk_line.startswith(" "):
+                    context_and_removed.append(hunk_line[1:])
+                # 빈 라인이나 기타는 무시
+
+            # old_start는 1-based, 0은 빈 파일(새 파일 생성)을 의미
+            if old_start == 0:
+                # 새 파일: 원본에 추가
+                result_lines.extend(line if line.endswith("\n") else line + "\n" for line in added)
+                consumed = len(lines)
+                continue
+
+            # old_start 이전의 아직 처리하지 않은 라인들을 결과에 추가
+            start_idx = old_start - 1
+            if start_idx < consumed:
+                # hunk가 겹치는 경우 — 매칭 검증
+                start_idx = consumed
+            if start_idx > len(lines):
+                raise ToolInvocationError("tool.patch_context_mismatch")
+            result_lines.extend(lines[consumed:start_idx])
+            consumed = start_idx
+
+            # context + removed 라인이 원본과 매칭되는지 검증
+            for i, expected in enumerate(context_and_removed):
+                if consumed + i >= len(lines):
+                    raise ToolInvocationError("tool.patch_context_mismatch")
+                actual = lines[consumed + i]
+                # keepends=True이므로 줄바꿈 문자 포함 비교
+                expected_stripped = expected.rstrip("\n")
+                actual_stripped = actual.rstrip("\n")
+                if expected_stripped != actual_stripped:
+                    raise ToolInvocationError("tool.patch_context_mismatch")
+
+            # removed + context 라인 수만큼 원본에서 소비
+            consumed += old_count
+
+            # added 라인을 결과에 추가
+            for line in added:
+                if line.endswith("\n"):
+                    result_lines.append(line)
+                else:
+                    result_lines.append(line + "\n")
+
+        # 남은 원본 라인 추가
+        result_lines.extend(lines[consumed:])
+
+        return "".join(result_lines)
 
     def _run_command(self, command: list[str]) -> ToolResult:
         """고정 argument vector를 timeout·출력 상한과 함께 실행한다.

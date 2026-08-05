@@ -13,7 +13,7 @@ from forge.adapters.outbound.tools import (
     StaticToolAuthorizationPolicy,
 )
 from forge.adapters.outbound.tools.builtin import ToolInvocationError
-from forge.domain.inner_loop import PlanStep
+from forge.domain.inner_loop import PlanStep, ToolInvocation, ToolStatus
 from forge.domain.memory import ExecutionOutcome
 
 
@@ -157,3 +157,183 @@ def test_tool_schemas_git_status_has_no_required(tmp_path: Path) -> None:
 
     git_status = schemas["git.status"]
     assert "required" not in git_status.parameters
+
+
+# --- apply_patch handler 테스트 ---
+
+
+class _AllowMutationPolicy:
+    """테스트용으로 WORKSPACE_MUTATION을 허용하는 권한 정책.
+
+    최종 수정일: 2026-08-05
+    """
+
+    def authorize(self, invocation: object, definition: object) -> bool:
+        return True
+
+
+def _make_invocation(patch_text: str) -> ToolInvocation:
+    """apply_patch 테스트용 ToolInvocation을 만든다.
+
+    최종 수정일: 2026-08-05
+    """
+    return ToolInvocation(
+        tool_name="workspace.apply_patch",
+        arguments={"patch": patch_text},
+        session_id="ses_test",
+        step_id="step_patch",
+        attempt=0,
+    )
+
+
+def test_apply_patch_modifies_existing_file(tmp_path: Path) -> None:
+    """정상 unified diff가 기존 파일 내용을 수정하는지 검증한다.
+
+    최종 수정일: 2026-08-05
+    """
+    (tmp_path / "hello.txt").write_text("hello world\n", encoding="utf-8")
+    registry = _registry(tmp_path)
+
+    patch = """\
+--- a/hello.txt
++++ b/hello.txt
+@@ -1 +1 @@
+-hello world
++hello forge
+"""
+    result = registry.execute(_make_invocation(patch))
+
+    assert result.status is ToolStatus.COMPLETED
+    assert result.output["patched_files"] == ["hello.txt"]
+    assert (tmp_path / "hello.txt").read_text(encoding="utf-8") == "hello forge\n"
+
+
+def test_apply_patch_creates_new_file(tmp_path: Path) -> None:
+    """--- /dev/null 헤더로 새 파일을 생성하는지 검증한다.
+
+    최종 수정일: 2026-08-05
+    """
+    registry = _registry(tmp_path)
+
+    patch = """\
+--- /dev/null
++++ b/new_file.txt
+@@ -0,0 +1,2 @@
++line one
++line two
+"""
+    result = registry.execute(_make_invocation(patch))
+
+    assert result.status is ToolStatus.COMPLETED
+    assert "new_file.txt" in result.output["patched_files"]
+    assert (tmp_path / "new_file.txt").read_text(encoding="utf-8") == "line one\nline two\n"
+
+
+def test_apply_patch_rejects_path_outside_workspace(tmp_path: Path) -> None:
+    """workspace 외부 경로를 대상으로 하는 patch가 거부되는지 검증한다.
+
+    최종 수정일: 2026-08-05
+    """
+    registry = _registry(tmp_path)
+
+    patch = """\
+--- a/../outside.txt
++++ b/../outside.txt
+@@ -1 +1 @@
+-old
++new
+"""
+    result = registry.execute(_make_invocation(patch))
+
+    assert result.status is ToolStatus.FAILED
+    assert result.safe_error_code == "tool.path_outside_workspace"
+
+
+def test_apply_patch_rejects_invalid_format(tmp_path: Path) -> None:
+    """unified diff 형식이 아닌 patch가 거부되는지 검증한다.
+
+    최종 수정일: 2026-08-05
+    """
+    registry = _registry(tmp_path)
+
+    result = registry.execute(_make_invocation("this is not a patch"))
+
+    assert result.status is ToolStatus.FAILED
+    assert result.safe_error_code == "tool.invalid_patch_format"
+
+
+def test_apply_patch_rejects_context_mismatch(tmp_path: Path) -> None:
+    """원본과 context 라인이 다르면 patch가 실패하는지 검증한다.
+
+    최종 수정일: 2026-08-05
+    """
+    (tmp_path / "mismatch.txt").write_text("actual content\n", encoding="utf-8")
+    registry = _registry(tmp_path)
+
+    patch = """\
+--- a/mismatch.txt
++++ b/mismatch.txt
+@@ -1 +1 @@
+-expected content
++new content
+"""
+    result = registry.execute(_make_invocation(patch))
+
+    assert result.status is ToolStatus.FAILED
+    assert result.safe_error_code == "tool.patch_context_mismatch"
+    # 원본이 변경되지 않았는지 확인
+    assert (tmp_path / "mismatch.txt").read_text(encoding="utf-8") == "actual content\n"
+
+
+def test_apply_patch_multiple_files(tmp_path: Path) -> None:
+    """하나의 patch로 여러 파일을 동시에 수정하는지 검증한다.
+
+    최종 수정일: 2026-08-05
+    """
+    (tmp_path / "a.txt").write_text("aaa\n", encoding="utf-8")
+    (tmp_path / "b.txt").write_text("bbb\n", encoding="utf-8")
+    registry = _registry(tmp_path)
+
+    patch = """\
+--- a/a.txt
++++ b/a.txt
+@@ -1 +1 @@
+-aaa
++AAA
+--- a/b.txt
++++ b/b.txt
+@@ -1 +1 @@
+-bbb
++BBB
+"""
+    result = registry.execute(_make_invocation(patch))
+
+    assert result.status is ToolStatus.COMPLETED
+    assert set(result.output["patched_files"]) == {"a.txt", "b.txt"}
+    assert (tmp_path / "a.txt").read_text(encoding="utf-8") == "AAA\n"
+    assert (tmp_path / "b.txt").read_text(encoding="utf-8") == "BBB\n"
+
+
+def test_apply_patch_through_executor_with_mutation_grant(tmp_path: Path) -> None:
+    """mutation 허용 정책에서 executor가 patch를 정상 실행하는지 검증한다.
+
+    최종 수정일: 2026-08-05
+    """
+    (tmp_path / "target.txt").write_text("old line\n", encoding="utf-8")
+    registry = _registry(tmp_path)
+    executor = RegistryPlanStepExecutor(registry, _AllowMutationPolicy())
+
+    patch = """\
+--- a/target.txt
++++ b/target.txt
+@@ -1 +1 @@
+-old line
++new line
+"""
+    execution = executor.execute(
+        PlanStep("patch", "Patch target", "workspace.apply_patch", {"patch": patch}),
+        session_id="ses_test",
+    )
+
+    assert execution.outcome is ExecutionOutcome.COMPLETED
+    assert (tmp_path / "target.txt").read_text(encoding="utf-8") == "new line\n"
