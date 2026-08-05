@@ -10,10 +10,12 @@ import pytest
 
 from forge.adapters.outbound.inner_loop.llm_planner import (
     LLMPlanner,
+    NativeToolCallPlanner,
     PlanGenerationError,
 )
+from forge.bootstrap import container
 from forge.domain.inner_loop import InnerLoopPlan, ToolSchema
-from forge.domain.llm import ChatMessage
+from forge.domain.llm import ChatMessage, ModelResponse, ToolCallData
 
 
 class FakeStructuredModel:
@@ -33,6 +35,37 @@ class FailingStructuredModel:
 
     def invoke(self, messages: Sequence[ChatMessage]) -> Mapping[str, Any]:
         raise RuntimeError("Model server unavailable")
+
+
+class FakeToolModel:
+    """고정 ModelResponse를 반환하는 fake ChatModel."""
+
+    def __init__(self, response: ModelResponse) -> None:
+        self._response = response
+        self.calls: list[list[ChatMessage]] = []
+
+    def invoke(self, messages: Sequence[ChatMessage]) -> ModelResponse:
+        self.calls.append(list(messages))
+        return self._response
+
+
+class FakeToolModelFactory:
+    """tool model 생성 호출을 기록하는 fake factory."""
+
+    def __init__(self, model: FakeToolModel) -> None:
+        self._model = model
+        self.tools: Sequence[ToolSchema] | None = None
+
+    def create_tool_model(self, tools: Sequence[ToolSchema]) -> FakeToolModel:
+        self.tools = tools
+        return self._model
+
+
+class FakeRegistry:
+    """tool_schemas만 제공하는 fake registry."""
+
+    def tool_schemas(self) -> Sequence[ToolSchema]:
+        return _TOOL_SCHEMAS
 
 
 _TOOL_SCHEMAS = (
@@ -257,3 +290,75 @@ def test_default_prompt_includes_tool_descriptions():
     assert "workspace.list_files" in system_message
     assert "List files under a workspace path." in system_message
     assert "workspace.read_file" in system_message
+
+
+def test_native_tool_call_planner_converts_model_tool_calls():
+    model = FakeToolModel(
+        ModelResponse(
+            content="",
+            tool_calls=(
+                ToolCallData(
+                    id="call_read",
+                    name="workspace.read_file",
+                    arguments={"path": "README.md"},
+                ),
+            ),
+        )
+    )
+    planner = NativeToolCallPlanner(model)
+
+    plan = planner.create_plan(task_request="Read README", context_episode_ids=("ep_1",))
+
+    assert plan.steps[0].step_id == "call_read"
+    assert plan.steps[0].tool_name == "workspace.read_file"
+    assert plan.steps[0].tool_arguments == {"path": "README.md"}
+    messages = model.calls[0]
+    assert [message.role for message in messages] == ["system", "user"]
+    assert messages[1].content == "Read README"
+    assert "ep_1" not in messages[0].content
+
+
+def test_native_tool_call_planner_raises_plan_generation_error_for_no_calls():
+    planner = NativeToolCallPlanner(FakeToolModel(ModelResponse(content="No tool needed")))
+
+    with pytest.raises(PlanGenerationError, match="no tool calls"):
+        planner.create_plan(task_request="test", context_episode_ids=())
+
+
+def test_native_tool_call_planner_rejects_empty_system_prompt():
+    with pytest.raises(ValueError, match="system_prompt must not be empty"):
+        NativeToolCallPlanner(FakeToolModel(ModelResponse(content="")), system_prompt=" ")
+
+
+def test_build_planner_supports_native_tool_type(monkeypatch):
+    model = FakeToolModel(
+        ModelResponse(
+            content="",
+            tool_calls=(
+                ToolCallData(
+                    id="call_list",
+                    name="workspace.list_files",
+                    arguments={"path": "."},
+                ),
+            ),
+        )
+    )
+    factory = FakeToolModelFactory(model)
+    monkeypatch.setattr(container, "_build_chat_model_factory", lambda _config: factory)
+
+    planner = container._build_planner(
+        {
+            "inner_loop": {
+                "planner": {
+                    "type": "native_tool",
+                    "system_prompt": "Plan with tool calls.",
+                }
+            }
+        },
+        FakeRegistry(),
+    )
+
+    assert isinstance(planner, NativeToolCallPlanner)
+    assert factory.tools == _TOOL_SCHEMAS
+    plan = planner.create_plan(task_request="List files", context_episode_ids=())
+    assert plan.steps[0].step_id == "call_list"

@@ -12,6 +12,7 @@ from forge.adapters.outbound.inner_loop import (
     DeterministicPlanner,
     DeterministicReflector,
     LLMPlanner,
+    NativeToolCallPlanner,
 )
 from forge.adapters.outbound.llm import (
     ChatModelFactory,
@@ -266,6 +267,14 @@ def _build_planner(
             tool_schemas=registry.tool_schemas(),
             system_prompt=planner_config.get("system_prompt"),
         )
+    if planner_type == "native_tool":
+        factory = _build_chat_model_factory(agent_config)
+        model = factory.create_tool_model(registry.tool_schemas())
+        return NativeToolCallPlanner(
+            model,
+            system_prompt=planner_config.get("system_prompt"),
+        )
     raise ValueError(
-        f"Unsupported planner type: {planner_type}. Use 'deterministic' or 'llm'."
+        f"Unsupported planner type: {planner_type}. "
+        "Use 'deterministic', 'llm', or 'native_tool'."
     )

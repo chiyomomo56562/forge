@@ -16,10 +16,11 @@ from typing import Any
 
 from forge.domain.inner_loop import InnerLoopPlan, PlanStep, ToolSchema
 from forge.domain.llm import ChatMessage
-from forge.ports.outbound import InnerLoopPlanner
-from forge.ports.outbound.model_gateway import StructuredChatModel
+from forge.ports.outbound.model_gateway import ChatModel, StructuredChatModel
 
-__all__ = ["LLMPlanner", "PlanGenerationError", "PLAN_SCHEMA"]
+from .tool_call_converter import ToolCallConversionError, convert_tool_calls_to_plan
+
+__all__ = ["LLMPlanner", "NativeToolCallPlanner", "PlanGenerationError", "PLAN_SCHEMA"]
 
 
 PLAN_SCHEMA: dict[str, Any] = {
@@ -207,6 +208,43 @@ class LLMPlanner:
                 )
             )
         return parsed
+
+
+class NativeToolCallPlanner:
+    """tool-calling 모델 응답을 ``InnerLoopPlan`` 으로 변환하는 planner."""
+
+    def __init__(
+        self,
+        model: ChatModel,
+        *,
+        system_prompt: str | None = None,
+    ) -> None:
+        if system_prompt is not None and not system_prompt.strip():
+            raise ValueError("system_prompt must not be empty when provided")
+        self._model = model
+        self._system_prompt = system_prompt or (
+            "You are a task planner. Use tool calls for each independent step needed "
+            "to complete the user's request."
+        )
+
+    def create_plan(
+        self,
+        *,
+        task_request: str,
+        context_episode_ids: Sequence[str],
+    ) -> InnerLoopPlan:
+        """task를 tool-calling 모델에 전달해 ``InnerLoopPlan`` 을 생성한다."""
+        del context_episode_ids
+
+        messages = [
+            ChatMessage(role="system", content=self._system_prompt),
+            ChatMessage(role="user", content=task_request),
+        ]
+        response = self._model.invoke(messages)
+        try:
+            return convert_tool_calls_to_plan(response.tool_calls)
+        except ToolCallConversionError as exc:
+            raise PlanGenerationError(str(exc)) from exc
 
 
 def _build_default_prompt(tool_schemas: Sequence[ToolSchema]) -> str:
