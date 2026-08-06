@@ -397,3 +397,33 @@ def test_invalid_dependency_graph_fails_before_tool_execution(tmp_path) -> None:
 
     assert result.outcome is ExecutionOutcome.FAILED
     assert executor.steps == []
+
+
+def test_replan_preserves_completed_steps_and_replaces_only_remaining_work(tmp_path) -> None:
+    initial = InnerLoopPlan(
+        "Initial graph.",
+        (
+            PlanStep("prepare", "Prepare", None, {}),
+            PlanStep("fail", "Fail", None, {}, depends_on=("prepare",)),
+        ),
+    )
+    replacement = InnerLoopPlan(
+        "Recovery graph.",
+        (PlanStep("recover", "Recover", None, {}, depends_on=("prepare",)),),
+    )
+    planner = FeedbackPlanner(initial, replacement)
+    executor = StepOutcomeExecutor(
+        {
+            "prepare": ToolExecution("prepare", "Prepared.", ExecutionOutcome.COMPLETED),
+            "fail": ToolExecution("fail", "Failed.", ExecutionOutcome.FAILED),
+            "recover": ToolExecution("recover", "Recovered.", ExecutionOutcome.COMPLETED),
+        }
+    )
+    service = _service(tmp_path, planner, executor, max_feedback_cycles=1)
+
+    result = service.handle(task_request="recover")
+
+    assert result.outcome is ExecutionOutcome.COMPLETED
+    assert [step.step_id for step in executor.steps] == ["prepare", "fail", "recover"]
+    feedback = planner.feedback_calls[0]["feedback"]
+    assert feedback["plan"]["steps"][0]["status"] == "succeeded"

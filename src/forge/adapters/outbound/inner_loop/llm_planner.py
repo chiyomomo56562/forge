@@ -28,12 +28,9 @@ class NativeToolCallPlanner:
             raise ValueError("system_prompt must not be empty when provided")
         self._model = model.bind_tools(tools)
         self._tools = frozenset(tool.name for tool in tools)
-        self._system_prompt = (
-            system_prompt
-            or (
-                "You are a task planner. Use tool calls for each independent step "
-                "needed to complete the user's request."
-            )
+        self._system_prompt = system_prompt or (
+            "You are a task planner. Use tool calls for each independent step "
+            "needed to complete the user's request."
         )
 
     def create_plan(
@@ -97,7 +94,9 @@ class NativeToolCallPlanner:
 
 def _feedback_prompt(feedback: Mapping[str, object], feedback_count: int) -> str:
     return (
-        "Previous plan execution did not complete the task. This is feedback cycle "
+        "Previous plan execution did not complete the task. Preserve completed steps "
+        "from the supplied plan and return tool calls only for remaining work. "
+        "This is feedback cycle "
         + str(feedback_count)
         + ".\n"
         + json.dumps(dict(feedback), ensure_ascii=False, sort_keys=True)

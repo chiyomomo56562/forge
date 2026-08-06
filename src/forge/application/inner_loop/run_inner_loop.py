@@ -14,7 +14,7 @@ from forge.application.memory import (
     RecordInnerLoopEventService,
     StartInnerLoopSessionService,
 )
-1from forge.domain.inner_loop import InnerLoopPlan, PlanStepStatus, ToolExecution
+from forge.domain.inner_loop import InnerLoopPlan, PlanStepStatus, ToolExecution
 from forge.domain.memory import Evaluation, ExecutionOutcome, L0EventType
 from forge.ports.outbound import (
     FeedbackAwareInnerLoopPlanner,
@@ -137,6 +137,7 @@ class RunInnerLoopService:
         }
 
     def _plan(self, state: InnerLoopState) -> InnerLoopState:
+        preserved_statuses: dict[str, str] | None = None
         try:
             if state.get("needs_replan") and isinstance(
                 self._planner, FeedbackAwareInnerLoopPlanner
@@ -147,8 +148,11 @@ class RunInnerLoopService:
                     task_request=state["task_request"],
                     context_episode_ids=(),
                     last_execution=last_execution,
-                    feedback=self._planner_feedback(last_execution),
+                    feedback=self._planner_feedback(last_execution, state),
                     feedback_count=feedback_count,
+                )
+                plan, preserved_statuses = _merge_replan(
+                    state["plan"], state.get("step_statuses", {}), plan
                 )
             else:
                 plan = self._planner.create_plan(
@@ -179,7 +183,8 @@ class RunInnerLoopService:
         return {
             "plan": plan,
             "step_index": 0,
-            "step_statuses": {step.step_id: PlanStepStatus.PENDING.value for step in plan.steps},
+            "step_statuses": preserved_statuses
+            or {step.step_id: PlanStepStatus.PENDING.value for step in plan.steps},
             "attempt": 0,
             "tool_names": (),
             "needs_replan": False,
@@ -292,13 +297,29 @@ class RunInnerLoopService:
             and state["feedback_count"] < self._max_feedback_cycles
         )
 
-    def _planner_feedback(self, execution: ToolExecution) -> dict[str, object]:
-        return dict(
+    def _planner_feedback(
+        self, execution: ToolExecution, state: InnerLoopState
+    ) -> dict[str, object]:
+        feedback = dict(
             serialize_tool_execution(
                 execution,
                 max_output_bytes=self._max_tool_feedback_bytes,
             )
         )
+        feedback["plan"] = {
+            "summary": state["plan"].summary,
+            "steps": [
+                {
+                    "step_id": step.step_id,
+                    "summary": step.summary,
+                    "tool_name": step.tool_name,
+                    "depends_on": list(step.depends_on),
+                    "status": state.get("step_statuses", {}).get(step.step_id),
+                }
+                for step in state["plan"].steps
+            ],
+        }
+        return feedback
 
     def _summarize_execution(self, state: InnerLoopState) -> InnerLoopState:
         execution = state["execution"]
@@ -377,6 +398,31 @@ def _plan_is_valid(plan: InnerLoopPlan) -> bool:
         for step_id in ready:
             del dependencies[step_id]
     return True
+
+
+def _merge_replan(
+    previous: InnerLoopPlan, statuses: dict[str, str], replacement: InnerLoopPlan
+) -> tuple[InnerLoopPlan, dict[str, str]]:
+    """Keep successful work immutable while replacing only unfinished graph work."""
+    completed = [
+        step
+        for step in previous.steps
+        if statuses.get(step.step_id) == PlanStepStatus.SUCCEEDED.value
+    ]
+    completed_ids = {step.step_id for step in completed}
+    replacement_steps = tuple(
+        step for step in replacement.steps if step.step_id not in completed_ids
+    )
+    merged = InnerLoopPlan(
+        replacement.summary,
+        (*completed, *replacement_steps),
+        replacement.pattern_candidate_id,
+    )
+    merged_statuses = {step.step_id: PlanStepStatus.SUCCEEDED.value for step in completed}
+    merged_statuses.update(
+        {step.step_id: PlanStepStatus.PENDING.value for step in replacement_steps}
+    )
+    return merged, merged_statuses
 
 
 def _next_ready_step_index(plan: InnerLoopPlan, statuses: dict[str, str]) -> int | None:
