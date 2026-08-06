@@ -14,7 +14,7 @@ from forge.application.memory import (
     RecordInnerLoopEventService,
     StartInnerLoopSessionService,
 )
-from forge.domain.inner_loop import InnerLoopPlan, ToolExecution
+1from forge.domain.inner_loop import InnerLoopPlan, PlanStepStatus, ToolExecution
 from forge.domain.memory import Evaluation, ExecutionOutcome, L0EventType
 from forge.ports.outbound import (
     FeedbackAwareInnerLoopPlanner,
@@ -34,6 +34,7 @@ class InnerLoopState(TypedDict, total=False):
     episode_id: str
     plan: InnerLoopPlan
     step_index: int
+    step_statuses: dict[str, str]
     attempt: int
     retry_count: int
     feedback_count: int
@@ -159,6 +160,8 @@ class RunInnerLoopService:
                 "step_index": 0,
                 "needs_replan": False,
             }
+        if not _plan_is_valid(plan):
+            plan = InnerLoopPlan("Planning failed: invalid step dependencies.", ())
         self._recorder.handle(
             session_id=state["session_id"],
             event_type=L0EventType.PLAN_COMPLETED,
@@ -170,11 +173,13 @@ class RunInnerLoopService:
                 "memory_context_error_code": None,
                 "retrieved_episode_ids": [],
                 "pattern_candidate_id": plan.pattern_candidate_id,
+                "dependencies": {step.step_id: list(step.depends_on) for step in plan.steps},
             },
         )
         return {
             "plan": plan,
             "step_index": 0,
+            "step_statuses": {step.step_id: PlanStepStatus.PENDING.value for step in plan.steps},
             "attempt": 0,
             "tool_names": (),
             "needs_replan": False,
@@ -187,8 +192,18 @@ class RunInnerLoopService:
                 "execution": ToolExecution("planner", plan.summary, ExecutionOutcome.FAILED),
                 "needs_replan": False,
             }
-        step = plan.steps[state["step_index"]]
+        ready_index = _next_ready_step_index(plan, state.get("step_statuses", {}))
+        if ready_index is None:
+            return {
+                "execution": ToolExecution(
+                    "planner", "No executable plan steps remain.", ExecutionOutcome.FAILED
+                ),
+                "needs_replan": False,
+            }
+        step = plan.steps[ready_index]
         attempt = state.get("attempt", 0)
+        statuses = dict(state.get("step_statuses", {}))
+        statuses[step.step_id] = PlanStepStatus.RUNNING.value
         self._recorder.handle(
             session_id=state["session_id"],
             event_type=L0EventType.EXECUTION_STARTED,
@@ -197,6 +212,7 @@ class RunInnerLoopService:
                 "summary": step.summary,
                 "attempt": attempt,
                 "tool_name": step.tool_name,
+                "depends_on": list(step.depends_on),
             },
         )
         result = self._executor.execute(step, session_id=state["session_id"], attempt=attempt)
@@ -221,13 +237,17 @@ class RunInnerLoopService:
         )
         tools = tuple(dict.fromkeys((*state.get("tool_names", ()), *result.tool_names)))
         if result.outcome is not ExecutionOutcome.COMPLETED:
-            if step.retry_allowed and result.retryable and state["retry_count"] < self._max_retries:
+            max_attempts = step.max_attempts or self._max_retries + 1
+            if step.retry_allowed and result.retryable and attempt + 1 < max_attempts:
                 return {
                     "attempt": attempt + 1,
                     "retry_count": state["retry_count"] + 1,
                     "tool_names": tools,
                     "needs_replan": False,
+                    "step_statuses": statuses,
                 }
+            statuses[step.step_id] = PlanStepStatus.FAILED.value
+            _mark_blocked_steps(plan, statuses)
             execution = _execution_with_tools(result, tools)
             if self._should_replan(execution, state):
                 return {
@@ -235,16 +255,26 @@ class RunInnerLoopService:
                     "feedback_count": state["feedback_count"] + 1,
                     "needs_replan": True,
                     "tool_names": tools,
+                    "step_statuses": statuses,
                 }
-            return {"execution": execution, "needs_replan": False}
-        if state["step_index"] + 1 < len(plan.steps):
             return {
-                "step_index": state["step_index"] + 1,
+                "execution": execution,
+                "needs_replan": False,
+                "step_statuses": statuses,
+            }
+        statuses[step.step_id] = PlanStepStatus.SUCCEEDED.value
+        if _next_ready_step_index(plan, statuses) is not None:
+            return {
                 "attempt": 0,
                 "tool_names": tools,
                 "needs_replan": False,
+                "step_statuses": statuses,
             }
-        return {"execution": _execution_with_tools(result, tools), "needs_replan": False}
+        return {
+            "execution": _execution_with_tools(result, tools),
+            "needs_replan": False,
+            "step_statuses": statuses,
+        }
 
     @staticmethod
     def _next_after_attempt(state: InnerLoopState) -> str:
@@ -325,6 +355,54 @@ def _evaluation_payload(evaluation: Evaluation, *, evidence_complete: bool) -> d
     payload["reasons"] = [asdict(reason) for reason in evaluation.reasons]
     payload["evidence_complete"] = evidence_complete
     return payload
+
+
+def _plan_is_valid(plan: InnerLoopPlan) -> bool:
+    """Reject duplicate, unknown, and cyclic graph dependencies before execution."""
+    step_ids = {step.step_id for step in plan.steps}
+    if len(step_ids) != len(plan.steps):
+        return False
+    if any(
+        not step.step_id or any(dep not in step_ids for dep in step.depends_on)
+        for step in plan.steps
+    ):
+        return False
+    dependencies = {step.step_id: set(step.depends_on) for step in plan.steps}
+    resolved: set[str] = set()
+    while dependencies:
+        ready = {step_id for step_id, deps in dependencies.items() if deps <= resolved}
+        if not ready:
+            return False
+        resolved.update(ready)
+        for step_id in ready:
+            del dependencies[step_id]
+    return True
+
+
+def _next_ready_step_index(plan: InnerLoopPlan, statuses: dict[str, str]) -> int | None:
+    """Return the first pending step whose dependencies have all succeeded."""
+    for index, step in enumerate(plan.steps):
+        if statuses.get(step.step_id) != PlanStepStatus.PENDING.value:
+            continue
+        if all(statuses.get(dep) == PlanStepStatus.SUCCEEDED.value for dep in step.depends_on):
+            return index
+    return None
+
+
+def _mark_blocked_steps(plan: InnerLoopPlan, statuses: dict[str, str]) -> None:
+    """Propagate failed or blocked dependencies to their pending descendants."""
+    changed = True
+    while changed:
+        changed = False
+        for step in plan.steps:
+            if statuses.get(step.step_id) != PlanStepStatus.PENDING.value:
+                continue
+            if any(
+                statuses.get(dep) in {PlanStepStatus.FAILED.value, PlanStepStatus.BLOCKED.value}
+                for dep in step.depends_on
+            ):
+                statuses[step.step_id] = PlanStepStatus.BLOCKED.value
+                changed = True
 
 
 def _execution_with_tools(execution: ToolExecution, tools: tuple[str, ...]) -> ToolExecution:

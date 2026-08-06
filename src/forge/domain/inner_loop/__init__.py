@@ -6,6 +6,7 @@
 from .models import (
     InnerLoopPlan,
     PlanStep,
+    PlanStepStatus,
     ToolDefinition,
     ToolExecution,
     ToolInvocation,
@@ -17,6 +18,7 @@ from .models import (
 __all__ = [
     "InnerLoopPlan",
     "PlanStep",
+    "PlanStepStatus",
     "ToolDefinition",
     "ToolExecution",
     "ToolInvocation",

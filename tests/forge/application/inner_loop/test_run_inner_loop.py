@@ -358,3 +358,42 @@ def test_feedback_planner_error_safe_stops_through_planning_failure(tmp_path) ->
     assert len(planner.feedback_calls) == 1
     assert [step.step_id for step in executor.steps] == ["fail"]
     assert service.repository.episode.execution.summary == "Planning failed before execution."
+
+
+def test_dependency_graph_runs_ready_steps_before_later_dependents(tmp_path) -> None:
+    plan = InnerLoopPlan(
+        "Use discovered input.",
+        (
+            PlanStep("read", "Read result", None, {}, depends_on=("list",)),
+            PlanStep("list", "List files", None, {}),
+        ),
+    )
+    executor = StepOutcomeExecutor(
+        {
+            "list": ToolExecution("list", "Listed.", ExecutionOutcome.COMPLETED),
+            "read": ToolExecution("read", "Read.", ExecutionOutcome.COMPLETED),
+        }
+    )
+    service = _service(tmp_path, OriginalPortPlanner(plan), executor)
+
+    result = service.handle(task_request="inspect")
+
+    assert result.outcome is ExecutionOutcome.COMPLETED
+    assert [step.step_id for step in executor.steps] == ["list", "read"]
+
+
+def test_invalid_dependency_graph_fails_before_tool_execution(tmp_path) -> None:
+    plan = InnerLoopPlan(
+        "Invalid cycle.",
+        (
+            PlanStep("first", "First", None, {}, depends_on=("second",)),
+            PlanStep("second", "Second", None, {}, depends_on=("first",)),
+        ),
+    )
+    executor = StepOutcomeExecutor({})
+    service = _service(tmp_path, OriginalPortPlanner(plan), executor)
+
+    result = service.handle(task_request="inspect")
+
+    assert result.outcome is ExecutionOutcome.FAILED
+    assert executor.steps == []
