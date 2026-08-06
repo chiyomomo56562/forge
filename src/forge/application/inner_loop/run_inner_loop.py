@@ -4,7 +4,7 @@
 """
 
 from dataclasses import asdict, dataclass
-from typing import TypedDict
+from typing import Any, TypedDict
 
 from langgraph.graph import END, START, StateGraph
 
@@ -86,7 +86,7 @@ class RunInnerLoopService:
         state = self._graph.invoke({"task_request": task_request, "task_category": task_category})
         return InnerLoopResult(state["session_id"], state["episode_id"], state["execution"].outcome)
 
-    def _build_graph(self):
+    def _build_graph(self) -> Any:
         """명시적 retry conditional edge를 가진 Inner Loop StateGraph를 조립한다."""
         builder = StateGraph(InnerLoopState)
         builder.add_node("start_session", self._start_session)
@@ -158,7 +158,7 @@ class RunInnerLoopService:
                 "tool_name": step.tool_name,
             },
         )
-        result = self._executor.execute(step)
+        result = self._executor.execute(step, session_id=state["session_id"], attempt=attempt)
         self._recorder.handle(
             session_id=state["session_id"],
             event_type=(
@@ -173,6 +173,9 @@ class RunInnerLoopService:
                 "attempt": attempt,
                 "retryable": result.retryable,
                 "safe_error_code": result.safe_error_code,
+                "audit_details": dict(result.audit_details),
+                "output_artifact_refs": list(result.output_artifact_refs),
+                "truncated": result.truncated,
             },
         )
         tools = tuple(dict.fromkeys((*state.get("tool_names", ()), *result.tool_names)))

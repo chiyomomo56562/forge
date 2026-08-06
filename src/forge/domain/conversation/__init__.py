@@ -1,3 +1,3 @@
-from .models import AssistantReply, SendMessageCommand
+from .models import AssistantReply, SendMessageCommand, ToolCall
 
-__all__ = ["AssistantReply", "SendMessageCommand"]
+__all__ = ["AssistantReply", "SendMessageCommand", "ToolCall"]
