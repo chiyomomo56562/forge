@@ -41,6 +41,7 @@ embedding:
 # --- Inner Loop Settings ---
 inner_loop:
   max_retries: 3               # 실행 단계 최대 재시도
+  max_feedback_cycles: 1       # 실행 실패 후 planner 재계획 최대 횟수
   eval_retries: 3              # 평가 단계 CIB 미달 시 재시도
   context_top_k: 5             # 선택적 주입: 초기 검색 개수
   context_expand_k: 10        # 점진적 확장 시 추가 검색 개수
@@ -53,6 +54,15 @@ inner_loop:
       path: "."
     # llm 설정 (type: llm 시 사용)
     system_prompt: null         # null이면 기본 prompt 사용
+
+# --- Conversation Tool Settings ---
+# 사용자 대화의 tool loop 조립 전용 설정이다. Inner Loop planner 선택과 독립적이다.
+conversation:
+  tools:
+    enabled: true
+    max_tool_feedback_bytes: 4096
+    max_protocol_failures: 2
+    allow_verification: false    # 대화 기본값은 읽기 전용만 허용
 
 # --- Model Strategy Settings ---
 # 전략 선택: prompt (모든 모델适用) | native (후속 최적화)
