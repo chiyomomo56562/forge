@@ -10,7 +10,6 @@ from forge.domain.inner_loop import (
     ToolExecution,
     ToolInvocation,
     ToolResult,
-    ToolSchema,
 )
 from forge.domain.memory import Evaluation, Reflection
 
@@ -48,10 +47,6 @@ class ToolRegistry(Protocol):
     def validate_arguments(self, tool_name: str, arguments: object) -> dict[str, object]: ...
 
     def execute(self, invocation: ToolInvocation) -> ToolResult: ...
-
-    def tool_schemas(self) -> Sequence[ToolSchema]:
-        """LLM tool-calling에 전달할 등록 도구 전체의 JSON Schema 목록."""
-        ...
 
 
 class ToolAuthorizationPolicy(Protocol):

@@ -9,7 +9,7 @@ import os
 import re
 import subprocess
 import time
-from collections.abc import Callable, Mapping, Sequence
+from collections.abc import Callable, Mapping
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -18,7 +18,6 @@ from forge.domain.inner_loop import (
     ToolInvocation,
     ToolResult,
     ToolRiskTier,
-    ToolSchema,
     ToolStatus,
 )
 
@@ -157,115 +156,6 @@ class BuiltinToolRegistry:
         if registered.handler is None:
             raise ToolInvocationError("tool.not_implemented")
         return registered.handler(invocation)
-
-    def tool_schemas(self) -> Sequence[ToolSchema]:
-        """LLM tool-calling에 전달할 등록 도구 전체의 JSON Schema 목록을 반환한다.
-
-        Returns:
-            name·description·parameters JSON Schema로 구성된 도구 schema 목록.
-
-        최종 수정일: 2026-08-04
-        """
-        return tuple(self._SCHEMAS)
-
-    _SCHEMAS: tuple[ToolSchema, ...] = (
-        ToolSchema(
-            "workspace.list_files",
-            "List files under a workspace path matching a glob pattern.",
-            {
-                "type": "object",
-                "properties": {
-                    "path": {
-                        "type": "string",
-                        "description": "Relative directory path from workspace root. Defaults to '.'.",
-                    },
-                    "glob": {
-                        "type": "string",
-                        "description": "Glob pattern to match. Defaults to '*'.",
-                    },
-                },
-            },
-        ),
-        ToolSchema(
-            "workspace.read_file",
-            "Read a UTF-8 text file within the workspace up to a byte limit.",
-            {
-                "type": "object",
-                "properties": {
-                    "path": {
-                        "type": "string",
-                        "description": "Relative file path from workspace root.",
-                    },
-                    "offset": {
-                        "type": "integer",
-                        "description": "Byte offset to start reading from. Defaults to 0.",
-                    },
-                    "max_bytes": {
-                        "type": "integer",
-                        "description": "Maximum bytes to read.",
-                    },
-                },
-                "required": ["path"],
-            },
-        ),
-        ToolSchema(
-            "workspace.search_text",
-            "Search for a literal text string in workspace files.",
-            {
-                "type": "object",
-                "properties": {
-                    "query": {
-                        "type": "string",
-                        "description": "Literal text to search for.",
-                    },
-                    "path": {
-                        "type": "string",
-                        "description": "Relative directory to search in. Defaults to '.'.",
-                    },
-                },
-                "required": ["query"],
-            },
-        ),
-        ToolSchema(
-            "git.status",
-            "Show short Git working-tree status.",
-            {"type": "object", "properties": {}},
-        ),
-        ToolSchema(
-            "git.diff",
-            "Show Git diff without external diff or pager.",
-            {"type": "object", "properties": {}},
-        ),
-        ToolSchema(
-            "workspace.apply_patch",
-            "Apply a unified diff patch to workspace files.",
-            {
-                "type": "object",
-                "properties": {
-                    "patch": {
-                        "type": "string",
-                        "description": "Unified diff patch text to apply.",
-                    },
-                },
-                "required": ["patch"],
-            },
-        ),
-        ToolSchema(
-            "project.verify",
-            "Run a fixed verification template (pytest, ruff, or mypy).",
-            {
-                "type": "object",
-                "properties": {
-                    "template": {
-                        "type": "string",
-                        "enum": ["pytest", "ruff", "mypy"],
-                        "description": "Verification template to run.",
-                    },
-                },
-                "required": ["template"],
-            },
-        ),
-    )
 
     def _build_tools(self) -> dict[str, _RegisteredTool]:
         """M2에서 허용할 고정 도구 집합을 구성한다.
@@ -691,9 +581,7 @@ class BuiltinToolRegistry:
             duration_ms=self._duration_ms(started),
         )
 
-    def _parse_unified_diff(
-        self, patch_text: str
-    ) -> list[tuple[str, list[list[str]]]]:
+    def _parse_unified_diff(self, patch_text: str) -> list[tuple[str, list[list[str]]]]:
         """unified diff 텍스트를 파일별 hunk 목록으로 파싱한다.
 
         Args:

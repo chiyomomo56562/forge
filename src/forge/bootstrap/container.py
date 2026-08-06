@@ -7,24 +7,12 @@ import yaml
 from chromadb import PersistentClient
 
 from forge.adapters.outbound.inner_loop import (
-    PLAN_SCHEMA,
     DeterministicEvaluator,
     DeterministicPlanner,
     DeterministicReflector,
-    LLMPlanner,
     NativeToolCallPlanner,
 )
-from forge.adapters.outbound.llm import (
-    ChatModelFactory,
-    CodexProviderAdapter,
-    CodexSettings,
-    DomainChatModelBridge,
-    OllamaProvider,
-    OllamaSettings,
-    PromptStructuredOutputStrategy,
-    PromptToolCallingStrategy,
-    UnifiedChatModelFactory,
-)
+from forge.adapters.outbound.llm import ChatModelFactory
 from forge.adapters.outbound.memory import (
     ChromaEpisodeIndex,
     JsonlL0EventStore,
@@ -36,6 +24,7 @@ from forge.adapters.outbound.tools import (
     BuiltinToolRegistry,
     RegistryPlanStepExecutor,
     StaticToolAuthorizationPolicy,
+    build_langchain_tools,
 )
 from forge.application.conversation import ReceiveMessageService
 from forge.application.inner_loop import RunInnerLoopService
@@ -157,17 +146,18 @@ def build_inner_loop_service(
     store = build_l0_event_store(config["working"]["l0"]["root_path"])
     tool_config = agent_config.get("tools", {})
     registry = _build_tool_registry(tool_config)
+    tools = build_langchain_tools(
+        registry,
+        StaticToolAuthorizationPolicy(
+            allow_verification=bool(tool_config.get("allow_verification", True))
+        ),
+    )
     return RunInnerLoopService(
         StartInnerLoopSessionService(store),
         RecordInnerLoopEventService(store),
         FinalizeEpisodeService(store, repository),
-        _build_planner(agent_config, registry),
-        RegistryPlanStepExecutor(
-            registry,
-            StaticToolAuthorizationPolicy(
-                allow_verification=bool(tool_config.get("allow_verification", True))
-            ),
-        ),
+        _build_planner(agent_config, tools, agent_config_path),
+        RegistryPlanStepExecutor(tools),
         DeterministicEvaluator(),
         DeterministicReflector(),
         max_retries=max_retries,
@@ -193,22 +183,6 @@ def _build_tool_registry(tool_config: dict[str, Any]) -> BuiltinToolRegistry:
     )
 
 
-def _build_tool_executor(
-    registry: BuiltinToolRegistry,
-    tool_config: dict[str, Any],
-    *,
-    default_allow_verification: bool,
-) -> RegistryPlanStepExecutor:
-    return RegistryPlanStepExecutor(
-        registry,
-        StaticToolAuthorizationPolicy(
-            allow_verification=bool(
-                tool_config.get("allow_verification", default_allow_verification)
-            )
-        ),
-    )
-
-
 def _build_conversation_runtime(
     config: dict[str, Any], *, config_path: str, chat_model: Any | None = None
 ) -> LangGraphConversationRuntime:
@@ -222,18 +196,16 @@ def _build_conversation_runtime(
 
     registry_config = dict(config.get("tools", {}))
     registry = _build_tool_registry(registry_config)
-    model = chat_model or DomainChatModelBridge(
-        _build_chat_model_factory(
-            config, require_tool=True, tool_purpose="conversation tools"
-        ).create_tool_model(
-            registry.tool_schemas()
-        )
+    authorization = StaticToolAuthorizationPolicy(
+        allow_verification=bool(tools_config.get("allow_verification", False))
     )
+    tools = build_langchain_tools(registry, authorization)
+    # Conversation tool calling is LangChain-native: bind the actual BaseTool
+    # instances to the provider model and let ToolNode execute them.
+    model = (chat_model or ChatModelFactory.from_config(config_path).create()).bind_tools(tools)
     return LangGraphConversationRuntime(
         model,
-        executor=_build_tool_executor(
-            registry, tools_config, default_allow_verification=False
-        ),
+        tools=tools,
         max_protocol_failures=_non_negative_int(
             tools_config.get("max_protocol_failures", 2),
             setting="conversation.tools.max_protocol_failures",
@@ -246,86 +218,12 @@ def _build_conversation_runtime(
     )
 
 
-def _validate_model_strategy(config: dict[str, Any], *, purpose: str) -> None:
-    model_config = config.get("model", {})
-    tool_strategy_name = model_config.get("tool_calling_strategy", "prompt")
-    if tool_strategy_name != "prompt":
-        raise ValueError(
-            f"Unsupported {purpose} tool_calling_strategy: {tool_strategy_name}. "
-            "Use 'prompt'."
-        )
-
-
-def _build_provider(config: dict[str, Any]):
-    """llm 설정에서 provider adapter를 생성한다.
-
-    provider 이름으로 기능을 분기하지 않고, 설정에 따라 adapter를 선택한다.
-
-    최종 수정일: 2026-08-04
-    """
-    llm = config.get("llm", {})
-    backend = llm.get("backend", "ollama")
-    selected = llm.get(backend, {})
-    if backend == "ollama":
-        return OllamaProvider(
-            OllamaSettings(
-                model=selected.get("model", "glm-5.2:cloud"),
-                base_url=selected.get("base_url", "http://localhost:11434"),
-                temperature=selected.get("temperature"),
-                max_tokens=selected.get("max_tokens"),
-            )
-        )
-    if backend == "openai":
-        return CodexProviderAdapter(
-            CodexSettings(
-                model=selected.get("model", "gpt-5.6-luna"),
-                temperature=selected.get("temperature"),
-                max_tokens=selected.get("max_tokens"),
-            )
-        )
-    raise ValueError(f"Unsupported LLM backend: {backend}")
-
-
-def _build_chat_model_factory(
-    config: dict[str, Any],
-    *,
-    require_tool: bool = False,
-    require_structured: bool = False,
-    tool_purpose: str = "model",
-) -> UnifiedChatModelFactory:
-    """provider와 전략을 조합해 ``UnifiedChatModelFactory`` 를 생성한다.
-
-    전략 선택은 config의 ``model.tool_calling_strategy`` 와
-    ``model.structured_output_strategy`` 에 따른다.
-    초기 기본값은 ``prompt`` 로 모든 모델에 적용 가능하다.
-
-    최종 수정일: 2026-08-04
-    """
-    model_config = config.get("model", {})
-    structured_strategy_name = model_config.get("structured_output_strategy", "prompt")
-
-    if require_tool:
-        _validate_model_strategy(config, purpose=tool_purpose)
-    if require_structured and structured_strategy_name != "prompt":
-        raise ValueError(
-            f"Structured output strategy '{structured_strategy_name}' is not yet supported. "
-            "Use 'prompt' for the initial implementation."
-        )
-
-    return UnifiedChatModelFactory(
-        provider=_build_provider(config),
-        tool_strategy=PromptToolCallingStrategy(),
-        structured_strategy=PromptStructuredOutputStrategy(),
-    )
-
-
 def _build_planner(
-    agent_config: dict[str, Any], registry: BuiltinToolRegistry
+    agent_config: dict[str, Any], tools: tuple[Any, ...] | list[Any], config_path: str
 ) -> InnerLoopPlanner:
     """config에 따라 deterministic 또는 LLM planner를 생성한다.
 
-    기본값은 ``deterministic`` 이며, ``inner_loop.planner.type: llm`` 인 경우
-    ``UnifiedChatModelFactory`` 로 structured model을 만들어 ``LLMPlanner`` 를 조립한다.
+    ``native_tool`` planner는 conversation and ToolNode와 동일한 decorated tools를 bind한다.
 
     최종 수정일: 2026-08-04
     """
@@ -337,33 +235,16 @@ def _build_planner(
             tool_name=planner_config.get("tool_name", "workspace.list_files"),
             tool_arguments=planner_config.get("tool_arguments", {"path": "."}),
         )
-    if planner_type == "llm":
-        structured_strategy_name = agent_config.get("model", {}).get(
-            "structured_output_strategy", "prompt"
-        )
-        if structured_strategy_name != "prompt":
-            raise ValueError(
-                "Unsupported inner_loop planner structured_output_strategy: "
-                f"{structured_strategy_name}. Use 'prompt'."
-            )
-        factory = _build_chat_model_factory(agent_config, require_structured=True)
-        model = factory.create_structured_model(PLAN_SCHEMA)
-        return LLMPlanner(
-            model,
-            tool_schemas=registry.tool_schemas(),
-            system_prompt=planner_config.get("system_prompt"),
-        )
-    if planner_type == "native_tool":
-        _validate_model_strategy(agent_config, purpose="inner_loop native_tool planner")
-        factory = _build_chat_model_factory(agent_config)
-        model = factory.create_tool_model(registry.tool_schemas())
+    if planner_type in {"llm", "native_tool"}:
+        model = ChatModelFactory.from_config(config_path).create()
         return NativeToolCallPlanner(
             model,
+            tools=tools,
             system_prompt=planner_config.get("system_prompt"),
         )
     raise ValueError(
         f"Unsupported planner type: {planner_type}. "
-        "Use 'deterministic', 'llm', or 'native_tool'."
+        "Use 'deterministic' or 'native_tool'."
     )
 
 

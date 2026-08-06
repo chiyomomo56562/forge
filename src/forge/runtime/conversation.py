@@ -3,31 +3,25 @@
 from __future__ import annotations
 
 import json
-from collections.abc import Callable, Sequence
+from collections.abc import Sequence
 from pathlib import Path
 from typing import Any
 
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage, ToolMessage
+from langchain_core.tools import BaseTool
 from langgraph.checkpoint.memory import InMemorySaver
 from langgraph.graph import END, START, MessagesState, StateGraph
+from langgraph.prebuilt import ToolNode
 from langgraph.runtime import Runtime
 
-from forge.adapters.outbound.inner_loop import ToolCallConversionError, convert_tool_calls_to_plan
 from forge.adapters.outbound.llm.strategies import ToolCallingError
 from forge.application.conversation.tool_feedback import (
     ToolFeedbackPayload,
     protocol_failure_feedback,
-    serialize_tool_execution,
 )
 from forge.domain.conversation import AssistantReply, ToolCall
-from forge.domain.inner_loop import InnerLoopPlan, ToolExecution
-from forge.domain.llm import ToolCallData
-from forge.ports.outbound import PlanStepExecutor
 
 from .context import ConversationContext
-
-ToolCallConverter = Callable[[Sequence[ToolCallData]], InnerLoopPlan]
-FeedbackSerializer = Callable[[ToolExecution], ToolFeedbackPayload]
 
 DEFAULT_MAX_TOOL_ROUNDS = 3
 DEFAULT_MAX_PROTOCOL_FAILURES = 2
@@ -54,9 +48,7 @@ class LangGraphConversationRuntime:
         model: Any,
         *,
         checkpointer: InMemorySaver | None = None,
-        executor: PlanStepExecutor | None = None,
-        tool_call_converter: ToolCallConverter | None = None,
-        feedback_serializer: FeedbackSerializer | None = None,
+        tools: Sequence[BaseTool] = (),
         max_tool_rounds: int = DEFAULT_MAX_TOOL_ROUNDS,
         max_protocol_failures: int = DEFAULT_MAX_PROTOCOL_FAILURES,
         max_tool_feedback_bytes: int = DEFAULT_MAX_TOOL_FEEDBACK_BYTES,
@@ -70,15 +62,7 @@ class LangGraphConversationRuntime:
         """
         self._model = model
         self._checkpointer = checkpointer or InMemorySaver()
-        self._executor = executor
-        self._tool_call_converter = tool_call_converter or convert_tool_calls_to_plan
-        self._feedback_serializer = feedback_serializer or (
-            lambda execution: serialize_tool_execution(
-                execution,
-                max_output_bytes=max_tool_feedback_bytes,
-                workspace_root=workspace_root,
-            )
-        )
+        self._tools = tuple(tools)
         self._max_tool_rounds = max_tool_rounds
         self._max_protocol_failures = max_protocol_failures
         self._max_tool_feedback_bytes = max_tool_feedback_bytes
@@ -86,21 +70,24 @@ class LangGraphConversationRuntime:
         builder = StateGraph(MessagesState, context_schema=ConversationContext)
         builder.add_node("call_model", self._call_model)
         builder.add_edge(START, "call_model")
-        if self._executor is not None:
-            builder.add_node("execute_tools", self._execute_tools)
+        if self._tools:
+            builder.add_node("execute_tools", ToolNode(self._tools))
             builder.add_node("tool_round_limit", self._tool_round_limit)
-            builder.add_conditional_edges(
-                "call_model",
-                self._route_after_model,
-                {
-                    "execute_tools": "execute_tools",
-                    "call_model": "call_model",
-                    "tool_round_limit": "tool_round_limit",
-                    END: END,
-                },
-            )
             builder.add_edge("execute_tools", "call_model")
             builder.add_edge("tool_round_limit", END)
+        else:
+            builder.add_node("tool_round_limit", self._tool_round_limit)
+            builder.add_edge("tool_round_limit", END)
+        builder.add_conditional_edges(
+            "call_model",
+            self._route_after_model,
+            {
+                "execute_tools": "execute_tools" if self._tools else END,
+                "call_model": "call_model",
+                "tool_round_limit": "tool_round_limit",
+                END: END,
+            },
+        )
         self._graph = builder.compile(checkpointer=self._checkpointer)
 
     def invoke(
@@ -156,32 +143,6 @@ class LangGraphConversationRuntime:
             raise RuntimeError("Configured chat model did not return an AIMessage")
         return {"messages": [response]}
 
-    def _execute_tools(
-        self,
-        state: MessagesState,
-        runtime: Runtime[ConversationContext],
-    ) -> dict[str, list[ToolMessage]]:
-        """Execute the latest AI tool calls sequentially and expose safe results."""
-        if self._executor is None:
-            return {"messages": []}
-        latest = state["messages"][-1]
-        if not isinstance(latest, AIMessage):
-            return {"messages": []}
-        tool_calls = _extract_tool_call_data(latest)
-        if not tool_calls:
-            return {"messages": []}
-        try:
-            plan = self._tool_call_converter(tool_calls)
-        except ToolCallConversionError as exc:
-            return {"messages": [self._protocol_failure_message(state, str(exc))]}
-
-        messages: list[ToolMessage] = []
-        for step in plan.steps:
-            execution = self._executor.execute(step, session_id=runtime.context.conversation_id)
-            payload = self._feedback_serializer(execution)
-            messages.append(_tool_message(payload))
-        return {"messages": messages}
-
     def _route_after_model(self, state: MessagesState) -> str:
         latest = state["messages"][-1]
         if isinstance(latest, ToolMessage) and latest.tool_call_id == _PROTOCOL_TOOL_CALL_ID:
@@ -233,17 +194,6 @@ def _extract_tool_calls(message: AIMessage) -> tuple[ToolCall, ...]:
         call_id = call.get("id", "")
         calls.append(ToolCall(name=name, arguments=dict(arguments), id=call_id))
     return tuple(calls)
-
-
-def _extract_tool_call_data(message: AIMessage) -> tuple[ToolCallData, ...]:
-    raw_calls = getattr(message, "tool_calls", None) or []
-    result: list[ToolCallData] = []
-    for call in raw_calls:
-        name = call.get("name", "")
-        arguments = call.get("args") or call.get("arguments") or {}
-        call_id = call.get("id", "")
-        result.append(ToolCallData(name=name, arguments=arguments, id=call_id))
-    return tuple(result)
 
 
 def _has_raw_tool_calls(message: AIMessage) -> bool:

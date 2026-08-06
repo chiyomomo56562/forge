@@ -105,60 +105,6 @@ def test_list_files_truncates_at_result_limit(tmp_path: Path) -> None:
     assert execution.truncated is True
 
 
-def test_tool_schemas_returns_all_registered_tools(tmp_path: Path) -> None:
-    """tool_schemas가 등록된 전체 도구의 JSON Schema를 반환하는지 검증한다.
-
-    최종 수정일: 2026-08-04
-    """
-    schemas = _registry(tmp_path).tool_schemas()
-
-    names = [s.name for s in schemas]
-    assert names == [
-        "workspace.list_files",
-        "workspace.read_file",
-        "workspace.search_text",
-        "git.status",
-        "git.diff",
-        "workspace.apply_patch",
-        "project.verify",
-    ]
-
-
-def test_tool_schemas_read_file_has_required_path(tmp_path: Path) -> None:
-    """read_file schema가 path를 required로 선언하는지 검증한다.
-
-    최종 수정일: 2026-08-04
-    """
-    schemas = {s.name: s for s in _registry(tmp_path).tool_schemas()}
-
-    read_file = schemas["workspace.read_file"]
-    assert "path" in read_file.parameters["required"]
-    assert read_file.parameters["properties"]["path"]["type"] == "string"
-
-
-def test_tool_schemas_verify_has_enum_template(tmp_path: Path) -> None:
-    """project.verify schema가 template enum을 포함하는지 검증한다.
-
-    최종 수정일: 2026-08-04
-    """
-    schemas = {s.name: s for s in _registry(tmp_path).tool_schemas()}
-
-    verify = schemas["project.verify"]
-    assert verify.parameters["properties"]["template"]["enum"] == ["pytest", "ruff", "mypy"]
-    assert "template" in verify.parameters["required"]
-
-
-def test_tool_schemas_git_status_has_no_required(tmp_path: Path) -> None:
-    """인자 없는 git.status schema에 required가 없는지 검증한다.
-
-    최종 수정일: 2026-08-04
-    """
-    schemas = {s.name: s for s in _registry(tmp_path).tool_schemas()}
-
-    git_status = schemas["git.status"]
-    assert "required" not in git_status.parameters
-
-
 # --- apply_patch handler 테스트 ---
 
 

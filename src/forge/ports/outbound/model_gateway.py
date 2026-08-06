@@ -2,7 +2,6 @@ from collections.abc import Mapping, Sequence
 from typing import Any, Protocol
 
 from forge.domain.conversation import AssistantReply
-from forge.domain.inner_loop import ToolSchema
 from forge.domain.llm import ChatMessage, ModelResponse
 
 
@@ -40,41 +39,6 @@ class StructuredChatModel(Protocol):
 
         Returns:
             ``response_schema`` 에 부합하는 JSON 호환 dict.
-        """
-        ...
-
-
-class ChatModelFactory(Protocol):
-    """provider와 무관하게 세 가지 모델 생성 기능을 보장하는 경계.
-
-    모든 provider가 세 기능을 동일하게 제공한다.
-    전략 선택(native/prompt)은 composition root가 담당하고,
-    adapter는 선택된 전략을 구현한다.
-    """
-
-    def create_chat(self) -> ChatModel:
-        """순수 채팅 모델을 생성한다."""
-        ...
-
-    def create_tool_model(
-        self,
-        tools: Sequence[ToolSchema],
-    ) -> ChatModel:
-        """도구 호출이 가능한 모델을 생성한다.
-
-        Args:
-            tools: 모델에 전달할 도구 schema 목록.
-        """
-        ...
-
-    def create_structured_model(
-        self,
-        response_schema: Mapping[str, Any],
-    ) -> StructuredChatModel:
-        """구조화된 출력을 반환하는 모델을 생성한다.
-
-        Args:
-            response_schema: 모델 응답이 따라야 할 JSON Schema.
         """
         ...
 
