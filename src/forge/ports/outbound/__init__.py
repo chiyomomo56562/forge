@@ -1,5 +1,6 @@
 from .episode_repository import EpisodeRepository
 from .inner_loop import (
+    FeedbackAwareInnerLoopPlanner,
     InnerLoopEvaluator,
     InnerLoopPlanner,
     InnerLoopReflector,
@@ -8,13 +9,13 @@ from .inner_loop import (
     ToolRegistry,
 )
 from .l0_event_store import L0EventStore
-from .model_gateway import ChatModel, ChatModelFactory, ConversationRuntime, StructuredChatModel
+from .model_gateway import ChatModel, ConversationRuntime, StructuredChatModel
 
 __all__ = [
     "ChatModel",
-    "ChatModelFactory",
     "ConversationRuntime",
     "EpisodeRepository",
+    "FeedbackAwareInnerLoopPlanner",
     "InnerLoopEvaluator",
     "InnerLoopPlanner",
     "InnerLoopReflector",

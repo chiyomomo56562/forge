@@ -1,7 +1,7 @@
 """Inner Loop planner, executor, evaluator, reflector outbound port."""
 
-from collections.abc import Sequence
-from typing import Protocol
+from collections.abc import Mapping, Sequence
+from typing import Protocol, runtime_checkable
 
 from forge.domain.inner_loop import (
     InnerLoopPlan,
@@ -10,7 +10,6 @@ from forge.domain.inner_loop import (
     ToolExecution,
     ToolInvocation,
     ToolResult,
-    ToolSchema,
 )
 from forge.domain.memory import Evaluation, Reflection
 
@@ -18,6 +17,19 @@ from forge.domain.memory import Evaluation, Reflection
 class InnerLoopPlanner(Protocol):
     def create_plan(
         self, *, task_request: str, context_episode_ids: Sequence[str]
+    ) -> InnerLoopPlan: ...
+
+
+@runtime_checkable
+class FeedbackAwareInnerLoopPlanner(Protocol):
+    def create_plan_after_feedback(
+        self,
+        *,
+        task_request: str,
+        context_episode_ids: Sequence[str],
+        last_execution: ToolExecution,
+        feedback: Mapping[str, object],
+        feedback_count: int,
     ) -> InnerLoopPlan: ...
 
 
@@ -35,10 +47,6 @@ class ToolRegistry(Protocol):
     def validate_arguments(self, tool_name: str, arguments: object) -> dict[str, object]: ...
 
     def execute(self, invocation: ToolInvocation) -> ToolResult: ...
-
-    def tool_schemas(self) -> Sequence[ToolSchema]:
-        """LLM tool-calling에 전달할 등록 도구 전체의 JSON Schema 목록."""
-        ...
 
 
 class ToolAuthorizationPolicy(Protocol):

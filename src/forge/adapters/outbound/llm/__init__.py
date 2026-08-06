@@ -1,4 +1,3 @@
-from .factory import UnifiedChatModelFactory
 from .litellm_codex_gateway import (
     CHAT_ROUTE,
     CODEX_PROVIDER,
@@ -8,16 +7,10 @@ from .litellm_codex_gateway import (
     CodexProvider,
 )
 from .providers import LiteLLMChatModel, ProviderAdapter
-from .providers.codex import CodexLLMProvider, CodexProvider as CodexProviderAdapter, CodexSettings
+from .providers.codex import CodexLLMProvider, CodexSettings
+from .providers.codex import CodexProvider as CodexProviderAdapter
 from .providers.ollama import OllamaProvider, OllamaSettings
-from .strategies import (
-    PromptStructuredOutputStrategy,
-    PromptToolCallingStrategy,
-    StructuredOutputError,
-    StructuredOutputStrategy,
-    ToolCallingError,
-    ToolCallingStrategy,
-)
+from .strategies import ToolCallingError
 
 __all__ = [
     "CHAT_ROUTE",
@@ -31,13 +24,7 @@ __all__ = [
     "LiteLLMChatModel",
     "OllamaProvider",
     "OllamaSettings",
-    "PromptStructuredOutputStrategy",
-    "PromptToolCallingStrategy",
     "ProviderAdapter",
-    "StructuredOutputError",
-    "StructuredOutputStrategy",
     "TERRA_MODEL",
     "ToolCallingError",
-    "ToolCallingStrategy",
-    "UnifiedChatModelFactory",
 ]

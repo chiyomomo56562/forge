@@ -9,6 +9,8 @@ class ConversationContext:
 
     Args:
         system_instruction: 이번 모델 호출에만 적용할 시스템 지시문.
+        conversation_id: 도구 실행 session_id로 사용할 현재 대화 식별자.
     """
 
     system_instruction: str = ""
+    conversation_id: str = ""

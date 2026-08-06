@@ -7,23 +7,12 @@ import yaml
 from chromadb import PersistentClient
 
 from forge.adapters.outbound.inner_loop import (
-    PLAN_SCHEMA,
     DeterministicEvaluator,
     DeterministicPlanner,
     DeterministicReflector,
-    LLMPlanner,
     NativeToolCallPlanner,
 )
-from forge.adapters.outbound.llm import (
-    ChatModelFactory,
-    CodexProviderAdapter,
-    CodexSettings,
-    OllamaProvider,
-    OllamaSettings,
-    PromptStructuredOutputStrategy,
-    PromptToolCallingStrategy,
-    UnifiedChatModelFactory,
-)
+from forge.adapters.outbound.llm import ChatModelFactory
 from forge.adapters.outbound.memory import (
     ChromaEpisodeIndex,
     JsonlL0EventStore,
@@ -35,6 +24,7 @@ from forge.adapters.outbound.tools import (
     BuiltinToolRegistry,
     RegistryPlanStepExecutor,
     StaticToolAuthorizationPolicy,
+    build_langchain_tools,
 )
 from forge.application.conversation import ReceiveMessageService
 from forge.application.inner_loop import RunInnerLoopService
@@ -62,10 +52,11 @@ def build_receive_message_service(
     Returns:
         준비된 대화 입력 facade.
 
-    최종 수정일: 2026-07-31
+    최종 수정일: 2026-08-05
     """
-    model = chat_model or ChatModelFactory.from_config(config_path).create()
-    return ReceiveMessageService(LangGraphConversationRuntime(model))
+    config = _load_yaml_config(config_path)
+    runtime = _build_conversation_runtime(config, config_path=config_path, chat_model=chat_model)
+    return ReceiveMessageService(runtime)
 
 
 def build_l0_event_store(root_path: str = "data/memory/working/sessions") -> JsonlL0EventStore:
@@ -134,12 +125,10 @@ def build_inner_loop_service(
     Returns:
         명시적으로 호출할 수 있는 Inner Loop application service.
 
-    최종 수정일: 2026-07-31
+    최종 수정일: 2026-08-05
     """
-    with open(config_path, encoding="utf-8") as config_file:
-        config = yaml.safe_load(config_file) or {}
-    with open(agent_config_path, encoding="utf-8") as config_file:
-        agent_config = yaml.safe_load(config_file) or {}
+    config = _load_yaml_config(config_path)
+    agent_config = _load_yaml_config(agent_config_path)
     episodic = config["episodic"]
     settings = MemorySettings(
         sqlite_path=Path(episodic["sqlite_path"]),
@@ -156,98 +145,85 @@ def build_inner_loop_service(
     )
     store = build_l0_event_store(config["working"]["l0"]["root_path"])
     tool_config = agent_config.get("tools", {})
-    registry = BuiltinToolRegistry(
+    registry = _build_tool_registry(tool_config)
+    tools = build_langchain_tools(
+        registry,
+        StaticToolAuthorizationPolicy(
+            allow_verification=bool(tool_config.get("allow_verification", True))
+        ),
+    )
+    return RunInnerLoopService(
+        StartInnerLoopSessionService(store),
+        RecordInnerLoopEventService(store),
+        FinalizeEpisodeService(store, repository),
+        _build_planner(agent_config, tools, agent_config_path),
+        RegistryPlanStepExecutor(tools),
+        DeterministicEvaluator(),
+        DeterministicReflector(),
+        max_retries=max_retries,
+        max_feedback_cycles=_non_negative_int(
+            agent_config.get("inner_loop", {}).get("max_feedback_cycles", 0),
+            setting="inner_loop.max_feedback_cycles",
+        ),
+    )
+
+
+def _load_yaml_config(config_path: str) -> dict[str, Any]:
+    with open(config_path, encoding="utf-8") as config_file:
+        return yaml.safe_load(config_file) or {}
+
+
+def _build_tool_registry(tool_config: dict[str, Any]) -> BuiltinToolRegistry:
+    return BuiltinToolRegistry(
         tool_config.get("workspace_root", "."),
         max_read_bytes=tool_config.get("max_read_bytes", 32_768),
         max_search_results=tool_config.get("max_search_results", 100),
         max_output_bytes=tool_config.get("max_output_bytes", 32_768),
         timeout_seconds=tool_config.get("timeout_seconds", 30),
     )
-    return RunInnerLoopService(
-        StartInnerLoopSessionService(store),
-        RecordInnerLoopEventService(store),
-        FinalizeEpisodeService(store, repository),
-        _build_planner(agent_config, registry),
-        RegistryPlanStepExecutor(
-            registry,
-            StaticToolAuthorizationPolicy(
-                allow_verification=bool(tool_config.get("allow_verification", True))
-            ),
-        ),
-        DeterministicEvaluator(),
-        DeterministicReflector(),
-        max_retries=max_retries,
+
+
+def _build_conversation_runtime(
+    config: dict[str, Any], *, config_path: str, chat_model: Any | None = None
+) -> LangGraphConversationRuntime:
+    conversation_config = config.get("conversation", {})
+    tools_config = conversation_config.get("tools", {})
+    if not isinstance(tools_config, dict):
+        raise ValueError("conversation.tools must be a mapping")
+    if not bool(tools_config.get("enabled", False)):
+        model = chat_model or ChatModelFactory.from_config(config_path).create()
+        return LangGraphConversationRuntime(model)
+
+    registry_config = dict(config.get("tools", {}))
+    registry = _build_tool_registry(registry_config)
+    authorization = StaticToolAuthorizationPolicy(
+        allow_verification=bool(tools_config.get("allow_verification", False))
     )
-
-
-def _build_provider(config: dict[str, Any]):
-    """llm 설정에서 provider adapter를 생성한다.
-
-    provider 이름으로 기능을 분기하지 않고, 설정에 따라 adapter를 선택한다.
-
-    최종 수정일: 2026-08-04
-    """
-    llm = config.get("llm", {})
-    backend = llm.get("backend", "ollama")
-    selected = llm.get(backend, {})
-    if backend == "ollama":
-        return OllamaProvider(
-            OllamaSettings(
-                model=selected.get("model", "glm-5.2:cloud"),
-                base_url=selected.get("base_url", "http://localhost:11434"),
-                temperature=selected.get("temperature"),
-                max_tokens=selected.get("max_tokens"),
-            )
-        )
-    if backend == "openai":
-        return CodexProviderAdapter(
-            CodexSettings(
-                model=selected.get("model", "gpt-5.6-luna"),
-                temperature=selected.get("temperature"),
-                max_tokens=selected.get("max_tokens"),
-            )
-        )
-    raise ValueError(f"Unsupported LLM backend: {backend}")
-
-
-def _build_chat_model_factory(config: dict[str, Any]) -> UnifiedChatModelFactory:
-    """provider와 전략을 조합해 ``UnifiedChatModelFactory`` 를 생성한다.
-
-    전략 선택은 config의 ``model.tool_calling_strategy`` 와
-    ``model.structured_output_strategy`` 에 따른다.
-    초기 기본값은 ``prompt`` 로 모든 모델에 적용 가능하다.
-
-    최종 수정일: 2026-08-04
-    """
-    model_config = config.get("model", {})
-    tool_strategy_name = model_config.get("tool_calling_strategy", "prompt")
-    structured_strategy_name = model_config.get("structured_output_strategy", "prompt")
-
-    if tool_strategy_name != "prompt":
-        raise ValueError(
-            f"Tool calling strategy '{tool_strategy_name}' is not yet supported. "
-            "Use 'prompt' for the initial implementation."
-        )
-    if structured_strategy_name != "prompt":
-        raise ValueError(
-            f"Structured output strategy '{structured_strategy_name}' is not yet supported. "
-            "Use 'prompt' for the initial implementation."
-        )
-
-    return UnifiedChatModelFactory(
-        provider=_build_provider(config),
-        tool_strategy=PromptToolCallingStrategy(),
-        structured_strategy=PromptStructuredOutputStrategy(),
+    tools = build_langchain_tools(registry, authorization)
+    # Conversation tool calling is LangChain-native: bind the actual BaseTool
+    # instances to the provider model and let ToolNode execute them.
+    model = (chat_model or ChatModelFactory.from_config(config_path).create()).bind_tools(tools)
+    return LangGraphConversationRuntime(
+        model,
+        tools=tools,
+        max_protocol_failures=_non_negative_int(
+            tools_config.get("max_protocol_failures", 2),
+            setting="conversation.tools.max_protocol_failures",
+        ),
+        max_tool_feedback_bytes=_positive_int(
+            tools_config.get("max_tool_feedback_bytes", 4_096),
+            setting="conversation.tools.max_tool_feedback_bytes",
+        ),
+        workspace_root=registry_config.get("workspace_root", "."),
     )
 
 
 def _build_planner(
-    agent_config: dict[str, Any], registry: BuiltinToolRegistry
+    agent_config: dict[str, Any], tools: tuple[Any, ...] | list[Any], config_path: str
 ) -> InnerLoopPlanner:
     """config에 따라 deterministic 또는 LLM planner를 생성한다.
 
-    기본값은 ``deterministic`` 이며, ``inner_loop.planner.type: llm`` 인 경우
-    ``UnifiedChatModelFactory`` 로 structured model을 만들어 ``LLMPlanner`` 를 조립한다.
+    ``native_tool`` planner는 conversation and ToolNode와 동일한 decorated tools를 bind한다.
 
     최종 수정일: 2026-08-04
     """
@@ -259,22 +235,26 @@ def _build_planner(
             tool_name=planner_config.get("tool_name", "workspace.list_files"),
             tool_arguments=planner_config.get("tool_arguments", {"path": "."}),
         )
-    if planner_type == "llm":
-        factory = _build_chat_model_factory(agent_config)
-        model = factory.create_structured_model(PLAN_SCHEMA)
-        return LLMPlanner(
-            model,
-            tool_schemas=registry.tool_schemas(),
-            system_prompt=planner_config.get("system_prompt"),
-        )
-    if planner_type == "native_tool":
-        factory = _build_chat_model_factory(agent_config)
-        model = factory.create_tool_model(registry.tool_schemas())
+    if planner_type in {"llm", "native_tool"}:
+        model = ChatModelFactory.from_config(config_path).create()
         return NativeToolCallPlanner(
             model,
+            tools=tools,
             system_prompt=planner_config.get("system_prompt"),
         )
     raise ValueError(
         f"Unsupported planner type: {planner_type}. "
-        "Use 'deterministic', 'llm', or 'native_tool'."
+        "Use 'deterministic' or 'native_tool'."
     )
+
+
+def _positive_int(value: object, *, setting: str) -> int:
+    if isinstance(value, bool) or not isinstance(value, int) or value <= 0:
+        raise ValueError(f"{setting} must be a positive integer")
+    return value
+
+
+def _non_negative_int(value: object, *, setting: str) -> int:
+    if isinstance(value, bool) or not isinstance(value, int) or value < 0:
+        raise ValueError(f"{setting} must be a non-negative integer")
+    return value
