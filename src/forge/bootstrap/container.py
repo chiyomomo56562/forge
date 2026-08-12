@@ -23,6 +23,7 @@ from forge.adapters.outbound.memory import (
     SqliteEpisodeStore,
 )
 from forge.adapters.outbound.outer_loop import JsonOuterLoopStore
+from forge.adapters.outbound.procedural import SqliteProceduralRepository
 from forge.adapters.outbound.tools import (
     BuiltinToolRegistry,
     RegistryPlanStepExecutor,
@@ -42,6 +43,7 @@ from forge.application.memory import (
     StartInnerLoopSessionService,
 )
 from forge.application.outer_loop import OuterLoopPolicy, RunOuterLoopService
+from forge.application.procedural import ProceduralMemoryService, SkillLifecyclePolicy
 from forge.ports.outbound import InnerLoopPlanner
 from forge.runtime import LangGraphConversationRuntime
 
@@ -247,6 +249,14 @@ def build_outer_loop_service(config_path: str = "config/memory.yml") -> RunOuter
             retire_confidence=float(consolidation.get("retire_confidence", 0.4)),
         ),
         build_constitution_repository(config_path),
+        ProceduralMemoryService(
+            SqliteProceduralRepository(config["procedural"]["db_path"]),
+            SkillLifecyclePolicy(
+                active_threshold=float(config["procedural"]["lifecycle"]["active_threshold"]),
+                degrading_threshold=float(config["procedural"]["lifecycle"]["degrading_threshold"]),
+                recovery_threshold=float(config["procedural"]["lifecycle"]["recovery_threshold"]),
+            ),
+        ),
     )
 
 
@@ -267,6 +277,7 @@ def _build_memory_manager(
             config.get("cognition", {}).get("memory_context_top_k", 3),
             setting="cognition.memory_context_top_k",
         ),
+        procedural=SqliteProceduralRepository(config["procedural"]["db_path"]),
     )
 
 

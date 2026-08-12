@@ -23,6 +23,9 @@ class SqliteProceduralRepository:
                     success_score REAL NOT NULL, cib_score REAL NOT NULL,
                     executed_at TEXT NOT NULL, PRIMARY KEY(skill_id, episode_id)
                 );
+                CREATE TABLE IF NOT EXISTS pending_hints (
+                    source_id TEXT PRIMARY KEY, hint TEXT NOT NULL, tool_names TEXT NOT NULL
+                );
                 """
             )
 
@@ -83,6 +86,15 @@ class SqliteProceduralRepository:
             SkillExecution(row[0], row[1], row[2], row[3], datetime.fromisoformat(row[4]))
             for row in rows
         ]
+
+    def store_pending_hint(self, source_id: str, hint: str, tool_names: tuple[str, ...]) -> None:
+        import json
+
+        with self._connect() as db:
+            db.execute(
+                "INSERT OR REPLACE INTO pending_hints VALUES (?,?,?)",
+                (source_id, hint, json.dumps(tool_names)),
+            )
 
     def _connect(self):
         db = sqlite3.connect(self._path)

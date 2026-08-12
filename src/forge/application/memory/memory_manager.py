@@ -18,6 +18,7 @@ from forge.ports.outbound import (
     IdentityRepository,
     OuterLoopStore,
 )
+from forge.ports.outbound.procedural_repository import ProceduralRepository
 
 
 class MemoryManager:
@@ -35,6 +36,7 @@ class MemoryManager:
         identity: IdentityRepository,
         *,
         top_k: int = 3,
+        procedural: ProceduralRepository | None = None,
     ) -> None:
         if top_k <= 0:
             raise ValueError("top_k must be positive")
@@ -43,6 +45,7 @@ class MemoryManager:
         self._constitution = constitution
         self._identity = identity
         self._top_k = top_k
+        self._procedural = procedural
 
     def read(self, *, query: str, task_category: str) -> MemoryReadResult:
         if not query.strip():
@@ -80,11 +83,15 @@ class MemoryManager:
         )
 
     def route_reflection(
-        self, reflection: Reflection, *, tool_names: tuple[str, ...]
+        self, reflection: Reflection, *, tool_names: tuple[str, ...], source_id: str = ""
     ) -> ReflectionRoutingDecision:
         if not reflection.has_content:
             return ReflectionRoutingDecision(ReflectionRoute.L1_ONLY, "reflection.empty")
         if tool_names:
+            if self._procedural is not None and source_id:
+                self._procedural.store_pending_hint(
+                    source_id, reflection.next_hint or reflection.what_worked, tool_names
+                )
             return ReflectionRoutingDecision(
                 ReflectionRoute.L3_PROCEDURE_PENDING, "reflection.tool_specific"
             )

@@ -6,6 +6,7 @@ from dataclasses import dataclass, replace
 from datetime import UTC, datetime
 from hashlib import sha256
 
+from forge.application.procedural import ProceduralMemoryService
 from forge.domain.memory import Episode, EpisodeSearchFilters, EpisodeStatus, PromotionEligibility
 from forge.domain.outer_loop import (
     L2Knowledge,
@@ -40,11 +41,13 @@ class RunOuterLoopService:
         store: OuterLoopStore,
         policy: OuterLoopPolicy,
         constitution: ConstitutionRepository | None = None,
+        procedural: ProceduralMemoryService | None = None,
     ) -> None:
         self._repository = repository
         self._store = store
         self._policy = policy
         self._constitution = constitution
+        self._procedural = procedural
 
     def handle(self, *, force: bool = False) -> OuterLoopResult:
         checkpoint = self._store.load_checkpoint()
@@ -73,6 +76,8 @@ class RunOuterLoopService:
             candidates[candidate_id] = revised
             if changed is not None:
                 knowledge[changed.knowledge_id] = changed
+                if self._procedural is not None:
+                    self._procedural.seed_from_l2(changed)
                 (promoted if is_promotion else updated).append(changed.knowledge_id)
 
         processed = (*checkpoint.processed_episode_ids, *(item.episode_id for item in batch))
