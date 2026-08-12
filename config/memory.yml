@@ -22,6 +22,7 @@ episodic:
 
 # --- L2: Semantic Memory (NetworkX Graph + JSON) ---
 semantic:
+  outer_loop_state_path: data/memory/semantic/json/outer_loop_state.json
   graph:
     graphml_path: data/memory/semantic/graph/knowledge_graph.graphml
     gpickle_path: data/memory/semantic/graph/knowledge_graph.gpickle
@@ -120,3 +121,5 @@ dual_storage:
 consolidation:
   batch_size: 20               # 한 번에 처리할 에피소드 수
   min_episodes_for_generalization: 3  # 일반화에 필요한 최소 에피소드 수
+  promotion_confidence: 0.8
+  retire_confidence: 0.4

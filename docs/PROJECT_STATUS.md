@@ -75,7 +75,7 @@ CLI (--conversation-id, --system, --query, --inner-loop)
 | `ports/outbound/episode_repository.py` | `EpisodeRepository` Protocol | ✅ |
 | 테스트 | `test_sqlite_chroma_episode_repository.py`, `test_models.py`, `test_finalize_episode.py`, `test_services.py` | ✅ |
 
-> **미구현**: L1 → L2 자동 추출(consolidation), 밀도 우선 검색(reflection 우선), 선택적 주입 파이프라인
+> **미구현**: 밀도 우선 검색(reflection 우선), L1/L2 선택적 주입 파이프라인
 
 #### 1.3 L0 원본 이벤트 — ✅ 완료
 
@@ -87,12 +87,15 @@ CLI (--conversation-id, --system, --query, --inner-loop)
 | `ports/outbound/l0_event_store.py` | `L0EventStore` Protocol | ✅ |
 | 테스트 | `test_jsonl_l0_event_store.py` | ✅ |
 
-#### 1.4 L2 시맨틱 기억 — ❌ 미구현 (Outer Loop 선행 필요)
+#### 1.4 L2 시맨틱 기억 — ⚠️ 최소 수직 슬라이스 완료
 
-현재 `src/forge`에는 L2 도메인 모델, 저장소, 그래프/JSON projection, Pattern Candidate,
-일반화 결정 정책이 없다. 설계상 L2는 Inner Loop가 직접 쓰지 않고, **Outer Loop가
-eligible L1 Episode를 누적·검증하여 승격/수정/약화/폐기**하는 계층이다. 따라서 L2
-구현은 Outer Loop의 최소 수직 슬라이스와 함께 시작해야 한다.
+`domain/outer_loop`, `application/outer_loop`, `adapters/outbound/outer_loop`에
+Pattern Candidate와 L2 knowledge의 JSON 저장소를 구현했다. Outer Loop는 complete·eligible
+L1 Episode를 후보 증거로 누적하고, 최소 증거 수와 confidence 기준을 충족하면 L2로 승격한다.
+반례는 active → weakened → retired 상태 전이를 유도하며, 후보·L2·watermark/checkpoint는
+단일 JSON 파일에 원자적으로 기록한다.
+
+> **후속 범위**: NetworkX/GraphML projection, L2 검색, Inner Loop 문맥 주입, L2→L3 승격
 
 #### 1.5 L4 헌법 — ⚠️ YAML만 존재
 
@@ -204,20 +207,20 @@ START → start_session → plan → execute_attempt
 | `adapters/inbound/cli.py` | `run_message` (단일 대화), `run_inner_loop` (Inner Loop), REPL 모드, `--conversation-id`, `--system`, `--query`, `--inner-loop`, `--config` | ✅ |
 | 테스트 | `test_container.py`, `test_cli.py` | ✅ |
 
-### Phase 3: 아우터 루프 (Outer Loop) — ❌ 미구현 (0%)
+### Phase 3: 아우터 루프 (Outer Loop) — ⚠️ 최소 수직 슬라이스 완료
 
-`src/forge`에는 Outer Loop application service, LangGraph workflow, inbound trigger,
-watermark/checkpoint 저장소, Pattern Candidate, L2 repository, L1→L2 결정 정책이 없다.
-문서(`docs/outer_loop/`)는 7단계 의사 코드만 제공하며 실행 가능한 구현은 없다.
-
-첫 구현 범위는 L2를 생성·관리하는 최소 수직 슬라이스여야 한다:
+`RunOuterLoopService`가 다음 범위를 제공한다:
 
 ```text
 eligible L1 수집 → Pattern Candidate 증거 누적 → L1→L2 결정
 → L2 upsert/refine/weaken/retire → watermark/checkpoint
 ```
 
-M16 성장 제어, M17 코히어런스 지수, L2→L3 승격, Meta Loop 트리거는 이후 단계로 둔다.
+상태는 `semantic.outer_loop_state_path`의 단일 JSON 문서로 저장되며, 배치가 완료된 뒤에만
+watermark가 전진한다. `build_outer_loop_service()`는 기존 L1 repository와 이 저장소를 조립한다.
+
+> **후속 범위**: 스케줄/이벤트 trigger와 LangGraph orchestration, M16 성장 제어, M17
+> 코히어런스 지수, L2→L3 승격, Meta Loop 트리거
 
 ### Phase 4: 메타 루프 (Meta Loop) — ❌ 미구현
 
@@ -297,19 +300,17 @@ M16 성장 제어, M17 코히어런스 지수, L2→L3 승격, Meta Loop 트리�
 | Phase | 진행도 | 상태 |
 -------|--------|------|
 | Phase 0: 인프라 | 100% | ✅ 완료 |
-| Phase 1: 메모리 계층 | ~40% | L1/L0 완료, L2/L4/L5/Manager 미구현 |
+| Phase 1: 메모리 계층 | ~50% | L1/L0 및 L2 최소 슬라이스 완료, L4/L5/Manager 미구현 |
 | Phase 2: 이너 루프 | ~90% | LLM/Tools/대화 Runtime/CLI 및 Inner Loop Cognition v1 완료 |
-| Phase 3: 아우터 루프 | 0% | ❌ 미구현 |
+| Phase 3: 아우터 루프 | ~25% | L1→L2 최소 수직 슬라이스 완료 |
 | Phase 4: 메타 루프 | 0% | ❌ 미구현 |
 | Phase 5: 한계 보완 | 0% | ❌ 미구현 |
 
 ### 다음 우선순위 (제안)
 
-1. **Outer Loop + L2 최소 수직 슬라이스** — eligible L1 수집, Pattern Candidate,
-   L1→L2 승격 판단, L2 저장소, watermark/checkpoint
-2. **L2 검색을 Cognition에 선택적으로 연결** — Inner Loop v1의 실행 상태 문맥을
+1. **L2 검색을 Cognition에 선택적으로 연결** — Inner Loop v1의 실행 상태 문맥을
    L1/L2/L3 검색 문맥으로 확장
-3. **L4 헌법 구현** — CIB guard, K-Scenario 검증, 방향성 함수 C
-4. **L5 정체성 구현** — self_model CRUD, 칼리브레이션 에러, 윈도우 통계
-5. **MemoryManager 구현** — L1~L5 통합 라우팅과 이중 저장 전략
-6. **Outer Loop 확장** — L2→L3, M16/M17, Meta Loop trigger
+2. **L4 헌법 구현** — CIB guard, K-Scenario 검증, 방향성 함수 C
+3. **L5 정체성 구현** — self_model CRUD, 칼리브레이션 에러, 윈도우 통계
+4. **MemoryManager 구현** — L1~L5 통합 라우팅과 이중 저장 전략
+5. **Outer Loop 확장** — 스케줄/이벤트 trigger, L2→L3, M16/M17, Meta Loop trigger
