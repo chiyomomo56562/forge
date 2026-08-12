@@ -2,11 +2,15 @@
 
 from pathlib import Path
 
+import yaml
+from langchain_core.messages import AIMessage
+
 from forge.adapters.outbound.tools import (
     BuiltinToolRegistry,
     StaticToolAuthorizationPolicy,
     build_langchain_tools,
 )
+from forge.bootstrap.container import _build_conversation_runtime
 
 
 def test_shared_collection_contains_the_seven_decorated_tools(tmp_path: Path) -> None:
@@ -21,3 +25,39 @@ def test_shared_collection_contains_the_seven_decorated_tools(tmp_path: Path) ->
         "workspace.apply_patch",
         "project.verify",
     ]
+
+
+class _ToolCapableModel:
+    def bind_tools(self, _tools):
+        return self
+
+    def invoke(self, _messages):
+        return AIMessage(content="done")
+
+
+def test_conversation_runtime_uses_configured_tool_round_budget(tmp_path: Path) -> None:
+    config = {
+        "conversation": {
+            "tools": {
+                "enabled": True,
+                "max_tool_rounds": 47,
+            }
+        },
+        "tools": {"workspace_root": str(tmp_path)},
+    }
+
+    runtime = _build_conversation_runtime(
+        config, config_path="unused.yml", chat_model=_ToolCapableModel()
+    )
+
+    assert runtime._max_tool_rounds == 47
+
+
+def test_agent_config_declares_generous_tool_round_budget() -> None:
+    config_path = Path(__file__).parents[3] / "config" / "agent.yml"
+
+    config = yaml.safe_load(config_path.read_text(encoding="utf-8"))
+
+    assert config["conversation"]["tools"]["max_tool_rounds"] == 30
+    assert config["conversation"]["tools"]["allow_workspace_mutation"] is True
+    assert config["conversation"]["tools"]["allow_verification"] is True

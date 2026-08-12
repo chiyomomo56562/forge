@@ -197,6 +197,7 @@ def _build_conversation_runtime(
     registry_config = dict(config.get("tools", {}))
     registry = _build_tool_registry(registry_config)
     authorization = StaticToolAuthorizationPolicy(
+        allow_workspace_mutation=bool(tools_config.get("allow_workspace_mutation", False)),
         allow_verification=bool(tools_config.get("allow_verification", False))
     )
     tools = build_langchain_tools(registry, authorization)
@@ -206,6 +207,10 @@ def _build_conversation_runtime(
     return LangGraphConversationRuntime(
         model,
         tools=tools,
+        max_tool_rounds=_positive_int(
+            tools_config.get("max_tool_rounds", 30),
+            setting="conversation.tools.max_tool_rounds",
+        ),
         max_protocol_failures=_non_negative_int(
             tools_config.get("max_protocol_failures", 2),
             setting="conversation.tools.max_protocol_failures",

@@ -74,6 +74,30 @@ def test_mutation_without_grant_maps_denial_to_halted(tmp_path: Path) -> None:
     assert target.read_text(encoding="utf-8") == "unchanged"
 
 
+def test_static_policy_allows_mutation_only_with_explicit_grant(tmp_path: Path) -> None:
+    """명시적 grant가 있을 때만 workspace 변경 도구를 실행한다."""
+    target = tmp_path / "target.txt"
+    target.write_text("old line\n", encoding="utf-8")
+    executor = RegistryPlanStepExecutor(
+        _registry(tmp_path), StaticToolAuthorizationPolicy(allow_workspace_mutation=True)
+    )
+    patch = """\
+--- a/target.txt
++++ b/target.txt
+@@ -1 +1 @@
+-old line
++new line
+"""
+
+    execution = executor.execute(
+        PlanStep("patch", "Patch target", "workspace.apply_patch", {"patch": patch}),
+        session_id="ses_test",
+    )
+
+    assert execution.outcome is ExecutionOutcome.COMPLETED
+    assert target.read_text(encoding="utf-8") == "new line\n"
+
+
 def test_unknown_tool_is_defensive_halted_result(tmp_path: Path) -> None:
     """손상된 plan이 executor에 도달해도 실행 없이 halted가 되는지 검증한다.
 
@@ -103,6 +127,23 @@ def test_list_files_truncates_at_result_limit(tmp_path: Path) -> None:
 
     assert len(execution.output["files"]) == 2
     assert execution.truncated is True
+
+
+def test_git_diff_uses_only_supported_git_options(tmp_path: Path, monkeypatch) -> None:
+    """git diff 호출에 지원되지 않는 --no-submodule 옵션을 넣지 않는다."""
+    registry = _registry(tmp_path)
+    command: list[str] = []
+
+    def record_command(args: list[str]):
+        command.extend(args)
+        return None
+
+    monkeypatch.setattr(registry, "_run_command", record_command)
+
+    registry._git_diff(ToolInvocation("git.diff", {}, "ses_test", "diff", 0))
+
+    assert command[-2:] == ["diff", "--no-ext-diff"]
+    assert "--no-submodule" not in command
 
 
 # --- apply_patch handler 테스트 ---

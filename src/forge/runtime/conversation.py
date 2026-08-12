@@ -23,7 +23,9 @@ from forge.domain.conversation import AssistantReply, ToolCall
 
 from .context import ConversationContext
 
-DEFAULT_MAX_TOOL_ROUNDS = 3
+# A tool-using task commonly needs several sequential read/act/verify turns.
+# Keep the safety bound, but make the out-of-the-box budget practical.
+DEFAULT_MAX_TOOL_ROUNDS = 30
 DEFAULT_MAX_PROTOCOL_FAILURES = 2
 DEFAULT_MAX_TOOL_FEEDBACK_BYTES = 4096
 _PROTOCOL_TOOL_CALL_ID = "tool_protocol"
