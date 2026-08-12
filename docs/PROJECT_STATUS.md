@@ -128,11 +128,14 @@ README 설계에는 NetworkX 그래프, JSON 스토어, 엔티티 추출, 중복
 - `ollama`: `ChatLiteLLM(model="ollama_chat/...")` via Ollama API
 - `openai`: `ChatLiteLLM(model="forge_codex/forge")` via Codex SDK custom provider
 
-#### 2.2 인지 모듈 (Cognition) — ❌ 미구현
+#### 2.2 인지 모듈 (Cognition) — ⚠️ Inner Loop v1 완료
 
-README 설계의 `context_builder`, `planner`, `reasoner`, `decision`,
-`reflection_loop` 중 `src/forge`에 별도 인지 모듈이 없다. Inner Loop의
-plan/evaluate/reflect 노드가 이 역할을 부분적으로 대체한다.
+`domain/cognition`과 `application/cognition`이 Inner Loop의 실행 문맥 구성,
+계획/재계획, 실행 결과 해석, retry/replan/summarize 판단, 평가·반성 위임을
+분리한다. `RunInnerLoopService`는 LangGraph 전이와 L0/L1 lifecycle을 유지한다.
+
+> **후속 범위**: L1/L2/L3 검색 기반 문맥 주입, L4 CIB 판단, L5 권한 판단은
+> 해당 계층 구현 시 Cognition에 연결한다.
 
 #### 2.3 도구 시스템 (Tools) — ✅ 완료
 

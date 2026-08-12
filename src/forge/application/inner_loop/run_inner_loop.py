@@ -8,16 +8,16 @@ from typing import Any, TypedDict
 
 from langgraph.graph import END, START, StateGraph
 
-from forge.application.conversation.tool_feedback import serialize_tool_execution
+from forge.application.cognition import InnerLoopCognition
 from forge.application.memory import (
     FinalizeEpisodeService,
     RecordInnerLoopEventService,
     StartInnerLoopSessionService,
 )
+from forge.domain.cognition import CognitionDecision, InnerLoopContext
 from forge.domain.inner_loop import InnerLoopPlan, PlanStepStatus, ToolExecution
 from forge.domain.memory import Evaluation, ExecutionOutcome, L0EventType
 from forge.ports.outbound import (
-    FeedbackAwareInnerLoopPlanner,
     InnerLoopEvaluator,
     InnerLoopPlanner,
     InnerLoopReflector,
@@ -72,13 +72,12 @@ class RunInnerLoopService:
         self._starter = starter
         self._recorder = recorder
         self._finalizer = finalizer
-        self._planner = planner
         self._executor = executor
-        self._evaluator = evaluator
-        self._reflector = reflector
         self._max_retries = max_retries
         self._max_feedback_cycles = max_feedback_cycles
-        self._max_tool_feedback_bytes = max_tool_feedback_bytes
+        self._cognition = InnerLoopCognition(
+            planner, evaluator, reflector, max_tool_feedback_bytes=max_tool_feedback_bytes
+        )
         self._graph = self._build_graph()
 
     def handle(self, *, task_request: str, task_category: str = "general") -> InnerLoopResult:
@@ -139,24 +138,12 @@ class RunInnerLoopService:
     def _plan(self, state: InnerLoopState) -> InnerLoopState:
         preserved_statuses: dict[str, str] | None = None
         try:
-            if state.get("needs_replan") and isinstance(
-                self._planner, FeedbackAwareInnerLoopPlanner
-            ):
-                feedback_count = state["feedback_count"]
-                last_execution = state["last_execution"]
-                plan = self._planner.create_plan_after_feedback(
-                    task_request=state["task_request"],
-                    context_episode_ids=(),
-                    last_execution=last_execution,
-                    feedback=self._planner_feedback(last_execution, state),
-                    feedback_count=feedback_count,
-                )
-                plan, preserved_statuses = _merge_replan(
+            context = self._context(state)
+            last_execution = state.get("last_execution") if state.get("needs_replan") else None
+            plan = self._cognition.create_plan(context, last_execution)
+            if last_execution is not None:
+                plan, preserved_statuses = self._cognition.merge_replan(
                     state["plan"], state.get("step_statuses", {}), plan
-                )
-            else:
-                plan = self._planner.create_plan(
-                    task_request=state["task_request"], context_episode_ids=()
                 )
         except Exception:
             return {
@@ -242,8 +229,8 @@ class RunInnerLoopService:
         )
         tools = tuple(dict.fromkeys((*state.get("tool_names", ()), *result.tool_names)))
         if result.outcome is not ExecutionOutcome.COMPLETED:
-            max_attempts = step.max_attempts or self._max_retries + 1
-            if step.retry_allowed and result.retryable and attempt + 1 < max_attempts:
+            decision = self._cognition.decide(self._context(state), step, result)
+            if decision is CognitionDecision.RETRY:
                 return {
                     "attempt": attempt + 1,
                     "retry_count": state["retry_count"] + 1,
@@ -254,7 +241,7 @@ class RunInnerLoopService:
             statuses[step.step_id] = PlanStepStatus.FAILED.value
             _mark_blocked_steps(plan, statuses)
             execution = _execution_with_tools(result, tools)
-            if self._should_replan(execution, state):
+            if decision is CognitionDecision.REPLAN:
                 return {
                     "last_execution": execution,
                     "feedback_count": state["feedback_count"] + 1,
@@ -289,37 +276,17 @@ class RunInnerLoopService:
             return "re_plan"
         return "attempt"
 
-    def _should_replan(self, execution: ToolExecution, state: InnerLoopState) -> bool:
-        return (
-            isinstance(self._planner, FeedbackAwareInnerLoopPlanner)
-            and execution.outcome is ExecutionOutcome.FAILED
-            and execution.safe_error_code != "tool.protocol_failure"
-            and state["feedback_count"] < self._max_feedback_cycles
+    def _context(self, state: InnerLoopState) -> InnerLoopContext:
+        return InnerLoopContext(
+            task_request=state["task_request"],
+            plan=state.get("plan"),
+            step_statuses=dict(state.get("step_statuses", {})),
+            attempt=state.get("attempt", 0),
+            retry_count=state.get("retry_count", 0),
+            feedback_count=state.get("feedback_count", 0),
+            max_retries=self._max_retries,
+            max_feedback_cycles=self._max_feedback_cycles,
         )
-
-    def _planner_feedback(
-        self, execution: ToolExecution, state: InnerLoopState
-    ) -> dict[str, object]:
-        feedback = dict(
-            serialize_tool_execution(
-                execution,
-                max_output_bytes=self._max_tool_feedback_bytes,
-            )
-        )
-        feedback["plan"] = {
-            "summary": state["plan"].summary,
-            "steps": [
-                {
-                    "step_id": step.step_id,
-                    "summary": step.summary,
-                    "tool_name": step.tool_name,
-                    "depends_on": list(step.depends_on),
-                    "status": state.get("step_statuses", {}).get(step.step_id),
-                }
-                for step in state["plan"].steps
-            ],
-        }
-        return feedback
 
     def _summarize_execution(self, state: InnerLoopState) -> InnerLoopState:
         execution = state["execution"]
@@ -337,11 +304,7 @@ class RunInnerLoopService:
         return {}
 
     def _evaluate(self, state: InnerLoopState) -> InnerLoopState:
-        evaluation = self._evaluator.evaluate(
-            task_request=state["task_request"],
-            execution=state["execution"],
-            retry_count=state["retry_count"],
-        )
+        evaluation = self._cognition.evaluate(self._context(state), state["execution"])
         self._recorder.handle(
             session_id=state["session_id"],
             event_type=L0EventType.EVALUATION_COMPLETED,
@@ -350,10 +313,8 @@ class RunInnerLoopService:
         return {"evaluation": evaluation}
 
     def _reflect(self, state: InnerLoopState) -> InnerLoopState:
-        reflection = self._reflector.reflect(
-            task_request=state["task_request"],
-            execution=state["execution"],
-            evaluation=state["evaluation"],
+        reflection = self._cognition.reflect(
+            self._context(state), state["execution"], state["evaluation"]
         )
         self._recorder.handle(
             session_id=state["session_id"],
@@ -398,31 +359,6 @@ def _plan_is_valid(plan: InnerLoopPlan) -> bool:
         for step_id in ready:
             del dependencies[step_id]
     return True
-
-
-def _merge_replan(
-    previous: InnerLoopPlan, statuses: dict[str, str], replacement: InnerLoopPlan
-) -> tuple[InnerLoopPlan, dict[str, str]]:
-    """Keep successful work immutable while replacing only unfinished graph work."""
-    completed = [
-        step
-        for step in previous.steps
-        if statuses.get(step.step_id) == PlanStepStatus.SUCCEEDED.value
-    ]
-    completed_ids = {step.step_id for step in completed}
-    replacement_steps = tuple(
-        step for step in replacement.steps if step.step_id not in completed_ids
-    )
-    merged = InnerLoopPlan(
-        replacement.summary,
-        (*completed, *replacement_steps),
-        replacement.pattern_candidate_id,
-    )
-    merged_statuses = {step.step_id: PlanStepStatus.SUCCEEDED.value for step in completed}
-    merged_statuses.update(
-        {step.step_id: PlanStepStatus.PENDING.value for step in replacement_steps}
-    )
-    return merged, merged_statuses
 
 
 def _next_ready_step_index(plan: InnerLoopPlan, statuses: dict[str, str]) -> int | None:
