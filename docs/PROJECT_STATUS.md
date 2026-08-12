@@ -1,6 +1,6 @@
 # Forge 프로젝트 진행 상황 요약
 
-> 작성일: 2026-08-05
+> 작성일: 2026-08-12
 > 기준: `src/forge`, `tests/forge`, `.omx/plans`, `config/`, `pyproject.toml`
 
 ---
@@ -75,7 +75,7 @@ CLI (--conversation-id, --system, --query, --inner-loop)
 | `ports/outbound/episode_repository.py` | `EpisodeRepository` Protocol | ✅ |
 | 테스트 | `test_sqlite_chroma_episode_repository.py`, `test_models.py`, `test_finalize_episode.py`, `test_services.py` | ✅ |
 
-> **미구현**: L1 → L2 자동 추출(consolidation), 밀도 우선 검색(reflection 우선), 선택적 주입 파이프라인
+> **미구현**: 밀도 우선 검색(reflection 우선), L1/L2 선택적 주입 파이프라인
 
 #### 1.3 L0 원본 이벤트 — ✅ 완료
 
@@ -87,26 +87,45 @@ CLI (--conversation-id, --system, --query, --inner-loop)
 | `ports/outbound/l0_event_store.py` | `L0EventStore` Protocol | ✅ |
 | 테스트 | `test_jsonl_l0_event_store.py` | ✅ |
 
-#### 1.4 L2 시맨틱 기억 — ❌ 미구현
+#### 1.4 L2 시맨틱 기억 — ⚠️ 최소 수직 슬라이스 완료
 
-README 설계에는 NetworkX 그래프, JSON 스토어, 엔티티 추출, 중복 병합, 추론이 포함되나,
-현재 `src/forge`에 L2 관련 구현이 없다.
+`domain/outer_loop`, `application/outer_loop`, `adapters/outbound/outer_loop`에
+Pattern Candidate와 L2 knowledge의 JSON 저장소를 구현했다. Outer Loop는 complete·eligible
+L1 Episode를 후보 증거로 누적하고, 최소 증거 수와 confidence 기준을 충족하면 L2로 승격한다.
+반례는 active → weakened → retired 상태 전이를 유도하며, 후보·L2·watermark/checkpoint는
+단일 JSON 파일에 원자적으로 기록한다.
 
-#### 1.5 L4 헌법 — ⚠️ YAML만 존재
+> **후속 범위**: NetworkX/GraphML projection, L2→L3 승격
 
-`constitution/*.yml` 파일은 존재하나, `src/forge`에 헌법 loader, validator, CIB guard
-구현이 없다. `Evaluation` 도메인 모델에 `cib_score`, `cib_evaluation_status` 필드는
-정의되어 있으나, 실제 CIB 검증 로직(방향성 함수 C, K-Scenario 대입)은 구현되지 않았다.
+#### 1.5 L4 헌법 — ⚠️ 최소 읽기·승격 guard 완료
 
-#### 1.6 L5 정체성 — ⚠️ YAML + SQLite만 존재
+`YamlConstitutionRepository`가 `constitution/safety.yml`을 읽어 CIB threshold와
+민감정보 패턴을 제공한다. Outer Loop는 L2 증거를 누적하기 전에 CIB 통과·threshold 및
+민감정보 저장 금지를 검사한다. 차단된 L1은 L2 증거로 사용하지 않지만 checkpoint는 전진한다.
 
-`identity/*.yml`과 `identity.sqlite3`은 존재하나, `src/forge`에 self_model CRUD,
-칼리브레이션 에러 계산, 윈도우 통계, updater 구현이 없다.
+> **후속 범위**: K-Scenario/방향성 함수 C 평가, 도구별 사용자 승인 정책 연결, Meta Loop +
+> HITL 기반 헌법 변경
 
-#### 1.7 메모리 매니저 — ❌ 미구현
+#### 1.6 L5 정체성 — ⚠️ 최소 읽기 모델 완료
 
-`MemoryManager` 통합 라우터, L1→L2 consolidation, 이중 저장 전략 라우팅은
-구현되지 않았다.
+`YamlIdentityRepository`가 `identity.yml`의 현재 autonomy level과
+`capabilities.yml`의 작업 카테고리별 역량·미지원 카테고리 기본값을 조회한다. YAML은 계속
+읽기 전용이며, self_model CRUD, 칼리브레이션·윈도우 통계 및 Outer Loop updater는 미구현이다.
+
+#### 1.7 Cognition 메모리 문맥 — ⚠️ L1/L2 선택 주입 완료
+
+`MemoryContextBuilder`가 L1 검색 결과와 active L2 knowledge를 관련성·개수 제한으로
+선별한다. L4의 CIB/민감정보 검사를 통과한 항목만 주입하며 L5 capability는 planner의
+자기 인식 문맥으로 함께 전달한다. L3는 아직 미구현이므로 동일한 문맥 계약에 추가하지 않았다.
+
+#### 1.8 메모리 매니저 — ⚠️ 최소 통합 라우터 완료
+
+`MemoryManager`가 L1 검색, active L2 knowledge, L4 안전 필터, L5 identity/capability를
+한 번의 읽기 요청으로 조합하고 Cognition의 선택 주입 경로가 이를 사용한다. 반성은
+범용 지식이면 L2 일반화, 도구 종속이면 `L3_PROCEDURE_PENDING`, 내용이 없으면 L1 전용으로
+분류한다. L3 저장소가 없으므로 `L3_PROCEDURE_PENDING`은 아직 영속화하지 않는다.
+
+L1→L2 consolidation은 이미 Outer Loop가 소유하며, MemoryManager는 이를 중복 실행하지 않는다.
 
 ### Phase 2: 이너 루프 (Inner Loop) — ✅ 기본 구조 완료
 
@@ -198,14 +217,24 @@ START → start_session → plan → execute_attempt
 
 | 파일 | 내용 | 상태 |
 ------|------|------|
-| `bootstrap/container.py` | `build_receive_message_service`, `build_inner_loop_service`, `build_memory_services`, `build_l0_event_store`, `_build_conversation_runtime` (tools enabled 시 bind_tools), `_build_planner` (deterministic / native_tool), `_build_tool_registry` | ✅ |
+| `bootstrap/container.py` | 대화/Inner/Outer Loop 및 L4/L5 읽기 저장소 builder, `_build_conversation_runtime` (tools enabled 시 bind_tools), `_build_planner` (deterministic / native_tool), `_build_tool_registry` | ✅ |
 | `adapters/inbound/cli.py` | `run_message` (단일 대화), `run_inner_loop` (Inner Loop), REPL 모드, `--conversation-id`, `--system`, `--query`, `--inner-loop`, `--config` | ✅ |
 | 테스트 | `test_container.py`, `test_cli.py` | ✅ |
 
-### Phase 3: 아우터 루프 (Outer Loop) — ❌ 미구현
+### Phase 3: 아우터 루프 (Outer Loop) — ⚠️ 최소 수직 슬라이스 완료
 
-README 설계의 7단계 프로세스, M16 그로스 레이트 레귤레이터, M17 코히어런스 인덱스,
-어댑티브 N은 구현되지 않았다.
+`RunOuterLoopService`가 다음 범위를 제공한다:
+
+```text
+eligible L1 수집 → Pattern Candidate 증거 누적 → L1→L2 결정
+→ L2 upsert/refine/weaken/retire → watermark/checkpoint
+```
+
+상태는 `semantic.outer_loop_state_path`의 단일 JSON 문서로 저장되며, 배치가 완료된 뒤에만
+watermark가 전진한다. `build_outer_loop_service()`는 기존 L1 repository와 이 저장소를 조립한다.
+
+> **후속 범위**: 스케줄/이벤트 trigger와 LangGraph orchestration, M16 성장 제어, M17
+> 코히어런스 지수, L2→L3 승격, Meta Loop 트리거
 
 ### Phase 4: 메타 루프 (Meta Loop) — ❌ 미구현
 
@@ -233,12 +262,13 @@ README 설계의 7단계 프로세스, M16 그로스 레이트 레귤레이터, 
 | `tests/forge/application/conversation/test_tool_feedback.py` | 안전 피드백 payload, redaction | ✅ |
 | `tests/forge/application/conversation/test_hexagonal_initial_input.py` | facade hexagonal 경계 | ✅ |
 | `tests/forge/application/inner_loop/test_run_inner_loop.py` | Inner Loop 그래프, retry, replan | ✅ |
+| `tests/forge/application/cognition/test_inner_loop_cognition.py` | Inner Loop 인지 판단(retry/replan/summarize) | ✅ |
 | `tests/forge/application/memory/test_services.py` | L1 persist/search/reindex service | ✅ |
 | `tests/forge/application/memory/test_finalize_episode.py` | L0 → L1 finalize | ✅ |
 | `tests/forge/domain/memory/test_models.py` | Episode/Evaluation/Reflection 검증 | ✅ |
 
-> **주의**: `pytest`, `ruff`, `mypy` 검증 템플릿이 현재 `tool.approval_required` 상태이므로
-> 실제 통과 여부는 미검증.
+> **검증**: 2026-08-12 기준 전체 `pytest`는 717개 통과했고, 변경 범위 `ruff`도 통과했다.
+> `mypy`는 프로젝트 코드 검사 전 가상환경 NumPy 스텁의 Python 버전 충돌로 중단된다.
 
 ---
 
@@ -246,29 +276,20 @@ README 설계의 7단계 프로세스, M16 그로스 레이트 레귤레이터, 
 
 | 파일 | 변경 내용 |
 ------|----------|
-| `config/agent.yml` | `conversation.tools` 블록 추가 (enabled: true, max_tool_rounds: 30, allow_workspace_mutation: true) |
-| `src/forge/adapters/outbound/tools/builtin.py` | `workspace.apply_patch` 도구 추가 (unified diff 파싱 및 적용) |
-| `src/forge/bootstrap/container.py` | `_build_conversation_runtime`에 tool binding 지원 추가 |
-| `src/forge/runtime/conversation.py` | tool calling 루프 추가 (ToolNode, routing, protocol failure, round limit) |
-| `tests/forge/adapters/outbound/tools/test_builtin.py` | apply_patch 테스트 7개 추가 |
-| `tests/forge/bootstrap/test_container.py` | tool round budget 및 agent config assertion 테스트 추가 |
+| `config/agent.yml` | 대화 도구 한도(30), workspace mutation 및 verification 권한 활성화 |
+| `src/forge/adapters/outbound/tools/builtin.py` | `workspace.apply_patch`와 수정된 `git.diff` 명령, mutation 권한 정책 |
+| `src/forge/bootstrap/container.py` | 대화 tool binding 및 권한/한도 설정 전달 |
+| `src/forge/runtime/conversation.py` | ToolNode 기반 다중 라운드 대화 실행 |
+| `src/forge/domain/cognition/`, `src/forge/application/cognition/` | Inner Loop Cognition v1 경계와 판단 서비스 |
+| `src/forge/application/inner_loop/run_inner_loop.py` | Cognition을 사용하고 L0/L1 lifecycle에 집중하도록 분리 |
+| `tests/forge/**` | 대화 도구, mutation, git.diff, Cognition 재시도/재계획 회귀 테스트 |
 
 ---
 
 ## 5. 알려진 문제
 
-### 5.1 `git.diff` 도구 버그
-
-`builtin.py`의 `_git_diff` 메서드가 `--no-submodule` 플래그를 `git diff`에 전달한다.
-이 플래그는 존재하지 않는 git 옵션이며, `git diff` 실행 시 `error: invalid option:
---no-submodule` 오류를 발생시킨다.
-
-**수정 필요**: `"--no-submodule"` 인자를 command vector에서 제거.
-
-### 5.2 검증 템플릿 접근 제한
-
-`project.verify` (pytest/ruff/mypy) 템플릿이 `tool.approval_required` 상태로,
-현재 자동화 검증을 실행할 수 없다.
+현재 알려진 프로젝트 코드 문제는 없다. 단, `mypy`는 NumPy 스텁의 Python 버전 충돌을
+먼저 해결해야 전체 타입 검사를 실행할 수 있다.
 
 ---
 
@@ -283,6 +304,7 @@ README 설계의 7단계 프로세스, M16 그로스 레이트 레귤레이터, 
 | `inner-loop-l0-event-foundation.md` | ✅ 완료 | L0 이벤트 + L1 Episode 수직 슬라이스 |
 | `inner-loop-runtime-integration.md` | ✅ 완료 | Inner Loop runtime 통합 |
 | `forge-langchain-conversation-tools-mcp.md` | ⚠️ 진행 중 | LangChain 대화 전환 + tool calling (MCP는 미구현) |
+| `inner-loop-cognition-v1.md` | ✅ 완료 | Inner Loop 인지 책임 분리; L1~L5 문맥 주입은 제외 |
 | `l0-event-foundation.md` | — | 바이너리 파일 (읽기 불가) |
 
 ---
@@ -292,19 +314,15 @@ README 설계의 7단계 프로세스, M16 그로스 레이트 레귤레이터, 
 | Phase | 진행도 | 상태 |
 -------|--------|------|
 | Phase 0: 인프라 | 100% | ✅ 완료 |
-| Phase 1: 메모리 계층 | ~40% | L1/L0 완료, L2/L4/L5/Manager 미구현 |
-| Phase 2: 이너 루프 | ~85% | LLM/Tools/Inner Loop/대화 Runtime/CLI 완료, 인지 모듈 미구현 |
-| Phase 3: 아우터 루프 | 0% | ❌ 미구현 |
+| Phase 1: 메모리 계층 | ~65% | L1/L0/L2, L4/L5 읽기 모델, MemoryManager 최소 라우터 완료 |
+| Phase 2: 이너 루프 | ~90% | LLM/Tools/대화 Runtime/CLI 및 Inner Loop Cognition v1 완료 |
+| Phase 3: 아우터 루프 | ~25% | L1→L2 최소 수직 슬라이스 완료 |
 | Phase 4: 메타 루프 | 0% | ❌ 미구현 |
 | Phase 5: 한계 보완 | 0% | ❌ 미구현 |
 
 ### 다음 우선순위 (제안)
 
-1. **`git.diff` 버그 수정** — `--no-submodule` 플래그 제거
-2. **미커밋 변경 사항 검증** — pytest/ruff/mypy 실행 후 커밋
-3. **L4 헌법 구현** — CIB guard, K-Scenario 검증, 방향성 함수 C
-4. **L5 정체성 구현** — self_model CRUD, 칼리브레이션 에러, 윈도우 통계
-5. **L2 시맨틱 기억 구현** — NetworkX 그래프, 엔티티 추출, 중복 병합
-6. **메모리 매니저 구현** — L1~L5 통합 라우팅, 이중 저장 전략
-7. **인지 모듈 구현** — context_builder, 선택적 주입, 밀도 우선 검색
-8. **Phase 3: 아우터 루프** — 7단계 프로세스, M16/M17
+1. **L4 확장** — K-Scenario, 방향성 함수 C, 도구별 사용자 승인 정책 연결
+2. **L5 확장** — self_model CRUD, 칼리브레이션 에러, 윈도우 통계와 Outer Loop updater
+3. **L3 구현** — reflection hint 저장, 스킬 lifecycle과 `L3_PROCEDURE_PENDING` 영속화
+4. **Outer Loop 확장** — 스케줄/이벤트 trigger, L2→L3, M16/M17, Meta Loop trigger

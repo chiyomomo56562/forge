@@ -9,6 +9,7 @@ from .errors import (
     RetryDisposition,
 )
 from .l0_events import L0Event, L0EventType, L0SessionManifest
+from .manager import MemoryReadResult, ReflectionRoute, ReflectionRoutingDecision
 from .models import (
     CibEvaluationStatus,
     Episode,
@@ -40,6 +41,7 @@ __all__ = [
     "L0Event",
     "L0EventType",
     "L0SessionManifest",
+    "MemoryReadResult",
     "MemoryInfrastructureError",
     "MemoryIntegrityError",
     "MemoryOperationError",
@@ -47,6 +49,8 @@ __all__ = [
     "PersistEpisodeResult",
     "PromotionEligibility",
     "Reflection",
+    "ReflectionRoute",
+    "ReflectionRoutingDecision",
     "ReindexResult",
     "RetryableMemoryOperationError",
     "RetryDisposition",

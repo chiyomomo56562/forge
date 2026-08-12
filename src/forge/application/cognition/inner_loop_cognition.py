@@ -11,6 +11,7 @@ from forge.ports.outbound import (
     InnerLoopEvaluator,
     InnerLoopPlanner,
     InnerLoopReflector,
+    MemoryAwareInnerLoopPlanner,
 )
 
 
@@ -33,15 +34,33 @@ class InnerLoopCognition:
     def create_plan(
         self, context: InnerLoopContext, last_execution: ToolExecution | None = None
     ) -> InnerLoopPlan:
+        if last_execution is not None and isinstance(self._planner, MemoryAwareInnerLoopPlanner):
+            return self._planner.create_plan_after_feedback_with_memory(
+                task_request=context.task_request,
+                context_episode_ids=context.memory_context.episode_ids,
+                last_execution=last_execution,
+                feedback=self.feedback(last_execution, context),
+                feedback_count=context.feedback_count,
+                memory_context=context.memory_context.as_payload(),
+            )
         if last_execution is not None and isinstance(self._planner, FeedbackAwareInnerLoopPlanner):
             return self._planner.create_plan_after_feedback(
                 task_request=context.task_request,
-                context_episode_ids=(),
+                context_episode_ids=context.memory_context.episode_ids,
                 last_execution=last_execution,
                 feedback=self.feedback(last_execution, context),
                 feedback_count=context.feedback_count,
             )
-        return self._planner.create_plan(task_request=context.task_request, context_episode_ids=())
+        if isinstance(self._planner, MemoryAwareInnerLoopPlanner):
+            return self._planner.create_plan_with_memory(
+                task_request=context.task_request,
+                context_episode_ids=context.memory_context.episode_ids,
+                memory_context=context.memory_context.as_payload(),
+            )
+        return self._planner.create_plan(
+            task_request=context.task_request,
+            context_episode_ids=context.memory_context.episode_ids,
+        )
 
     def decide(
         self, context: InnerLoopContext, step: PlanStep, execution: ToolExecution

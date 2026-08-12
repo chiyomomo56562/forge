@@ -1,5 +1,5 @@
 from forge.application.cognition import InnerLoopCognition
-from forge.domain.cognition import CognitionDecision, InnerLoopContext
+from forge.domain.cognition import CognitionDecision, InnerLoopContext, RetrievedMemoryContext
 from forge.domain.inner_loop import InnerLoopPlan, PlanStep, ToolExecution
 from forge.domain.memory import ExecutionOutcome
 
@@ -16,6 +16,15 @@ class _FeedbackPlanner(_Planner):
     ):
         del task_request, context_episode_ids, last_execution, feedback, feedback_count
         return InnerLoopPlan("replacement", (PlanStep("replacement", "retry safely"),))
+
+
+class _MemoryPlanner(_Planner):
+    def create_plan_with_memory(self, *, task_request, context_episode_ids, memory_context):
+        self.received = (task_request, context_episode_ids, memory_context)
+        return InnerLoopPlan("memory plan", (PlanStep("step", "do work"),))
+
+    def create_plan_after_feedback_with_memory(self, **_kwargs):
+        raise AssertionError("not needed")
 
 
 class _Evaluator:
@@ -79,3 +88,17 @@ def test_protocol_failure_never_replans():
     )
 
     assert decision is CognitionDecision.SUMMARIZE
+
+
+def test_plan_passes_vetted_memory_to_memory_aware_planner():
+    planner = _MemoryPlanner()
+    context = _context(
+        memory_context=RetrievedMemoryContext(("ep_1",), ("condition: practice",), "coding")
+    )
+
+    assert (
+        InnerLoopCognition(planner, _Evaluator(), _Reflector()).create_plan(context).summary
+        == "memory plan"
+    )
+    assert planner.received[1] == ("ep_1",)
+    assert planner.received[2]["l2_knowledge"] == ["condition: practice"]

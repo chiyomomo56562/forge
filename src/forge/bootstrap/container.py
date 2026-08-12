@@ -6,6 +6,8 @@ from typing import Any
 import yaml
 from chromadb import PersistentClient
 
+from forge.adapters.outbound.constitution import YamlConstitutionRepository
+from forge.adapters.outbound.identity import YamlIdentityRepository
 from forge.adapters.outbound.inner_loop import (
     DeterministicEvaluator,
     DeterministicPlanner,
@@ -20,22 +22,26 @@ from forge.adapters.outbound.memory import (
     SqliteChromaEpisodeRepository,
     SqliteEpisodeStore,
 )
+from forge.adapters.outbound.outer_loop import JsonOuterLoopStore
 from forge.adapters.outbound.tools import (
     BuiltinToolRegistry,
     RegistryPlanStepExecutor,
     StaticToolAuthorizationPolicy,
     build_langchain_tools,
 )
+from forge.application.cognition import MemoryContextBuilder
 from forge.application.conversation import ReceiveMessageService
 from forge.application.inner_loop import RunInnerLoopService
 from forge.application.memory import (
     FinalizeEpisodeService,
+    MemoryManager,
     PersistEpisodeService,
     RecordInnerLoopEventService,
     ReindexEpisodesService,
     SearchEpisodesService,
     StartInnerLoopSessionService,
 )
+from forge.application.outer_loop import OuterLoopPolicy, RunOuterLoopService
 from forge.ports.outbound import InnerLoopPlanner
 from forge.runtime import LangGraphConversationRuntime
 
@@ -73,6 +79,20 @@ def build_l0_event_store(root_path: str = "data/memory/working/sessions") -> Jso
     return JsonlL0EventStore(root_path)
 
 
+def build_constitution_repository(
+    config_path: str = "config/memory.yml",
+) -> YamlConstitutionRepository:
+    """읽기 전용 L4 헌법 저장소를 조립한다."""
+    config = _load_yaml_config(config_path)
+    return YamlConstitutionRepository(config["constitution"]["dir"])
+
+
+def build_identity_repository(config_path: str = "config/memory.yml") -> YamlIdentityRepository:
+    """읽기 전용 L5 정체성·역량 저장소를 조립한다."""
+    config = _load_yaml_config(config_path)
+    return YamlIdentityRepository(config["identity"]["dir"])
+
+
 def build_memory_services(
     config_path: str = "config/memory.yml",
 ) -> tuple[PersistEpisodeService, SearchEpisodesService, ReindexEpisodesService]:
@@ -107,6 +127,26 @@ def build_memory_services(
         SearchEpisodesService(repository),
         ReindexEpisodesService(repository),
     )
+
+
+def build_memory_manager(config_path: str = "config/memory.yml") -> MemoryManager:
+    """현재 구현된 L1/L2/L4/L5를 통합 조회하는 MemoryManager를 조립한다."""
+    config = _load_yaml_config(config_path)
+    episodic = config["episodic"]
+    settings = MemorySettings(
+        sqlite_path=Path(episodic["sqlite_path"]),
+        chroma_path=Path(episodic["chroma_path"]),
+        collection_name=episodic["collection_name"],
+    )
+    collection = PersistentClient(path=str(settings.chroma_path)).get_or_create_collection(
+        settings.collection_name
+    )
+    repository = SqliteChromaEpisodeRepository(
+        SqliteEpisodeStore(settings.sqlite_path),
+        ChromaEpisodeIndex(collection, settings.projection_version, settings.embedding_model_id),
+        settings,
+    )
+    return _build_memory_manager(config, repository)
 
 
 def build_inner_loop_service(
@@ -165,12 +205,69 @@ def build_inner_loop_service(
             agent_config.get("inner_loop", {}).get("max_feedback_cycles", 0),
             setting="inner_loop.max_feedback_cycles",
         ),
+        memory_context_builder=MemoryContextBuilder(_build_memory_manager(config, repository)),
+    )
+
+
+def build_outer_loop_service(config_path: str = "config/memory.yml") -> RunOuterLoopService:
+    """L1 SQLite/Chroma repository와 checkpointed L1→L2 서비스를 조립한다.
+
+    Args:
+        config_path: episodic, semantic, consolidation 설정을 담은 YAML 파일.
+
+    Returns:
+        명시적으로 실행할 Outer Loop application service.
+    """
+    config = _load_yaml_config(config_path)
+    episodic = config["episodic"]
+    settings = MemorySettings(
+        sqlite_path=Path(episodic["sqlite_path"]),
+        chroma_path=Path(episodic["chroma_path"]),
+        collection_name=episodic["collection_name"],
+    )
+    collection = PersistentClient(path=str(settings.chroma_path)).get_or_create_collection(
+        settings.collection_name
+    )
+    repository = SqliteChromaEpisodeRepository(
+        SqliteEpisodeStore(settings.sqlite_path),
+        ChromaEpisodeIndex(collection, settings.projection_version, settings.embedding_model_id),
+        settings,
+    )
+    consolidation = config.get("consolidation", {})
+    return RunOuterLoopService(
+        repository,
+        JsonOuterLoopStore(Path(config["semantic"]["outer_loop_state_path"])),
+        OuterLoopPolicy(
+            batch_size=_positive_int(consolidation.get("batch_size", 20), setting="batch_size"),
+            min_episodes_for_generalization=_positive_int(
+                consolidation.get("min_episodes_for_generalization", 3),
+                setting="min_episodes_for_generalization",
+            ),
+            promotion_confidence=float(consolidation.get("promotion_confidence", 0.8)),
+            retire_confidence=float(consolidation.get("retire_confidence", 0.4)),
+        ),
+        build_constitution_repository(config_path),
     )
 
 
 def _load_yaml_config(config_path: str) -> dict[str, Any]:
     with open(config_path, encoding="utf-8") as config_file:
         return yaml.safe_load(config_file) or {}
+
+
+def _build_memory_manager(
+    config: dict[str, Any], repository: SqliteChromaEpisodeRepository
+) -> MemoryManager:
+    return MemoryManager(
+        repository,
+        JsonOuterLoopStore(Path(config["semantic"]["outer_loop_state_path"])),
+        YamlConstitutionRepository(config["constitution"]["dir"]),
+        YamlIdentityRepository(config["identity"]["dir"]),
+        top_k=_positive_int(
+            config.get("cognition", {}).get("memory_context_top_k", 3),
+            setting="cognition.memory_context_top_k",
+        ),
+    )
 
 
 def _build_tool_registry(tool_config: dict[str, Any]) -> BuiltinToolRegistry:
@@ -198,7 +295,7 @@ def _build_conversation_runtime(
     registry = _build_tool_registry(registry_config)
     authorization = StaticToolAuthorizationPolicy(
         allow_workspace_mutation=bool(tools_config.get("allow_workspace_mutation", False)),
-        allow_verification=bool(tools_config.get("allow_verification", False))
+        allow_verification=bool(tools_config.get("allow_verification", False)),
     )
     tools = build_langchain_tools(registry, authorization)
     # Conversation tool calling is LangChain-native: bind the actual BaseTool
@@ -248,8 +345,7 @@ def _build_planner(
             system_prompt=planner_config.get("system_prompt"),
         )
     raise ValueError(
-        f"Unsupported planner type: {planner_type}. "
-        "Use 'deterministic' or 'native_tool'."
+        f"Unsupported planner type: {planner_type}. Use 'deterministic' or 'native_tool'."
     )
 
 
