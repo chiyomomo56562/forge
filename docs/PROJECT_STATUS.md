@@ -97,7 +97,7 @@ L1 Episode를 후보 증거로 누적하고, 최소 증거 수와 confidence 기
 
 > **후속 범위**: NetworkX/GraphML projection, L2→L3 Seed 생성의 반복 가능성 판정 고도화
 
-#### 1.5 L3 절차 기억 — ⚠️ 최소 수직 슬라이스 완료
+#### 1.5 L3 절차 기억 — ⚠️ 안전한 실행 경로 포함 최소 수직 슬라이스 완료
 
 `SqliteProceduralRepository`가 L3 스킬·실행 이력·도구 종속 pending hint를 SQLite에
 저장한다. active L2 knowledge는 source L2 ID를 가진 Seed 스킬로 생성되고, 운영 표본이
@@ -105,9 +105,12 @@ L1 Episode를 후보 증거로 누적하고, 최소 증거 수와 confidence 기
 
 Inner Loop의 reflection 단계는 도구를 사용한 경우 `episode_id`를 source ID로 하여
 `pending_hints`에 자동 기록한다. Outer Loop는 L2 변경 뒤 L3 Seed 생성을 호출한다.
+`SkillExecutor`는 Active 스킬에 명시적으로 바인딩·영속화된 구조화 tool step만 기존
+`PlanStepExecutor`로 순서대로 실행하며, 첫 실패에서 중단하고 결과를 lifecycle 표본으로
+기록한다. 자연어 Seed procedure나 reflection hint는 도구 호출로 자동 변환하지 않는다.
 
-> **후속 범위**: pending hint를 L2 근거와 결합해 실행 가능한 procedure로 편성, Inner Loop의
-> Active 스킬 선택·실행, Degrading/Archived 전이와 미사용 기간 처리
+> **후속 범위**: pending hint를 L2 근거와 결합해 검토 가능한 구조화 step으로 편성, Inner Loop의
+> Active 스킬 선택·실행 연결, Degrading/Archived 전이와 미사용 기간 처리
 
 #### 1.6 L4 헌법 — ⚠️ 최소 읽기·승격 guard 완료
 
@@ -124,12 +127,13 @@ Inner Loop의 reflection 단계는 도구를 사용한 경우 `episode_id`를 so
 `capabilities.yml`의 작업 카테고리별 역량·미지원 카테고리 기본값을 조회한다. YAML은 계속
 읽기 전용이며, self_model CRUD, 칼리브레이션·윈도우 통계 및 Outer Loop updater는 미구현이다.
 
-#### 1.8 Cognition 메모리 문맥 — ⚠️ L1/L2 선택 주입 완료
+#### 1.8 Cognition 메모리 문맥 — ⚠️ L1/L2/L3 선택 주입 완료
 
 `MemoryContextBuilder`가 L1 검색 결과와 active L2 knowledge를 관련성·개수 제한으로
 선별한다. L4의 CIB/민감정보 검사를 통과한 항목만 주입하며 L5 capability는 planner의
-자기 인식 문맥으로 함께 전달한다. L3 저장소는 구현됐지만 Active 스킬 검색·주입·실행은 아직
-연결하지 않았다.
+자기 인식 문맥으로 함께 전달한다. Active L3 스킬은 query 관련성 기준으로 절차 요약을
+planner 문맥에 주입한다. 실제 `SkillExecutor` 호출은 planner/Inner Loop의 명시적 선택 노드가
+아직 소유하지 않으므로, 현재는 독립 application service로 제공된다.
 
 #### 1.9 메모리 매니저 — ⚠️ 최소 통합 파사드·라우터 완료
 
@@ -327,7 +331,7 @@ watermark가 전진한다. `build_outer_loop_service()`는 기존 L1 repository�
 | Phase | 진행도 | 상태 |
 -------|--------|------|
 | Phase 0: 인프라 | 100% | ✅ 완료 |
-| Phase 1: 메모리 계층 | ~70% | L1/L0/L2/L3 최소 슬라이스, L4/L5 읽기 모델, MemoryManager 완료 |
+| Phase 1: 메모리 계층 | ~75% | L1/L0/L2/L3 안전 실행 슬라이스, L4/L5 읽기 모델, MemoryManager 완료 |
 | Phase 2: 이너 루프 | ~90% | LLM/Tools/대화 Runtime/CLI 및 Inner Loop Cognition v1 완료 |
 | Phase 3: 아우터 루프 | ~30% | L1→L2 및 L2→L3 Seed 연결 완료 |
 | Phase 4: 메타 루프 | 0% | ❌ 미구현 |
@@ -335,7 +339,7 @@ watermark가 전진한다. `build_outer_loop_service()`는 기존 L1 repository�
 
 ### 다음 우선순위 (제안)
 
-1. **L3 완성** — pending hint→procedure 편성, Active 스킬 검색·실행, lifecycle refresh
+1. **L3 완성** — pending hint→검토된 executable step 편성, Inner Loop 선택 실행, lifecycle refresh
 2. **Outer Loop 확장** — 스케줄/이벤트 trigger, L3 lifecycle, M16/M17, Meta Loop trigger
 3. **L4 확장** — K-Scenario, 방향성 함수 C, 도구별 사용자 승인 정책 연결
 4. **L5 확장** — self_model CRUD, 칼리브레이션 에러, 윈도우 통계와 Outer Loop updater

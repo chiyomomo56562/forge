@@ -1,8 +1,10 @@
 import sqlite3
+from collections.abc import Mapping
 from datetime import datetime
 from pathlib import Path
+from typing import Any, cast
 
-from forge.domain.procedural import ProceduralSkill, SkillExecution, SkillStatus
+from forge.domain.procedural import ProceduralSkill, SkillExecution, SkillStatus, SkillStep
 
 
 class SqliteProceduralRepository:
@@ -16,7 +18,7 @@ class SqliteProceduralRepository:
                     source_l2_id TEXT PRIMARY KEY, skill_id TEXT NOT NULL,
                     procedure TEXT NOT NULL, hints TEXT NOT NULL, status TEXT NOT NULL,
                     success_rate REAL NOT NULL, total_executions INTEGER NOT NULL,
-                    updated_at TEXT NOT NULL
+                    updated_at TEXT NOT NULL, executable_steps TEXT NOT NULL DEFAULT '[]'
                 );
                 CREATE TABLE IF NOT EXISTS skill_executions (
                     skill_id TEXT NOT NULL, episode_id TEXT NOT NULL,
@@ -28,6 +30,11 @@ class SqliteProceduralRepository:
                 );
                 """
             )
+            columns = {row[1] for row in db.execute("PRAGMA table_info(skills)")}
+            if "executable_steps" not in columns:
+                db.execute(
+                    "ALTER TABLE skills ADD COLUMN executable_steps TEXT NOT NULL DEFAULT '[]'"
+                )
 
     def get_by_source_l2(self, knowledge_id: str) -> ProceduralSkill | None:
         with self._connect() as db:
@@ -51,7 +58,12 @@ class SqliteProceduralRepository:
 
         with self._connect() as db:
             db.execute(
-                "INSERT OR REPLACE INTO skills VALUES (?,?,?,?,?,?,?,?)",
+                """
+                INSERT OR REPLACE INTO skills
+                (source_l2_id, skill_id, procedure, hints, status, success_rate,
+                 total_executions, updated_at, executable_steps)
+                VALUES (?,?,?,?,?,?,?,?,?)
+                """,
                 (
                     skill.source_l2_id,
                     skill.skill_id,
@@ -61,6 +73,16 @@ class SqliteProceduralRepository:
                     skill.success_rate,
                     skill.total_executions,
                     skill.updated_at.isoformat(),
+                    json.dumps(
+                        [
+                            {
+                                "step_id": step.step_id,
+                                "tool_name": step.tool_name,
+                                "tool_arguments": dict(step.tool_arguments),
+                            }
+                            for step in skill.executable_steps
+                        ]
+                    ),
                 ),
             )
 
@@ -106,21 +128,30 @@ class SqliteProceduralRepository:
             ).fetchall()
         return [str(row[0]) for row in rows]
 
-    def _connect(self):
+    def _connect(self) -> sqlite3.Connection:
         db = sqlite3.connect(self._path)
         db.row_factory = sqlite3.Row
         return db
 
-    def _skill(self, row):
+    def _skill(self, row: sqlite3.Row) -> ProceduralSkill:
         import json
 
+        executable_steps = cast(list[Mapping[str, Any]], json.loads(str(row["executable_steps"])))
         return ProceduralSkill(
-            row["skill_id"],
-            row["source_l2_id"],
-            tuple(json.loads(row["procedure"])),
-            tuple(json.loads(row["hints"])),
-            SkillStatus(row["status"]),
-            row["success_rate"],
-            row["total_executions"],
-            datetime.fromisoformat(row["updated_at"]),
+            str(row["skill_id"]),
+            str(row["source_l2_id"]),
+            tuple(cast(list[str], json.loads(str(row["procedure"])))),
+            tuple(cast(list[str], json.loads(str(row["hints"])))),
+            SkillStatus(str(row["status"])),
+            float(row["success_rate"]),
+            int(row["total_executions"]),
+            datetime.fromisoformat(str(row["updated_at"])),
+            tuple(
+                SkillStep(
+                    str(item["step_id"]),
+                    str(item["tool_name"]),
+                    cast(Mapping[str, Any], item.get("tool_arguments", {})),
+                )
+                for item in executable_steps
+            ),
         )

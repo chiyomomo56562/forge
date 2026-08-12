@@ -1,8 +1,9 @@
 from dataclasses import dataclass, replace
 from datetime import UTC, datetime
+from typing import cast
 
 from forge.domain.outer_loop import L2Knowledge, L2KnowledgeStatus
-from forge.domain.procedural import ProceduralSkill, SkillExecution, SkillStatus
+from forge.domain.procedural import ProceduralSkill, SkillExecution, SkillStatus, SkillStep
 from forge.ports.outbound.procedural_repository import ProceduralRepository
 
 
@@ -49,6 +50,22 @@ class ProceduralMemoryService:
 
     def refresh(self, skill: ProceduralSkill) -> ProceduralSkill:
         return self._recalculate(skill)
+
+    def bind_executable_steps(
+        self, skill_id: str, steps: tuple[SkillStep, ...]
+    ) -> ProceduralSkill:
+        """Persist reviewed tool steps without deriving them from free-form text."""
+        skill = self._repository.get(skill_id)
+        if skill is None:
+            raise ValueError("Unknown skill")
+        if any(not step.step_id or not step.tool_name for step in steps):
+            raise ValueError("Executable steps require a step ID and tool name")
+        updated = cast(
+            ProceduralSkill,
+            replace(skill, executable_steps=steps, updated_at=datetime.now(UTC)),
+        )
+        self._repository.upsert(updated)
+        return updated
 
     def _recalculate(self, skill: ProceduralSkill) -> ProceduralSkill:
         samples = self._repository.executions_for(skill.skill_id)
