@@ -358,3 +358,72 @@ def test_feedback_planner_error_safe_stops_through_planning_failure(tmp_path) ->
     assert len(planner.feedback_calls) == 1
     assert [step.step_id for step in executor.steps] == ["fail"]
     assert service.repository.episode.execution.summary == "Planning failed before execution."
+
+
+def test_dependency_graph_runs_ready_steps_before_later_dependents(tmp_path) -> None:
+    plan = InnerLoopPlan(
+        "Use discovered input.",
+        (
+            PlanStep("read", "Read result", None, {}, depends_on=("list",)),
+            PlanStep("list", "List files", None, {}),
+        ),
+    )
+    executor = StepOutcomeExecutor(
+        {
+            "list": ToolExecution("list", "Listed.", ExecutionOutcome.COMPLETED),
+            "read": ToolExecution("read", "Read.", ExecutionOutcome.COMPLETED),
+        }
+    )
+    service = _service(tmp_path, OriginalPortPlanner(plan), executor)
+
+    result = service.handle(task_request="inspect")
+
+    assert result.outcome is ExecutionOutcome.COMPLETED
+    assert [step.step_id for step in executor.steps] == ["list", "read"]
+
+
+def test_invalid_dependency_graph_fails_before_tool_execution(tmp_path) -> None:
+    plan = InnerLoopPlan(
+        "Invalid cycle.",
+        (
+            PlanStep("first", "First", None, {}, depends_on=("second",)),
+            PlanStep("second", "Second", None, {}, depends_on=("first",)),
+        ),
+    )
+    executor = StepOutcomeExecutor({})
+    service = _service(tmp_path, OriginalPortPlanner(plan), executor)
+
+    result = service.handle(task_request="inspect")
+
+    assert result.outcome is ExecutionOutcome.FAILED
+    assert executor.steps == []
+
+
+def test_replan_preserves_completed_steps_and_replaces_only_remaining_work(tmp_path) -> None:
+    initial = InnerLoopPlan(
+        "Initial graph.",
+        (
+            PlanStep("prepare", "Prepare", None, {}),
+            PlanStep("fail", "Fail", None, {}, depends_on=("prepare",)),
+        ),
+    )
+    replacement = InnerLoopPlan(
+        "Recovery graph.",
+        (PlanStep("recover", "Recover", None, {}, depends_on=("prepare",)),),
+    )
+    planner = FeedbackPlanner(initial, replacement)
+    executor = StepOutcomeExecutor(
+        {
+            "prepare": ToolExecution("prepare", "Prepared.", ExecutionOutcome.COMPLETED),
+            "fail": ToolExecution("fail", "Failed.", ExecutionOutcome.FAILED),
+            "recover": ToolExecution("recover", "Recovered.", ExecutionOutcome.COMPLETED),
+        }
+    )
+    service = _service(tmp_path, planner, executor, max_feedback_cycles=1)
+
+    result = service.handle(task_request="recover")
+
+    assert result.outcome is ExecutionOutcome.COMPLETED
+    assert [step.step_id for step in executor.steps] == ["prepare", "fail", "recover"]
+    feedback = planner.feedback_calls[0]["feedback"]
+    assert feedback["plan"]["steps"][0]["status"] == "succeeded"

@@ -8,16 +8,16 @@ from typing import Any, TypedDict
 
 from langgraph.graph import END, START, StateGraph
 
-from forge.application.conversation.tool_feedback import serialize_tool_execution
+from forge.application.cognition import InnerLoopCognition
 from forge.application.memory import (
     FinalizeEpisodeService,
     RecordInnerLoopEventService,
     StartInnerLoopSessionService,
 )
-from forge.domain.inner_loop import InnerLoopPlan, ToolExecution
+from forge.domain.cognition import CognitionDecision, InnerLoopContext
+from forge.domain.inner_loop import InnerLoopPlan, PlanStepStatus, ToolExecution
 from forge.domain.memory import Evaluation, ExecutionOutcome, L0EventType
 from forge.ports.outbound import (
-    FeedbackAwareInnerLoopPlanner,
     InnerLoopEvaluator,
     InnerLoopPlanner,
     InnerLoopReflector,
@@ -34,6 +34,7 @@ class InnerLoopState(TypedDict, total=False):
     episode_id: str
     plan: InnerLoopPlan
     step_index: int
+    step_statuses: dict[str, str]
     attempt: int
     retry_count: int
     feedback_count: int
@@ -71,13 +72,12 @@ class RunInnerLoopService:
         self._starter = starter
         self._recorder = recorder
         self._finalizer = finalizer
-        self._planner = planner
         self._executor = executor
-        self._evaluator = evaluator
-        self._reflector = reflector
         self._max_retries = max_retries
         self._max_feedback_cycles = max_feedback_cycles
-        self._max_tool_feedback_bytes = max_tool_feedback_bytes
+        self._cognition = InnerLoopCognition(
+            planner, evaluator, reflector, max_tool_feedback_bytes=max_tool_feedback_bytes
+        )
         self._graph = self._build_graph()
 
     def handle(self, *, task_request: str, task_category: str = "general") -> InnerLoopResult:
@@ -136,22 +136,14 @@ class RunInnerLoopService:
         }
 
     def _plan(self, state: InnerLoopState) -> InnerLoopState:
+        preserved_statuses: dict[str, str] | None = None
         try:
-            if state.get("needs_replan") and isinstance(
-                self._planner, FeedbackAwareInnerLoopPlanner
-            ):
-                feedback_count = state["feedback_count"]
-                last_execution = state["last_execution"]
-                plan = self._planner.create_plan_after_feedback(
-                    task_request=state["task_request"],
-                    context_episode_ids=(),
-                    last_execution=last_execution,
-                    feedback=self._planner_feedback(last_execution),
-                    feedback_count=feedback_count,
-                )
-            else:
-                plan = self._planner.create_plan(
-                    task_request=state["task_request"], context_episode_ids=()
+            context = self._context(state)
+            last_execution = state.get("last_execution") if state.get("needs_replan") else None
+            plan = self._cognition.create_plan(context, last_execution)
+            if last_execution is not None:
+                plan, preserved_statuses = self._cognition.merge_replan(
+                    state["plan"], state.get("step_statuses", {}), plan
                 )
         except Exception:
             return {
@@ -159,6 +151,8 @@ class RunInnerLoopService:
                 "step_index": 0,
                 "needs_replan": False,
             }
+        if not _plan_is_valid(plan):
+            plan = InnerLoopPlan("Planning failed: invalid step dependencies.", ())
         self._recorder.handle(
             session_id=state["session_id"],
             event_type=L0EventType.PLAN_COMPLETED,
@@ -170,11 +164,14 @@ class RunInnerLoopService:
                 "memory_context_error_code": None,
                 "retrieved_episode_ids": [],
                 "pattern_candidate_id": plan.pattern_candidate_id,
+                "dependencies": {step.step_id: list(step.depends_on) for step in plan.steps},
             },
         )
         return {
             "plan": plan,
             "step_index": 0,
+            "step_statuses": preserved_statuses
+            or {step.step_id: PlanStepStatus.PENDING.value for step in plan.steps},
             "attempt": 0,
             "tool_names": (),
             "needs_replan": False,
@@ -187,8 +184,18 @@ class RunInnerLoopService:
                 "execution": ToolExecution("planner", plan.summary, ExecutionOutcome.FAILED),
                 "needs_replan": False,
             }
-        step = plan.steps[state["step_index"]]
+        ready_index = _next_ready_step_index(plan, state.get("step_statuses", {}))
+        if ready_index is None:
+            return {
+                "execution": ToolExecution(
+                    "planner", "No executable plan steps remain.", ExecutionOutcome.FAILED
+                ),
+                "needs_replan": False,
+            }
+        step = plan.steps[ready_index]
         attempt = state.get("attempt", 0)
+        statuses = dict(state.get("step_statuses", {}))
+        statuses[step.step_id] = PlanStepStatus.RUNNING.value
         self._recorder.handle(
             session_id=state["session_id"],
             event_type=L0EventType.EXECUTION_STARTED,
@@ -197,6 +204,7 @@ class RunInnerLoopService:
                 "summary": step.summary,
                 "attempt": attempt,
                 "tool_name": step.tool_name,
+                "depends_on": list(step.depends_on),
             },
         )
         result = self._executor.execute(step, session_id=state["session_id"], attempt=attempt)
@@ -221,30 +229,44 @@ class RunInnerLoopService:
         )
         tools = tuple(dict.fromkeys((*state.get("tool_names", ()), *result.tool_names)))
         if result.outcome is not ExecutionOutcome.COMPLETED:
-            if step.retry_allowed and result.retryable and state["retry_count"] < self._max_retries:
+            decision = self._cognition.decide(self._context(state), step, result)
+            if decision is CognitionDecision.RETRY:
                 return {
                     "attempt": attempt + 1,
                     "retry_count": state["retry_count"] + 1,
                     "tool_names": tools,
                     "needs_replan": False,
+                    "step_statuses": statuses,
                 }
+            statuses[step.step_id] = PlanStepStatus.FAILED.value
+            _mark_blocked_steps(plan, statuses)
             execution = _execution_with_tools(result, tools)
-            if self._should_replan(execution, state):
+            if decision is CognitionDecision.REPLAN:
                 return {
                     "last_execution": execution,
                     "feedback_count": state["feedback_count"] + 1,
                     "needs_replan": True,
                     "tool_names": tools,
+                    "step_statuses": statuses,
                 }
-            return {"execution": execution, "needs_replan": False}
-        if state["step_index"] + 1 < len(plan.steps):
             return {
-                "step_index": state["step_index"] + 1,
+                "execution": execution,
+                "needs_replan": False,
+                "step_statuses": statuses,
+            }
+        statuses[step.step_id] = PlanStepStatus.SUCCEEDED.value
+        if _next_ready_step_index(plan, statuses) is not None:
+            return {
                 "attempt": 0,
                 "tool_names": tools,
                 "needs_replan": False,
+                "step_statuses": statuses,
             }
-        return {"execution": _execution_with_tools(result, tools), "needs_replan": False}
+        return {
+            "execution": _execution_with_tools(result, tools),
+            "needs_replan": False,
+            "step_statuses": statuses,
+        }
 
     @staticmethod
     def _next_after_attempt(state: InnerLoopState) -> str:
@@ -254,20 +276,16 @@ class RunInnerLoopService:
             return "re_plan"
         return "attempt"
 
-    def _should_replan(self, execution: ToolExecution, state: InnerLoopState) -> bool:
-        return (
-            isinstance(self._planner, FeedbackAwareInnerLoopPlanner)
-            and execution.outcome is ExecutionOutcome.FAILED
-            and execution.safe_error_code != "tool.protocol_failure"
-            and state["feedback_count"] < self._max_feedback_cycles
-        )
-
-    def _planner_feedback(self, execution: ToolExecution) -> dict[str, object]:
-        return dict(
-            serialize_tool_execution(
-                execution,
-                max_output_bytes=self._max_tool_feedback_bytes,
-            )
+    def _context(self, state: InnerLoopState) -> InnerLoopContext:
+        return InnerLoopContext(
+            task_request=state["task_request"],
+            plan=state.get("plan"),
+            step_statuses=dict(state.get("step_statuses", {})),
+            attempt=state.get("attempt", 0),
+            retry_count=state.get("retry_count", 0),
+            feedback_count=state.get("feedback_count", 0),
+            max_retries=self._max_retries,
+            max_feedback_cycles=self._max_feedback_cycles,
         )
 
     def _summarize_execution(self, state: InnerLoopState) -> InnerLoopState:
@@ -286,11 +304,7 @@ class RunInnerLoopService:
         return {}
 
     def _evaluate(self, state: InnerLoopState) -> InnerLoopState:
-        evaluation = self._evaluator.evaluate(
-            task_request=state["task_request"],
-            execution=state["execution"],
-            retry_count=state["retry_count"],
-        )
+        evaluation = self._cognition.evaluate(self._context(state), state["execution"])
         self._recorder.handle(
             session_id=state["session_id"],
             event_type=L0EventType.EVALUATION_COMPLETED,
@@ -299,10 +313,8 @@ class RunInnerLoopService:
         return {"evaluation": evaluation}
 
     def _reflect(self, state: InnerLoopState) -> InnerLoopState:
-        reflection = self._reflector.reflect(
-            task_request=state["task_request"],
-            execution=state["execution"],
-            evaluation=state["evaluation"],
+        reflection = self._cognition.reflect(
+            self._context(state), state["execution"], state["evaluation"]
         )
         self._recorder.handle(
             session_id=state["session_id"],
@@ -325,6 +337,54 @@ def _evaluation_payload(evaluation: Evaluation, *, evidence_complete: bool) -> d
     payload["reasons"] = [asdict(reason) for reason in evaluation.reasons]
     payload["evidence_complete"] = evidence_complete
     return payload
+
+
+def _plan_is_valid(plan: InnerLoopPlan) -> bool:
+    """Reject duplicate, unknown, and cyclic graph dependencies before execution."""
+    step_ids = {step.step_id for step in plan.steps}
+    if len(step_ids) != len(plan.steps):
+        return False
+    if any(
+        not step.step_id or any(dep not in step_ids for dep in step.depends_on)
+        for step in plan.steps
+    ):
+        return False
+    dependencies = {step.step_id: set(step.depends_on) for step in plan.steps}
+    resolved: set[str] = set()
+    while dependencies:
+        ready = {step_id for step_id, deps in dependencies.items() if deps <= resolved}
+        if not ready:
+            return False
+        resolved.update(ready)
+        for step_id in ready:
+            del dependencies[step_id]
+    return True
+
+
+def _next_ready_step_index(plan: InnerLoopPlan, statuses: dict[str, str]) -> int | None:
+    """Return the first pending step whose dependencies have all succeeded."""
+    for index, step in enumerate(plan.steps):
+        if statuses.get(step.step_id) != PlanStepStatus.PENDING.value:
+            continue
+        if all(statuses.get(dep) == PlanStepStatus.SUCCEEDED.value for dep in step.depends_on):
+            return index
+    return None
+
+
+def _mark_blocked_steps(plan: InnerLoopPlan, statuses: dict[str, str]) -> None:
+    """Propagate failed or blocked dependencies to their pending descendants."""
+    changed = True
+    while changed:
+        changed = False
+        for step in plan.steps:
+            if statuses.get(step.step_id) != PlanStepStatus.PENDING.value:
+                continue
+            if any(
+                statuses.get(dep) in {PlanStepStatus.FAILED.value, PlanStepStatus.BLOCKED.value}
+                for dep in step.depends_on
+            ):
+                statuses[step.step_id] = PlanStepStatus.BLOCKED.value
+                changed = True
 
 
 def _execution_with_tools(execution: ToolExecution, tools: tuple[str, ...]) -> ToolExecution:

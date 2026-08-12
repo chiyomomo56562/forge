@@ -46,15 +46,19 @@ class _RegisteredTool:
 
 
 class StaticToolAuthorizationPolicy:
-    """M2의 정적 권한 정책으로 변경 도구를 기본 거부한다.
+    """정적 권한 정책으로 도구 위험 등급별 실행을 제어한다.
 
     Args:
+        allow_workspace_mutation: workspace 내부 파일 생성·수정 허용 여부.
         allow_verification: 고정된 프로젝트 검증 template의 실행 허용 여부.
 
     최종 수정일: 2026-07-31
     """
 
-    def __init__(self, *, allow_verification: bool = True) -> None:
+    def __init__(
+        self, *, allow_workspace_mutation: bool = False, allow_verification: bool = True
+    ) -> None:
+        self._allow_workspace_mutation = allow_workspace_mutation
         self._allow_verification = allow_verification
 
     def authorize(self, invocation: ToolInvocation, definition: ToolDefinition) -> bool:
@@ -65,13 +69,15 @@ class StaticToolAuthorizationPolicy:
             definition: 호출 대상 도구의 정책 메타데이터.
 
         Returns:
-            read-only 및 허용된 verification 도구의 실행 가능 여부.
+            read-only 및 설정으로 허용된 mutation/verification 도구의 실행 가능 여부.
 
         최종 수정일: 2026-07-31
         """
         del invocation
         if definition.risk_tier is ToolRiskTier.READ_ONLY:
             return True
+        if definition.risk_tier is ToolRiskTier.WORKSPACE_MUTATION:
+            return self._allow_workspace_mutation
         return definition.risk_tier is ToolRiskTier.VERIFICATION and self._allow_verification
 
 
@@ -507,7 +513,6 @@ class BuiltinToolRegistry:
                 "--no-optional-locks",
                 "diff",
                 "--no-ext-diff",
-                "--no-submodule",
             ]
         )
 

@@ -36,6 +36,16 @@ class ToolStatus(StrEnum):
     DENIED = "denied"
 
 
+class PlanStepStatus(StrEnum):
+    """작업 그래프 안에서 개별 계획 단계의 실행 상태."""
+
+    PENDING = "pending"
+    RUNNING = "running"
+    SUCCEEDED = "succeeded"
+    FAILED = "failed"
+    BLOCKED = "blocked"
+
+
 @dataclass(frozen=True)
 class ToolDefinition:
     """레지스트리에 노출되는 도구의 안정적인 정책 메타데이터.
@@ -96,6 +106,8 @@ class PlanStep:
     tool_name: str | None = None
     tool_arguments: Mapping[str, Any] = field(default_factory=dict)
     retry_allowed: bool = True
+    depends_on: tuple[str, ...] = ()
+    max_attempts: int | None = None
 
 
 @dataclass(frozen=True)
