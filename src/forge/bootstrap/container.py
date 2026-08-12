@@ -276,6 +276,17 @@ def build_outer_loop_service(config_path: str = "config/memory.yml") -> RunOuter
     )
 
 
+def build_procedural_memory_service(
+    config_path: str = "config/memory.yml",
+) -> ProceduralMemoryService:
+    """Build the L3 review and lifecycle application service."""
+    config = _load_yaml_config(config_path)
+    return ProceduralMemoryService(
+        SqliteProceduralRepository(config["procedural"]["db_path"]),
+        _skill_lifecycle_policy(config),
+    )
+
+
 def _load_yaml_config(config_path: str) -> dict[str, Any]:
     with open(config_path, encoding="utf-8") as config_file:
         return yaml.safe_load(config_file) or {}

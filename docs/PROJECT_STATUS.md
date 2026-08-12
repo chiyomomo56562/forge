@@ -116,8 +116,11 @@ L2 근거의 support/counterexample episode에 저장된 tool-specific reflectio
 인자는 포함하지 않는다. `bind_executable_steps()`는 대응되는 draft가 있는 도구만 승인된
 실행 step으로 저장할 수 있다.
 
-> **후속 범위**: draft 인자 제안·검토 workflow와 운영 인터페이스, Degrading/Archived 전이와
-> 미사용 기간 처리
+`forge --list-l3-drafts --l3-skill-id <id>`는 실행 불가능한 draft를 JSON으로 조회하며,
+`forge --approve-l3-draft <draft> --l3-skill-id <id> --step-id <step> --tool-arguments '<JSON>'`
+는 검토자가 제공한 인자만 사용해 하나의 executable step을 승인한다.
+
+> **후속 범위**: draft 인자 제안 보조와 batch review, Degrading/Archived 전이와 미사용 기간 처리
 
 #### 1.6 L4 헌법 — ⚠️ 최소 읽기·승격 guard 완료
 

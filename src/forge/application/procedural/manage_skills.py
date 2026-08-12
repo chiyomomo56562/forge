@@ -83,6 +83,35 @@ class ProceduralMemoryService:
         self._repository.upsert(updated)
         return updated
 
+    def approve_step_draft(
+        self,
+        skill_id: str,
+        *,
+        draft_id: str,
+        step_id: str,
+        tool_arguments: dict[str, object],
+    ) -> ProceduralSkill:
+        """Approve one draft with reviewer-supplied arguments; never infer arguments."""
+        skill = self._repository.get(skill_id)
+        if skill is None:
+            raise ValueError("Unknown skill")
+        draft = next((item for item in skill.step_drafts if item.draft_id == draft_id), None)
+        if draft is None:
+            raise ValueError("Unknown step draft")
+        if any(step.step_id == step_id for step in skill.executable_steps):
+            raise ValueError("Executable step ID already exists")
+        return self.bind_executable_steps(
+            skill_id,
+            (*skill.executable_steps, SkillStep(step_id, draft.tool_name, tool_arguments)),
+        )
+
+    def list_step_drafts(self, skill_id: str) -> tuple[SkillStepDraft, ...]:
+        """Return the non-executable drafts that require explicit review."""
+        skill = self._repository.get(skill_id)
+        if skill is None:
+            raise ValueError("Unknown skill")
+        return cast(tuple[SkillStepDraft, ...], skill.step_drafts)
+
     @staticmethod
     def _merge_step_drafts(
         existing: tuple[SkillStepDraft, ...],
