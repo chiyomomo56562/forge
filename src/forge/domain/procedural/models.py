@@ -23,6 +23,16 @@ class SkillStep:
 
 
 @dataclass(frozen=True)
+class SkillStepDraft:
+    """A non-executable procedure candidate grounded in an observed reflection."""
+
+    draft_id: str
+    source_episode_id: str
+    hint: str
+    tool_name: str
+
+
+@dataclass(frozen=True)
 class ProceduralSkill:
     skill_id: str
     source_l2_id: str
@@ -33,6 +43,7 @@ class ProceduralSkill:
     total_executions: int
     updated_at: datetime
     executable_steps: tuple[SkillStep, ...] = ()
+    step_drafts: tuple[SkillStepDraft, ...] = ()
 
 
 @dataclass(frozen=True)

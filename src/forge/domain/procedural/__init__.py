@@ -1,3 +1,3 @@
-from .models import ProceduralSkill, SkillExecution, SkillStatus, SkillStep
+from .models import ProceduralSkill, SkillExecution, SkillStatus, SkillStep, SkillStepDraft
 
-__all__ = ["ProceduralSkill", "SkillExecution", "SkillStatus", "SkillStep"]
+__all__ = ["ProceduralSkill", "SkillExecution", "SkillStatus", "SkillStep", "SkillStepDraft"]

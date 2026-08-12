@@ -11,7 +11,7 @@ from forge.application.procedural import (
 )
 from forge.domain.inner_loop import ToolExecution
 from forge.domain.memory import ExecutionOutcome
-from forge.domain.procedural import ProceduralSkill, SkillStatus, SkillStep
+from forge.domain.procedural import ProceduralSkill, SkillStatus, SkillStep, SkillStepDraft
 
 
 class RecordingExecutor:
@@ -35,6 +35,11 @@ def _active_skill() -> ProceduralSkill:
         1.0,
         3,
         datetime.now(UTC),
+        (),
+        (
+            SkillStepDraft("draft_list", "ep_0", "inspect", "workspace.list_files"),
+            SkillStepDraft("draft_status", "ep_0", "inspect", "git.status"),
+        ),
     )
 
 

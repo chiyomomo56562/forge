@@ -111,8 +111,13 @@ Inner Loop의 reflection 단계는 도구를 사용한 경우 `episode_id`를 so
 실행하고 평가 결과를 lifecycle 표본으로 기록한다. 자연어 Seed procedure나 reflection hint는
 도구 호출로 자동 변환하지 않는다.
 
-> **후속 범위**: pending hint를 L2 근거와 결합해 검토 가능한 구조화 step으로 편성,
-> Degrading/Archived 전이와 미사용 기간 처리
+L2 근거의 support/counterexample episode에 저장된 tool-specific reflection은 L3 Seed 갱신 시
+`SkillStepDraft`로 승격된다. draft에는 관찰된 도구명·source episode·hint만 들어가며 실행할
+인자는 포함하지 않는다. `bind_executable_steps()`는 대응되는 draft가 있는 도구만 승인된
+실행 step으로 저장할 수 있다.
+
+> **후속 범위**: draft 인자 제안·검토 workflow와 운영 인터페이스, Degrading/Archived 전이와
+> 미사용 기간 처리
 
 #### 1.6 L4 헌법 — ⚠️ 최소 읽기·승격 guard 완료
 
