@@ -10,6 +10,7 @@ from .inner_loop import (
 )
 from .l0_event_store import L0EventStore
 from .model_gateway import ChatModel, ConversationRuntime, StructuredChatModel
+from .outer_loop_store import OuterLoopStore
 
 __all__ = [
     "ChatModel",
@@ -20,6 +21,7 @@ __all__ = [
     "InnerLoopPlanner",
     "InnerLoopReflector",
     "L0EventStore",
+    "OuterLoopStore",
     "PlanStepExecutor",
     "StructuredChatModel",
     "ToolAuthorizationPolicy",

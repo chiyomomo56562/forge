@@ -20,6 +20,7 @@ from forge.adapters.outbound.memory import (
     SqliteChromaEpisodeRepository,
     SqliteEpisodeStore,
 )
+from forge.adapters.outbound.outer_loop import JsonOuterLoopStore
 from forge.adapters.outbound.tools import (
     BuiltinToolRegistry,
     RegistryPlanStepExecutor,
@@ -36,6 +37,7 @@ from forge.application.memory import (
     SearchEpisodesService,
     StartInnerLoopSessionService,
 )
+from forge.application.outer_loop import OuterLoopPolicy, RunOuterLoopService
 from forge.ports.outbound import InnerLoopPlanner
 from forge.runtime import LangGraphConversationRuntime
 
@@ -168,6 +170,46 @@ def build_inner_loop_service(
     )
 
 
+def build_outer_loop_service(config_path: str = "config/memory.yml") -> RunOuterLoopService:
+    """L1 SQLite/Chroma repository와 checkpointed L1→L2 서비스를 조립한다.
+
+    Args:
+        config_path: episodic, semantic, consolidation 설정을 담은 YAML 파일.
+
+    Returns:
+        명시적으로 실행할 Outer Loop application service.
+    """
+    config = _load_yaml_config(config_path)
+    episodic = config["episodic"]
+    settings = MemorySettings(
+        sqlite_path=Path(episodic["sqlite_path"]),
+        chroma_path=Path(episodic["chroma_path"]),
+        collection_name=episodic["collection_name"],
+    )
+    collection = PersistentClient(path=str(settings.chroma_path)).get_or_create_collection(
+        settings.collection_name
+    )
+    repository = SqliteChromaEpisodeRepository(
+        SqliteEpisodeStore(settings.sqlite_path),
+        ChromaEpisodeIndex(collection, settings.projection_version, settings.embedding_model_id),
+        settings,
+    )
+    consolidation = config.get("consolidation", {})
+    return RunOuterLoopService(
+        repository,
+        JsonOuterLoopStore(Path(config["semantic"]["outer_loop_state_path"])),
+        OuterLoopPolicy(
+            batch_size=_positive_int(consolidation.get("batch_size", 20), setting="batch_size"),
+            min_episodes_for_generalization=_positive_int(
+                consolidation.get("min_episodes_for_generalization", 3),
+                setting="min_episodes_for_generalization",
+            ),
+            promotion_confidence=float(consolidation.get("promotion_confidence", 0.8)),
+            retire_confidence=float(consolidation.get("retire_confidence", 0.4)),
+        ),
+    )
+
+
 def _load_yaml_config(config_path: str) -> dict[str, Any]:
     with open(config_path, encoding="utf-8") as config_file:
         return yaml.safe_load(config_file) or {}
@@ -198,7 +240,7 @@ def _build_conversation_runtime(
     registry = _build_tool_registry(registry_config)
     authorization = StaticToolAuthorizationPolicy(
         allow_workspace_mutation=bool(tools_config.get("allow_workspace_mutation", False)),
-        allow_verification=bool(tools_config.get("allow_verification", False))
+        allow_verification=bool(tools_config.get("allow_verification", False)),
     )
     tools = build_langchain_tools(registry, authorization)
     # Conversation tool calling is LangChain-native: bind the actual BaseTool
@@ -248,8 +290,7 @@ def _build_planner(
             system_prompt=planner_config.get("system_prompt"),
         )
     raise ValueError(
-        f"Unsupported planner type: {planner_type}. "
-        "Use 'deterministic' or 'native_tool'."
+        f"Unsupported planner type: {planner_type}. Use 'deterministic' or 'native_tool'."
     )
 
 
