@@ -60,9 +60,11 @@ inner_loop:
 conversation:
   tools:
     enabled: true
+    max_tool_rounds: 30          # 한 사용자 요청에서 허용할 모델↔도구 왕복 횟수
     max_tool_feedback_bytes: 4096
     max_protocol_failures: 2
-    allow_verification: false    # 대화 기본값은 읽기 전용만 허용
+    allow_workspace_mutation: true  # workspace 내부 파일 생성·수정 허용
+    allow_verification: true     # 고정 pytest/ruff/mypy template 실행 허용
 
 # --- Model Strategy Settings ---
 # 전략 선택: prompt (모든 모델适用) | native (후속 최적화)
