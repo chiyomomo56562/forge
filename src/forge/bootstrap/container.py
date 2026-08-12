@@ -194,6 +194,7 @@ def build_inner_loop_service(
             allow_verification=bool(tool_config.get("allow_verification", True))
         ),
     )
+    memory_manager = _build_memory_manager(config, repository)
     return RunInnerLoopService(
         StartInnerLoopSessionService(store),
         RecordInnerLoopEventService(store),
@@ -207,7 +208,8 @@ def build_inner_loop_service(
             agent_config.get("inner_loop", {}).get("max_feedback_cycles", 0),
             setting="inner_loop.max_feedback_cycles",
         ),
-        memory_context_builder=MemoryContextBuilder(_build_memory_manager(config, repository)),
+        memory_context_builder=MemoryContextBuilder(memory_manager),
+        memory_manager=memory_manager,
     )
 
 

@@ -11,6 +11,7 @@ from langgraph.graph import END, START, StateGraph
 from forge.application.cognition import InnerLoopCognition, MemoryContextBuilder
 from forge.application.memory import (
     FinalizeEpisodeService,
+    MemoryManager,
     RecordInnerLoopEventService,
     StartInnerLoopSessionService,
 )
@@ -70,6 +71,7 @@ class RunInnerLoopService:
         max_feedback_cycles: int = 0,
         max_tool_feedback_bytes: int = 8_192,
         memory_context_builder: MemoryContextBuilder | None = None,
+        memory_manager: MemoryManager | None = None,
     ) -> None:
         self._starter = starter
         self._recorder = recorder
@@ -78,6 +80,7 @@ class RunInnerLoopService:
         self._max_retries = max_retries
         self._max_feedback_cycles = max_feedback_cycles
         self._memory_context_builder = memory_context_builder
+        self._memory_manager = memory_manager
         self._cognition = InnerLoopCognition(
             planner, evaluator, reflector, max_tool_feedback_bytes=max_tool_feedback_bytes
         )
@@ -330,6 +333,12 @@ class RunInnerLoopService:
         reflection = self._cognition.reflect(
             self._context(state), state["execution"], state["evaluation"]
         )
+        if self._memory_manager is not None:
+            self._memory_manager.route_reflection(
+                reflection,
+                tool_names=state["execution"].tool_names,
+                source_id=state["episode_id"],
+            )
         self._recorder.handle(
             session_id=state["session_id"],
             event_type=L0EventType.REFLECTION_COMPLETED,
