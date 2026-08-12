@@ -7,7 +7,7 @@ from datetime import UTC, datetime
 
 from forge.application.procedural.manage_skills import ProceduralMemoryService
 from forge.domain.inner_loop import PlanStep, ToolExecution
-from forge.domain.memory import ExecutionOutcome
+from forge.domain.memory import Evaluation, ExecutionOutcome
 from forge.domain.procedural import SkillExecution, SkillStatus
 from forge.ports.outbound.inner_loop import PlanStepExecutor
 from forge.ports.outbound.procedural_repository import ProceduralRepository
@@ -41,7 +41,7 @@ class SkillExecutor:
         skill_id: str,
         *,
         episode_id: str,
-        cib_score: float,
+        cib_score: float | None = None,
         session_id: str = "",
     ) -> SkillRunResult:
         skill = self._repository.get(skill_id)
@@ -74,13 +74,24 @@ class SkillExecutor:
         succeeded = len(executions) == len(skill.executable_steps) and all(
             item.outcome is ExecutionOutcome.COMPLETED for item in executions
         )
+        if cib_score is not None:
+            self._record(skill.skill_id, episode_id, succeeded, cib_score)
+        return SkillRunResult(skill.skill_id, tuple(executions))
+
+    def record_evaluation(
+        self, skill_id: str, *, episode_id: str, evaluation: Evaluation
+    ) -> None:
+        """Update L3 lifecycle only after the Inner Loop has evaluated its outcome."""
+        success = evaluation.success_score is not None and evaluation.success_score >= 0.5
+        self._record(skill_id, episode_id, success, evaluation.cib_score or 0.0)
+
+    def _record(self, skill_id: str, episode_id: str, succeeded: bool, cib_score: float) -> None:
         self._lifecycle.record_execution(
             SkillExecution(
-                skill_id=skill.skill_id,
+                skill_id=skill_id,
                 episode_id=episode_id,
                 success_score=1.0 if succeeded else 0.0,
                 cib_score=cib_score,
                 executed_at=datetime.now(UTC),
             )
         )
-        return SkillRunResult(skill.skill_id, tuple(executions))

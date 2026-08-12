@@ -20,6 +20,7 @@ class RetrievedMemoryContext:
     episode_ids: tuple[str, ...] = ()
     l2_knowledge: tuple[str, ...] = ()
     l3_skills: tuple[str, ...] = ()
+    l3_skill_ids: tuple[str, ...] = ()
     capability_summary: str | None = None
 
     def as_payload(self) -> dict[str, object]:
@@ -27,6 +28,7 @@ class RetrievedMemoryContext:
             "episode_ids": list(self.episode_ids),
             "l2_knowledge": list(self.l2_knowledge),
             "l3_skills": list(self.l3_skills),
+            "l3_skill_ids": list(self.l3_skill_ids),
             "capability": self.capability_summary,
         }
 

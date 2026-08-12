@@ -15,8 +15,9 @@ from forge.application.memory import (
     RecordInnerLoopEventService,
     StartInnerLoopSessionService,
 )
+from forge.application.procedural import SkillExecutionError, SkillExecutor
 from forge.domain.cognition import CognitionDecision, InnerLoopContext, RetrievedMemoryContext
-from forge.domain.inner_loop import InnerLoopPlan, PlanStepStatus, ToolExecution
+from forge.domain.inner_loop import InnerLoopPlan, PlanStep, PlanStepStatus, ToolExecution
 from forge.domain.memory import Evaluation, ExecutionOutcome, L0EventType
 from forge.ports.outbound import (
     InnerLoopEvaluator,
@@ -45,6 +46,7 @@ class InnerLoopState(TypedDict, total=False):
     execution: ToolExecution
     evaluation: Evaluation
     memory_context: RetrievedMemoryContext
+    selected_l3_skill_ids: tuple[str, ...]
 
 
 @dataclass(frozen=True)
@@ -72,6 +74,7 @@ class RunInnerLoopService:
         max_tool_feedback_bytes: int = 8_192,
         memory_context_builder: MemoryContextBuilder | None = None,
         memory_manager: MemoryManager | None = None,
+        skill_executor: SkillExecutor | None = None,
     ) -> None:
         self._starter = starter
         self._recorder = recorder
@@ -81,6 +84,7 @@ class RunInnerLoopService:
         self._max_feedback_cycles = max_feedback_cycles
         self._memory_context_builder = memory_context_builder
         self._memory_manager = memory_manager
+        self._skill_executor = skill_executor
         self._cognition = InnerLoopCognition(
             planner, evaluator, reflector, max_tool_feedback_bytes=max_tool_feedback_bytes
         )
@@ -162,7 +166,7 @@ class RunInnerLoopService:
                 "step_index": 0,
                 "needs_replan": False,
             }
-        if not _plan_is_valid(plan):
+        if not _plan_is_valid(plan) or not _l3_selections_are_valid(plan, context.memory_context):
             plan = InnerLoopPlan("Planning failed: invalid step dependencies.", ())
         self._recorder.handle(
             session_id=state["session_id"],
@@ -221,7 +225,13 @@ class RunInnerLoopService:
                 "depends_on": list(step.depends_on),
             },
         )
-        result = self._executor.execute(step, session_id=state["session_id"], attempt=attempt)
+        selected_skill_ids = tuple(state.get("selected_l3_skill_ids", ()))
+        if step.tool_name == "l3.execute":
+            result, skill_id = self._execute_l3_skill(step, state)
+            if skill_id is not None:
+                selected_skill_ids = tuple(dict.fromkeys((*selected_skill_ids, skill_id)))
+        else:
+            result = self._executor.execute(step, session_id=state["session_id"], attempt=attempt)
         self._recorder.handle(
             session_id=state["session_id"],
             event_type=(
@@ -251,6 +261,7 @@ class RunInnerLoopService:
                     "tool_names": tools,
                     "needs_replan": False,
                     "step_statuses": statuses,
+                    "selected_l3_skill_ids": selected_skill_ids,
                 }
             statuses[step.step_id] = PlanStepStatus.FAILED.value
             _mark_blocked_steps(plan, statuses)
@@ -262,11 +273,13 @@ class RunInnerLoopService:
                     "needs_replan": True,
                     "tool_names": tools,
                     "step_statuses": statuses,
+                    "selected_l3_skill_ids": selected_skill_ids,
                 }
             return {
                 "execution": execution,
                 "needs_replan": False,
                 "step_statuses": statuses,
+                "selected_l3_skill_ids": selected_skill_ids,
             }
         statuses[step.step_id] = PlanStepStatus.SUCCEEDED.value
         if _next_ready_step_index(plan, statuses) is not None:
@@ -275,12 +288,64 @@ class RunInnerLoopService:
                 "tool_names": tools,
                 "needs_replan": False,
                 "step_statuses": statuses,
+                "selected_l3_skill_ids": selected_skill_ids,
             }
         return {
             "execution": _execution_with_tools(result, tools),
             "needs_replan": False,
             "step_statuses": statuses,
+            "selected_l3_skill_ids": selected_skill_ids,
         }
+
+    def _execute_l3_skill(
+        self, step: PlanStep, state: InnerLoopState
+    ) -> tuple[ToolExecution, str | None]:
+        skill_id = step.tool_arguments.get("skill_id")
+        if self._skill_executor is None or not isinstance(skill_id, str):
+            return (
+                ToolExecution(
+                    step.step_id,
+                    "L3 skill execution is unavailable.",
+                    ExecutionOutcome.HALTED,
+                    safe_error_code="l3.execution_unavailable",
+                ),
+                None,
+            )
+        try:
+            run = self._skill_executor.execute(
+                skill_id,
+                episode_id=state["episode_id"],
+                session_id=state["session_id"],
+            )
+        except SkillExecutionError as exc:
+            return (
+                ToolExecution(
+                    step.step_id,
+                    "L3 skill execution was denied.",
+                    ExecutionOutcome.HALTED,
+                    safe_error_code="l3.skill_not_executable",
+                    audit_details={"reason": str(exc), "skill_id": skill_id},
+                ),
+                None,
+            )
+        final = run.executions[-1]
+        tool_names = tuple(
+            dict.fromkeys(name for execution in run.executions for name in execution.tool_names)
+        )
+        return (
+            ToolExecution(
+                step.step_id,
+                final.summary,
+                final.outcome,
+                tool_names,
+                retryable=False,
+                safe_error_code=final.safe_error_code,
+                audit_details={"l3_skill_id": skill_id, "executed_step_count": len(run.executions)},
+                output={"l3_skill_id": skill_id},
+                truncated=final.truncated,
+            ),
+            skill_id,
+        )
 
     @staticmethod
     def _next_after_attempt(state: InnerLoopState) -> str:
@@ -322,6 +387,11 @@ class RunInnerLoopService:
 
     def _evaluate(self, state: InnerLoopState) -> InnerLoopState:
         evaluation = self._cognition.evaluate(self._context(state), state["execution"])
+        if self._skill_executor is not None:
+            for skill_id in state.get("selected_l3_skill_ids", ()):
+                self._skill_executor.record_evaluation(
+                    skill_id, episode_id=state["episode_id"], evaluation=evaluation
+                )
         self._recorder.handle(
             session_id=state["session_id"],
             event_type=L0EventType.EVALUATION_COMPLETED,
@@ -381,6 +451,18 @@ def _plan_is_valid(plan: InnerLoopPlan) -> bool:
         resolved.update(ready)
         for step_id in ready:
             del dependencies[step_id]
+    return True
+
+
+def _l3_selections_are_valid(plan: InnerLoopPlan, memory_context: RetrievedMemoryContext) -> bool:
+    """L3 execution is valid only for IDs retrieved in the vetted memory context."""
+    allowed_ids = set(memory_context.l3_skill_ids)
+    for step in plan.steps:
+        if step.tool_name != "l3.execute":
+            continue
+        skill_id = step.tool_arguments.get("skill_id")
+        if not isinstance(skill_id, str) or skill_id not in allowed_ids:
+            return False
     return True
 
 

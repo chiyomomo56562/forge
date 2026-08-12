@@ -106,11 +106,13 @@ L1 Episode를 후보 증거로 누적하고, 최소 증거 수와 confidence 기
 Inner Loop의 reflection 단계는 도구를 사용한 경우 `episode_id`를 source ID로 하여
 `pending_hints`에 자동 기록한다. Outer Loop는 L2 변경 뒤 L3 Seed 생성을 호출한다.
 `SkillExecutor`는 Active 스킬에 명시적으로 바인딩·영속화된 구조화 tool step만 기존
-`PlanStepExecutor`로 순서대로 실행하며, 첫 실패에서 중단하고 결과를 lifecycle 표본으로
-기록한다. 자연어 Seed procedure나 reflection hint는 도구 호출로 자동 변환하지 않는다.
+`PlanStepExecutor`로 순서대로 실행하며, 첫 실패에서 중단한다. Inner Loop는 planner의
+`l3.execute(skill_id)` 선택을 가로채어, 이번 요청의 vetted memory context에 포함된 skill ID만
+실행하고 평가 결과를 lifecycle 표본으로 기록한다. 자연어 Seed procedure나 reflection hint는
+도구 호출로 자동 변환하지 않는다.
 
-> **후속 범위**: pending hint를 L2 근거와 결합해 검토 가능한 구조화 step으로 편성, Inner Loop의
-> Active 스킬 선택·실행 연결, Degrading/Archived 전이와 미사용 기간 처리
+> **후속 범위**: pending hint를 L2 근거와 결합해 검토 가능한 구조화 step으로 편성,
+> Degrading/Archived 전이와 미사용 기간 처리
 
 #### 1.6 L4 헌법 — ⚠️ 최소 읽기·승격 guard 완료
 
@@ -131,9 +133,9 @@ Inner Loop의 reflection 단계는 도구를 사용한 경우 `episode_id`를 so
 
 `MemoryContextBuilder`가 L1 검색 결과와 active L2 knowledge를 관련성·개수 제한으로
 선별한다. L4의 CIB/민감정보 검사를 통과한 항목만 주입하며 L5 capability는 planner의
-자기 인식 문맥으로 함께 전달한다. Active L3 스킬은 query 관련성 기준으로 절차 요약을
-planner 문맥에 주입한다. 실제 `SkillExecutor` 호출은 planner/Inner Loop의 명시적 선택 노드가
-아직 소유하지 않으므로, 현재는 독립 application service로 제공된다.
+자기 인식 문맥으로 함께 전달한다. Active L3 스킬은 query 관련성 기준으로 절차 요약과
+허용 skill ID를 planner 문맥에 주입한다. native tool planner는 `l3.execute`로 한 개의
+retrieved skill을 명시적으로 선택할 수 있고, Inner Loop가 그 선택을 검증·실행한다.
 
 #### 1.9 메모리 매니저 — ⚠️ 최소 통합 파사드·라우터 완료
 
@@ -339,7 +341,7 @@ watermark가 전진한다. `build_outer_loop_service()`는 기존 L1 repository�
 
 ### 다음 우선순위 (제안)
 
-1. **L3 완성** — pending hint→검토된 executable step 편성, Inner Loop 선택 실행, lifecycle refresh
+1. **L3 완성** — pending hint→검토된 executable step 편성, lifecycle refresh·idle archive
 2. **Outer Loop 확장** — 스케줄/이벤트 trigger, L3 lifecycle, M16/M17, Meta Loop trigger
 3. **L4 확장** — K-Scenario, 방향성 함수 C, 도구별 사용자 승인 정책 연결
 4. **L5 확장** — self_model CRUD, 칼리브레이션 에러, 윈도우 통계와 Outer Loop updater

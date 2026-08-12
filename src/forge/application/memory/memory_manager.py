@@ -12,6 +12,7 @@ from forge.domain.memory import (
     ReflectionRoutingDecision,
 )
 from forge.domain.outer_loop import L2Knowledge, L2KnowledgeStatus
+from forge.domain.procedural import ProceduralSkill
 from forge.ports.outbound import (
     ConstitutionRepository,
     EpisodeRepository,
@@ -78,6 +79,7 @@ class MemoryManager:
                 f"{item.condition}: {item.statement}" for item in result.l2_knowledge
             ),
             l3_skills=tuple(f"{skill.skill_id}: {' → '.join(skill.procedure)}" for skill in skills),
+            l3_skill_ids=tuple(skill.skill_id for skill in skills),
             capability_summary=(
                 f"{result.capability.category}: confidence={result.capability.confidence:.2f}, "
                 f"success_rate={result.capability.success_rate:.2f}"
@@ -116,7 +118,7 @@ class MemoryManager:
                 break
         return selected
 
-    def _relevant_l3(self, query: str):
+    def _relevant_l3(self, query: str) -> list[ProceduralSkill]:
         if self._procedural is None:
             return []
         tokens = set(query.casefold().split())

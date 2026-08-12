@@ -23,7 +23,10 @@ from forge.adapters.outbound.memory import (
     SqliteEpisodeStore,
 )
 from forge.adapters.outbound.outer_loop import JsonOuterLoopStore
-from forge.adapters.outbound.procedural import SqliteProceduralRepository
+from forge.adapters.outbound.procedural import (
+    SqliteProceduralRepository,
+    build_procedural_selection_tool,
+)
 from forge.adapters.outbound.tools import (
     BuiltinToolRegistry,
     RegistryPlanStepExecutor,
@@ -43,7 +46,11 @@ from forge.application.memory import (
     StartInnerLoopSessionService,
 )
 from forge.application.outer_loop import OuterLoopPolicy, RunOuterLoopService
-from forge.application.procedural import ProceduralMemoryService, SkillLifecyclePolicy
+from forge.application.procedural import (
+    ProceduralMemoryService,
+    SkillExecutor,
+    SkillLifecyclePolicy,
+)
 from forge.ports.outbound import InnerLoopPlanner
 from forge.runtime import LangGraphConversationRuntime
 
@@ -195,12 +202,22 @@ def build_inner_loop_service(
         ),
     )
     memory_manager = _build_memory_manager(config, repository)
+    procedural_repository = SqliteProceduralRepository(config["procedural"]["db_path"])
+    procedural_lifecycle = ProceduralMemoryService(
+        procedural_repository,
+        _skill_lifecycle_policy(config),
+    )
+    plan_executor = RegistryPlanStepExecutor(tools)
     return RunInnerLoopService(
         StartInnerLoopSessionService(store),
         RecordInnerLoopEventService(store),
         FinalizeEpisodeService(store, repository),
-        _build_planner(agent_config, tools, agent_config_path),
-        RegistryPlanStepExecutor(tools),
+        _build_planner(
+            agent_config,
+            (*tools, build_procedural_selection_tool()),
+            agent_config_path,
+        ),
+        plan_executor,
         DeterministicEvaluator(),
         DeterministicReflector(),
         max_retries=max_retries,
@@ -210,6 +227,7 @@ def build_inner_loop_service(
         ),
         memory_context_builder=MemoryContextBuilder(memory_manager),
         memory_manager=memory_manager,
+        skill_executor=SkillExecutor(procedural_repository, plan_executor, procedural_lifecycle),
     )
 
 
@@ -253,12 +271,7 @@ def build_outer_loop_service(config_path: str = "config/memory.yml") -> RunOuter
         build_constitution_repository(config_path),
         ProceduralMemoryService(
             SqliteProceduralRepository(config["procedural"]["db_path"]),
-            SkillLifecyclePolicy(
-                active_threshold=float(config["procedural"]["lifecycle"]["active_threshold"]),
-                degrading_threshold=float(config["procedural"]["lifecycle"]["degrading_threshold"]),
-                archive_threshold=float(config["procedural"]["lifecycle"]["archive_threshold"]),
-                recovery_threshold=float(config["procedural"]["lifecycle"]["recovery_threshold"]),
-            ),
+            _skill_lifecycle_policy(config),
         ),
     )
 
@@ -281,6 +294,16 @@ def _build_memory_manager(
             setting="cognition.memory_context_top_k",
         ),
         procedural=SqliteProceduralRepository(config["procedural"]["db_path"]),
+    )
+
+
+def _skill_lifecycle_policy(config: dict[str, Any]) -> SkillLifecyclePolicy:
+    lifecycle = config["procedural"]["lifecycle"]
+    return SkillLifecyclePolicy(
+        active_threshold=float(lifecycle["active_threshold"]),
+        degrading_threshold=float(lifecycle["degrading_threshold"]),
+        archive_threshold=float(lifecycle["archive_threshold"]),
+        recovery_threshold=float(lifecycle["recovery_threshold"]),
     )
 
 
