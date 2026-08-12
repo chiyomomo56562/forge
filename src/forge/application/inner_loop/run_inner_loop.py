@@ -8,13 +8,13 @@ from typing import Any, TypedDict
 
 from langgraph.graph import END, START, StateGraph
 
-from forge.application.cognition import InnerLoopCognition
+from forge.application.cognition import InnerLoopCognition, MemoryContextBuilder
 from forge.application.memory import (
     FinalizeEpisodeService,
     RecordInnerLoopEventService,
     StartInnerLoopSessionService,
 )
-from forge.domain.cognition import CognitionDecision, InnerLoopContext
+from forge.domain.cognition import CognitionDecision, InnerLoopContext, RetrievedMemoryContext
 from forge.domain.inner_loop import InnerLoopPlan, PlanStepStatus, ToolExecution
 from forge.domain.memory import Evaluation, ExecutionOutcome, L0EventType
 from forge.ports.outbound import (
@@ -43,6 +43,7 @@ class InnerLoopState(TypedDict, total=False):
     needs_replan: bool
     execution: ToolExecution
     evaluation: Evaluation
+    memory_context: RetrievedMemoryContext
 
 
 @dataclass(frozen=True)
@@ -68,6 +69,7 @@ class RunInnerLoopService:
         max_retries: int = 3,
         max_feedback_cycles: int = 0,
         max_tool_feedback_bytes: int = 8_192,
+        memory_context_builder: MemoryContextBuilder | None = None,
     ) -> None:
         self._starter = starter
         self._recorder = recorder
@@ -75,6 +77,7 @@ class RunInnerLoopService:
         self._executor = executor
         self._max_retries = max_retries
         self._max_feedback_cycles = max_feedback_cycles
+        self._memory_context_builder = memory_context_builder
         self._cognition = InnerLoopCognition(
             planner, evaluator, reflector, max_tool_feedback_bytes=max_tool_feedback_bytes
         )
@@ -138,7 +141,12 @@ class RunInnerLoopService:
     def _plan(self, state: InnerLoopState) -> InnerLoopState:
         preserved_statuses: dict[str, str] | None = None
         try:
-            context = self._context(state)
+            memory_context = state.get("memory_context")
+            if memory_context is None and self._memory_context_builder is not None:
+                memory_context = self._memory_context_builder.build(
+                    task_request=state["task_request"], task_category=state["task_category"]
+                )
+            context = self._context(state, memory_context or RetrievedMemoryContext())
             last_execution = state.get("last_execution") if state.get("needs_replan") else None
             plan = self._cognition.create_plan(context, last_execution)
             if last_execution is not None:
@@ -162,7 +170,9 @@ class RunInnerLoopService:
                 "tool_names": [step.tool_name for step in plan.steps if step.tool_name],
                 "memory_context_status": "available",
                 "memory_context_error_code": None,
-                "retrieved_episode_ids": [],
+                "retrieved_episode_ids": list(context.memory_context.episode_ids),
+                "retrieved_l2_knowledge": list(context.memory_context.l2_knowledge),
+                "capability_context": context.memory_context.capability_summary,
                 "pattern_candidate_id": plan.pattern_candidate_id,
                 "dependencies": {step.step_id: list(step.depends_on) for step in plan.steps},
             },
@@ -175,6 +185,7 @@ class RunInnerLoopService:
             "attempt": 0,
             "tool_names": (),
             "needs_replan": False,
+            "memory_context": context.memory_context,
         }
 
     def _execute_attempt(self, state: InnerLoopState) -> InnerLoopState:
@@ -276,7 +287,9 @@ class RunInnerLoopService:
             return "re_plan"
         return "attempt"
 
-    def _context(self, state: InnerLoopState) -> InnerLoopContext:
+    def _context(
+        self, state: InnerLoopState, memory_context: RetrievedMemoryContext | None = None
+    ) -> InnerLoopContext:
         return InnerLoopContext(
             task_request=state["task_request"],
             plan=state.get("plan"),
@@ -286,6 +299,7 @@ class RunInnerLoopService:
             feedback_count=state.get("feedback_count", 0),
             max_retries=self._max_retries,
             max_feedback_cycles=self._max_feedback_cycles,
+            memory_context=memory_context or state.get("memory_context", RetrievedMemoryContext()),
         )
 
     def _summarize_execution(self, state: InnerLoopState) -> InnerLoopState:

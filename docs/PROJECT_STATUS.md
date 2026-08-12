@@ -95,7 +95,7 @@ L1 Episode를 후보 증거로 누적하고, 최소 증거 수와 confidence 기
 반례는 active → weakened → retired 상태 전이를 유도하며, 후보·L2·watermark/checkpoint는
 단일 JSON 파일에 원자적으로 기록한다.
 
-> **후속 범위**: NetworkX/GraphML projection, L2 검색, Inner Loop 문맥 주입, L2→L3 승격
+> **후속 범위**: NetworkX/GraphML projection, L2→L3 승격
 
 #### 1.5 L4 헌법 — ⚠️ 최소 읽기·승격 guard 완료
 
@@ -112,7 +112,13 @@ L1 Episode를 후보 증거로 누적하고, 최소 증거 수와 confidence 기
 `capabilities.yml`의 작업 카테고리별 역량·미지원 카테고리 기본값을 조회한다. YAML은 계속
 읽기 전용이며, self_model CRUD, 칼리브레이션·윈도우 통계 및 Outer Loop updater는 미구현이다.
 
-#### 1.7 메모리 매니저 — ❌ 미구현
+#### 1.7 Cognition 메모리 문맥 — ⚠️ L1/L2 선택 주입 완료
+
+`MemoryContextBuilder`가 L1 검색 결과와 active L2 knowledge를 관련성·개수 제한으로
+선별한다. L4의 CIB/민감정보 검사를 통과한 항목만 주입하며 L5 capability는 planner의
+자기 인식 문맥으로 함께 전달한다. L3는 아직 미구현이므로 동일한 문맥 계약에 추가하지 않았다.
+
+#### 1.8 메모리 매니저 — ❌ 미구현
 
 `MemoryManager` 통합 라우터, L1→L2 consolidation, 이중 저장 전략 라우팅은
 구현되지 않았다.
@@ -312,9 +318,7 @@ watermark가 전진한다. `build_outer_loop_service()`는 기존 L1 repository�
 
 ### 다음 우선순위 (제안)
 
-1. **L2 검색을 Cognition에 선택적으로 연결** — L1/L2 검색 문맥을 Inner Loop v1의
-   계획·재계획에 선택 주입
-2. **L4 확장** — K-Scenario, 방향성 함수 C, 도구별 사용자 승인 정책 연결
-3. **L5 확장** — self_model CRUD, 칼리브레이션 에러, 윈도우 통계와 Outer Loop updater
-4. **MemoryManager 구현** — L1~L5 통합 라우팅과 이중 저장 전략
-5. **Outer Loop 확장** — 스케줄/이벤트 trigger, L2→L3, M16/M17, Meta Loop trigger
+1. **L4 확장** — K-Scenario, 방향성 함수 C, 도구별 사용자 승인 정책 연결
+2. **L5 확장** — self_model CRUD, 칼리브레이션 에러, 윈도우 통계와 Outer Loop updater
+3. **MemoryManager 구현** — L1~L5 통합 라우팅과 이중 저장 전략
+4. **Outer Loop 확장** — 스케줄/이벤트 trigger, L2→L3, M16/M17, Meta Loop trigger

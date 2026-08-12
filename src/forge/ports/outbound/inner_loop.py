@@ -33,6 +33,28 @@ class FeedbackAwareInnerLoopPlanner(Protocol):
     ) -> InnerLoopPlan: ...
 
 
+@runtime_checkable
+class MemoryAwareInnerLoopPlanner(Protocol):
+    def create_plan_with_memory(
+        self,
+        *,
+        task_request: str,
+        context_episode_ids: Sequence[str],
+        memory_context: Mapping[str, object],
+    ) -> InnerLoopPlan: ...
+
+    def create_plan_after_feedback_with_memory(
+        self,
+        *,
+        task_request: str,
+        context_episode_ids: Sequence[str],
+        last_execution: ToolExecution,
+        feedback: Mapping[str, object],
+        feedback_count: int,
+        memory_context: Mapping[str, object],
+    ) -> InnerLoopPlan: ...
+
+
 class PlanStepExecutor(Protocol):
     def execute(
         self, step: PlanStep, *, session_id: str = "", attempt: int = 0

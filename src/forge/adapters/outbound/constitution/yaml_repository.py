@@ -41,9 +41,13 @@ class YamlConstitutionRepository:
                 episode.reflection.causal_condition,
             )
         )
-        if any(re.search(pattern, content) for pattern in policy.sensitive_patterns):
+        decision = self.evaluate_memory_text(content)
+        return decision if not decision.allowed else CibDecision(True, "cib.passed")
+
+    def evaluate_memory_text(self, content: str) -> CibDecision:
+        if any(re.search(pattern, content) for pattern in self.load_policy().sensitive_patterns):
             return CibDecision(False, "memory.sensitive_content")
-        return CibDecision(True, "cib.passed")
+        return CibDecision(True, "memory.safe")
 
     def _load(self, name: str) -> dict[str, Any]:
         with (self._root / name).open(encoding="utf-8") as source:

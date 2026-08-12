@@ -29,6 +29,7 @@ from forge.adapters.outbound.tools import (
     StaticToolAuthorizationPolicy,
     build_langchain_tools,
 )
+from forge.application.cognition import MemoryContextBuilder
 from forge.application.conversation import ReceiveMessageService
 from forge.application.inner_loop import RunInnerLoopService
 from forge.application.memory import (
@@ -182,6 +183,16 @@ def build_inner_loop_service(
         max_feedback_cycles=_non_negative_int(
             agent_config.get("inner_loop", {}).get("max_feedback_cycles", 0),
             setting="inner_loop.max_feedback_cycles",
+        ),
+        memory_context_builder=MemoryContextBuilder(
+            repository,
+            JsonOuterLoopStore(Path(config["semantic"]["outer_loop_state_path"])),
+            build_constitution_repository(config_path),
+            build_identity_repository(config_path),
+            top_k=_positive_int(
+                config.get("cognition", {}).get("memory_context_top_k", 3),
+                setting="cognition.memory_context_top_k",
+            ),
         ),
     )
 

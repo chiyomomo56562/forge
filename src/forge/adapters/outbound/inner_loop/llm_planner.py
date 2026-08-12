@@ -41,6 +41,22 @@ class NativeToolCallPlanner:
             [SystemMessage(content=self._system_prompt), HumanMessage(content=task_request)]
         )
 
+    def create_plan_with_memory(
+        self,
+        *,
+        task_request: str,
+        context_episode_ids: Sequence[str],
+        memory_context: Mapping[str, object],
+    ) -> InnerLoopPlan:
+        del context_episode_ids
+        return self._invoke(
+            [
+                SystemMessage(content=self._system_prompt),
+                SystemMessage(content=_memory_prompt(memory_context)),
+                HumanMessage(content=task_request),
+            ]
+        )
+
     def create_plan_after_feedback(
         self,
         *,
@@ -54,6 +70,26 @@ class NativeToolCallPlanner:
         return self._invoke(
             [
                 SystemMessage(content=self._system_prompt),
+                HumanMessage(content=task_request),
+                HumanMessage(content=_feedback_prompt(feedback, feedback_count)),
+            ]
+        )
+
+    def create_plan_after_feedback_with_memory(
+        self,
+        *,
+        task_request: str,
+        context_episode_ids: Sequence[str],
+        last_execution: ToolExecution,
+        feedback: Mapping[str, object],
+        feedback_count: int,
+        memory_context: Mapping[str, object],
+    ) -> InnerLoopPlan:
+        del context_episode_ids, last_execution
+        return self._invoke(
+            [
+                SystemMessage(content=self._system_prompt),
+                SystemMessage(content=_memory_prompt(memory_context)),
                 HumanMessage(content=task_request),
                 HumanMessage(content=_feedback_prompt(feedback, feedback_count)),
             ]
@@ -100,4 +136,10 @@ def _feedback_prompt(feedback: Mapping[str, object], feedback_count: int) -> str
         + str(feedback_count)
         + ".\n"
         + json.dumps(dict(feedback), ensure_ascii=False, sort_keys=True)
+    )
+
+
+def _memory_prompt(memory_context: Mapping[str, object]) -> str:
+    return "Use this vetted memory only when it helps the current task.\n" + json.dumps(
+        dict(memory_context), ensure_ascii=False, sort_keys=True
     )

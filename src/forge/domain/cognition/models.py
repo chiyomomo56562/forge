@@ -1,6 +1,6 @@
 """Pure values used to separate cognition from Inner Loop orchestration."""
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import StrEnum
 
 from forge.domain.inner_loop import InnerLoopPlan, ToolExecution
@@ -11,6 +11,22 @@ class CognitionDecision(StrEnum):
     RETRY = "retry"
     REPLAN = "replan"
     SUMMARIZE = "summarize"
+
+
+@dataclass(frozen=True)
+class RetrievedMemoryContext:
+    """Vetted, size-bounded memory made available to a planner."""
+
+    episode_ids: tuple[str, ...] = ()
+    l2_knowledge: tuple[str, ...] = ()
+    capability_summary: str | None = None
+
+    def as_payload(self) -> dict[str, object]:
+        return {
+            "episode_ids": list(self.episode_ids),
+            "l2_knowledge": list(self.l2_knowledge),
+            "capability": self.capability_summary,
+        }
 
 
 @dataclass(frozen=True)
@@ -25,6 +41,7 @@ class InnerLoopContext:
     feedback_count: int
     max_retries: int
     max_feedback_cycles: int
+    memory_context: RetrievedMemoryContext = field(default_factory=RetrievedMemoryContext)
 
 
 @dataclass(frozen=True)
@@ -39,4 +56,4 @@ class ReasonedExecution:
 
     @property
     def protocol_failure(self) -> bool:
-        return self.execution.safe_error_code == "tool.protocol_failure"
+        return bool(self.execution.safe_error_code == "tool.protocol_failure")
