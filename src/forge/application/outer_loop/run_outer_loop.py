@@ -14,7 +14,7 @@ from forge.domain.outer_loop import (
     OuterLoopResult,
     PatternCandidate,
 )
-from forge.ports.outbound import EpisodeRepository, OuterLoopStore
+from forge.ports.outbound import ConstitutionRepository, EpisodeRepository, OuterLoopStore
 
 
 @dataclass(frozen=True)
@@ -35,11 +35,16 @@ class RunOuterLoopService:
     """Consolidates complete L1 episodes and atomically advances its checkpoint."""
 
     def __init__(
-        self, repository: EpisodeRepository, store: OuterLoopStore, policy: OuterLoopPolicy
+        self,
+        repository: EpisodeRepository,
+        store: OuterLoopStore,
+        policy: OuterLoopPolicy,
+        constitution: ConstitutionRepository | None = None,
     ) -> None:
         self._repository = repository
         self._store = store
         self._policy = policy
+        self._constitution = constitution
 
     def handle(self, *, force: bool = False) -> OuterLoopResult:
         checkpoint = self._store.load_checkpoint()
@@ -55,7 +60,7 @@ class RunOuterLoopService:
 
         batch = unseen[: self._policy.batch_size]
         for episode in batch:
-            if self._is_eligible(episode):
+            if self._is_eligible(episode) and self._is_constitutionally_allowed(episode):
                 candidate = self._merge_candidate(
                     candidates.get(self._candidate_id(episode)), episode
                 )
@@ -93,6 +98,11 @@ class RunOuterLoopService:
             episode.evidence_complete
             and episode.evaluation.promotion_eligibility is PromotionEligibility.ELIGIBLE
             and episode.reflection.has_content
+        )
+
+    def _is_constitutionally_allowed(self, episode: Episode) -> bool:
+        return (
+            self._constitution is None or self._constitution.evaluate_l2_evidence(episode).allowed
         )
 
     @staticmethod

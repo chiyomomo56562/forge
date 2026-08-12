@@ -15,6 +15,13 @@ from forge.domain.memory import (
 )
 
 
+class DenyConstitution:
+    def evaluate_l2_evidence(self, _episode):
+        from forge.domain.constitution import CibDecision
+
+        return CibDecision(False, "memory.sensitive_content")
+
+
 class FakeEpisodeRepository:
     def __init__(self, episodes: list[Episode]) -> None:
         self.episodes = episodes
@@ -117,3 +124,14 @@ def test_counterexample_weakens_existing_l2_knowledge(tmp_path):
     assert second.updated_knowledge_ids == first.promoted_knowledge_ids
     assert store.load_knowledge()[0].status.value == "weakened"
     assert store.load_knowledge()[0].confidence == 0.75
+
+
+def test_constitution_can_block_l1_evidence_from_l2_promotion(tmp_path):
+    service, store = _service(tmp_path, [_episode(1), _episode(2), _episode(3)])
+    service._constitution = DenyConstitution()
+
+    result = service.handle()
+
+    assert result.promoted_knowledge_ids == ()
+    assert store.load_candidates() == []
+    assert result.checkpoint.processed_episode_ids == ("ep_1", "ep_2", "ep_3")

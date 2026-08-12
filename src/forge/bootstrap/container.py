@@ -6,6 +6,8 @@ from typing import Any
 import yaml
 from chromadb import PersistentClient
 
+from forge.adapters.outbound.constitution import YamlConstitutionRepository
+from forge.adapters.outbound.identity import YamlIdentityRepository
 from forge.adapters.outbound.inner_loop import (
     DeterministicEvaluator,
     DeterministicPlanner,
@@ -73,6 +75,20 @@ def build_l0_event_store(root_path: str = "data/memory/working/sessions") -> Jso
     최종 수정일: 2026-07-31
     """
     return JsonlL0EventStore(root_path)
+
+
+def build_constitution_repository(
+    config_path: str = "config/memory.yml",
+) -> YamlConstitutionRepository:
+    """읽기 전용 L4 헌법 저장소를 조립한다."""
+    config = _load_yaml_config(config_path)
+    return YamlConstitutionRepository(config["constitution"]["dir"])
+
+
+def build_identity_repository(config_path: str = "config/memory.yml") -> YamlIdentityRepository:
+    """읽기 전용 L5 정체성·역량 저장소를 조립한다."""
+    config = _load_yaml_config(config_path)
+    return YamlIdentityRepository(config["identity"]["dir"])
 
 
 def build_memory_services(
@@ -207,6 +223,7 @@ def build_outer_loop_service(config_path: str = "config/memory.yml") -> RunOuter
             promotion_confidence=float(consolidation.get("promotion_confidence", 0.8)),
             retire_confidence=float(consolidation.get("retire_confidence", 0.4)),
         ),
+        build_constitution_repository(config_path),
     )
 
 
