@@ -118,10 +118,14 @@ L1 Episode를 후보 증거로 누적하고, 최소 증거 수와 confidence 기
 선별한다. L4의 CIB/민감정보 검사를 통과한 항목만 주입하며 L5 capability는 planner의
 자기 인식 문맥으로 함께 전달한다. L3는 아직 미구현이므로 동일한 문맥 계약에 추가하지 않았다.
 
-#### 1.8 메모리 매니저 — ❌ 미구현
+#### 1.8 메모리 매니저 — ⚠️ 최소 통합 라우터 완료
 
-`MemoryManager` 통합 라우터, L1→L2 consolidation, 이중 저장 전략 라우팅은
-구현되지 않았다.
+`MemoryManager`가 L1 검색, active L2 knowledge, L4 안전 필터, L5 identity/capability를
+한 번의 읽기 요청으로 조합하고 Cognition의 선택 주입 경로가 이를 사용한다. 반성은
+범용 지식이면 L2 일반화, 도구 종속이면 `L3_PROCEDURE_PENDING`, 내용이 없으면 L1 전용으로
+분류한다. L3 저장소가 없으므로 `L3_PROCEDURE_PENDING`은 아직 영속화하지 않는다.
+
+L1→L2 consolidation은 이미 Outer Loop가 소유하며, MemoryManager는 이를 중복 실행하지 않는다.
 
 ### Phase 2: 이너 루프 (Inner Loop) — ✅ 기본 구조 완료
 
@@ -310,7 +314,7 @@ watermark가 전진한다. `build_outer_loop_service()`는 기존 L1 repository�
 | Phase | 진행도 | 상태 |
 -------|--------|------|
 | Phase 0: 인프라 | 100% | ✅ 완료 |
-| Phase 1: 메모리 계층 | ~60% | L1/L0/L2 최소 슬라이스 및 L4/L5 읽기 모델 완료, Manager 미구현 |
+| Phase 1: 메모리 계층 | ~65% | L1/L0/L2, L4/L5 읽기 모델, MemoryManager 최소 라우터 완료 |
 | Phase 2: 이너 루프 | ~90% | LLM/Tools/대화 Runtime/CLI 및 Inner Loop Cognition v1 완료 |
 | Phase 3: 아우터 루프 | ~25% | L1→L2 최소 수직 슬라이스 완료 |
 | Phase 4: 메타 루프 | 0% | ❌ 미구현 |
@@ -320,5 +324,5 @@ watermark가 전진한다. `build_outer_loop_service()`는 기존 L1 repository�
 
 1. **L4 확장** — K-Scenario, 방향성 함수 C, 도구별 사용자 승인 정책 연결
 2. **L5 확장** — self_model CRUD, 칼리브레이션 에러, 윈도우 통계와 Outer Loop updater
-3. **MemoryManager 구현** — L1~L5 통합 라우팅과 이중 저장 전략
+3. **L3 구현** — reflection hint 저장, 스킬 lifecycle과 `L3_PROCEDURE_PENDING` 영속화
 4. **Outer Loop 확장** — 스케줄/이벤트 trigger, L2→L3, M16/M17, Meta Loop trigger

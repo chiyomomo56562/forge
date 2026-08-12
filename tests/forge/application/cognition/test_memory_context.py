@@ -2,8 +2,9 @@ from datetime import UTC, datetime
 from types import SimpleNamespace
 
 from forge.application.cognition import MemoryContextBuilder
+from forge.application.memory import MemoryManager
 from forge.domain.constitution import CibDecision
-from forge.domain.identity import Capability
+from forge.domain.identity import AgentIdentity, Capability
 from forge.domain.outer_loop import L2Knowledge, L2KnowledgeStatus
 
 
@@ -49,14 +50,17 @@ class _Constitution:
 
 
 class _Identity:
+    def load_identity(self):
+        return AgentIdentity("Gnosis", "agent", "L1", 1)
+
     def capability_for(self, category):
         return Capability(category, "Coding", 0.8, 0.7, 0.4, 3)
 
 
 def test_builds_l1_l2_context_only_from_relevant_and_vetted_memory():
-    context = MemoryContextBuilder(_Episodes(), _Store(), _Constitution(), _Identity()).build(
-        task_request="repository inspection", task_category="coding"
-    )
+    context = MemoryContextBuilder(
+        MemoryManager(_Episodes(), _Store(), _Constitution(), _Identity())
+    ).build(task_request="repository inspection", task_category="coding")
 
     assert context.episode_ids == ("ep_safe",)
     assert context.l2_knowledge == ("repository inspection: use focused search",)

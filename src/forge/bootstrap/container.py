@@ -34,6 +34,7 @@ from forge.application.conversation import ReceiveMessageService
 from forge.application.inner_loop import RunInnerLoopService
 from forge.application.memory import (
     FinalizeEpisodeService,
+    MemoryManager,
     PersistEpisodeService,
     RecordInnerLoopEventService,
     ReindexEpisodesService,
@@ -128,6 +129,26 @@ def build_memory_services(
     )
 
 
+def build_memory_manager(config_path: str = "config/memory.yml") -> MemoryManager:
+    """현재 구현된 L1/L2/L4/L5를 통합 조회하는 MemoryManager를 조립한다."""
+    config = _load_yaml_config(config_path)
+    episodic = config["episodic"]
+    settings = MemorySettings(
+        sqlite_path=Path(episodic["sqlite_path"]),
+        chroma_path=Path(episodic["chroma_path"]),
+        collection_name=episodic["collection_name"],
+    )
+    collection = PersistentClient(path=str(settings.chroma_path)).get_or_create_collection(
+        settings.collection_name
+    )
+    repository = SqliteChromaEpisodeRepository(
+        SqliteEpisodeStore(settings.sqlite_path),
+        ChromaEpisodeIndex(collection, settings.projection_version, settings.embedding_model_id),
+        settings,
+    )
+    return _build_memory_manager(config, repository)
+
+
 def build_inner_loop_service(
     config_path: str = "config/memory.yml",
     *,
@@ -184,16 +205,7 @@ def build_inner_loop_service(
             agent_config.get("inner_loop", {}).get("max_feedback_cycles", 0),
             setting="inner_loop.max_feedback_cycles",
         ),
-        memory_context_builder=MemoryContextBuilder(
-            repository,
-            JsonOuterLoopStore(Path(config["semantic"]["outer_loop_state_path"])),
-            build_constitution_repository(config_path),
-            build_identity_repository(config_path),
-            top_k=_positive_int(
-                config.get("cognition", {}).get("memory_context_top_k", 3),
-                setting="cognition.memory_context_top_k",
-            ),
-        ),
+        memory_context_builder=MemoryContextBuilder(_build_memory_manager(config, repository)),
     )
 
 
@@ -241,6 +253,21 @@ def build_outer_loop_service(config_path: str = "config/memory.yml") -> RunOuter
 def _load_yaml_config(config_path: str) -> dict[str, Any]:
     with open(config_path, encoding="utf-8") as config_file:
         return yaml.safe_load(config_file) or {}
+
+
+def _build_memory_manager(
+    config: dict[str, Any], repository: SqliteChromaEpisodeRepository
+) -> MemoryManager:
+    return MemoryManager(
+        repository,
+        JsonOuterLoopStore(Path(config["semantic"]["outer_loop_state_path"])),
+        YamlConstitutionRepository(config["constitution"]["dir"]),
+        YamlIdentityRepository(config["identity"]["dir"]),
+        top_k=_positive_int(
+            config.get("cognition", {}).get("memory_context_top_k", 3),
+            setting="cognition.memory_context_top_k",
+        ),
+    )
 
 
 def _build_tool_registry(tool_config: dict[str, Any]) -> BuiltinToolRegistry:
