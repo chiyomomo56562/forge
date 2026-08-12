@@ -97,16 +97,20 @@ L1 Episode를 후보 증거로 누적하고, 최소 증거 수와 confidence 기
 
 > **후속 범위**: NetworkX/GraphML projection, L2 검색, Inner Loop 문맥 주입, L2→L3 승격
 
-#### 1.5 L4 헌법 — ⚠️ YAML만 존재
+#### 1.5 L4 헌법 — ⚠️ 최소 읽기·승격 guard 완료
 
-`constitution/*.yml` 파일은 존재하나, `src/forge`에 헌법 loader, validator, CIB guard
-구현이 없다. `Evaluation` 도메인 모델에 `cib_score`, `cib_evaluation_status` 필드는
-정의되어 있으나, 실제 CIB 검증 로직(방향성 함수 C, K-Scenario 대입)은 구현되지 않았다.
+`YamlConstitutionRepository`가 `constitution/safety.yml`을 읽어 CIB threshold와
+민감정보 패턴을 제공한다. Outer Loop는 L2 증거를 누적하기 전에 CIB 통과·threshold 및
+민감정보 저장 금지를 검사한다. 차단된 L1은 L2 증거로 사용하지 않지만 checkpoint는 전진한다.
 
-#### 1.6 L5 정체성 — ⚠️ YAML + SQLite만 존재
+> **후속 범위**: K-Scenario/방향성 함수 C 평가, 도구별 사용자 승인 정책 연결, Meta Loop +
+> HITL 기반 헌법 변경
 
-`identity/*.yml`과 `identity.sqlite3`은 존재하나, `src/forge`에 self_model CRUD,
-칼리브레이션 에러 계산, 윈도우 통계, updater 구현이 없다.
+#### 1.6 L5 정체성 — ⚠️ 최소 읽기 모델 완료
+
+`YamlIdentityRepository`가 `identity.yml`의 현재 autonomy level과
+`capabilities.yml`의 작업 카테고리별 역량·미지원 카테고리 기본값을 조회한다. YAML은 계속
+읽기 전용이며, self_model CRUD, 칼리브레이션·윈도우 통계 및 Outer Loop updater는 미구현이다.
 
 #### 1.7 메모리 매니저 — ❌ 미구현
 
@@ -203,7 +207,7 @@ START → start_session → plan → execute_attempt
 
 | 파일 | 내용 | 상태 |
 ------|------|------|
-| `bootstrap/container.py` | `build_receive_message_service`, `build_inner_loop_service`, `build_memory_services`, `build_l0_event_store`, `_build_conversation_runtime` (tools enabled 시 bind_tools), `_build_planner` (deterministic / native_tool), `_build_tool_registry` | ✅ |
+| `bootstrap/container.py` | 대화/Inner/Outer Loop 및 L4/L5 읽기 저장소 builder, `_build_conversation_runtime` (tools enabled 시 bind_tools), `_build_planner` (deterministic / native_tool), `_build_tool_registry` | ✅ |
 | `adapters/inbound/cli.py` | `run_message` (단일 대화), `run_inner_loop` (Inner Loop), REPL 모드, `--conversation-id`, `--system`, `--query`, `--inner-loop`, `--config` | ✅ |
 | 테스트 | `test_container.py`, `test_cli.py` | ✅ |
 
@@ -300,7 +304,7 @@ watermark가 전진한다. `build_outer_loop_service()`는 기존 L1 repository�
 | Phase | 진행도 | 상태 |
 -------|--------|------|
 | Phase 0: 인프라 | 100% | ✅ 완료 |
-| Phase 1: 메모리 계층 | ~50% | L1/L0 및 L2 최소 슬라이스 완료, L4/L5/Manager 미구현 |
+| Phase 1: 메모리 계층 | ~60% | L1/L0/L2 최소 슬라이스 및 L4/L5 읽기 모델 완료, Manager 미구현 |
 | Phase 2: 이너 루프 | ~90% | LLM/Tools/대화 Runtime/CLI 및 Inner Loop Cognition v1 완료 |
 | Phase 3: 아우터 루프 | ~25% | L1→L2 최소 수직 슬라이스 완료 |
 | Phase 4: 메타 루프 | 0% | ❌ 미구현 |
@@ -308,9 +312,9 @@ watermark가 전진한다. `build_outer_loop_service()`는 기존 L1 repository�
 
 ### 다음 우선순위 (제안)
 
-1. **L2 검색을 Cognition에 선택적으로 연결** — Inner Loop v1의 실행 상태 문맥을
-   L1/L2/L3 검색 문맥으로 확장
-2. **L4 헌법 구현** — CIB guard, K-Scenario 검증, 방향성 함수 C
-3. **L5 정체성 구현** — self_model CRUD, 칼리브레이션 에러, 윈도우 통계
+1. **L2 검색을 Cognition에 선택적으로 연결** — L1/L2 검색 문맥을 Inner Loop v1의
+   계획·재계획에 선택 주입
+2. **L4 확장** — K-Scenario, 방향성 함수 C, 도구별 사용자 승인 정책 연결
+3. **L5 확장** — self_model CRUD, 칼리브레이션 에러, 윈도우 통계와 Outer Loop updater
 4. **MemoryManager 구현** — L1~L5 통합 라우팅과 이중 저장 전략
 5. **Outer Loop 확장** — 스케줄/이벤트 trigger, L2→L3, M16/M17, Meta Loop trigger
