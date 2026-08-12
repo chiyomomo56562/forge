@@ -71,11 +71,13 @@ class MemoryManager:
 
     def build_context(self, *, query: str, task_category: str) -> RetrievedMemoryContext:
         result = self.read(query=query, task_category=task_category)
+        skills = self._relevant_l3(query)
         return RetrievedMemoryContext(
             episode_ids=tuple(hit.episode.episode_id for hit in result.l1_hits),
             l2_knowledge=tuple(
                 f"{item.condition}: {item.statement}" for item in result.l2_knowledge
             ),
+            l3_skills=tuple(f"{skill.skill_id}: {' → '.join(skill.procedure)}" for skill in skills),
             capability_summary=(
                 f"{result.capability.category}: confidence={result.capability.confidence:.2f}, "
                 f"success_rate={result.capability.success_rate:.2f}"
@@ -113,3 +115,13 @@ class MemoryManager:
             if len(selected) == self._top_k:
                 break
         return selected
+
+    def _relevant_l3(self, query: str):
+        if self._procedural is None:
+            return []
+        tokens = set(query.casefold().split())
+        return [
+            skill
+            for skill in self._procedural.list_active()
+            if not tokens or tokens.intersection(" ".join(skill.procedure).casefold().split())
+        ][: self._top_k]

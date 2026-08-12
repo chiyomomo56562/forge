@@ -96,6 +96,16 @@ class SqliteProceduralRepository:
                 (source_id, hint, json.dumps(tool_names)),
             )
 
+    def pending_hints_for(self, source_ids: tuple[str, ...]) -> list[str]:
+        if not source_ids:
+            return []
+        placeholders = ",".join("?" for _ in source_ids)
+        with self._connect() as db:
+            rows = db.execute(
+                f"SELECT hint FROM pending_hints WHERE source_id IN ({placeholders})", source_ids
+            ).fetchall()
+        return [str(row[0]) for row in rows]
+
     def _connect(self):
         db = sqlite3.connect(self._path)
         db.row_factory = sqlite3.Row

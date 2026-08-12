@@ -256,6 +256,7 @@ def build_outer_loop_service(config_path: str = "config/memory.yml") -> RunOuter
             SkillLifecyclePolicy(
                 active_threshold=float(config["procedural"]["lifecycle"]["active_threshold"]),
                 degrading_threshold=float(config["procedural"]["lifecycle"]["degrading_threshold"]),
+                archive_threshold=float(config["procedural"]["lifecycle"]["archive_threshold"]),
                 recovery_threshold=float(config["procedural"]["lifecycle"]["recovery_threshold"]),
             ),
         ),

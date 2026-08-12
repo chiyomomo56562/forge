@@ -11,6 +11,7 @@ class SkillLifecyclePolicy:
     min_samples: int = 3
     active_threshold: float = 0.9
     degrading_threshold: float = 0.5
+    archive_threshold: float = 0.2
     recovery_threshold: float = 0.7
 
 
@@ -22,11 +23,15 @@ class ProceduralMemoryService:
         if knowledge.status is not L2KnowledgeStatus.ACTIVE or not knowledge.statement.strip():
             return None
         existing = self._repository.get_by_source_l2(knowledge.knowledge_id)
+        hints = tuple(
+            dict.fromkeys((*knowledge.counterexample_episode_ids, *knowledge.support_episode_ids))
+        )
+        pending_hints = tuple(self._repository.pending_hints_for(hints))
         skill = ProceduralSkill(
             skill_id=f"skill_{knowledge.knowledge_id[3:]}",
             source_l2_id=knowledge.knowledge_id,
-            procedure=(knowledge.statement,),
-            reflection_hints=(knowledge.condition,),
+            procedure=(knowledge.statement, *pending_hints),
+            reflection_hints=(knowledge.condition, *pending_hints),
             status=existing.status if existing else SkillStatus.SEED,
             success_rate=existing.success_rate if existing else 0.0,
             total_executions=existing.total_executions if existing else 0,
@@ -51,7 +56,15 @@ class ProceduralMemoryService:
         cib_ok = all(item.cib_score >= 0.95 for item in samples)
         status = skill.status
         if len(samples) >= self._policy.min_samples:
-            if rate >= self._policy.active_threshold and cib_ok:
+            if status is SkillStatus.DEGRADING and rate < self._policy.archive_threshold:
+                status = SkillStatus.ARCHIVED
+            elif (
+                status is SkillStatus.DEGRADING
+                and rate >= self._policy.recovery_threshold
+                and cib_ok
+            ):
+                status = SkillStatus.ACTIVE
+            elif rate >= self._policy.active_threshold and cib_ok:
                 status = SkillStatus.ACTIVE
             elif rate < self._policy.degrading_threshold:
                 status = SkillStatus.DEGRADING

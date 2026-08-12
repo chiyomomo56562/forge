@@ -19,12 +19,14 @@ class RetrievedMemoryContext:
 
     episode_ids: tuple[str, ...] = ()
     l2_knowledge: tuple[str, ...] = ()
+    l3_skills: tuple[str, ...] = ()
     capability_summary: str | None = None
 
     def as_payload(self) -> dict[str, object]:
         return {
             "episode_ids": list(self.episode_ids),
             "l2_knowledge": list(self.l2_knowledge),
+            "l3_skills": list(self.l3_skills),
             "capability": self.capability_summary,
         }
 
