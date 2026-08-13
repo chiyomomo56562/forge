@@ -9,11 +9,20 @@ import pytest
 
 from forge.adapters.outbound.tools import (
     BuiltinToolRegistry,
+    ConstitutionToolAuthorizationPolicy,
     RegistryPlanStepExecutor,
     StaticToolAuthorizationPolicy,
 )
 from forge.adapters.outbound.tools.builtin import ToolInvocationError
-from forge.domain.inner_loop import PlanStep, ToolInvocation, ToolStatus
+from forge.domain.constitution import ConstitutionPolicy
+from forge.domain.inner_loop import (
+    PlanStep,
+    ToolDefinition,
+    ToolInvocation,
+    ToolRiskTier,
+    ToolSource,
+    ToolStatus,
+)
 from forge.domain.memory import ExecutionOutcome
 
 
@@ -96,6 +105,66 @@ def test_static_policy_allows_mutation_only_with_explicit_grant(tmp_path: Path) 
 
     assert execution.outcome is ExecutionOutcome.COMPLETED
     assert target.read_text(encoding="utf-8") == "new line\n"
+
+
+def test_constitution_policy_requires_approval_before_runtime_mutation_grant(
+    tmp_path: Path,
+) -> None:
+    """Runtime grant cannot bypass constitution confirmation-required policy."""
+    target = tmp_path / "target.txt"
+    target.write_text("unchanged", encoding="utf-8")
+    policy = ConstitutionPolicy(
+        version=1,
+        cib_threshold=0.8,
+        sensitive_patterns=(),
+        autonomous_tool_ids=("file_read",),
+        confirmation_required_tool_ids=("file_write",),
+    )
+    executor = RegistryPlanStepExecutor(
+        _registry(tmp_path),
+        ConstitutionToolAuthorizationPolicy(
+            policy,
+            StaticToolAuthorizationPolicy(allow_workspace_mutation=True),
+        ),
+    )
+
+    execution = executor.execute(
+        PlanStep("patch", "Patch target", "workspace.apply_patch", {"patch": "ignored"}),
+        session_id="ses_test",
+    )
+
+    assert execution.outcome is ExecutionOutcome.HALTED
+    assert execution.safe_error_code == "tool.approval_required"
+    assert target.read_text(encoding="utf-8") == "unchanged"
+
+
+def test_constitution_policy_denies_mcp_tool_without_stable_policy_id() -> None:
+    """MCP discovery metadata alone cannot grant a Forge tool policy."""
+    policy = ConstitutionPolicy(
+        version=1,
+        cib_threshold=0.8,
+        sensitive_patterns=(),
+        autonomous_tool_ids=("file_read",),
+    )
+    authorization = ConstitutionToolAuthorizationPolicy(
+        policy,
+        StaticToolAuthorizationPolicy(),
+    )
+    definition = ToolDefinition(
+        "remote.list",
+        "1",
+        ToolRiskTier.READ_ONLY,
+        10,
+        1024,
+        source=ToolSource.MCP,
+    )
+
+    decision = authorization.evaluate(
+        ToolInvocation("remote.list", {}, "ses_test", "step", 0), definition
+    )
+
+    assert decision.allowed is False
+    assert decision.reason_code == "tool.policy_unmapped"
 
 
 def test_unknown_tool_is_defensive_halted_result(tmp_path: Path) -> None:

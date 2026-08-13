@@ -16,9 +16,9 @@ Meta Loop는 포함하지 않는다.
 - `src/forge/adapters/outbound/tools/_langchain.py`는 내장 도구의 schema 검증 →
   authorization → 실행 순서를 보장하지만, `StaticToolAuthorizationPolicy`는 위험 등급
   두 개의 boolean만 처리한다.
-- `constitution/tool_policy.yml`에는 confirmation-required·forbidden 도구와 audit 필드가
-  선언돼 있으나 `YamlConstitutionRepository` / `ConstitutionPolicy`는 아직 이를 로드하거나
-  실행 정책으로 적용하지 않는다.
+- `constitution/tool_policy.yml`의 autonomous·confirmation-required·forbidden 정책은
+  `YamlConstitutionRepository`와 `ConstitutionPolicy`가 stable policy ID로 읽는다. 공통
+  LangChain 호출 경계는 이 결정을 적용하며 ID가 없는 MCP discovery 결과는 fail-closed한다.
 - `RegistryPlanStepExecutor`는 audit-friendly `ToolExecution`을 만들지만 영속 audit sink가
   없고, 대화 `ToolNode`는 이 executor를 거치지 않는다.
 
@@ -47,6 +47,9 @@ MCP는 서버별 allowlist와 명시적 도구 metadata를 가진 **outbound ada
      결과만으로 위험 등급을 신뢰하지 않는다. 구성의 명시적 mapping이 없는 MCP 도구는 deny다.
    - static boolean 정책을 대체하는 policy evaluator를 추가한다. 결정은 `allowed`,
      `approval_required`, `denied`와 안전한 reason code를 반환한다.
+   - 현재: 완료. 내장 도구는 stable policy ID를 등록했고, static 권한은 헌법 정책을
+     넓힐 수 없는 보조 제한으로만 남겼다. `approval_required`는 HITL 승인 구현 전까지
+     실행 없이 정지한다.
 
 3. **HITL 승인 경계**
    - `ports/outbound/tool_approval.py`에 immutable approval request/decision 계약을 둔다.

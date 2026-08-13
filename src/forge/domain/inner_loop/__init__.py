@@ -12,6 +12,7 @@ from .models import (
     ToolInvocation,
     ToolResult,
     ToolRiskTier,
+    ToolSource,
     ToolStatus,
 )
 
@@ -24,5 +25,6 @@ __all__ = [
     "ToolInvocation",
     "ToolResult",
     "ToolRiskTier",
+    "ToolSource",
     "ToolStatus",
 ]

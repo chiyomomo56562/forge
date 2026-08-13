@@ -2,6 +2,7 @@ from .constitution import ConstitutionRepository
 from .episode_repository import EpisodeRepository
 from .identity import IdentityRepository
 from .inner_loop import (
+    DecisionAwareToolAuthorizationPolicy,
     FeedbackAwareInnerLoopPlanner,
     InnerLoopEvaluator,
     InnerLoopPlanner,
@@ -26,6 +27,7 @@ __all__ = [
     "ChatModel",
     "ConstitutionRepository",
     "ConversationRuntime",
+    "DecisionAwareToolAuthorizationPolicy",
     "EpisodeRepository",
     "FeedbackAwareInnerLoopPlanner",
     "InnerLoopEvaluator",

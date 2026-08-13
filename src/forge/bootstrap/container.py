@@ -29,6 +29,7 @@ from forge.adapters.outbound.procedural import (
 )
 from forge.adapters.outbound.tools import (
     BuiltinToolRegistry,
+    ConstitutionToolAuthorizationPolicy,
     RegistryPlanStepExecutor,
     StaticToolAuthorizationPolicy,
     build_langchain_tools,
@@ -246,8 +247,9 @@ def build_inner_loop_service(
     registry = _build_tool_registry(tool_config)
     tools = build_langchain_tools(
         registry,
-        StaticToolAuthorizationPolicy(
-            allow_verification=bool(tool_config.get("allow_verification", True))
+        _build_tool_authorization(
+            tool_config,
+            allow_verification=bool(tool_config.get("allow_verification", True)),
         ),
     )
     memory_manager = _build_memory_manager(config, repository)
@@ -415,8 +417,9 @@ def build_skill_validation_service(
     registry = _build_tool_registry(tool_config)
     tools = build_langchain_tools(
         registry,
-        StaticToolAuthorizationPolicy(
-            allow_verification=bool(tool_config.get("allow_verification", True))
+        _build_tool_authorization(
+            tool_config,
+            allow_verification=bool(tool_config.get("allow_verification", True)),
         ),
     )
     repository = _build_procedural_repository(config)
@@ -506,6 +509,23 @@ def _build_tool_registry(tool_config: dict[str, Any]) -> BuiltinToolRegistry:
     )
 
 
+def _build_tool_authorization(
+    tool_config: dict[str, Any],
+    *,
+    allow_workspace_mutation: bool = False,
+    allow_verification: bool = True,
+) -> ConstitutionToolAuthorizationPolicy:
+    """Constitution policy is authoritative; agent settings only narrow permissions."""
+    del tool_config
+    return ConstitutionToolAuthorizationPolicy(
+        YamlConstitutionRepository("constitution").load_policy(),
+        StaticToolAuthorizationPolicy(
+            allow_workspace_mutation=allow_workspace_mutation,
+            allow_verification=allow_verification,
+        ),
+    )
+
+
 def _build_conversation_runtime(
     config: dict[str, Any], *, config_path: str, chat_model: Any | None = None
 ) -> LangGraphConversationRuntime:
@@ -519,7 +539,8 @@ def _build_conversation_runtime(
 
     registry_config = dict(config.get("tools", {}))
     registry = _build_tool_registry(registry_config)
-    authorization = StaticToolAuthorizationPolicy(
+    authorization = _build_tool_authorization(
+        registry_config,
         allow_workspace_mutation=bool(tools_config.get("allow_workspace_mutation", False)),
         allow_verification=bool(tools_config.get("allow_verification", False)),
     )

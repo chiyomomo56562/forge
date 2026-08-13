@@ -7,7 +7,10 @@ from collections.abc import Mapping
 from typing import Any
 
 from forge.domain.inner_loop import ToolInvocation, ToolStatus
-from forge.ports.outbound import ToolAuthorizationPolicy
+from forge.ports.outbound import (
+    DecisionAwareToolAuthorizationPolicy,
+    ToolAuthorizationPolicy,
+)
 
 from .builtin import BuiltinToolRegistry, ToolInvocationError
 
@@ -22,7 +25,12 @@ def invoke_registered_tool(
     try:
         canonical = registry.validate_arguments(name, dict(arguments))
         invocation = ToolInvocation(name, canonical, "", "", 0)
-        if not authorization.authorize(invocation, registry.definition_for(name)):
+        definition = registry.definition_for(name)
+        if isinstance(authorization, DecisionAwareToolAuthorizationPolicy):
+            decision = authorization.evaluate(invocation, definition)
+            if not decision.allowed:
+                return _payload(name, "denied", "Tool invocation was denied.", decision.reason_code)
+        elif not authorization.authorize(invocation, definition):
             return _payload(name, "denied", "Tool invocation was denied.", "tool.approval_required")
         result = registry.execute(invocation)
     except ToolInvocationError as exc:
