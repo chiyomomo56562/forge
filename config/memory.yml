@@ -43,6 +43,7 @@ semantic:
 # --- L3: Procedural Memory (SQLite) ---
 procedural:
   db_path: data/memory/procedural/skills.sqlite3
+  skills_dir: data/memory/procedural/skills
   registry_path: data/memory/procedural/skill_registry.json
   migrations_dir: data/memory/procedural/migrations
   lifecycle:

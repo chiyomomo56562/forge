@@ -142,3 +142,33 @@ def test_explicit_archive_preserves_skill_and_execution_history(tmp_path):
     assert archived.status is SkillStatus.ARCHIVED
     assert repository.get(skill.skill_id).status is SkillStatus.ARCHIVED
     assert repository.executions_for(skill.skill_id) == [stale]
+
+
+def test_skill_mutations_publish_a_versioned_artifact_and_registry(tmp_path):
+    skills_dir = tmp_path / "skills"
+    registry_path = tmp_path / "skill_registry.json"
+    repository = SqliteProceduralRepository(
+        tmp_path / "skills.sqlite3", skills_dir=skills_dir, registry_path=registry_path
+    )
+    service = ProceduralMemoryService(repository, SkillLifecyclePolicy())
+    repository.store_pending_hint("ep_1", "inspect", ("workspace.list_files",))
+
+    skill = service.seed_from_l2(
+        L2Knowledge(
+            "l2_artifact", "pc_artifact", "inspect", "repository", 1.0,
+            L2KnowledgeStatus.ACTIVE, ("ep_1",), (), datetime.now(UTC),
+        )
+    )
+
+    assert skill is not None
+    artifact = skills_dir / f"{skill.skill_id}.yml"
+    assert artifact.exists()
+    assert "version: 1" in artifact.read_text(encoding="utf-8")
+    assert skill.skill_id in registry_path.read_text(encoding="utf-8")
+
+    updated = service.approve_step_draft(
+        skill.skill_id, draft_id=skill.step_drafts[0].draft_id, step_id="inspect", tool_arguments={}
+    )
+
+    assert repository.get(updated.skill_id).version == 2
+    assert "version: 2" in artifact.read_text(encoding="utf-8")

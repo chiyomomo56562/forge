@@ -203,7 +203,7 @@ def build_inner_loop_service(
         ),
     )
     memory_manager = _build_memory_manager(config, repository)
-    procedural_repository = SqliteProceduralRepository(config["procedural"]["db_path"])
+    procedural_repository = _build_procedural_repository(config)
     procedural_lifecycle = ProceduralMemoryService(
         procedural_repository,
         _skill_lifecycle_policy(config),
@@ -271,7 +271,7 @@ def build_outer_loop_service(config_path: str = "config/memory.yml") -> RunOuter
         ),
         build_constitution_repository(config_path),
         ProceduralMemoryService(
-            SqliteProceduralRepository(config["procedural"]["db_path"]),
+            _build_procedural_repository(config),
             _skill_lifecycle_policy(config),
         ),
     )
@@ -283,7 +283,7 @@ def build_procedural_memory_service(
     """Build the L3 review and lifecycle application service."""
     config = _load_yaml_config(config_path)
     return ProceduralMemoryService(
-        SqliteProceduralRepository(config["procedural"]["db_path"]),
+        _build_procedural_repository(config),
         _skill_lifecycle_policy(config),
     )
 
@@ -304,7 +304,7 @@ def build_skill_validation_service(
             allow_verification=bool(tool_config.get("allow_verification", True))
         ),
     )
-    repository = SqliteProceduralRepository(config["procedural"]["db_path"])
+    repository = _build_procedural_repository(config)
     lifecycle = ProceduralMemoryService(repository, _skill_lifecycle_policy(config))
     return SkillValidationService(
         SkillExecutor(repository, RegistryPlanStepExecutor(tools), lifecycle),
@@ -329,7 +329,7 @@ def _build_memory_manager(
             config.get("cognition", {}).get("memory_context_top_k", 3),
             setting="cognition.memory_context_top_k",
         ),
-        procedural=SqliteProceduralRepository(config["procedural"]["db_path"]),
+        procedural=_build_procedural_repository(config),
     )
 
 
@@ -339,6 +339,15 @@ def _skill_lifecycle_policy(config: dict[str, Any]) -> SkillLifecyclePolicy:
         active_threshold=float(lifecycle["active_threshold"]),
         degrading_threshold=float(lifecycle["degrading_threshold"]),
         recovery_threshold=float(lifecycle["recovery_threshold"]),
+    )
+
+
+def _build_procedural_repository(config: dict[str, Any]) -> SqliteProceduralRepository:
+    procedural = config["procedural"]
+    return SqliteProceduralRepository(
+        procedural["db_path"],
+        skills_dir=procedural.get("skills_dir"),
+        registry_path=procedural.get("registry_path"),
     )
 
 

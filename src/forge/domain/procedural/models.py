@@ -45,6 +45,7 @@ class ProceduralSkill:
     updated_at: datetime
     executable_steps: tuple[SkillStep, ...] = ()
     step_drafts: tuple[SkillStepDraft, ...] = ()
+    version: int = 1
 
 
 @dataclass(frozen=True)
