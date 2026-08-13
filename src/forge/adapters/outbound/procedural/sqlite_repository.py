@@ -39,12 +39,14 @@ class SqliteProceduralRepository:
                     procedure TEXT NOT NULL, hints TEXT NOT NULL, status TEXT NOT NULL,
                     success_rate REAL NOT NULL, total_executions INTEGER NOT NULL,
                     updated_at TEXT NOT NULL, executable_steps TEXT NOT NULL DEFAULT '[]',
-                    step_drafts TEXT NOT NULL DEFAULT '[]', version INTEGER NOT NULL DEFAULT 1
+                    step_drafts TEXT NOT NULL DEFAULT '[]', version INTEGER NOT NULL DEFAULT 1,
+                    avg_pain_index REAL, last_executed_at TEXT
                 );
                 CREATE TABLE IF NOT EXISTS skill_executions (
                     skill_id TEXT NOT NULL, episode_id TEXT NOT NULL,
                     success_score REAL NOT NULL, cib_score REAL NOT NULL,
-                    executed_at TEXT NOT NULL, PRIMARY KEY(skill_id, episode_id)
+                    executed_at TEXT NOT NULL, pain_index REAL, tool_error_ratio REAL,
+                    PRIMARY KEY(skill_id, episode_id)
                 );
                 CREATE TABLE IF NOT EXISTS pending_hints (
                     source_id TEXT PRIMARY KEY, hint TEXT NOT NULL, tool_names TEXT NOT NULL
@@ -60,6 +62,17 @@ class SqliteProceduralRepository:
                 db.execute("ALTER TABLE skills ADD COLUMN step_drafts TEXT NOT NULL DEFAULT '[]'")
             if "version" not in columns:
                 db.execute("ALTER TABLE skills ADD COLUMN version INTEGER NOT NULL DEFAULT 1")
+            if "avg_pain_index" not in columns:
+                db.execute("ALTER TABLE skills ADD COLUMN avg_pain_index REAL")
+            if "last_executed_at" not in columns:
+                db.execute("ALTER TABLE skills ADD COLUMN last_executed_at TEXT")
+            execution_columns = {
+                row[1] for row in db.execute("PRAGMA table_info(skill_executions)")
+            }
+            if "pain_index" not in execution_columns:
+                db.execute("ALTER TABLE skill_executions ADD COLUMN pain_index REAL")
+            if "tool_error_ratio" not in execution_columns:
+                db.execute("ALTER TABLE skill_executions ADD COLUMN tool_error_ratio REAL")
 
     def get_by_source_l2(self, knowledge_id: str) -> ProceduralSkill | None:
         with self._connect() as db:
@@ -90,14 +103,16 @@ class SqliteProceduralRepository:
             skill.skill_id, skill.source_l2_id, skill.procedure, skill.reflection_hints,
             skill.status, skill.success_rate, skill.total_executions, skill.updated_at,
             skill.executable_steps, skill.step_drafts, version,
+            skill.avg_pain_index, skill.last_executed_at,
         )
         with self._connect() as db:
             db.execute(
                 """
                 INSERT OR REPLACE INTO skills
                 (source_l2_id, skill_id, procedure, hints, status, success_rate,
-                 total_executions, updated_at, executable_steps, step_drafts, version)
-                VALUES (?,?,?,?,?,?,?,?,?,?,?)
+                 total_executions, updated_at, executable_steps, step_drafts, version,
+                 avg_pain_index, last_executed_at)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)
                 """,
                 (
                     skill.source_l2_id,
@@ -130,6 +145,8 @@ class SqliteProceduralRepository:
                         ]
                     ),
                     skill.version,
+                    skill.avg_pain_index,
+                    skill.last_executed_at.isoformat() if skill.last_executed_at else None,
                 ),
             )
         self._write_projection(skill)
@@ -138,13 +155,15 @@ class SqliteProceduralRepository:
     def record_execution(self, execution: SkillExecution) -> None:
         with self._connect() as db:
             db.execute(
-                "INSERT OR IGNORE INTO skill_executions VALUES (?,?,?,?,?)",
+                "INSERT OR IGNORE INTO skill_executions VALUES (?,?,?,?,?,?,?)",
                 (
                     execution.skill_id,
                     execution.episode_id,
                     execution.success_score,
                     execution.cib_score,
                     execution.executed_at.isoformat(),
+                    execution.pain_index,
+                    execution.tool_error_ratio,
                 ),
             )
 
@@ -154,7 +173,9 @@ class SqliteProceduralRepository:
                 "SELECT * FROM skill_executions WHERE skill_id=?", (skill_id,)
             ).fetchall()
         return [
-            SkillExecution(row[0], row[1], row[2], row[3], datetime.fromisoformat(row[4]))
+            SkillExecution(
+                row[0], row[1], row[2], row[3], datetime.fromisoformat(row[4]), row[5], row[6]
+            )
             for row in rows
         ]
 
@@ -226,6 +247,10 @@ class SqliteProceduralRepository:
                 for item in step_drafts
             ),
             int(row["version"]),
+            float(row["avg_pain_index"]) if row["avg_pain_index"] is not None else None,
+            datetime.fromisoformat(str(row["last_executed_at"]))
+            if row["last_executed_at"] is not None
+            else None,
         )
 
     def _write_registry(self) -> None:

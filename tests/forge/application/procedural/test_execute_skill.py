@@ -128,7 +128,8 @@ def test_validation_execution_is_separate_from_normal_active_execution(tmp_path)
     ).validate("skill_test", episode_id="validation_1")
 
     assert result.evaluation.success_score == 1.0
-    assert repository.get("skill_test").status is SkillStatus.ACTIVE
+    assert repository.get("skill_test").status is SkillStatus.VALIDATING
+    assert lifecycle.refresh(repository.get("skill_test")).status is SkillStatus.ACTIVE
     assert [step.tool_name for step in executor.steps] == ["workspace.list_files"]
     with pytest.raises(SkillExecutionError, match="validating"):
         SkillExecutor(repository, executor, lifecycle).execute_validation(

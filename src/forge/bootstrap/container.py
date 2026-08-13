@@ -346,6 +346,16 @@ def _build_memory_manager(
 def _skill_lifecycle_policy(config: dict[str, Any]) -> SkillLifecyclePolicy:
     lifecycle = config["procedural"]["lifecycle"]
     return SkillLifecyclePolicy(
+        evaluation_window_samples=_positive_int(
+            lifecycle.get("evaluation_window_samples", 20),
+            setting="procedural.lifecycle.evaluation_window_samples",
+        ),
+        pain_threshold=float(lifecycle.get("pain_threshold", 0.5)),
+        tool_error_threshold=float(lifecycle.get("tool_error_threshold", 0.5)),
+        min_repeated_tool_sequences=_positive_int(
+            lifecycle.get("min_repeated_tool_sequences", 1),
+            setting="procedural.lifecycle.min_repeated_tool_sequences",
+        ),
         min_seed_evidence=_positive_int(
             lifecycle.get("min_seed_evidence", 1), setting="procedural.lifecycle.min_seed_evidence"
         ),

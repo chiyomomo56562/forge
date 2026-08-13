@@ -48,6 +48,10 @@ procedural:
   migrations_dir: data/memory/procedural/migrations
   lifecycle:
     min_seed_evidence: 3       # L2 support episodes required before an executable L3 seed
+    min_repeated_tool_sequences: 2  # 동일 순서의 도구 시퀀스가 반복되어야 Seed 생성
+    evaluation_window_samples: 20   # lifecycle 계산에 쓰는 최근 실행 표본 수
+    pain_threshold: 0.5
+    tool_error_threshold: 0.5
     active_threshold: 0.9      # Seed → Active 전이 조건 (success_rate)
     degrading_threshold: 0.5   # Active → Degrading 전이 조건
     recovery_threshold: 0.7    # Degrading → Active 복귀 조건

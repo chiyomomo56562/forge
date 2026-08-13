@@ -11,6 +11,7 @@ from forge.domain.procedural import SkillExecution, SkillStatus, SkillStep
 def test_reviewed_validating_skill_with_safe_samples_promotes_to_active(tmp_path):
     repository = SqliteProceduralRepository(tmp_path / "skills.sqlite3")
     service = ProceduralMemoryService(repository, SkillLifecyclePolicy())
+    repository.store_pending_hint("ep_1", "inspect", ("workspace.list_files",))
     skill = service.seed_from_l2(
         L2Knowledge(
             "l2_test",
@@ -25,7 +26,6 @@ def test_reviewed_validating_skill_with_safe_samples_promotes_to_active(tmp_path
         )
     )
     assert skill is not None and skill.status is SkillStatus.SEED
-    repository.store_pending_hint("ep_1", "inspect", ("workspace.list_files",))
     skill = service.seed_from_l2(
         L2Knowledge(
             "l2_test",
@@ -50,6 +50,7 @@ def test_reviewed_validating_skill_with_safe_samples_promotes_to_active(tmp_path
         skill = service.record_execution(
             SkillExecution(skill.skill_id, f"ep_{number}", 1.0, 1.0, datetime.now(UTC))
         )
+    skill = service.refresh(skill)
     assert skill.status is SkillStatus.ACTIVE
     assert repository.list_active()[0].procedure == ("inspect then verify", "inspect")
 
@@ -57,6 +58,7 @@ def test_reviewed_validating_skill_with_safe_samples_promotes_to_active(tmp_path
 def test_repeated_low_performance_marks_a_skill_degrading_without_archiving_it(tmp_path):
     repository = SqliteProceduralRepository(tmp_path / "skills.sqlite3")
     service = ProceduralMemoryService(repository, SkillLifecyclePolicy())
+    repository.store_pending_hint("ep_1", "inspect", ("workspace.list_files",))
     skill = service.seed_from_l2(
         L2Knowledge(
             "l2_low",
@@ -75,12 +77,44 @@ def test_repeated_low_performance_marks_a_skill_degrading_without_archiving_it(t
         skill = service.record_execution(
             SkillExecution(skill.skill_id, f"ep_low_{number}", 0.0, 1.0, datetime.now(UTC))
         )
+    skill = service.refresh(skill)
     assert skill.status is SkillStatus.DEGRADING
+
+
+def test_outer_loop_refresh_marks_high_pain_skill_as_degrading(tmp_path):
+    repository = SqliteProceduralRepository(tmp_path / "skills.sqlite3")
+    service = ProceduralMemoryService(repository, SkillLifecyclePolicy(min_samples=1))
+    repository.store_pending_hint("ep_1", "inspect", ("workspace.list_files",))
+    skill = service.seed_from_l2(
+        L2Knowledge(
+            "l2_pain", "pc_pain", "inspect", "repository", 1.0,
+            L2KnowledgeStatus.ACTIVE, ("ep_1",), (), datetime.now(UTC),
+        )
+    )
+    assert skill is not None
+    skill = service.record_execution(
+        SkillExecution(
+            skill.skill_id,
+            "ep_pain",
+            1.0,
+            1.0,
+            datetime.now(UTC),
+            pain_index=0.8,
+            tool_error_ratio=0.0,
+        )
+    )
+    refreshed = service.refresh(skill)
+
+    assert refreshed.status is SkillStatus.DEGRADING
+    assert refreshed.avg_pain_index == 0.8
+    assert refreshed.last_executed_at is not None
 
 
 def test_seed_requires_repeated_evidence_and_a_reviewable_tool_hint(tmp_path):
     repository = SqliteProceduralRepository(tmp_path / "skills.sqlite3")
-    service = ProceduralMemoryService(repository, SkillLifecyclePolicy(min_seed_evidence=3))
+    service = ProceduralMemoryService(
+        repository, SkillLifecyclePolicy(min_seed_evidence=3, min_repeated_tool_sequences=2)
+    )
     knowledge = L2Knowledge(
         "l2_gate", "pc_gate", "inspect", "repository", 1.0,
         L2KnowledgeStatus.ACTIVE, ("ep_1", "ep_2", "ep_3"), (), datetime.now(UTC),
@@ -89,6 +123,10 @@ def test_seed_requires_repeated_evidence_and_a_reviewable_tool_hint(tmp_path):
     assert service.seed_from_l2(knowledge) is None
 
     repository.store_pending_hint("ep_1", "inspect first", ("workspace.list_files",))
+
+    assert service.seed_from_l2(knowledge) is None
+
+    repository.store_pending_hint("ep_2", "inspect first", ("workspace.list_files",))
 
     assert service.seed_from_l2(knowledge) is not None
 
@@ -129,6 +167,7 @@ def test_tool_reflection_is_promoted_to_a_non_executable_step_draft(tmp_path):
 def test_explicit_archive_preserves_skill_and_execution_history(tmp_path):
     repository = SqliteProceduralRepository(tmp_path / "skills.sqlite3")
     service = ProceduralMemoryService(repository, SkillLifecyclePolicy())
+    repository.store_pending_hint("ep_1", "inspect", ("workspace.list_files",))
     skill = service.seed_from_l2(
         L2Knowledge(
             "l2_idle",
@@ -168,6 +207,7 @@ def test_skill_mutations_publish_versioned_review_projections(tmp_path):
         tmp_path / "skills.sqlite3", skills_dir=skills_dir, registry_path=registry_path
     )
     service = ProceduralMemoryService(repository, SkillLifecyclePolicy())
+    repository.store_pending_hint("ep_1", "inspect", ("workspace.list_files",))
     repository.store_pending_hint("ep_1", "inspect", ("workspace.list_files",))
 
     skill = service.seed_from_l2(

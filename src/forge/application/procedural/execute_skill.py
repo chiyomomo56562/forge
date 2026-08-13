@@ -121,9 +121,25 @@ class SkillExecutor:
     ) -> None:
         """Update L3 lifecycle only after the Inner Loop has evaluated its outcome."""
         success = evaluation.success_score is not None and evaluation.success_score >= 0.5
-        self._record(skill_id, episode_id, success, evaluation.cib_score or 0.0)
+        self._record(
+            skill_id,
+            episode_id,
+            success,
+            evaluation.cib_score or 0.0,
+            pain_index=evaluation.pain_index,
+            tool_error_ratio=evaluation.tool_error_ratio,
+        )
 
-    def _record(self, skill_id: str, episode_id: str, succeeded: bool, cib_score: float) -> None:
+    def _record(
+        self,
+        skill_id: str,
+        episode_id: str,
+        succeeded: bool,
+        cib_score: float,
+        *,
+        pain_index: float | None = None,
+        tool_error_ratio: float | None = None,
+    ) -> None:
         self._lifecycle.record_execution(
             SkillExecution(
                 skill_id=skill_id,
@@ -131,5 +147,7 @@ class SkillExecutor:
                 success_score=1.0 if succeeded else 0.0,
                 cib_score=cib_score,
                 executed_at=datetime.now(UTC),
+                pain_index=pain_index,
+                tool_error_ratio=tool_error_ratio,
             )
         )

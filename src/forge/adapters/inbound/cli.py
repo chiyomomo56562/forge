@@ -88,6 +88,35 @@ def list_l3_step_drafts(*, skill_id: str, memory_config_path: str = "config/memo
     )
 
 
+def list_l3_skills(*, memory_config_path: str = "config/memory.yml") -> str:
+    """Return retained L3 skill state without reading a registry projection."""
+    skills = build_procedural_memory_service(memory_config_path).list_skills()
+    return json.dumps(
+        [
+            {
+                "skill_id": skill.skill_id,
+                "status": skill.status.value,
+                "version": skill.version,
+                "success_rate": skill.success_rate,
+                "total_executions": skill.total_executions,
+                "avg_pain_index": skill.avg_pain_index,
+                "last_executed_at": skill.last_executed_at.isoformat()
+                if skill.last_executed_at
+                else None,
+            }
+            for skill in skills
+        ],
+        ensure_ascii=False,
+        sort_keys=True,
+    )
+
+
+def archive_l3_skill(*, skill_id: str, memory_config_path: str = "config/memory.yml") -> str:
+    """Explicitly retain a skill in Archive; no automatic archive exists."""
+    skill = build_procedural_memory_service(memory_config_path).archive(skill_id)
+    return f"archived skill={skill.skill_id}"
+
+
 def approve_l3_step_draft(
     *,
     skill_id: str,
@@ -164,6 +193,12 @@ def main(argv: Sequence[str] | None = None) -> int:
         help="List non-executable drafts for --l3-skill-id.",
     )
     parser.add_argument(
+        "--list-l3-skills", action="store_true", help="List all retained L3 skills."
+    )
+    parser.add_argument(
+        "--archive-l3-skill", type=str, help="Explicitly archive and retain one L3 skill."
+    )
+    parser.add_argument(
         "--approve-l3-draft", type=str, help="Approve this draft ID for --l3-skill-id."
     )
     parser.add_argument("--step-id", type=str, help="Approved executable step ID.")
@@ -206,6 +241,16 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     try:
+        if args.list_l3_skills:
+            print(list_l3_skills(memory_config_path=args.memory_config))
+            return 0
+        if args.archive_l3_skill:
+            print(
+                archive_l3_skill(
+                    skill_id=args.archive_l3_skill, memory_config_path=args.memory_config
+                )
+            )
+            return 0
         if args.list_l3_drafts:
             if not args.l3_skill_id:
                 raise ValueError("--list-l3-drafts requires --l3-skill-id")

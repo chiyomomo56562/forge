@@ -1,3 +1,4 @@
+from collections import Counter
 from dataclasses import dataclass, replace
 from datetime import UTC, datetime
 from typing import cast
@@ -17,17 +18,28 @@ from forge.ports.outbound.procedural_repository import ProceduralRepository
 class SkillLifecyclePolicy:
     min_samples: int = 3
     min_seed_evidence: int = 1
+    min_repeated_tool_sequences: int = 1
+    evaluation_window_samples: int = 20
     active_threshold: float = 0.9
     degrading_threshold: float = 0.5
     recovery_threshold: float = 0.7
+    pain_threshold: float = 0.5
+    tool_error_threshold: float = 0.5
 
     def __post_init__(self) -> None:
-        if self.min_samples <= 0 or self.min_seed_evidence <= 0:
+        if (
+            self.min_samples <= 0
+            or self.min_seed_evidence <= 0
+            or self.min_repeated_tool_sequences <= 0
+            or self.evaluation_window_samples <= 0
+        ):
             raise ValueError("Lifecycle sample limits must be positive")
         if not 0.0 <= self.degrading_threshold <= 1.0:
             raise ValueError("Lifecycle degradation thresholds are invalid")
         if not 0.0 <= self.recovery_threshold <= 1.0:
             raise ValueError("Lifecycle recovery threshold is invalid")
+        if not 0.0 <= self.pain_threshold <= 1.0 or not 0.0 <= self.tool_error_threshold <= 1.0:
+            raise ValueError("Lifecycle quality thresholds are invalid")
 
 
 class ProceduralMemoryService:
@@ -46,11 +58,13 @@ class ProceduralMemoryService:
             dict.fromkeys((*knowledge.counterexample_episode_ids, *knowledge.support_episode_ids))
         )
         pending_hint_records = self._repository.pending_hint_records_for(hints)
-        if self._policy.min_seed_evidence > 1 and not pending_hint_records:
+        sequence = self._repeated_tool_sequence(pending_hint_records)
+        if sequence is None:
             return None
-        pending_hints = tuple(item[1] for item in pending_hint_records)
+        repeated_records = [item for item in pending_hint_records if item[2] == sequence]
+        pending_hints = tuple(item[1] for item in repeated_records)
         existing_drafts = existing.step_drafts if existing else ()
-        drafts = self._merge_step_drafts(existing_drafts, pending_hint_records)
+        drafts = self._merge_step_drafts(existing_drafts, repeated_records)
         skill = ProceduralSkill(
             skill_id=f"skill_{knowledge.knowledge_id[3:]}",
             source_l2_id=knowledge.knowledge_id,
@@ -71,7 +85,7 @@ class ProceduralMemoryService:
         skill = self._repository.get(execution.skill_id)
         if skill is None:
             raise ValueError("Unknown skill execution")
-        return self._recalculate(skill, touch=True)
+        return skill
 
     def refresh(self, skill: ProceduralSkill) -> ProceduralSkill:
         return self._recalculate(skill)
@@ -158,6 +172,22 @@ class ProceduralMemoryService:
             raise ValueError("Unknown skill")
         return cast(tuple[SkillStepDraft, ...], skill.step_drafts)
 
+    def list_skills(self) -> tuple[ProceduralSkill, ...]:
+        """Return all retained L3 skills, including archived records."""
+        return tuple(self._repository.list_all())
+
+    def _repeated_tool_sequence(
+        self,
+        records: list[tuple[str, str, tuple[str, ...]]],
+    ) -> tuple[str, ...] | None:
+        sequences = Counter(record[2] for record in records if record[2])
+        if not sequences:
+            return None
+        sequence, count = min(
+            sequences.items(), key=lambda item: (-item[1], item[0])
+        )
+        return sequence if count >= self._policy.min_repeated_tool_sequences else None
+
     @staticmethod
     def _merge_step_drafts(
         existing: tuple[SkillStepDraft, ...],
@@ -182,9 +212,16 @@ class ProceduralMemoryService:
         return tuple(drafts)
 
     def _recalculate(self, skill: ProceduralSkill, *, touch: bool = True) -> ProceduralSkill:
-        samples = self._repository.executions_for(skill.skill_id)
+        all_executions = sorted(
+            self._repository.executions_for(skill.skill_id), key=lambda item: item.executed_at
+        )
+        samples = all_executions[-self._policy.evaluation_window_samples :]
         rate = sum(item.success_score for item in samples) / len(samples) if samples else 0.0
         cib_ok = all(item.cib_score >= 0.95 for item in samples)
+        pain = [item.pain_index for item in samples if item.pain_index is not None]
+        errors = [item.tool_error_ratio for item in samples if item.tool_error_ratio is not None]
+        avg_pain = sum(pain) / len(pain) if pain else None
+        avg_errors = sum(errors) / len(errors) if errors else 0.0
         status = skill.status
         now = datetime.now(UTC)
         if len(samples) >= self._policy.min_samples and status is not SkillStatus.ARCHIVED:
@@ -200,7 +237,11 @@ class ProceduralMemoryService:
                 and cib_ok
             ):
                 status = SkillStatus.ACTIVE
-            elif rate < self._policy.degrading_threshold:
+            elif (
+                rate < self._policy.degrading_threshold
+                or (avg_pain is not None and avg_pain >= self._policy.pain_threshold)
+                or avg_errors >= self._policy.tool_error_threshold
+            ):
                 status = SkillStatus.DEGRADING
             elif status is SkillStatus.SEED:
                 status = SkillStatus.DEVELOPING
@@ -208,7 +249,9 @@ class ProceduralMemoryService:
             skill,
             status=status,
             success_rate=rate,
-            total_executions=len(samples),
+            total_executions=len(all_executions),
+            avg_pain_index=avg_pain,
+            last_executed_at=max((item.executed_at for item in samples), default=None),
             updated_at=now if touch else skill.updated_at,
         )
         self._repository.upsert(updated)

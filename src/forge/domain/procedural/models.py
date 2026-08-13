@@ -46,6 +46,8 @@ class ProceduralSkill:
     executable_steps: tuple[SkillStep, ...] = ()
     step_drafts: tuple[SkillStepDraft, ...] = ()
     version: int = 1
+    avg_pain_index: float | None = None
+    last_executed_at: datetime | None = None
 
 
 @dataclass(frozen=True)
@@ -55,3 +57,5 @@ class SkillExecution:
     success_score: float
     cib_score: float
     executed_at: datetime
+    pain_index: float | None = None
+    tool_error_ratio: float | None = None
