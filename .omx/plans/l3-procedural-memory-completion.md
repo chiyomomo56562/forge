@@ -27,9 +27,8 @@ be selected within an explicit budget, and follow an observable lifecycle.
 
 4. **Lifecycle and archive policy**
    - Evaluate Active/Degrading recovery from execution samples.
-   - Archive Degrading skills only when both the configured low-performance and
-     inactivity thresholds are met; retain artifacts and history.
-   - Continue supporting explicit archive as an operator action.
+   - Preserve Degrading skills and their artifacts/history until an operator explicitly
+     archives them; no performance or inactivity policy may archive or delete a skill.
 
 ## Test shape
 

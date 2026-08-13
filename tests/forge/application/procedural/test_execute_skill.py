@@ -79,6 +79,27 @@ def test_executor_rejects_active_skill_without_reviewed_tool_steps(tmp_path):
         )
 
 
+def test_executor_blocks_a_skill_that_exceeds_its_step_budget(tmp_path):
+    repository = SqliteProceduralRepository(tmp_path / "skills.sqlite3")
+    lifecycle = ProceduralMemoryService(repository, SkillLifecyclePolicy())
+    repository.upsert(_active_skill())
+    lifecycle.bind_executable_steps(
+        "skill_test",
+        (
+            SkillStep("inspect", "workspace.list_files", {"path": "."}),
+            SkillStep("status", "git.status"),
+        ),
+    )
+    executor = RecordingExecutor()
+
+    with pytest.raises(SkillExecutionError, match="step limit"):
+        SkillExecutor(repository, executor, lifecycle, max_steps_per_run=1).execute_active(
+            "skill_test", episode_id="ep_1", cib_score=1.0
+        )
+
+    assert executor.steps == []
+
+
 def test_validation_execution_is_separate_from_normal_active_execution(tmp_path):
     repository = SqliteProceduralRepository(tmp_path / "skills.sqlite3")
     lifecycle = ProceduralMemoryService(repository, SkillLifecyclePolicy(min_samples=1))

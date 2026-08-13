@@ -47,10 +47,12 @@ procedural:
   registry_path: data/memory/procedural/skill_registry.json
   migrations_dir: data/memory/procedural/migrations
   lifecycle:
+    min_seed_evidence: 3       # L2 support episodes required before an executable L3 seed
     active_threshold: 0.9      # Seed → Active 전이 조건 (success_rate)
     degrading_threshold: 0.5   # Active → Degrading 전이 조건
     recovery_threshold: 0.7    # Degrading → Active 복귀 조건
   execution:
+    max_steps_per_run: 8
     timeout_seconds: 30
     sandbox: true
     allowed_modules:           # exec() 허용 모듈 화이트리스트

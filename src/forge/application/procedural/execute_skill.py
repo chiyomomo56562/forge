@@ -31,10 +31,15 @@ class SkillExecutor:
         repository: ProceduralRepository,
         executor: PlanStepExecutor,
         lifecycle: ProceduralMemoryService,
+        *,
+        max_steps_per_run: int = 8,
     ) -> None:
         self._repository = repository
         self._executor = executor
         self._lifecycle = lifecycle
+        if max_steps_per_run <= 0:
+            raise ValueError("L3 execution step limit must be positive")
+        self._max_steps_per_run = max_steps_per_run
 
     def execute_active(
         self,
@@ -82,6 +87,8 @@ class SkillExecutor:
             )
         if not skill.executable_steps:
             raise SkillExecutionError("Skill has no reviewed executable steps")
+        if len(skill.executable_steps) > self._max_steps_per_run:
+            raise SkillExecutionError("Skill exceeds the L3 execution step limit")
 
         executions: list[ToolExecution] = []
         for index, step in enumerate(skill.executable_steps):

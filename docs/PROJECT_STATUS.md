@@ -310,7 +310,7 @@ watermark가 전진한다. `build_outer_loop_service()`는 기존 L1 repository�
 | `tests/forge/application/memory/test_finalize_episode.py` | L0 → L1 finalize | ✅ |
 | `tests/forge/domain/memory/test_models.py` | Episode/Evaluation/Reflection 검증 | ✅ |
 
-> **검증**: 2026-08-13 기준 전체 `pytest -q`는 740개 통과했다. 변경 범위 `ruff`도 통과했다.
+> **검증**: 2026-08-13 기준 전체 `pytest -q`는 744개 통과했다. 변경 범위 `ruff`도 통과했다.
 > `mypy`는 프로젝트 코드 검사 전 가상환경 NumPy 스텁의 Python 버전 충돌로 중단된다.
 
 ---
@@ -347,7 +347,7 @@ watermark가 전진한다. `build_outer_loop_service()`는 기존 L1 repository�
 | `inner-loop-l0-event-foundation.md` | ✅ 완료 | L0 이벤트 + L1 Episode 수직 슬라이스 |
 | `inner-loop-runtime-integration.md` | ✅ 완료 | Inner Loop runtime 통합 |
 | `forge-langchain-conversation-tools-mcp.md` | ✅ 완료 | LangChain 대화 전환 + 대화 도구 호출. 이 계획의 MCP 범위는 후속 계획으로 분리됨 |
-| `l3-procedural-memory-completion.md` | 📋 계획 예정 | 반복 가능성 판정, 절차 정본·registry, ranking·실행 예산, lifecycle/archive를 구현해 L3 완료 게이트를 충족 |
+| `l3-procedural-memory-completion.md` | ✅ 완료 | 반복성 Seed gate, 버전 관리 절차 정본·registry, ranking·실행 step 예산 구현. Archive는 명시적 보존 처리만 허용 |
 | `mcp-policy-hitl-audit.md` | ⏸️ L3 이후 | L3 완료 게이트 뒤 MCP 연결과 헌법 정책 실행, HITL 승인, 감사 로그의 경계·수용 기준·검증을 설계 |
 | `inner-loop-cognition-v1.md` | ✅ 완료 | Inner Loop 인지 책임 분리; L1~L5 문맥 주입은 제외 |
 | `l0-event-foundation.md` | — | 바이너리 파일 (읽기 불가) |
@@ -367,7 +367,6 @@ watermark가 전진한다. `build_outer_loop_service()`는 기존 L1 repository�
 
 ### 다음 우선순위 (제안)
 
-1. **L3 완료 계획·구현** — 반복 가능성 판정, 버전 관리되는 절차 정본·registry, 스킬 ranking·실행 예산, 성과·미사용 기반 lifecycle/archive를 설계·테스트·구현
-2. **MCP·정책/HITL·감사 계획 수립** — L3 완료 후 MCP adapter의 권한 경계, 사용자 승인 시점, 감사 이벤트와 실패 처리를 설계·테스트 명세로 고정
-3. **Outer Loop 확장** — L3 완료 후 스케줄/이벤트 trigger, M16/M17, Meta Loop trigger를 확장
-4. **L4/L5 확장** — L3 완료 후 K-Scenario·도구별 승인 정책과 self_model CRUD·캘리브레이션·Outer Loop updater를 확장
+1. **MCP·정책/HITL·감사 계획 수립** — L3 완료 후 MCP adapter의 권한 경계, 사용자 승인 시점, 감사 이벤트와 실패 처리를 설계·테스트 명세로 고정
+2. **Outer Loop 확장** — 스케줄/이벤트 trigger, M16/M17, Meta Loop trigger를 확장
+3. **L4/L5 확장** — K-Scenario·도구별 승인 정책과 self_model CRUD·캘리브레이션·Outer Loop updater를 확장

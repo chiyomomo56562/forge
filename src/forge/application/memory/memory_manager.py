@@ -122,8 +122,14 @@ class MemoryManager:
         if self._procedural is None:
             return []
         tokens = set(query.casefold().split())
-        return [
-            skill
-            for skill in self._procedural.list_active()
-            if not tokens or tokens.intersection(" ".join(skill.procedure).casefold().split())
-        ][: self._top_k]
+        candidates = []
+        for skill in self._procedural.list_active():
+            skill_tokens = set(" ".join(skill.procedure).casefold().split())
+            relevance = len(tokens.intersection(skill_tokens)) if tokens else 0
+            if tokens and not relevance:
+                continue
+            candidates.append((relevance, skill.success_rate, skill.updated_at, skill))
+        candidates.sort(
+            key=lambda item: (-item[0], -item[1], -item[2].timestamp(), item[3].skill_id)
+        )
+        return [item[3] for item in candidates[: self._top_k]]

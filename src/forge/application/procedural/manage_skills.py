@@ -16,13 +16,14 @@ from forge.ports.outbound.procedural_repository import ProceduralRepository
 @dataclass(frozen=True)
 class SkillLifecyclePolicy:
     min_samples: int = 3
+    min_seed_evidence: int = 1
     active_threshold: float = 0.9
     degrading_threshold: float = 0.5
     recovery_threshold: float = 0.7
 
     def __post_init__(self) -> None:
-        if self.min_samples <= 0:
-            raise ValueError("Lifecycle sample limit must be positive")
+        if self.min_samples <= 0 or self.min_seed_evidence <= 0:
+            raise ValueError("Lifecycle sample limits must be positive")
         if not 0.0 <= self.degrading_threshold <= 1.0:
             raise ValueError("Lifecycle degradation thresholds are invalid")
         if not 0.0 <= self.recovery_threshold <= 1.0:
@@ -34,13 +35,19 @@ class ProceduralMemoryService:
         self._repository, self._policy = repository, policy
 
     def seed_from_l2(self, knowledge: L2Knowledge) -> ProceduralSkill | None:
-        if knowledge.status is not L2KnowledgeStatus.ACTIVE or not knowledge.statement.strip():
+        if (
+            knowledge.status is not L2KnowledgeStatus.ACTIVE
+            or not knowledge.statement.strip()
+            or len(set(knowledge.support_episode_ids)) < self._policy.min_seed_evidence
+        ):
             return None
         existing = self._repository.get_by_source_l2(knowledge.knowledge_id)
         hints = tuple(
             dict.fromkeys((*knowledge.counterexample_episode_ids, *knowledge.support_episode_ids))
         )
         pending_hint_records = self._repository.pending_hint_records_for(hints)
+        if self._policy.min_seed_evidence > 1 and not pending_hint_records:
+            return None
         pending_hints = tuple(item[1] for item in pending_hint_records)
         existing_drafts = existing.step_drafts if existing else ()
         drafts = self._merge_step_drafts(existing_drafts, pending_hint_records)
@@ -179,6 +186,7 @@ class ProceduralMemoryService:
         rate = sum(item.success_score for item in samples) / len(samples) if samples else 0.0
         cib_ok = all(item.cib_score >= 0.95 for item in samples)
         status = skill.status
+        now = datetime.now(UTC)
         if len(samples) >= self._policy.min_samples and status is not SkillStatus.ARCHIVED:
             if (
                 status is SkillStatus.DEGRADING
@@ -201,7 +209,7 @@ class ProceduralMemoryService:
             status=status,
             success_rate=rate,
             total_executions=len(samples),
-            updated_at=datetime.now(UTC) if touch else skill.updated_at,
+            updated_at=now if touch else skill.updated_at,
         )
         self._repository.upsert(updated)
         return updated

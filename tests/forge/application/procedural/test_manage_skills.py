@@ -20,7 +20,7 @@ def test_reviewed_validating_skill_with_safe_samples_promotes_to_active(tmp_path
             1.0,
             L2KnowledgeStatus.ACTIVE,
             ("ep_1",),
-            (),
+            ("ep_1",),
             datetime.now(UTC),
         )
     )
@@ -78,6 +78,21 @@ def test_repeated_low_performance_marks_a_skill_degrading_without_archiving_it(t
     assert skill.status is SkillStatus.DEGRADING
 
 
+def test_seed_requires_repeated_evidence_and_a_reviewable_tool_hint(tmp_path):
+    repository = SqliteProceduralRepository(tmp_path / "skills.sqlite3")
+    service = ProceduralMemoryService(repository, SkillLifecyclePolicy(min_seed_evidence=3))
+    knowledge = L2Knowledge(
+        "l2_gate", "pc_gate", "inspect", "repository", 1.0,
+        L2KnowledgeStatus.ACTIVE, ("ep_1", "ep_2", "ep_3"), (), datetime.now(UTC),
+    )
+
+    assert service.seed_from_l2(knowledge) is None
+
+    repository.store_pending_hint("ep_1", "inspect first", ("workspace.list_files",))
+
+    assert service.seed_from_l2(knowledge) is not None
+
+
 def test_tool_reflection_is_promoted_to_a_non_executable_step_draft(tmp_path):
     repository = SqliteProceduralRepository(tmp_path / "skills.sqlite3")
     service = ProceduralMemoryService(repository, SkillLifecyclePolicy())
@@ -122,7 +137,7 @@ def test_explicit_archive_preserves_skill_and_execution_history(tmp_path):
             "repository",
             1.0,
             L2KnowledgeStatus.ACTIVE,
-            (),
+            ("ep_1",),
             (),
             datetime.now(UTC),
         )
@@ -142,6 +157,8 @@ def test_explicit_archive_preserves_skill_and_execution_history(tmp_path):
     assert archived.status is SkillStatus.ARCHIVED
     assert repository.get(skill.skill_id).status is SkillStatus.ARCHIVED
     assert repository.executions_for(skill.skill_id) == [stale]
+
+
 
 
 def test_skill_mutations_publish_a_versioned_artifact_and_registry(tmp_path):

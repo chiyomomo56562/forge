@@ -228,7 +228,12 @@ def build_inner_loop_service(
         ),
         memory_context_builder=MemoryContextBuilder(memory_manager),
         memory_manager=memory_manager,
-        skill_executor=SkillExecutor(procedural_repository, plan_executor, procedural_lifecycle),
+        skill_executor=SkillExecutor(
+            procedural_repository,
+            plan_executor,
+            procedural_lifecycle,
+            max_steps_per_run=_l3_max_steps(config),
+        ),
     )
 
 
@@ -307,7 +312,12 @@ def build_skill_validation_service(
     repository = _build_procedural_repository(config)
     lifecycle = ProceduralMemoryService(repository, _skill_lifecycle_policy(config))
     return SkillValidationService(
-        SkillExecutor(repository, RegistryPlanStepExecutor(tools), lifecycle),
+        SkillExecutor(
+            repository,
+            RegistryPlanStepExecutor(tools),
+            lifecycle,
+            max_steps_per_run=_l3_max_steps(config),
+        ),
         DeterministicEvaluator(),
     )
 
@@ -336,6 +346,9 @@ def _build_memory_manager(
 def _skill_lifecycle_policy(config: dict[str, Any]) -> SkillLifecyclePolicy:
     lifecycle = config["procedural"]["lifecycle"]
     return SkillLifecyclePolicy(
+        min_seed_evidence=_positive_int(
+            lifecycle.get("min_seed_evidence", 1), setting="procedural.lifecycle.min_seed_evidence"
+        ),
         active_threshold=float(lifecycle["active_threshold"]),
         degrading_threshold=float(lifecycle["degrading_threshold"]),
         recovery_threshold=float(lifecycle["recovery_threshold"]),
@@ -348,6 +361,14 @@ def _build_procedural_repository(config: dict[str, Any]) -> SqliteProceduralRepo
         procedural["db_path"],
         skills_dir=procedural.get("skills_dir"),
         registry_path=procedural.get("registry_path"),
+    )
+
+
+def _l3_max_steps(config: dict[str, Any]) -> int:
+    execution = config["procedural"].get("execution", {})
+    return _positive_int(
+        execution.get("max_steps_per_run", 8),
+        setting="procedural.execution.max_steps_per_run",
     )
 
 
