@@ -22,6 +22,7 @@ class PatternCandidate:
     support_episode_ids: tuple[str, ...] = ()
     counterexample_episode_ids: tuple[str, ...] = ()
     knowledge_id: str | None = None
+    task_category: str = "general"
 
     def __post_init__(self) -> None:
         if not all((self.candidate_id.strip(), self.signature.strip(), self.statement.strip())):
@@ -49,6 +50,7 @@ class L2Knowledge:
     support_episode_ids: tuple[str, ...]
     counterexample_episode_ids: tuple[str, ...]
     updated_at: datetime
+    task_category: str = "general"
 
     def __post_init__(self) -> None:
         if not all((self.knowledge_id.strip(), self.candidate_id.strip(), self.statement.strip())):
@@ -63,6 +65,7 @@ class L2Knowledge:
 class OuterLoopCheckpoint:
     watermark: datetime | None = None
     processed_episode_ids: tuple[str, ...] = ()
+    growth_observations: tuple[GrowthObservation, ...] = ()
 
     def __post_init__(self) -> None:
         if self.watermark is not None and (
@@ -72,8 +75,29 @@ class OuterLoopCheckpoint:
 
 
 @dataclass(frozen=True)
+class GrowthObservation:
+    """A compact, persisted input to the M16 L3-seed rate regulator."""
+
+    observed_at: datetime
+    episode_count: int
+    consolidation_coherence: float
+    global_coherence: float | None = None
+
+    def __post_init__(self) -> None:
+        if self.observed_at.tzinfo is None or self.observed_at.utcoffset() is None:
+            raise ValueError("Growth observation time must be timezone-aware.")
+        if self.episode_count < 0 or not 0.0 <= self.consolidation_coherence <= 1.0:
+            raise ValueError("Growth observation values are invalid.")
+        if self.global_coherence is not None and not 0.0 <= self.global_coherence <= 1.0:
+            raise ValueError("Global coherence must be between 0 and 1.")
+
+
+@dataclass(frozen=True)
 class OuterLoopResult:
     processed_episode_ids: tuple[str, ...]
     promoted_knowledge_ids: tuple[str, ...]
     updated_knowledge_ids: tuple[str, ...]
     checkpoint: OuterLoopCheckpoint
+    deferred_l3_knowledge_ids: tuple[str, ...] = ()
+    l3_growth_limit: int | None = None
+    l3_growth_reasons: tuple[str, ...] = ()

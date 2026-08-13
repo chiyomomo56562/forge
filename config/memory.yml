@@ -7,6 +7,7 @@ version: 1
 
 cognition:
   memory_context_top_k: 3        # planner에 주입할 L1/L2 각각의 최대 항목 수
+  l3_context_max_chars: 1200    # L3 procedure 주입 하드 문자 예산
 
 # --- L1: Episodic Memory (Chroma DB) ---
 episodic:
@@ -43,15 +44,20 @@ semantic:
 # --- L3: Procedural Memory (SQLite) ---
 procedural:
   db_path: data/memory/procedural/skills.sqlite3
+  skills_dir: data/memory/procedural/skills  # SQLite에서 생성되는 검토용 YAML projection
   registry_path: data/memory/procedural/skill_registry.json
   migrations_dir: data/memory/procedural/migrations
   lifecycle:
+    min_seed_evidence: 3       # L2 support episodes required before an executable L3 seed
+    min_repeated_tool_sequences: 2  # 동일 순서의 도구 시퀀스가 반복되어야 Seed 생성
+    evaluation_window_samples: 20   # lifecycle 계산에 쓰는 최근 실행 표본 수
+    pain_threshold: 0.5
+    tool_error_threshold: 0.5
     active_threshold: 0.9      # Seed → Active 전이 조건 (success_rate)
     degrading_threshold: 0.5   # Active → Degrading 전이 조건
-    archive_threshold: 0.2     # Degrading → Archived 전이 조건
-    archive_idle_days: 30      # 미사용 기간 기준 아카이브
     recovery_threshold: 0.7    # Degrading → Active 복귀 조건
   execution:
+    max_steps_per_run: 8
     timeout_seconds: 30
     sandbox: true
     allowed_modules:           # exec() 허용 모듈 화이트리스트
@@ -126,3 +132,7 @@ consolidation:
   min_episodes_for_generalization: 3  # 일반화에 필요한 최소 에피소드 수
   promotion_confidence: 0.8
   retire_confidence: 0.4
+  l3_growth:
+    max_new_seeds_per_run: 2
+    min_capability_confidence: 0.70
+    min_capability_success_rate: 0.70

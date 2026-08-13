@@ -1,4 +1,5 @@
 from collections.abc import Mapping, Sequence
+from datetime import UTC, datetime
 
 from forge.adapters.outbound.inner_loop import (
     DeterministicEvaluator,
@@ -7,6 +8,7 @@ from forge.adapters.outbound.inner_loop import (
     DeterministicReflector,
 )
 from forge.adapters.outbound.memory import JsonlL0EventStore
+from forge.adapters.outbound.procedural import SqliteProceduralRepository
 from forge.adapters.outbound.tools import (
     BuiltinToolRegistry,
     RegistryPlanStepExecutor,
@@ -18,8 +20,15 @@ from forge.application.memory import (
     RecordInnerLoopEventService,
     StartInnerLoopSessionService,
 )
+from forge.application.procedural import (
+    ProceduralMemoryService,
+    SkillExecutor,
+    SkillLifecyclePolicy,
+)
+from forge.domain.cognition import RetrievedMemoryContext
 from forge.domain.inner_loop import InnerLoopPlan, PlanStep, ToolExecution
 from forge.domain.memory import ExecutionOutcome, IndexState, L0EventType, PersistEpisodeResult
+from forge.domain.procedural import ProceduralSkill, SkillStatus, SkillStep
 
 
 class Repository:
@@ -188,6 +197,93 @@ def _service(tmp_path, planner, executor, *, max_feedback_cycles: int = 0) -> Ru
     service.store = store
     service.repository = repository
     return service
+
+
+class L3Planner:
+    def create_plan(
+        self, *, task_request: str, context_episode_ids: Sequence[str]
+    ) -> InnerLoopPlan:
+        del task_request, context_episode_ids
+        return InnerLoopPlan(
+            "Run the retrieved procedure.",
+            (PlanStep("l3", "Run L3", "l3.execute", {"skill_id": "skill_safe"}),),
+        )
+
+
+class StaticMemoryContext:
+    def build(self, *, task_request: str, task_category: str) -> RetrievedMemoryContext:
+        del task_request, task_category
+        return RetrievedMemoryContext(l3_skill_ids=("skill_safe",))
+
+
+class EmptyMemoryContext:
+    def build(self, *, task_request: str, task_category: str) -> RetrievedMemoryContext:
+        del task_request, task_category
+        return RetrievedMemoryContext()
+
+
+def test_inner_loop_executes_only_a_retrieved_active_l3_skill(tmp_path) -> None:
+    store = JsonlL0EventStore(tmp_path / "l0")
+    repository = Repository()
+    procedural = SqliteProceduralRepository(tmp_path / "skills.sqlite3")
+    lifecycle = ProceduralMemoryService(procedural, SkillLifecyclePolicy(min_samples=1))
+    procedural.upsert(
+        ProceduralSkill(
+            "skill_safe",
+            "l2_safe",
+            ("inspect",),
+            (),
+            SkillStatus.ACTIVE,
+            1.0,
+            1,
+            datetime.now(UTC),
+            (SkillStep("inspect", "workspace.list_files", {"path": "."}),),
+        )
+    )
+    tool_executor = StepOutcomeExecutor(
+        {
+            "inspect": ToolExecution(
+                "inspect", "Inspected.", ExecutionOutcome.COMPLETED, ("workspace.list_files",)
+            )
+        }
+    )
+    service = RunInnerLoopService(
+        StartInnerLoopSessionService(store),
+        RecordInnerLoopEventService(store),
+        FinalizeEpisodeService(store, repository),
+        L3Planner(),
+        tool_executor,
+        DeterministicEvaluator(),
+        DeterministicReflector(),
+        memory_context_builder=StaticMemoryContext(),
+        skill_executor=SkillExecutor(procedural, tool_executor, lifecycle),
+    )
+
+    result = service.handle(task_request="inspect", task_category="test")
+
+    assert result.outcome is ExecutionOutcome.COMPLETED
+    assert [step.step_id for step in tool_executor.steps] == ["inspect"]
+    assert procedural.executions_for("skill_safe")[0].episode_id == result.episode_id
+
+
+def test_inner_loop_rejects_l3_skill_not_in_retrieved_memory(tmp_path) -> None:
+    store = JsonlL0EventStore(tmp_path / "l0")
+    repository = Repository()
+    service = RunInnerLoopService(
+        StartInnerLoopSessionService(store),
+        RecordInnerLoopEventService(store),
+        FinalizeEpisodeService(store, repository),
+        L3Planner(),
+        DeterministicExecutor(),
+        DeterministicEvaluator(),
+        DeterministicReflector(),
+        memory_context_builder=EmptyMemoryContext(),
+    )
+
+    result = service.handle(task_request="inspect", task_category="test")
+
+    assert result.outcome is ExecutionOutcome.FAILED
+    assert repository.episode is not None
 
 
 def test_failed_execution_feedback_replans_and_then_completes(tmp_path) -> None:

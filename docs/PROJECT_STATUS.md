@@ -1,6 +1,6 @@
 # Forge 프로젝트 진행 상황 요약
 
-> 작성일: 2026-08-12
+> 작성일: 2026-08-13
 > 기준: `src/forge`, `tests/forge`, `.omx/plans`, `config/`, `pyproject.toml`
 
 ---
@@ -75,7 +75,7 @@ CLI (--conversation-id, --system, --query, --inner-loop)
 | `ports/outbound/episode_repository.py` | `EpisodeRepository` Protocol | ✅ |
 | 테스트 | `test_sqlite_chroma_episode_repository.py`, `test_models.py`, `test_finalize_episode.py`, `test_services.py` | ✅ |
 
-> **미구현**: 밀도 우선 검색(reflection 우선), L1/L2 선택적 주입 파이프라인
+> **미구현**: 밀도 우선 검색(reflection 우선)
 
 #### 1.3 L0 원본 이벤트 — ✅ 완료
 
@@ -95,9 +95,65 @@ L1 Episode를 후보 증거로 누적하고, 최소 증거 수와 confidence 기
 반례는 active → weakened → retired 상태 전이를 유도하며, 후보·L2·watermark/checkpoint는
 단일 JSON 파일에 원자적으로 기록한다.
 
-> **후속 범위**: NetworkX/GraphML projection, L2→L3 승격
+> **후속 범위**: NetworkX/GraphML projection, L2→L3 Seed 생성의 반복 가능성 판정 고도화
 
-#### 1.5 L4 헌법 — ⚠️ 최소 읽기·승격 guard 완료
+#### 1.5 L3 절차 기억 — ✅ 완료
+
+`SqliteProceduralRepository`가 L3 스킬·실행 이력·도구 종속 pending hint를 SQLite
+정본에 저장한다. skill 변경마다 SQLite에서만 생성하는 versioned YAML 검토 projection과
+비-Archive 스킬 JSON registry를 갱신하지만, 둘 다 실행·lifecycle·복구 입력으로 읽지 않는다.
+active L2 knowledge는 충분한 근거와 반복된 동일 도구 순서를 통과할 때만 source L2 ID를 가진
+Seed 스킬로 생성되고, 운영 표본이 최소 3건이며 성공률 0.90 이상과 CIB 0.95 이상을 만족하면
+Active로 승격한다.
+
+Inner Loop의 reflection 단계는 도구를 사용한 경우 `episode_id`를 source ID로 하여
+`pending_hints`에 자동 기록한다. Outer Loop는 L2 변경 뒤 L3 Seed 생성을 호출한다.
+`SkillExecutor`는 Active 스킬에 명시적으로 바인딩·영속화된 구조화 tool step만 기존
+`PlanStepExecutor`로 순서대로 실행하며, 첫 실패에서 중단한다. Inner Loop는 planner의
+`l3.execute(skill_id)` 선택을 가로채어, 이번 요청의 vetted memory context에 포함된 skill ID만
+실행하고 평가 결과를 lifecycle 표본으로 기록한다. 자연어 Seed procedure나 reflection hint는
+도구 호출로 자동 변환하지 않는다.
+
+MemoryManager는 Active L3을 query relevance → success rate → recency → skill ID 순으로
+결정적으로 고르고, 항목 수와 `cognition.l3_context_max_chars` 하드 문자 예산을 함께 적용한다.
+예산을 넘는 procedure는 주입하지 않는다.
+
+L2 근거의 support/counterexample episode에 저장된 tool-specific reflection은 L3 Seed 갱신 시
+`SkillStepDraft`로 승격된다. draft에는 관찰된 도구명·source episode·hint만 들어가며 실행할
+인자는 포함하지 않는다. `bind_executable_steps()`는 대응되는 draft가 있는 도구만 승인된
+실행 step으로 저장할 수 있다.
+
+`forge --list-l3-drafts --l3-skill-id <id>`는 실행 불가능한 draft를 JSON으로 조회하며,
+`forge --approve-l3-draft <draft> --l3-skill-id <id> --step-id <step> --tool-arguments '<JSON>'`
+는 검토자가 제공한 인자만 사용해 하나의 executable step을 승인한다.
+
+승급은 `Seed → (승인된 step) → Validating → Active`다. `Validating`은 일반 Inner Loop
+후보에 포함되지 않으며, `forge --begin-l3-validation <skill>`으로 명시 전이한 뒤
+`forge --validate-l3-skill <skill>`의 검증 실행·평가 표본이 lifecycle 기준을 만족할 때만
+`Active`가 된다. 따라서 Active 전용 실행기와 표본 축적 사이의 교착은 없다.
+실행 API도 `execute_active()`와 `execute_validation()`으로 분리되어, 일반 실행과 승급 검증이
+boolean 플래그로 섞이지 않는다.
+
+`refresh_all()`은 전체 스킬의 lifecycle 지표만 재계산한다. L3 신규 Seed는 L4가 L2 절차
+방향을 허용하고 L5 카테고리 역량의 confidence·success rate 기준을 통과하며, 실행당 생성
+예산이 남아 있을 때만 생성된다. M16은 최근 성공률 급락 시 신규 Seed를 동결하고, checkpoint에
+보존한 M17 전역 coherence 관측값으로 정체·급성장을 감지하면 Seed 한도를 1개로 throttle한다.
+M17은 최근 L1의 평균 CIB와 L5 capability confidence의 실제 성공률 보정 오차를 설정 가중치로
+결합해 계산한다. 최근 L1 평가의 pain index, retry ratio, tool-error ratio, budget-overrun ratio도
+운영 부하로 평가한다. 한 항목 초과는 1개로 감속하고 둘 이상 초과는 동결한다. 보류되어도
+L1/L2 증거와 L2 knowledge는 보존된다.
+`Archived`는 명시적으로
+보존 처리한 스킬을 뜻하며, 유휴 시간이나 낮은 성공률로 자동 전이·삭제되지 않는다. Archive된
+스킬의 procedure, draft, 실행 이력은 SQLite에 그대로 유지된다. Outer Loop는 새 L1 배치가
+부족해 조기 종료하더라도 이 refresh를 먼저 수행한다.
+
+> **후속 범위**: draft 인자 제안 보조와 batch review, L4 K-Scenario와 L5 updater의 쓰기 경로
+
+> **완료 게이트**: SQLite 정본, 반복 가능성, version/YAML 검토 projection, deterministic
+> selection·문자/실행 예산, lifecycle recovery, 명시 Archive·registry 제외, L4/L5 방향 및
+> M16/M17 Seed 예산을 회귀 테스트로 검증했다. 다음 구현 범위는 MCP·정책/HITL·감사다.
+
+#### 1.6 L4 헌법 — ⚠️ 최소 읽기·승격 guard 완료
 
 `YamlConstitutionRepository`가 `constitution/safety.yml`을 읽어 CIB threshold와
 민감정보 패턴을 제공한다. Outer Loop는 L2 증거를 누적하기 전에 CIB 통과·threshold 및
@@ -106,24 +162,26 @@ L1 Episode를 후보 증거로 누적하고, 최소 증거 수와 confidence 기
 > **후속 범위**: K-Scenario/방향성 함수 C 평가, 도구별 사용자 승인 정책 연결, Meta Loop +
 > HITL 기반 헌법 변경
 
-#### 1.6 L5 정체성 — ⚠️ 최소 읽기 모델 완료
+#### 1.7 L5 정체성 — ⚠️ 최소 읽기 모델 완료
 
 `YamlIdentityRepository`가 `identity.yml`의 현재 autonomy level과
 `capabilities.yml`의 작업 카테고리별 역량·미지원 카테고리 기본값을 조회한다. YAML은 계속
 읽기 전용이며, self_model CRUD, 칼리브레이션·윈도우 통계 및 Outer Loop updater는 미구현이다.
 
-#### 1.7 Cognition 메모리 문맥 — ⚠️ L1/L2 선택 주입 완료
+#### 1.8 Cognition 메모리 문맥 — ⚠️ L1/L2/L3 선택 주입 완료
 
 `MemoryContextBuilder`가 L1 검색 결과와 active L2 knowledge를 관련성·개수 제한으로
 선별한다. L4의 CIB/민감정보 검사를 통과한 항목만 주입하며 L5 capability는 planner의
-자기 인식 문맥으로 함께 전달한다. L3는 아직 미구현이므로 동일한 문맥 계약에 추가하지 않았다.
+자기 인식 문맥으로 함께 전달한다. Active L3 스킬은 query 관련성 기준으로 절차 요약과
+허용 skill ID를 planner 문맥에 주입한다. native tool planner는 `l3.execute`로 한 개의
+retrieved skill을 명시적으로 선택할 수 있고, Inner Loop가 그 선택을 검증·실행한다.
 
-#### 1.8 메모리 매니저 — ⚠️ 최소 통합 라우터 완료
+#### 1.9 메모리 매니저 — ⚠️ 최소 통합 파사드·라우터 완료
 
 `MemoryManager`가 L1 검색, active L2 knowledge, L4 안전 필터, L5 identity/capability를
 한 번의 읽기 요청으로 조합하고 Cognition의 선택 주입 경로가 이를 사용한다. 반성은
 범용 지식이면 L2 일반화, 도구 종속이면 `L3_PROCEDURE_PENDING`, 내용이 없으면 L1 전용으로
-분류한다. L3 저장소가 없으므로 `L3_PROCEDURE_PENDING`은 아직 영속화하지 않는다.
+분류한다. 도구 종속 반성은 L3 SQLite `pending_hints`에 영속화한다.
 
 L1→L2 consolidation은 이미 Outer Loop가 소유하며, MemoryManager는 이를 중복 실행하지 않는다.
 
@@ -153,8 +211,8 @@ L1→L2 consolidation은 이미 Outer Loop가 소유하며, MemoryManager는 이
 계획/재계획, 실행 결과 해석, retry/replan/summarize 판단, 평가·반성 위임을
 분리한다. `RunInnerLoopService`는 LangGraph 전이와 L0/L1 lifecycle을 유지한다.
 
-> **후속 범위**: L1/L2/L3 검색 기반 문맥 주입, L4 CIB 판단, L5 권한 판단은
-> 해당 계층 구현 시 Cognition에 연결한다.
+> **후속 범위**: Active L3 스킬 검색·선택·실행, L4 K-Scenario 기반 계획 preflight,
+> L5 권한 판단은 해당 계층 확장 시 Cognition에 연결한다.
 
 #### 2.3 도구 시스템 (Tools) — ✅ 완료
 
@@ -227,14 +285,13 @@ START → start_session → plan → execute_attempt
 
 ```text
 eligible L1 수집 → Pattern Candidate 증거 누적 → L1→L2 결정
-→ L2 upsert/refine/weaken/retire → watermark/checkpoint
+→ L2 upsert/refine/weaken/retire → L2→L3 Seed 생성 → watermark/checkpoint
 ```
 
 상태는 `semantic.outer_loop_state_path`의 단일 JSON 문서로 저장되며, 배치가 완료된 뒤에만
 watermark가 전진한다. `build_outer_loop_service()`는 기존 L1 repository와 이 저장소를 조립한다.
 
-> **후속 범위**: 스케줄/이벤트 trigger와 LangGraph orchestration, M16 성장 제어, M17
-> 코히어런스 지수, L2→L3 승격, Meta Loop 트리거
+> **후속 범위**: 스케줄/이벤트 trigger와 LangGraph orchestration, M17 기반 Meta Loop trigger
 
 ### Phase 4: 메타 루프 (Meta Loop) — ❌ 미구현
 
@@ -267,7 +324,7 @@ watermark가 전진한다. `build_outer_loop_service()`는 기존 L1 repository�
 | `tests/forge/application/memory/test_finalize_episode.py` | L0 → L1 finalize | ✅ |
 | `tests/forge/domain/memory/test_models.py` | Episode/Evaluation/Reflection 검증 | ✅ |
 
-> **검증**: 2026-08-12 기준 전체 `pytest`는 717개 통과했고, 변경 범위 `ruff`도 통과했다.
+> **검증**: 2026-08-13 기준 전체 `pytest -q`는 759개 통과했다. 변경 범위 `ruff`도 통과했다.
 > `mypy`는 프로젝트 코드 검사 전 가상환경 NumPy 스텁의 Python 버전 충돌로 중단된다.
 
 ---
@@ -303,7 +360,9 @@ watermark가 전진한다. `build_outer_loop_service()`는 기존 L1 repository�
 | `inner-loop-tool-registry-and-execution.md` | ✅ 완료 | Inner Loop 도구 registry 및 실행 |
 | `inner-loop-l0-event-foundation.md` | ✅ 완료 | L0 이벤트 + L1 Episode 수직 슬라이스 |
 | `inner-loop-runtime-integration.md` | ✅ 완료 | Inner Loop runtime 통합 |
-| `forge-langchain-conversation-tools-mcp.md` | ⚠️ 진행 중 | LangChain 대화 전환 + tool calling (MCP는 미구현) |
+| `forge-langchain-conversation-tools-mcp.md` | ✅ 완료 | LangChain 대화 전환 + 대화 도구 호출. 이 계획의 MCP 범위는 후속 계획으로 분리됨 |
+| `l3-procedural-memory-completion.md` | 🚧 진행 중 | SQLite 정본·YAML 검토 projection, 반복 도구 시퀀스 Seed gate, 최근 운영 지표 lifecycle, L4/L5 방향·M16 Seed 예산 gate 구현; procedure metadata·조건 enforcement 등 잔여 범위 계속 구현 |
+| `mcp-policy-hitl-audit.md` | ⏸️ L3 완료 후 | L3 완료 게이트가 검증된 뒤에만 계획 검토·구현 착수 |
 | `inner-loop-cognition-v1.md` | ✅ 완료 | Inner Loop 인지 책임 분리; L1~L5 문맥 주입은 제외 |
 | `l0-event-foundation.md` | — | 바이너리 파일 (읽기 불가) |
 
@@ -314,15 +373,14 @@ watermark가 전진한다. `build_outer_loop_service()`는 기존 L1 repository�
 | Phase | 진행도 | 상태 |
 -------|--------|------|
 | Phase 0: 인프라 | 100% | ✅ 완료 |
-| Phase 1: 메모리 계층 | ~65% | L1/L0/L2, L4/L5 읽기 모델, MemoryManager 최소 라우터 완료 |
+| Phase 1: 메모리 계층 | ~80% | L1/L0/L2/L3 안전 실행, L4/L5 읽기 모델, MemoryManager 완료 |
 | Phase 2: 이너 루프 | ~90% | LLM/Tools/대화 Runtime/CLI 및 Inner Loop Cognition v1 완료 |
-| Phase 3: 아우터 루프 | ~25% | L1→L2 최소 수직 슬라이스 완료 |
+| Phase 3: 아우터 루프 | ~40% | L1→L2, L2→L3 Seed, L4/L5 방향 및 M16 동적 Seed 예산 gate 완료 |
 | Phase 4: 메타 루프 | 0% | ❌ 미구현 |
 | Phase 5: 한계 보완 | 0% | ❌ 미구현 |
 
 ### 다음 우선순위 (제안)
 
-1. **L4 확장** — K-Scenario, 방향성 함수 C, 도구별 사용자 승인 정책 연결
-2. **L5 확장** — self_model CRUD, 칼리브레이션 에러, 윈도우 통계와 Outer Loop updater
-3. **L3 구현** — reflection hint 저장, 스킬 lifecycle과 `L3_PROCEDURE_PENDING` 영속화
-4. **Outer Loop 확장** — 스케줄/이벤트 trigger, L2→L3, M16/M17, Meta Loop trigger
+1. **MCP·정책/HITL·감사** — L3 완료 게이트가 검증됐으므로 MCP adapter의 권한 경계, 사용자 승인 시점, 감사 이벤트와 실패 처리를 설계·테스트 명세로 고정
+2. **Outer Loop 확장** — 스케줄/이벤트 trigger와 M17 기반 Meta Loop trigger를 확장
+3. **L4/L5 확장** — K-Scenario·도구별 승인 정책과 self_model CRUD·캘리브레이션·Outer Loop updater를 확장

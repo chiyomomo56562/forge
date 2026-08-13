@@ -23,6 +23,10 @@ from forge.adapters.outbound.memory import (
     SqliteEpisodeStore,
 )
 from forge.adapters.outbound.outer_loop import JsonOuterLoopStore
+from forge.adapters.outbound.procedural import (
+    SqliteProceduralRepository,
+    build_procedural_selection_tool,
+)
 from forge.adapters.outbound.tools import (
     BuiltinToolRegistry,
     RegistryPlanStepExecutor,
@@ -41,7 +45,18 @@ from forge.application.memory import (
     SearchEpisodesService,
     StartInnerLoopSessionService,
 )
-from forge.application.outer_loop import OuterLoopPolicy, RunOuterLoopService
+from forge.application.outer_loop import (
+    GrowthRegulatorPolicy,
+    L3GrowthPolicy,
+    OuterLoopPolicy,
+    RunOuterLoopService,
+)
+from forge.application.procedural import (
+    ProceduralMemoryService,
+    SkillExecutor,
+    SkillLifecyclePolicy,
+    SkillValidationService,
+)
 from forge.ports.outbound import InnerLoopPlanner
 from forge.runtime import LangGraphConversationRuntime
 
@@ -192,12 +207,23 @@ def build_inner_loop_service(
             allow_verification=bool(tool_config.get("allow_verification", True))
         ),
     )
+    memory_manager = _build_memory_manager(config, repository)
+    procedural_repository = _build_procedural_repository(config)
+    procedural_lifecycle = ProceduralMemoryService(
+        procedural_repository,
+        _skill_lifecycle_policy(config),
+    )
+    plan_executor = RegistryPlanStepExecutor(tools)
     return RunInnerLoopService(
         StartInnerLoopSessionService(store),
         RecordInnerLoopEventService(store),
         FinalizeEpisodeService(store, repository),
-        _build_planner(agent_config, tools, agent_config_path),
-        RegistryPlanStepExecutor(tools),
+        _build_planner(
+            agent_config,
+            (*tools, build_procedural_selection_tool()),
+            agent_config_path,
+        ),
+        plan_executor,
         DeterministicEvaluator(),
         DeterministicReflector(),
         max_retries=max_retries,
@@ -205,11 +231,22 @@ def build_inner_loop_service(
             agent_config.get("inner_loop", {}).get("max_feedback_cycles", 0),
             setting="inner_loop.max_feedback_cycles",
         ),
-        memory_context_builder=MemoryContextBuilder(_build_memory_manager(config, repository)),
+        memory_context_builder=MemoryContextBuilder(memory_manager),
+        memory_manager=memory_manager,
+        skill_executor=SkillExecutor(
+            procedural_repository,
+            plan_executor,
+            procedural_lifecycle,
+            max_steps_per_run=_l3_max_steps(config),
+        ),
     )
 
 
-def build_outer_loop_service(config_path: str = "config/memory.yml") -> RunOuterLoopService:
+def build_outer_loop_service(
+    config_path: str = "config/memory.yml",
+    *,
+    agent_config_path: str = "config/agent.yml",
+) -> RunOuterLoopService:
     """L1 SQLite/Chroma repository와 checkpointed L1→L2 서비스를 조립한다.
 
     Args:
@@ -219,6 +256,7 @@ def build_outer_loop_service(config_path: str = "config/memory.yml") -> RunOuter
         명시적으로 실행할 Outer Loop application service.
     """
     config = _load_yaml_config(config_path)
+    agent_config = _load_yaml_config(agent_config_path)
     episodic = config["episodic"]
     settings = MemorySettings(
         sqlite_path=Path(episodic["sqlite_path"]),
@@ -234,6 +272,9 @@ def build_outer_loop_service(config_path: str = "config/memory.yml") -> RunOuter
         settings,
     )
     consolidation = config.get("consolidation", {})
+    l3_growth = consolidation.get("l3_growth", {})
+    growth_regulator = agent_config.get("growth_regulator", {})
+    operational_load = growth_regulator.get("operational_load", {})
     return RunOuterLoopService(
         repository,
         JsonOuterLoopStore(Path(config["semantic"]["outer_loop_state_path"])),
@@ -247,6 +288,104 @@ def build_outer_loop_service(config_path: str = "config/memory.yml") -> RunOuter
             retire_confidence=float(consolidation.get("retire_confidence", 0.4)),
         ),
         build_constitution_repository(config_path),
+        ProceduralMemoryService(
+            _build_procedural_repository(config),
+            _skill_lifecycle_policy(config),
+        ),
+        build_identity_repository(config_path),
+        L3GrowthPolicy(
+            max_new_seeds_per_run=_positive_int(
+                l3_growth.get("max_new_seeds_per_run", 2),
+                setting="consolidation.l3_growth.max_new_seeds_per_run",
+            ),
+            min_capability_confidence=float(l3_growth.get("min_capability_confidence", 0.7)),
+            min_capability_success_rate=float(
+                l3_growth.get("min_capability_success_rate", 0.7)
+            ),
+        ),
+        GrowthRegulatorPolicy(
+            crash_window=_positive_int(
+                growth_regulator.get("crash", {}).get("window", 20),
+                setting="growth_regulator.crash.window",
+            ),
+            crash_delta_threshold=float(
+                growth_regulator.get("crash", {}).get("delta_threshold", 0.15)
+            ),
+            stagnation_window=_positive_int(
+                growth_regulator.get("stagnation", {}).get("window", 50),
+                setting="growth_regulator.stagnation.window",
+            ),
+            stagnation_coherence_delta=float(
+                growth_regulator.get("stagnation", {}).get("coherence_delta", 0.01)
+            ),
+            overgrowth_days=_positive_int(
+                growth_regulator.get("overgrowth", {}).get("days", 7),
+                setting="growth_regulator.overgrowth.days",
+            ),
+            overgrowth_coherence_rise=float(
+                growth_regulator.get("overgrowth", {}).get("coherence_rise", 0.2)
+            ),
+            operational_load_window=_positive_int(
+                operational_load.get("window", 20),
+                setting="growth_regulator.operational_load.window",
+            ),
+            pain_threshold=float(operational_load.get("pain_threshold", 0.5)),
+            retry_ratio_threshold=float(operational_load.get("retry_ratio_threshold", 0.4)),
+            tool_error_ratio_threshold=float(
+                operational_load.get("tool_error_ratio_threshold", 0.3)
+            ),
+            budget_overrun_ratio_threshold=float(
+                operational_load.get("budget_overrun_ratio_threshold", 0.2)
+            ),
+            coherence_cib_weight=float(agent_config.get("coherence", {}).get("cib_weight", 0.5)),
+            coherence_calibration_weight=float(
+                agent_config.get("coherence", {}).get("calibration_weight", 0.5)
+            ),
+            coherence_window=_positive_int(
+                agent_config.get("coherence", {}).get("window", 50),
+                setting="coherence.window",
+            ),
+        ),
+    )
+
+
+def build_procedural_memory_service(
+    config_path: str = "config/memory.yml",
+) -> ProceduralMemoryService:
+    """Build the L3 review and lifecycle application service."""
+    config = _load_yaml_config(config_path)
+    return ProceduralMemoryService(
+        _build_procedural_repository(config),
+        _skill_lifecycle_policy(config),
+    )
+
+
+def build_skill_validation_service(
+    config_path: str = "config/memory.yml",
+    *,
+    agent_config_path: str = "config/agent.yml",
+) -> SkillValidationService:
+    """Build the explicit L3 validation executor using the normal tool policy boundary."""
+    config = _load_yaml_config(config_path)
+    agent_config = _load_yaml_config(agent_config_path)
+    tool_config = agent_config.get("tools", {})
+    registry = _build_tool_registry(tool_config)
+    tools = build_langchain_tools(
+        registry,
+        StaticToolAuthorizationPolicy(
+            allow_verification=bool(tool_config.get("allow_verification", True))
+        ),
+    )
+    repository = _build_procedural_repository(config)
+    lifecycle = ProceduralMemoryService(repository, _skill_lifecycle_policy(config))
+    return SkillValidationService(
+        SkillExecutor(
+            repository,
+            RegistryPlanStepExecutor(tools),
+            lifecycle,
+            max_steps_per_run=_l3_max_steps(config),
+        ),
+        DeterministicEvaluator(),
     )
 
 
@@ -267,6 +406,50 @@ def _build_memory_manager(
             config.get("cognition", {}).get("memory_context_top_k", 3),
             setting="cognition.memory_context_top_k",
         ),
+        l3_context_max_chars=_positive_int(
+            config.get("cognition", {}).get("l3_context_max_chars", 1200),
+            setting="cognition.l3_context_max_chars",
+        ),
+        procedural=_build_procedural_repository(config),
+    )
+
+
+def _skill_lifecycle_policy(config: dict[str, Any]) -> SkillLifecyclePolicy:
+    lifecycle = config["procedural"]["lifecycle"]
+    return SkillLifecyclePolicy(
+        evaluation_window_samples=_positive_int(
+            lifecycle.get("evaluation_window_samples", 20),
+            setting="procedural.lifecycle.evaluation_window_samples",
+        ),
+        pain_threshold=float(lifecycle.get("pain_threshold", 0.5)),
+        tool_error_threshold=float(lifecycle.get("tool_error_threshold", 0.5)),
+        min_repeated_tool_sequences=_positive_int(
+            lifecycle.get("min_repeated_tool_sequences", 1),
+            setting="procedural.lifecycle.min_repeated_tool_sequences",
+        ),
+        min_seed_evidence=_positive_int(
+            lifecycle.get("min_seed_evidence", 1), setting="procedural.lifecycle.min_seed_evidence"
+        ),
+        active_threshold=float(lifecycle["active_threshold"]),
+        degrading_threshold=float(lifecycle["degrading_threshold"]),
+        recovery_threshold=float(lifecycle["recovery_threshold"]),
+    )
+
+
+def _build_procedural_repository(config: dict[str, Any]) -> SqliteProceduralRepository:
+    procedural = config["procedural"]
+    return SqliteProceduralRepository(
+        procedural["db_path"],
+        skills_dir=procedural.get("skills_dir"),
+        registry_path=procedural.get("registry_path"),
+    )
+
+
+def _l3_max_steps(config: dict[str, Any]) -> int:
+    execution = config["procedural"].get("execution", {})
+    return _positive_int(
+        execution.get("max_steps_per_run", 8),
+        setting="procedural.execution.max_steps_per_run",
     )
 
 

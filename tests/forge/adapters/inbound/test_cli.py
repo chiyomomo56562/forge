@@ -1,4 +1,5 @@
 import sys
+from types import SimpleNamespace
 
 from forge.adapters.inbound import cli
 from forge.domain.conversation import AssistantReply
@@ -56,3 +57,77 @@ def test_run_message_returns_assistant_text(monkeypatch):
         == "chat response"
     )
     assert service.commands[0].conversation_id == "thread-1"
+
+
+def test_cli_lists_and_approves_l3_drafts(monkeypatch, capsys):
+    class ProceduralService:
+        def __init__(self):
+            self.approval = None
+
+        def list_step_drafts(self, skill_id):
+            assert skill_id == "skill_1"
+            return (
+                SimpleNamespace(
+                    draft_id="draft_1",
+                    source_episode_id="ep_1",
+                    hint="inspect",
+                    tool_name="git.status",
+                ),
+            )
+
+        def approve_step_draft(self, skill_id, *, draft_id, step_id, tool_arguments):
+            self.approval = (skill_id, draft_id, step_id, tool_arguments)
+            return SimpleNamespace(skill_id=skill_id)
+
+    service = ProceduralService()
+    monkeypatch.setattr(cli, "build_procedural_memory_service", lambda _path: service)
+
+    assert cli.main(["--list-l3-drafts", "--l3-skill-id", "skill_1"]) == 0
+    assert '"draft_id": "draft_1"' in capsys.readouterr().out
+    assert (
+        cli.main(
+            [
+                "--approve-l3-draft",
+                "draft_1",
+                "--l3-skill-id",
+                "skill_1",
+                "--step-id",
+                "status",
+                "--tool-arguments",
+                "{}",
+            ]
+        )
+        == 0
+    )
+    assert service.approval == ("skill_1", "draft_1", "status", {})
+
+
+def test_cli_lists_and_explicitly_archives_l3_skills(monkeypatch, capsys):
+    class ProceduralService:
+        def __init__(self):
+            self.archived = None
+
+        def list_skills(self):
+            return (
+                SimpleNamespace(
+                    skill_id="skill_1",
+                    status=SimpleNamespace(value="degrading"),
+                    version=2,
+                    success_rate=0.4,
+                    total_executions=5,
+                    avg_pain_index=0.7,
+                    last_executed_at=None,
+                ),
+            )
+
+        def archive(self, skill_id):
+            self.archived = skill_id
+            return SimpleNamespace(skill_id=skill_id)
+
+    service = ProceduralService()
+    monkeypatch.setattr(cli, "build_procedural_memory_service", lambda _path: service)
+
+    assert cli.main(["--list-l3-skills"]) == 0
+    assert '"status": "degrading"' in capsys.readouterr().out
+    assert cli.main(["--archive-l3-skill", "skill_1"]) == 0
+    assert service.archived == "skill_1"

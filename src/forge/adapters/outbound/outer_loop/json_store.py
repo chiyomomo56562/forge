@@ -10,6 +10,7 @@ from tempfile import NamedTemporaryFile
 from typing import Any, cast
 
 from forge.domain.outer_loop import (
+    GrowthObservation,
     L2Knowledge,
     L2KnowledgeStatus,
     OuterLoopCheckpoint,
@@ -34,6 +35,19 @@ class JsonOuterLoopStore:
         return OuterLoopCheckpoint(
             watermark=datetime.fromisoformat(item["watermark"]) if item["watermark"] else None,
             processed_episode_ids=tuple(item["processed_episode_ids"]),
+            growth_observations=tuple(
+                GrowthObservation(
+                    observed_at=datetime.fromisoformat(str(observation["observed_at"])),
+                    episode_count=int(observation["episode_count"]),
+                    consolidation_coherence=float(observation["consolidation_coherence"]),
+                    global_coherence=(
+                        float(observation["global_coherence"])
+                        if observation.get("global_coherence") is not None
+                        else None
+                    ),
+                )
+                for observation in item.get("growth_observations", [])
+            ),
         )
 
     def save(
@@ -57,6 +71,15 @@ class JsonOuterLoopStore:
             "checkpoint": {
                 "watermark": checkpoint.watermark.isoformat() if checkpoint.watermark else None,
                 "processed_episode_ids": list(checkpoint.processed_episode_ids),
+                "growth_observations": [
+                    {
+                        "observed_at": item.observed_at.isoformat(),
+                        "episode_count": item.episode_count,
+                        "consolidation_coherence": item.consolidation_coherence,
+                        "global_coherence": item.global_coherence,
+                    }
+                    for item in checkpoint.growth_observations
+                ],
             },
         }
         self._path.parent.mkdir(parents=True, exist_ok=True)
@@ -86,6 +109,7 @@ class JsonOuterLoopStore:
             support_episode_ids=tuple(item["support_episode_ids"]),
             counterexample_episode_ids=tuple(item["counterexample_episode_ids"]),
             knowledge_id=item["knowledge_id"],
+            task_category=str(item.get("task_category", "general")),
         )
 
     @staticmethod
@@ -100,4 +124,5 @@ class JsonOuterLoopStore:
             support_episode_ids=tuple(item["support_episode_ids"]),
             counterexample_episode_ids=tuple(item["counterexample_episode_ids"]),
             updated_at=datetime.fromisoformat(str(item["updated_at"])),
+            task_category=str(item.get("task_category", "general")),
         )

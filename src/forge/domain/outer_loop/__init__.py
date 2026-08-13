@@ -1,6 +1,7 @@
 """Outer Loop consolidation domain values."""
 
 from .models import (
+    GrowthObservation,
     L2Knowledge,
     L2KnowledgeStatus,
     OuterLoopCheckpoint,
@@ -9,6 +10,7 @@ from .models import (
 )
 
 __all__ = [
+    "GrowthObservation",
     "L2Knowledge",
     "L2KnowledgeStatus",
     "OuterLoopCheckpoint",

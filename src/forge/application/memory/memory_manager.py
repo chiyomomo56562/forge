@@ -12,20 +12,18 @@ from forge.domain.memory import (
     ReflectionRoutingDecision,
 )
 from forge.domain.outer_loop import L2Knowledge, L2KnowledgeStatus
+from forge.domain.procedural import ProceduralSkill
 from forge.ports.outbound import (
     ConstitutionRepository,
     EpisodeRepository,
     IdentityRepository,
     OuterLoopStore,
 )
+from forge.ports.outbound.procedural_repository import ProceduralRepository
 
 
 class MemoryManager:
-    """Routes safe reads across L1/L2/L4/L5 and classifies reflection destinations.
-
-    L3 has no repository yet. Tool-specific reflections therefore produce an explicit
-    pending route instead of being silently persisted somewhere else.
-    """
+    """Routes safe reads across L1/L2/L3/L4/L5 and classifies reflection destinations."""
 
     def __init__(
         self,
@@ -35,14 +33,18 @@ class MemoryManager:
         identity: IdentityRepository,
         *,
         top_k: int = 3,
+        l3_context_max_chars: int = 1200,
+        procedural: ProceduralRepository | None = None,
     ) -> None:
-        if top_k <= 0:
-            raise ValueError("top_k must be positive")
+        if top_k <= 0 or l3_context_max_chars <= 0:
+            raise ValueError("Memory context limits must be positive")
         self._episodes = episodes
         self._l2_store = l2_store
         self._constitution = constitution
         self._identity = identity
         self._top_k = top_k
+        self._l3_context_max_chars = l3_context_max_chars
+        self._procedural = procedural
 
     def read(self, *, query: str, task_category: str) -> MemoryReadResult:
         if not query.strip():
@@ -68,11 +70,14 @@ class MemoryManager:
 
     def build_context(self, *, query: str, task_category: str) -> RetrievedMemoryContext:
         result = self.read(query=query, task_category=task_category)
+        skills = self._relevant_l3(query)
         return RetrievedMemoryContext(
             episode_ids=tuple(hit.episode.episode_id for hit in result.l1_hits),
             l2_knowledge=tuple(
                 f"{item.condition}: {item.statement}" for item in result.l2_knowledge
             ),
+            l3_skills=tuple(f"{skill.skill_id}: {' → '.join(skill.procedure)}" for skill in skills),
+            l3_skill_ids=tuple(skill.skill_id for skill in skills),
             capability_summary=(
                 f"{result.capability.category}: confidence={result.capability.confidence:.2f}, "
                 f"success_rate={result.capability.success_rate:.2f}"
@@ -80,11 +85,15 @@ class MemoryManager:
         )
 
     def route_reflection(
-        self, reflection: Reflection, *, tool_names: tuple[str, ...]
+        self, reflection: Reflection, *, tool_names: tuple[str, ...], source_id: str = ""
     ) -> ReflectionRoutingDecision:
         if not reflection.has_content:
             return ReflectionRoutingDecision(ReflectionRoute.L1_ONLY, "reflection.empty")
         if tool_names:
+            if self._procedural is not None and source_id:
+                self._procedural.store_pending_hint(
+                    source_id, reflection.next_hint or reflection.what_worked, tool_names
+                )
             return ReflectionRoutingDecision(
                 ReflectionRoute.L3_PROCEDURE_PENDING, "reflection.tool_specific"
             )
@@ -106,3 +115,33 @@ class MemoryManager:
             if len(selected) == self._top_k:
                 break
         return selected
+
+    def _relevant_l3(self, query: str) -> list[ProceduralSkill]:
+        if self._procedural is None:
+            return []
+        tokens = set(query.casefold().split())
+        candidates = []
+        for skill in self._procedural.list_active():
+            skill_tokens = set(" ".join(skill.procedure).casefold().split())
+            relevance = len(tokens.intersection(skill_tokens)) if tokens else 0
+            if tokens and not relevance:
+                continue
+            candidates.append((relevance, skill.success_rate, skill.updated_at, skill))
+        candidates.sort(
+            key=lambda item: (-item[0], -item[1], -item[2].timestamp(), item[3].skill_id)
+        )
+        selected: list[ProceduralSkill] = []
+        remaining = self._l3_context_max_chars
+        for _, _, _, skill in candidates:
+            rendered = self._render_l3_skill(skill)
+            if len(rendered) > remaining:
+                continue
+            selected.append(skill)
+            remaining -= len(rendered)
+            if len(selected) == self._top_k:
+                break
+        return selected
+
+    @staticmethod
+    def _render_l3_skill(skill: ProceduralSkill) -> str:
+        return f"{skill.skill_id}: {' → '.join(skill.procedure)}"
