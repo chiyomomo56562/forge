@@ -81,12 +81,15 @@ class GrowthObservation:
     observed_at: datetime
     episode_count: int
     consolidation_coherence: float
+    global_coherence: float | None = None
 
     def __post_init__(self) -> None:
         if self.observed_at.tzinfo is None or self.observed_at.utcoffset() is None:
             raise ValueError("Growth observation time must be timezone-aware.")
         if self.episode_count < 0 or not 0.0 <= self.consolidation_coherence <= 1.0:
             raise ValueError("Growth observation values are invalid.")
+        if self.global_coherence is not None and not 0.0 <= self.global_coherence <= 1.0:
+            raise ValueError("Global coherence must be between 0 and 1.")
 
 
 @dataclass(frozen=True)

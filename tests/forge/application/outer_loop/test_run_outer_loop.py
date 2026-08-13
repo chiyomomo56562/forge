@@ -303,18 +303,42 @@ def test_m16_throttles_stagnating_l3_growth_and_persists_observation(tmp_path):
     )
     checkpoint = OuterLoopCheckpoint(
         processed_episode_ids=("ep_1", "ep_2", "ep_3"),
-        growth_observations=(GrowthObservation(datetime.now(UTC), 0, 0.8),),
+        growth_observations=(GrowthObservation(datetime.now(UTC), 0, 0.8, 1.0),),
     )
 
     limit, reasons = service._l3_growth_limit([], checkpoint, {knowledge.knowledge_id: knowledge})
     persisted = OuterLoopCheckpoint(
-        growth_observations=service._append_growth_observation(checkpoint, 3, [knowledge])
+        growth_observations=service._append_growth_observation(checkpoint, 3, [knowledge], [])
     )
     store.save(candidates=[], knowledge=[], checkpoint=persisted)
 
     assert limit == 1
-    assert reasons == ("consolidation_stagnation",)
+    assert reasons == ("m17_stagnation",)
     assert store.load_checkpoint().growth_observations == persisted.growth_observations
+
+
+def test_m17_uses_cib_and_l5_confidence_calibration(tmp_path):
+    service, _store = _service(tmp_path, [])
+    service._identity = Identity(confidence=0.5)
+    service._growth_regulator = GrowthRegulatorPolicy(coherence_window=2)
+
+    coherence = service._m17_coherence([_episode(1), _episode(2)])
+
+    assert coherence == 0.75
+
+
+def test_m17_coherence_is_persisted_in_growth_observation(tmp_path):
+    service, store = _service(tmp_path, [])
+    service._identity = Identity(confidence=0.5)
+    observation = service._append_growth_observation(
+        OuterLoopCheckpoint(), 2, [], [_episode(1), _episode(2)]
+    )
+    checkpoint = OuterLoopCheckpoint(growth_observations=observation)
+    store.save(candidates=[], knowledge=[], checkpoint=checkpoint)
+
+    loaded = store.load_checkpoint().growth_observations[0]
+
+    assert loaded.global_coherence == 0.75
 
 
 def test_m16_throttles_new_seeds_when_one_operational_load_signal_exceeds_limit(tmp_path):

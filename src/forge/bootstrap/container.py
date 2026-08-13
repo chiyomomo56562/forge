@@ -337,6 +337,14 @@ def build_outer_loop_service(
             budget_overrun_ratio_threshold=float(
                 operational_load.get("budget_overrun_ratio_threshold", 0.2)
             ),
+            coherence_cib_weight=float(agent_config.get("coherence", {}).get("cib_weight", 0.5)),
+            coherence_calibration_weight=float(
+                agent_config.get("coherence", {}).get("calibration_weight", 0.5)
+            ),
+            coherence_window=_positive_int(
+                agent_config.get("coherence", {}).get("window", 50),
+                setting="coherence.window",
+            ),
         ),
     )
 

@@ -40,6 +40,11 @@ class JsonOuterLoopStore:
                     observed_at=datetime.fromisoformat(str(observation["observed_at"])),
                     episode_count=int(observation["episode_count"]),
                     consolidation_coherence=float(observation["consolidation_coherence"]),
+                    global_coherence=(
+                        float(observation["global_coherence"])
+                        if observation.get("global_coherence") is not None
+                        else None
+                    ),
                 )
                 for observation in item.get("growth_observations", [])
             ),
@@ -71,6 +76,7 @@ class JsonOuterLoopStore:
                         "observed_at": item.observed_at.isoformat(),
                         "episode_count": item.episode_count,
                         "consolidation_coherence": item.consolidation_coherence,
+                        "global_coherence": item.global_coherence,
                     }
                     for item in checkpoint.growth_observations
                 ],

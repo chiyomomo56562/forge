@@ -133,17 +133,17 @@ boolean 플래그로 섞이지 않는다.
 `refresh_all()`은 전체 스킬의 lifecycle 지표만 재계산한다. L3 신규 Seed는 L4가 L2 절차
 방향을 허용하고 L5 카테고리 역량의 confidence·success rate 기준을 통과하며, 실행당 생성
 예산이 남아 있을 때만 생성된다. M16은 최근 성공률 급락 시 신규 Seed를 동결하고, checkpoint에
-보존한 L2 consolidation coherence 관측값으로 정체·급성장을 감지하면 Seed 한도를 1개로
-throttle한다. 최근 L1 평가의 pain index, retry ratio, tool-error ratio, budget-overrun ratio도
-운영 부하로 평가한다. 한 항목 초과는 1개로 감속하고 둘 이상 초과는 동결한다. 이는 향후 전역
-M17 지수와 구분되는 L3 성장 전용 신호다. 보류되어도 L1/L2 증거와 L2 knowledge는 보존된다.
+보존한 M17 전역 coherence 관측값으로 정체·급성장을 감지하면 Seed 한도를 1개로 throttle한다.
+M17은 최근 L1의 평균 CIB와 L5 capability confidence의 실제 성공률 보정 오차를 설정 가중치로
+결합해 계산한다. 최근 L1 평가의 pain index, retry ratio, tool-error ratio, budget-overrun ratio도
+운영 부하로 평가한다. 한 항목 초과는 1개로 감속하고 둘 이상 초과는 동결한다. 보류되어도
+L1/L2 증거와 L2 knowledge는 보존된다.
 `Archived`는 명시적으로
 보존 처리한 스킬을 뜻하며, 유휴 시간이나 낮은 성공률로 자동 전이·삭제되지 않는다. Archive된
 스킬의 procedure, draft, 실행 이력은 SQLite에 그대로 유지된다. Outer Loop는 새 L1 배치가
 부족해 조기 종료하더라도 이 refresh를 먼저 수행한다.
 
-> **후속 범위**: draft 인자 제안 보조와 batch review, 전역 M17 coherence를 입력으로 쓰는
-> 확장 M16 제어, L4 K-Scenario와 L5 updater의 쓰기 경로
+> **후속 범위**: draft 인자 제안 보조와 batch review, L4 K-Scenario와 L5 updater의 쓰기 경로
 
 > **완료 게이트**: L3의 SQLite 정본, 반복 가능성, 버전/YAML 검토 projection, deterministic
 > selection·실행 예산, lifecycle과 명시 Archive, L4/L5 방향·Seed 예산은 구현했다. 전체 L3
@@ -287,8 +287,7 @@ eligible L1 수집 → Pattern Candidate 증거 누적 → L1→L2 결정
 상태는 `semantic.outer_loop_state_path`의 단일 JSON 문서로 저장되며, 배치가 완료된 뒤에만
 watermark가 전진한다. `build_outer_loop_service()`는 기존 L1 repository와 이 저장소를 조립한다.
 
-> **후속 범위**: 스케줄/이벤트 trigger와 LangGraph orchestration, M17 코히어런스 지수,
-> Meta Loop 트리거
+> **후속 범위**: 스케줄/이벤트 trigger와 LangGraph orchestration, M17 기반 Meta Loop trigger
 
 ### Phase 4: 메타 루프 (Meta Loop) — ❌ 미구현
 
@@ -321,7 +320,7 @@ watermark가 전진한다. `build_outer_loop_service()`는 기존 L1 repository�
 | `tests/forge/application/memory/test_finalize_episode.py` | L0 → L1 finalize | ✅ |
 | `tests/forge/domain/memory/test_models.py` | Episode/Evaluation/Reflection 검증 | ✅ |
 
-> **검증**: 2026-08-13 기준 전체 `pytest -q`는 753개 통과했다. 변경 범위 `ruff`도 통과했다.
+> **검증**: 2026-08-13 기준 전체 `pytest -q`는 755개 통과했다. 변경 범위 `ruff`도 통과했다.
 > `mypy`는 프로젝트 코드 검사 전 가상환경 NumPy 스텁의 Python 버전 충돌로 중단된다.
 
 ---

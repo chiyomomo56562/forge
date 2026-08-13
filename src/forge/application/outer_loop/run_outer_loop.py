@@ -63,8 +63,7 @@ class L3GrowthPolicy:
 class GrowthRegulatorPolicy:
     """M16 safeguards for the rate of *new* L3 procedures only.
 
-    Consolidation coherence is the mean confidence of active L2 knowledge.  It is a
-    bounded L3-growth signal, not the future system-wide M17 coherence index.
+    M17 coherence combines CIB compliance with self-model calibration accuracy.
     """
 
     crash_window: int = 20
@@ -78,6 +77,9 @@ class GrowthRegulatorPolicy:
     retry_ratio_threshold: float = 0.4
     tool_error_ratio_threshold: float = 0.3
     budget_overrun_ratio_threshold: float = 0.2
+    coherence_cib_weight: float = 0.5
+    coherence_calibration_weight: float = 0.5
+    coherence_window: int = 50
 
     def __post_init__(self) -> None:
         if min(
@@ -85,6 +87,7 @@ class GrowthRegulatorPolicy:
             self.stagnation_window,
             self.overgrowth_days,
             self.operational_load_window,
+            self.coherence_window,
         ) <= 0:
             raise ValueError("M16 windows must be positive")
         if not all(
@@ -97,9 +100,13 @@ class GrowthRegulatorPolicy:
                 self.retry_ratio_threshold,
                 self.tool_error_ratio_threshold,
                 self.budget_overrun_ratio_threshold,
+                self.coherence_cib_weight,
+                self.coherence_calibration_weight,
             )
         ):
             raise ValueError("M16 thresholds are invalid")
+        if self.coherence_cib_weight + self.coherence_calibration_weight != 1.0:
+            raise ValueError("M17 coherence weights must sum to 1.0")
 
 
 class RunOuterLoopService:
@@ -150,8 +157,9 @@ class RunOuterLoopService:
         promoted: list[str] = []
         updated: list[str] = []
         deferred_l3: list[str] = []
+        growth_episodes = self._growth_evaluation_window(batch)
         growth_limit, growth_reasons = self._l3_growth_limit(
-            self._growth_evaluation_window(batch), checkpoint, knowledge
+            growth_episodes, checkpoint, knowledge
         )
         new_seed_count = 0
         for candidate_id, candidate in list(candidates.items()):
@@ -177,7 +185,7 @@ class RunOuterLoopService:
             watermark=max((item.created_at for item in batch), default=checkpoint.watermark),
             processed_episode_ids=processed[-10_000:],
             growth_observations=self._append_growth_observation(
-                checkpoint, len(processed), knowledge.values()
+                checkpoint, len(processed), knowledge.values(), growth_episodes
             ),
         )
         self._store.save(
@@ -339,15 +347,15 @@ class RunOuterLoopService:
             limit = min(limit, 1)
             reasons.extend(f"operational_load:{item}" for item in operational_load)
 
-        coherence = self._consolidation_coherence(knowledge.values())
+        coherence = self._m17_coherence(batch)
         episode_count = len(checkpoint.processed_episode_ids) + len(batch)
         observations = checkpoint.growth_observations
         if self._is_stagnating(observations, episode_count, coherence):
             limit = min(limit, 1)
-            reasons.append("consolidation_stagnation")
+            reasons.append("m17_stagnation")
         if self._is_overgrowing(observations, coherence):
             limit = min(limit, 1)
-            reasons.append("rapid_consolidation_growth")
+            reasons.append("m17_rapid_growth")
         return limit, tuple(reasons)
 
     def _growth_evaluation_window(self, batch: list[Episode]) -> list[Episode]:
@@ -355,6 +363,7 @@ class RunOuterLoopService:
         required = max(
             self._growth_regulator.crash_window * 2,
             self._growth_regulator.operational_load_window,
+            self._growth_regulator.coherence_window,
         )
         if len(batch) >= required:
             return batch[-required:]
@@ -406,7 +415,7 @@ class RunOuterLoopService:
             (item for item in reversed(observations) if item.episode_count <= target), None
         )
         return baseline is not None and (
-            coherence - baseline.consolidation_coherence
+            coherence - self._observation_coherence(baseline)
             <= self._growth_regulator.stagnation_coherence_delta
         )
 
@@ -418,7 +427,7 @@ class RunOuterLoopService:
             (item for item in observations if item.observed_at.timestamp() >= cutoff), None
         )
         return baseline is not None and (
-            coherence - baseline.consolidation_coherence
+            coherence - self._observation_coherence(baseline)
             >= self._growth_regulator.overgrowth_coherence_rise
         )
 
@@ -427,16 +436,48 @@ class RunOuterLoopService:
         active = [item.confidence for item in knowledge if item.status is L2KnowledgeStatus.ACTIVE]
         return sum(active) / len(active) if active else 0.0
 
+    def _m17_coherence(self, episodes: list[Episode]) -> float:
+        """Compute M17 from CIB compliance and L5 confidence calibration."""
+        sample = episodes[-self._growth_regulator.coherence_window :]
+        cib_scores = [
+            item.evaluation.cib_score for item in sample if item.evaluation.cib_score is not None
+        ]
+        avg_cib = sum(cib_scores) / len(cib_scores) if cib_scores else 1.0
+        calibration_errors: list[float] = []
+        if self._identity is not None:
+            for episode in sample:
+                actual = episode.evaluation.success_score
+                if actual is not None:
+                    predicted = self._identity.capability_for(episode.task_category).confidence
+                    calibration_errors.append(abs(predicted - actual))
+        average_error = (
+            sum(calibration_errors) / len(calibration_errors) if calibration_errors else 0.0
+        )
+        return (
+            self._growth_regulator.coherence_cib_weight * avg_cib
+            + self._growth_regulator.coherence_calibration_weight * (1.0 - average_error)
+        )
+
     @staticmethod
+    def _observation_coherence(observation: GrowthObservation) -> float:
+        return (
+            observation.global_coherence
+            if observation.global_coherence is not None
+            else observation.consolidation_coherence
+        )
+
     def _append_growth_observation(
+        self,
         checkpoint: OuterLoopCheckpoint,
         episode_count: int,
         knowledge: Iterable[L2Knowledge],
+        episodes: list[Episode],
     ) -> tuple[GrowthObservation, ...]:
         observation = GrowthObservation(
             datetime.now(UTC),
             episode_count,
             RunOuterLoopService._consolidation_coherence(knowledge),
+            self._m17_coherence(episodes),
         )
         observations = (*checkpoint.growth_observations, observation)
         return observations[-1_000:]
