@@ -58,6 +58,10 @@ MCP는 서버별 allowlist와 명시적 도구 metadata를 가진 **outbound ada
      approval은 arguments hash와 session에 묶어 재사용·변조를 막는다.
    - 대화와 Inner Loop 모두 approval-required 호출에서 도구를 실행하지 않고
      `tool.approval_required` 결과를 반환한다. 비대화/비대화형 모드의 기본은 deny다.
+   - 현재: immutable request/record port와 fsync JSONL append-only store, pending 목록 및
+     call-ID approve/deny CLI를 구현했다. store는 session·canonical arguments SHA-256·expiry·
+     one-time consume을 검증한다. 승인된 호출을 공통 execution adapter가 소비하는 연결은
+     다음 공유 adapter 단위에서 구현한다.
 
 4. **공유 실행 adapter와 감사**
    - 내장·MCP 도구 모두 단일 Forge execution adapter를 통해 `ToolExecution`을 생성한다.

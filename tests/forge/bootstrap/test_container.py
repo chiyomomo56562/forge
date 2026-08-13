@@ -10,7 +10,11 @@ from forge.adapters.outbound.tools import (
     StaticToolAuthorizationPolicy,
     build_langchain_tools,
 )
-from forge.bootstrap.container import _build_conversation_runtime, build_mcp_server_configs
+from forge.bootstrap.container import (
+    _build_conversation_runtime,
+    build_mcp_server_configs,
+    build_tool_approval_store,
+)
 
 
 def test_shared_collection_contains_the_seven_decorated_tools(tmp_path: Path) -> None:
@@ -88,3 +92,16 @@ def test_enabled_mcp_requires_an_explicit_allowlist_and_valid_transport(tmp_path
     )
 
     assert build_mcp_server_configs(str(config))[0].allowed_tools == ("read_file",)
+
+
+def test_tool_approval_store_uses_explicit_configured_log_path(tmp_path: Path) -> None:
+    config = tmp_path / "agent.yml"
+    log_path = tmp_path / "audit" / "approvals.jsonl"
+    config.write_text(
+        f"tool_approval:\n  log_path: {log_path}\n  ttl_seconds: 900\n",
+        encoding="utf-8",
+    )
+
+    store = build_tool_approval_store(str(config))
+
+    assert store._path == log_path

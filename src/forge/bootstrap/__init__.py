@@ -9,6 +9,7 @@ from .container import (
     build_procedural_memory_service,
     build_receive_message_service,
     build_skill_validation_service,
+    build_tool_approval_store,
 )
 
 __all__ = [
@@ -22,4 +23,5 @@ __all__ = [
     "build_procedural_memory_service",
     "build_skill_validation_service",
     "build_receive_message_service",
+    "build_tool_approval_store",
 ]

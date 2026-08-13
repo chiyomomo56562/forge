@@ -30,6 +30,7 @@ from forge.adapters.outbound.procedural import (
 from forge.adapters.outbound.tools import (
     BuiltinToolRegistry,
     ConstitutionToolAuthorizationPolicy,
+    JsonlToolApprovalStore,
     RegistryPlanStepExecutor,
     StaticToolAuthorizationPolicy,
     build_langchain_tools,
@@ -58,7 +59,7 @@ from forge.application.procedural import (
     SkillLifecyclePolicy,
     SkillValidationService,
 )
-from forge.ports.outbound import InnerLoopPlanner, McpServerConfig
+from forge.ports.outbound import InnerLoopPlanner, McpServerConfig, ToolApprovalStore
 from forge.runtime import LangGraphConversationRuntime
 
 
@@ -79,6 +80,18 @@ def build_receive_message_service(
     config = _load_yaml_config(config_path)
     runtime = _build_conversation_runtime(config, config_path=config_path, chat_model=chat_model)
     return ReceiveMessageService(runtime)
+
+
+def build_tool_approval_store(config_path: str = "config/agent.yml") -> ToolApprovalStore:
+    """Build the durable, operator-facing HITL approval store."""
+    config = _load_yaml_config(config_path)
+    approval_config = config.get("tool_approval", {})
+    if not isinstance(approval_config, dict):
+        raise ValueError("tool_approval must be a mapping")
+    log_path = approval_config.get("log_path", "data/audit/tool_approvals.jsonl")
+    if not isinstance(log_path, str) or not log_path.strip():
+        raise ValueError("tool_approval.log_path must be a non-empty string")
+    return JsonlToolApprovalStore(log_path)
 
 
 def build_l0_event_store(root_path: str = "data/memory/working/sessions") -> JsonlL0EventStore:

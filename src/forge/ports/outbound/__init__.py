@@ -22,6 +22,12 @@ from .mcp_client import (
 )
 from .model_gateway import ChatModel, ConversationRuntime, StructuredChatModel
 from .outer_loop_store import OuterLoopStore
+from .tool_approval import (
+    ToolApprovalRecord,
+    ToolApprovalRequest,
+    ToolApprovalStatus,
+    ToolApprovalStore,
+)
 
 __all__ = [
     "ChatModel",
@@ -45,5 +51,9 @@ __all__ = [
     "PlanStepExecutor",
     "StructuredChatModel",
     "ToolAuthorizationPolicy",
+    "ToolApprovalRecord",
+    "ToolApprovalRequest",
+    "ToolApprovalStatus",
+    "ToolApprovalStore",
     "ToolRegistry",
 ]
