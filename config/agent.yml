@@ -82,6 +82,18 @@ tools:
   timeout_seconds: 30
   allow_verification: true     # 고정 pytest/ruff/mypy template만 허용
 
+# --- MCP (disabled by default) ---
+# 등록은 명시적 서버별 allowlist와 정책 mapping이 함께 구현된 뒤에만 활성화한다.
+mcp:
+  enabled: false
+  servers: []
+
+# --- Tool approval (HITL) ---
+# Approval is bound to one call ID, session, and canonical arguments digest.
+tool_approval:
+  log_path: data/audit/tool_approvals.jsonl
+  ttl_seconds: 900
+
 # --- Outer Loop Settings ---
 outer_loop:
   # 위험도별 기본 N값 (에피소드 누적 개수)

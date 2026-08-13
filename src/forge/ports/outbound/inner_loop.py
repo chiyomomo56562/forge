@@ -3,6 +3,7 @@
 from collections.abc import Mapping, Sequence
 from typing import Protocol, runtime_checkable
 
+from forge.domain.constitution import ToolPolicyDecision
 from forge.domain.inner_loop import (
     InnerLoopPlan,
     PlanStep,
@@ -75,6 +76,15 @@ class ToolAuthorizationPolicy(Protocol):
     """도구 정의와 호출 맥락에 따른 실행 허용 여부를 결정하는 경계."""
 
     def authorize(self, invocation: ToolInvocation, definition: ToolDefinition) -> bool: ...
+
+
+@runtime_checkable
+class DecisionAwareToolAuthorizationPolicy(ToolAuthorizationPolicy, Protocol):
+    """실행 허용 여부와 함께 사용자 승인 필요 여부를 구분하는 정책 경계."""
+
+    def evaluate(
+        self, invocation: ToolInvocation, definition: ToolDefinition
+    ) -> ToolPolicyDecision: ...
 
 
 class InnerLoopEvaluator(Protocol):

@@ -131,3 +131,52 @@ def test_cli_lists_and_explicitly_archives_l3_skills(monkeypatch, capsys):
     assert '"status": "degrading"' in capsys.readouterr().out
     assert cli.main(["--archive-l3-skill", "skill_1"]) == 0
     assert service.archived == "skill_1"
+
+
+def test_cli_lists_and_decides_tool_approvals(monkeypatch, capsys):
+    class ApprovalStore:
+        def __init__(self):
+            self.decision = None
+
+        def list_pending(self, *, now):
+            del now
+            return (
+                SimpleNamespace(
+                    request=SimpleNamespace(
+                        call_id="call_1",
+                        session_id="session_1",
+                        tool_id="workspace.apply_patch",
+                        policy_id="file_write",
+                        arguments_sha256="a" * 64,
+                        arguments_summary={"patch": {"length": 5}},
+                        expires_at=SimpleNamespace(isoformat=lambda: "2026-08-13T00:00:00+00:00"),
+                    )
+                ),
+            )
+
+        def decide(self, call_id, *, approved, reviewer, now):
+            self.decision = (call_id, approved, reviewer, now)
+            return SimpleNamespace(
+                request=SimpleNamespace(call_id=call_id),
+                status=SimpleNamespace(value="approved" if approved else "denied"),
+            )
+
+    store = ApprovalStore()
+    monkeypatch.setattr(cli, "build_tool_approval_store", lambda _path: store)
+
+    assert cli.main(["--list-tool-approvals", "--config", "none.yml"]) == 0
+    assert '"call_id": "call_1"' in capsys.readouterr().out
+    assert (
+        cli.main(
+            [
+                "--approve-tool-call",
+                "call_1",
+                "--reviewer",
+                "admin",
+                "--config",
+                "none.yml",
+            ]
+        )
+        == 0
+    )
+    assert store.decision[:3] == ("call_1", True, "admin")

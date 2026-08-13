@@ -22,6 +22,11 @@ class ToolRiskTier(StrEnum):
     VERIFICATION = "verification"
 
 
+class ToolSource(StrEnum):
+    BUILTIN = "builtin"
+    MCP = "mcp"
+
+
 class ToolStatus(StrEnum):
     """단일 도구 호출의 결과 상태.
 
@@ -60,6 +65,8 @@ class ToolDefinition:
     risk_tier: ToolRiskTier
     timeout_seconds: int
     max_output_bytes: int
+    policy_id: str | None = None
+    source: ToolSource = ToolSource.BUILTIN
 
 
 @dataclass(frozen=True)

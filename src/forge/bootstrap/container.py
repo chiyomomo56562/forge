@@ -1,7 +1,7 @@
 """구체 adapter와 application service를 조립하는 composition root."""
 
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal, cast
 
 import yaml
 from chromadb import PersistentClient
@@ -29,6 +29,8 @@ from forge.adapters.outbound.procedural import (
 )
 from forge.adapters.outbound.tools import (
     BuiltinToolRegistry,
+    ConstitutionToolAuthorizationPolicy,
+    JsonlToolApprovalStore,
     RegistryPlanStepExecutor,
     StaticToolAuthorizationPolicy,
     build_langchain_tools,
@@ -57,7 +59,7 @@ from forge.application.procedural import (
     SkillLifecyclePolicy,
     SkillValidationService,
 )
-from forge.ports.outbound import InnerLoopPlanner
+from forge.ports.outbound import InnerLoopPlanner, McpServerConfig, ToolApprovalStore
 from forge.runtime import LangGraphConversationRuntime
 
 
@@ -78,6 +80,18 @@ def build_receive_message_service(
     config = _load_yaml_config(config_path)
     runtime = _build_conversation_runtime(config, config_path=config_path, chat_model=chat_model)
     return ReceiveMessageService(runtime)
+
+
+def build_tool_approval_store(config_path: str = "config/agent.yml") -> ToolApprovalStore:
+    """Build the durable, operator-facing HITL approval store."""
+    config = _load_yaml_config(config_path)
+    approval_config = config.get("tool_approval", {})
+    if not isinstance(approval_config, dict):
+        raise ValueError("tool_approval must be a mapping")
+    log_path = approval_config.get("log_path", "data/audit/tool_approvals.jsonl")
+    if not isinstance(log_path, str) or not log_path.strip():
+        raise ValueError("tool_approval.log_path must be a non-empty string")
+    return JsonlToolApprovalStore(log_path)
 
 
 def build_l0_event_store(root_path: str = "data/memory/working/sessions") -> JsonlL0EventStore:
@@ -106,6 +120,49 @@ def build_identity_repository(config_path: str = "config/memory.yml") -> YamlIde
     """읽기 전용 L5 정체성·역량 저장소를 조립한다."""
     config = _load_yaml_config(config_path)
     return YamlIdentityRepository(config["identity"]["dir"])
+
+
+def build_mcp_server_configs(config_path: str = "config/agent.yml") -> tuple[McpServerConfig, ...]:
+    """Read explicitly enabled, allowlisted MCP server configurations only.
+
+    This intentionally creates no connection. The later MCP adapter owns lifecycle
+    and must receive this already fail-closed configuration.
+    """
+    mcp = _load_yaml_config(config_path).get("mcp", {})
+    if not mcp.get("enabled", False):
+        return ()
+    servers = mcp.get("servers", [])
+    if not isinstance(servers, list):
+        raise ValueError("mcp.servers must be a list")
+    result: list[McpServerConfig] = []
+    for item in servers:
+        if not isinstance(item, dict):
+            raise ValueError("MCP server configuration must be an object")
+        transport = str(item.get("transport", ""))
+        if transport not in {"stdio", "streamable_http"}:
+            raise ValueError("MCP transport must be stdio or streamable_http")
+        tools = item.get("allowed_tools", [])
+        arguments = item.get("arguments", [])
+        if not isinstance(tools, list) or not isinstance(arguments, list):
+            raise ValueError("MCP tools and arguments must be lists")
+        result.append(
+            McpServerConfig(
+                server_id=str(item.get("id", "")),
+                transport=cast(Literal["stdio", "streamable_http"], transport),
+                allowed_tools=tuple(str(name) for name in tools),
+                command=str(item["command"]) if item.get("command") is not None else None,
+                arguments=tuple(str(value) for value in arguments),
+                url=str(item["url"]) if item.get("url") is not None else None,
+                timeout_seconds=_positive_int(
+                    item.get("timeout_seconds", 30), setting="mcp.servers.timeout_seconds"
+                ),
+                max_output_bytes=_positive_int(
+                    item.get("max_output_bytes", 32_768),
+                    setting="mcp.servers.max_output_bytes"
+                ),
+            )
+        )
+    return tuple(result)
 
 
 def build_memory_services(
@@ -203,8 +260,9 @@ def build_inner_loop_service(
     registry = _build_tool_registry(tool_config)
     tools = build_langchain_tools(
         registry,
-        StaticToolAuthorizationPolicy(
-            allow_verification=bool(tool_config.get("allow_verification", True))
+        _build_tool_authorization(
+            tool_config,
+            allow_verification=bool(tool_config.get("allow_verification", True)),
         ),
     )
     memory_manager = _build_memory_manager(config, repository)
@@ -372,8 +430,9 @@ def build_skill_validation_service(
     registry = _build_tool_registry(tool_config)
     tools = build_langchain_tools(
         registry,
-        StaticToolAuthorizationPolicy(
-            allow_verification=bool(tool_config.get("allow_verification", True))
+        _build_tool_authorization(
+            tool_config,
+            allow_verification=bool(tool_config.get("allow_verification", True)),
         ),
     )
     repository = _build_procedural_repository(config)
@@ -463,6 +522,23 @@ def _build_tool_registry(tool_config: dict[str, Any]) -> BuiltinToolRegistry:
     )
 
 
+def _build_tool_authorization(
+    tool_config: dict[str, Any],
+    *,
+    allow_workspace_mutation: bool = False,
+    allow_verification: bool = True,
+) -> ConstitutionToolAuthorizationPolicy:
+    """Constitution policy is authoritative; agent settings only narrow permissions."""
+    del tool_config
+    return ConstitutionToolAuthorizationPolicy(
+        YamlConstitutionRepository("constitution").load_policy(),
+        StaticToolAuthorizationPolicy(
+            allow_workspace_mutation=allow_workspace_mutation,
+            allow_verification=allow_verification,
+        ),
+    )
+
+
 def _build_conversation_runtime(
     config: dict[str, Any], *, config_path: str, chat_model: Any | None = None
 ) -> LangGraphConversationRuntime:
@@ -476,7 +552,8 @@ def _build_conversation_runtime(
 
     registry_config = dict(config.get("tools", {}))
     registry = _build_tool_registry(registry_config)
-    authorization = StaticToolAuthorizationPolicy(
+    authorization = _build_tool_authorization(
+        registry_config,
         allow_workspace_mutation=bool(tools_config.get("allow_workspace_mutation", False)),
         allow_verification=bool(tools_config.get("allow_verification", False)),
     )

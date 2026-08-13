@@ -5,9 +5,9 @@
 외부 MCP 도구를 Forge에 연결하되, MCP 서버가 Forge의 권한 모델·헌법·감사를
 우회하지 않게 한다. 이 문서는 구현 전에 경계와 수용 기준을 고정한다.
 
-**선행 조건은 아직 충족되지 않았다.** L3 완료 게이트가 재검증·구현되기 전까지 이 문서는
-참조용 후속 계획이며, MCP 구현에는 착수하지 않는다. 이 계획은 MCP 구현만 다루며 L4 헌법
-개정이나 Meta Loop는 포함하지 않는다.
+**선행 조건 충족.** L3 완료 게이트가 2026-08-13에 전체 회귀로 검증되어, 이 계획의
+1단계(MCP 구성·수명 경계) 구현을 시작했다. 이 계획은 MCP 구현만 다루며 L4 헌법 개정이나
+Meta Loop는 포함하지 않는다.
 
 ## 현재 근거
 
@@ -16,9 +16,9 @@
 - `src/forge/adapters/outbound/tools/_langchain.py`는 내장 도구의 schema 검증 →
   authorization → 실행 순서를 보장하지만, `StaticToolAuthorizationPolicy`는 위험 등급
   두 개의 boolean만 처리한다.
-- `constitution/tool_policy.yml`에는 confirmation-required·forbidden 도구와 audit 필드가
-  선언돼 있으나 `YamlConstitutionRepository` / `ConstitutionPolicy`는 아직 이를 로드하거나
-  실행 정책으로 적용하지 않는다.
+- `constitution/tool_policy.yml`의 autonomous·confirmation-required·forbidden 정책은
+  `YamlConstitutionRepository`와 `ConstitutionPolicy`가 stable policy ID로 읽는다. 공통
+  LangChain 호출 경계는 이 결정을 적용하며 ID가 없는 MCP discovery 결과는 fail-closed한다.
 - `RegistryPlanStepExecutor`는 audit-friendly `ToolExecution`을 만들지만 영속 audit sink가
   없고, 대화 `ToolNode`는 이 executor를 거치지 않는다.
 
@@ -37,6 +37,8 @@ MCP는 서버별 allowlist와 명시적 도구 metadata를 가진 **outbound ada
    - `adapters/outbound/mcp/`에 선택한 공식 MCP/LangChain adapter를 감싼 client를 둔다.
      import·연결 실패는 서버 ID를 포함한 안전한 typed error로 변환한다.
    - bootstrap은 활성 서버만 만들고 process 종료 시 client를 닫는다.
+   - 현재: disabled-by-default 설정과 `McpServerConfig`/`McpClient` fail-closed 계약 완료;
+     공식 SDK adapter와 lifecycle 연결은 다음 단위다.
 
 2. **정책 모델과 헌법 투영**
    - `ConstitutionPolicy`와 YAML repository가 `tool_policy.yml`의 forbidden,
@@ -45,6 +47,9 @@ MCP는 서버별 allowlist와 명시적 도구 metadata를 가진 **outbound ada
      결과만으로 위험 등급을 신뢰하지 않는다. 구성의 명시적 mapping이 없는 MCP 도구는 deny다.
    - static boolean 정책을 대체하는 policy evaluator를 추가한다. 결정은 `allowed`,
      `approval_required`, `denied`와 안전한 reason code를 반환한다.
+   - 현재: 완료. 내장 도구는 stable policy ID를 등록했고, static 권한은 헌법 정책을
+     넓힐 수 없는 보조 제한으로만 남겼다. `approval_required`는 HITL 승인 구현 전까지
+     실행 없이 정지한다.
 
 3. **HITL 승인 경계**
    - `ports/outbound/tool_approval.py`에 immutable approval request/decision 계약을 둔다.
@@ -53,6 +58,10 @@ MCP는 서버별 allowlist와 명시적 도구 metadata를 가진 **outbound ada
      approval은 arguments hash와 session에 묶어 재사용·변조를 막는다.
    - 대화와 Inner Loop 모두 approval-required 호출에서 도구를 실행하지 않고
      `tool.approval_required` 결과를 반환한다. 비대화/비대화형 모드의 기본은 deny다.
+   - 현재: immutable request/record port와 fsync JSONL append-only store, pending 목록 및
+     call-ID approve/deny CLI를 구현했다. store는 session·canonical arguments SHA-256·expiry·
+     one-time consume을 검증한다. 승인된 호출을 공통 execution adapter가 소비하는 연결은
+     다음 공유 adapter 단위에서 구현한다.
 
 4. **공유 실행 adapter와 감사**
    - 내장·MCP 도구 모두 단일 Forge execution adapter를 통해 `ToolExecution`을 생성한다.

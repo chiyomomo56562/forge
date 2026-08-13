@@ -361,8 +361,8 @@ watermark가 전진한다. `build_outer_loop_service()`는 기존 L1 repository�
 | `inner-loop-l0-event-foundation.md` | ✅ 완료 | L0 이벤트 + L1 Episode 수직 슬라이스 |
 | `inner-loop-runtime-integration.md` | ✅ 완료 | Inner Loop runtime 통합 |
 | `forge-langchain-conversation-tools-mcp.md` | ✅ 완료 | LangChain 대화 전환 + 대화 도구 호출. 이 계획의 MCP 범위는 후속 계획으로 분리됨 |
-| `l3-procedural-memory-completion.md` | 🚧 진행 중 | SQLite 정본·YAML 검토 projection, 반복 도구 시퀀스 Seed gate, 최근 운영 지표 lifecycle, L4/L5 방향·M16 Seed 예산 gate 구현; procedure metadata·조건 enforcement 등 잔여 범위 계속 구현 |
-| `mcp-policy-hitl-audit.md` | ⏸️ L3 완료 후 | L3 완료 게이트가 검증된 뒤에만 계획 검토·구현 착수 |
+| `l3-procedural-memory-completion.md` | ✅ 완료 | SQLite 정본·YAML 검토 projection, 반복 도구 시퀀스 Seed gate, context/실행 예산, lifecycle 및 M16/M17 gate 검증 완료 |
+| `mcp-policy-hitl-audit.md` | 🚧 구현 중 | MCP disabled-by-default 설정·stable 정책 evaluator와 append-only HITL request/approve/deny CLI 완료; 다음은 공통 실행·감사 adapter |
 | `inner-loop-cognition-v1.md` | ✅ 완료 | Inner Loop 인지 책임 분리; L1~L5 문맥 주입은 제외 |
 | `l0-event-foundation.md` | — | 바이너리 파일 (읽기 불가) |
 
@@ -381,6 +381,6 @@ watermark가 전진한다. `build_outer_loop_service()`는 기존 L1 repository�
 
 ### 다음 우선순위 (제안)
 
-1. **MCP·정책/HITL·감사** — L3 완료 게이트가 검증됐으므로 MCP adapter의 권한 경계, 사용자 승인 시점, 감사 이벤트와 실패 처리를 설계·테스트 명세로 고정
+1. **MCP·정책/HITL·감사** — 승인 요청의 session·arguments hash 결속과 운영자 CLI까지 구현됐으므로 공통 실행 adapter의 1회 소비, append-only 호출 감사, 공식 SDK adapter와 실패 경계를 구현
 2. **Outer Loop 확장** — 스케줄/이벤트 trigger와 M17 기반 Meta Loop trigger를 확장
 3. **L4/L5 확장** — K-Scenario·도구별 승인 정책과 self_model CRUD·캘리브레이션·Outer Loop updater를 확장

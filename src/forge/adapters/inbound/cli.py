@@ -6,6 +6,7 @@ import argparse
 import json
 import sys
 from collections.abc import Sequence
+from datetime import UTC, datetime
 from typing import Any, cast
 from uuid import uuid4
 
@@ -14,6 +15,7 @@ from forge.bootstrap import (
     build_procedural_memory_service,
     build_receive_message_service,
     build_skill_validation_service,
+    build_tool_approval_store,
 )
 from forge.domain.conversation import SendMessageCommand
 
@@ -159,6 +161,44 @@ def validate_l3_skill(
     )
 
 
+def list_tool_approvals(*, config_path: str = "config/agent.yml") -> str:
+    """List pending HITL tool approvals without exposing raw arguments."""
+    records = build_tool_approval_store(config_path).list_pending(now=datetime.now(UTC))
+    return json.dumps(
+        [
+            {
+                "call_id": record.request.call_id,
+                "session_id": record.request.session_id,
+                "tool_id": record.request.tool_id,
+                "policy_id": record.request.policy_id,
+                "arguments_sha256": record.request.arguments_sha256,
+                "arguments_summary": dict(record.request.arguments_summary),
+                "expires_at": record.request.expires_at.isoformat(),
+            }
+            for record in records
+        ],
+        ensure_ascii=False,
+        sort_keys=True,
+    )
+
+
+def decide_tool_approval(
+    call_id: str,
+    *,
+    approved: bool,
+    reviewer: str,
+    config_path: str = "config/agent.yml",
+) -> str:
+    """Approve or deny one pending call ID; argument/session binding is checked on use."""
+    record = build_tool_approval_store(config_path).decide(
+        call_id,
+        approved=approved,
+        reviewer=reviewer,
+        now=datetime.now(UTC),
+    )
+    return f"tool approval call={record.request.call_id} status={record.status.value}"
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     """CLI 인자를 해석해 단일 호출 또는 REPL을 실행한다.
 
@@ -201,6 +241,19 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument(
         "--approve-l3-draft", type=str, help="Approve this draft ID for --l3-skill-id."
     )
+    parser.add_argument(
+        "--list-tool-approvals",
+        action="store_true",
+        help="List pending HITL tool approval requests.",
+    )
+    parser.add_argument("--approve-tool-call", type=str, help="Approve one pending tool call ID.")
+    parser.add_argument("--deny-tool-call", type=str, help="Deny one pending tool call ID.")
+    parser.add_argument(
+        "--reviewer",
+        type=str,
+        default="operator",
+        help="Reviewer identity recorded with a tool approval decision.",
+    )
     parser.add_argument("--step-id", type=str, help="Approved executable step ID.")
     parser.add_argument(
         "--tool-arguments", type=str, help="Reviewer-provided JSON object for an approved step."
@@ -241,6 +294,21 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     try:
+        if args.list_tool_approvals:
+            print(list_tool_approvals(config_path=args.config))
+            return 0
+        if args.approve_tool_call or args.deny_tool_call:
+            if args.approve_tool_call and args.deny_tool_call:
+                raise ValueError("choose only one of --approve-tool-call or --deny-tool-call")
+            print(
+                decide_tool_approval(
+                    args.approve_tool_call or args.deny_tool_call,
+                    approved=bool(args.approve_tool_call),
+                    reviewer=args.reviewer,
+                    config_path=args.config,
+                )
+            )
+            return 0
         if args.list_l3_skills:
             print(list_l3_skills(memory_config_path=args.memory_config))
             return 0

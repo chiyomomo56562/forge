@@ -1,6 +1,7 @@
 from datetime import UTC, datetime
 
 from forge.adapters.outbound.constitution import YamlConstitutionRepository
+from forge.domain.constitution import ToolPolicyAction
 from forge.domain.memory import (
     CibEvaluationStatus,
     Episode,
@@ -51,3 +52,12 @@ def test_loads_cib_threshold_and_blocks_sensitive_l2_evidence():
         is False
     )
     assert repository.evaluate_l2_evidence(_episode("normal maintenance task")).allowed is True
+
+
+def test_tool_policy_is_fail_closed_and_distinguishes_approval_from_denial():
+    repository = YamlConstitutionRepository("constitution")
+
+    assert repository.evaluate_tool("file_read").action is ToolPolicyAction.ALLOWED
+    assert repository.evaluate_tool("file_write").action is ToolPolicyAction.APPROVAL_REQUIRED
+    assert repository.evaluate_tool("exec_unsandboxed").action is ToolPolicyAction.DENIED
+    assert repository.evaluate_tool("unmapped_remote_tool").reason_code == "tool.policy_unmapped"
