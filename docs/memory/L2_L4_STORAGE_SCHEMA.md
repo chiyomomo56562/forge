@@ -9,7 +9,7 @@ L2~L4는 모두 장기 기억 범주에 속하지만, 필요한 조회 방식과
 | 계층 | 정본 | 보조 인덱스 | 변경 주체 |
 | --- | --- | --- | --- |
 | L2 시맨틱 기억 | NetworkX 그래프 + GraphML 영속화 | 선택적 벡터/키워드 인덱스 | Outer Loop |
-| L3 절차 기억 | SQLite 메타데이터·실행 이력 + 버전 관리 절차 파일 | 카테고리·상태 인덱스 | Outer Loop |
+| L3 절차 기억 | SQLite 절차·메타데이터·실행 이력 정본 | YAML 검토 projection + registry view | Outer Loop |
 | L4 헌법 기억 | Git 관리 YAML | 런타임 읽기 캐시 | Meta Loop + HITL |
 
 L4는 L1→L2→L3 승격 경로의 목적지가 아니다. 모든 계층의 읽기·쓰기·실행을
@@ -78,33 +78,33 @@ edge:
 
 ### 저장 목적
 
-L3는 실제로 실행 가능한 절차와 그 운영 성과를 저장한다. 절차 본문은 사람이
-검토하고 버전 관리할 수 있는 파일로, 상태·통계·실행 이력은 질의하기 쉬운
-SQLite로 분리한다.
+L3는 실제로 실행 가능한 절차와 그 운영 성과를 SQLite에 저장한다. SQLite가 절차,
+상태, 통계, 실행 이력의 단일 정본이다. YAML은 SQLite 변경마다 생성되는 사람·Git
+검토용 projection이며, 실행·lifecycle·복구 시 읽지 않는다.
 
 ### 물리 저장
 
 ```text
-data/memory/procedural/skills.sqlite3       # 스킬 메타데이터·실행 이력 정본
+data/memory/procedural/skills.sqlite3       # 스킬 절차·메타데이터·실행 이력 정본
 data/memory/procedural/skill_registry.json  # 선택적 빠른 레지스트리 뷰
-skills/<skill_id>.yml 또는 skills/<skill_id>.py  # 절차·코드 정본
+data/memory/procedural/skills/<skill_id>.yml # SQLite에서 생성되는 검토용 projection
 ```
 
-### 절차 파일 예시
+### 검토 projection 예시
 
 ```yaml
 skill_id: skill_pdf_ocr
-name: 이미지 PDF 텍스트 추출
 version: 1
 source_l2_id: knowledge_scanned_pdf_ocr
-description: 텍스트 레이어가 없는 PDF에서 OCR로 텍스트를 추출한다.
-preconditions:
-  - "PDF에 텍스트 레이어가 없음"
-steps:
+status: active
+procedure:
   - "PDF 유형을 검사한다"
   - "OCR 도구를 실행한다"
-  - "텍스트 품질을 검증한다"
-rollback: "결과를 저장하지 않고 원본 PDF를 유지한다"
+executable_steps:
+  - step_id: inspect_pdf
+    tool_name: workspace.read_file
+    tool_arguments:
+      path: input.pdf
 ```
 
 ### SQLite 논리 스키마
@@ -116,7 +116,7 @@ CREATE TABLE skills (
   version INTEGER NOT NULL,
   status TEXT NOT NULL,
   source_l2_id TEXT NOT NULL,
-  procedure_path TEXT NOT NULL,
+  procedure TEXT NOT NULL,
   success_rate REAL NOT NULL,
   avg_pain_index REAL,
   total_executions INTEGER NOT NULL,

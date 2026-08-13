@@ -132,7 +132,7 @@ class SqliteProceduralRepository:
                     skill.version,
                 ),
             )
-        self._write_artifact(skill)
+        self._write_projection(skill)
         self._write_registry()
 
     def record_execution(self, execution: SkillExecution) -> None:
@@ -228,31 +228,6 @@ class SqliteProceduralRepository:
             int(row["version"]),
         )
 
-    def _write_artifact(self, skill: ProceduralSkill) -> None:
-        artifact = self._skills_dir / f"{skill.skill_id}.yml"
-        payload = {
-            "skill_id": skill.skill_id,
-            "version": skill.version,
-            "source_l2_id": skill.source_l2_id,
-            "status": skill.status.value,
-            "procedure": list(skill.procedure),
-            "reflection_hints": list(skill.reflection_hints),
-            "executable_steps": [
-                {
-                    "step_id": step.step_id,
-                    "tool_name": step.tool_name,
-                    "tool_arguments": dict(step.tool_arguments),
-                }
-                for step in skill.executable_steps
-            ],
-            "updated_at": skill.updated_at.isoformat(),
-        }
-        temporary = artifact.with_suffix(".yml.tmp")
-        temporary.write_text(
-            yaml.safe_dump(payload, allow_unicode=True, sort_keys=False), encoding="utf-8"
-        )
-        temporary.replace(artifact)
-
     def _write_registry(self) -> None:
         payload = [
             {
@@ -270,3 +245,29 @@ class SqliteProceduralRepository:
             json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8"
         )
         temporary.replace(self._registry_path)
+
+    def _write_projection(self, skill: ProceduralSkill) -> None:
+        """Publish a review-only YAML projection; SQLite remains the execution source."""
+        projection = self._skills_dir / f"{skill.skill_id}.yml"
+        payload = {
+            "skill_id": skill.skill_id,
+            "version": skill.version,
+            "source_l2_id": skill.source_l2_id,
+            "status": skill.status.value,
+            "procedure": list(skill.procedure),
+            "reflection_hints": list(skill.reflection_hints),
+            "executable_steps": [
+                {
+                    "step_id": step.step_id,
+                    "tool_name": step.tool_name,
+                    "tool_arguments": dict(step.tool_arguments),
+                }
+                for step in skill.executable_steps
+            ],
+            "updated_at": skill.updated_at.isoformat(),
+        }
+        temporary = projection.with_suffix(".yml.tmp")
+        temporary.write_text(
+            yaml.safe_dump(payload, allow_unicode=True, sort_keys=False), encoding="utf-8"
+        )
+        temporary.replace(projection)

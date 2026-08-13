@@ -43,7 +43,7 @@ semantic:
 # --- L3: Procedural Memory (SQLite) ---
 procedural:
   db_path: data/memory/procedural/skills.sqlite3
-  skills_dir: data/memory/procedural/skills
+  skills_dir: data/memory/procedural/skills  # SQLite에서 생성되는 검토용 YAML projection
   registry_path: data/memory/procedural/skill_registry.json
   migrations_dir: data/memory/procedural/migrations
   lifecycle:

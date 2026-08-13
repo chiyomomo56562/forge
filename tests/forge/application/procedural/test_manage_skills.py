@@ -161,7 +161,7 @@ def test_explicit_archive_preserves_skill_and_execution_history(tmp_path):
 
 
 
-def test_skill_mutations_publish_a_versioned_artifact_and_registry(tmp_path):
+def test_skill_mutations_publish_versioned_review_projections(tmp_path):
     skills_dir = tmp_path / "skills"
     registry_path = tmp_path / "skill_registry.json"
     repository = SqliteProceduralRepository(
@@ -178,14 +178,17 @@ def test_skill_mutations_publish_a_versioned_artifact_and_registry(tmp_path):
     )
 
     assert skill is not None
-    artifact = skills_dir / f"{skill.skill_id}.yml"
-    assert artifact.exists()
-    assert "version: 1" in artifact.read_text(encoding="utf-8")
-    assert skill.skill_id in registry_path.read_text(encoding="utf-8")
+    projection = skills_dir / f"{skill.skill_id}.yml"
+    assert projection.exists()
+    assert "version: 1" in projection.read_text(encoding="utf-8")
+    registry = registry_path.read_text(encoding="utf-8")
+    assert skill.skill_id in registry
+    assert '"version": 1' in registry
 
     updated = service.approve_step_draft(
         skill.skill_id, draft_id=skill.step_drafts[0].draft_id, step_id="inspect", tool_arguments={}
     )
 
     assert repository.get(updated.skill_id).version == 2
-    assert "version: 2" in artifact.read_text(encoding="utf-8")
+    assert "version: 2" in projection.read_text(encoding="utf-8")
+    assert '"version": 2' in registry_path.read_text(encoding="utf-8")

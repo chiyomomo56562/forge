@@ -3,7 +3,7 @@
 ## Goal
 
 Complete the L3 boundary before MCP, Meta Loop, or L4/L5 expansion. A skill must be
-grounded in repeatable L2 evidence, have a reviewable persisted procedure definition,
+grounded in repeatable L2 evidence, have a reviewable SQLite-persisted procedure definition,
 be selected within an explicit budget, and follow an observable lifecycle.
 
 ## Scope and acceptance criteria
@@ -13,12 +13,14 @@ be selected within an explicit budget, and follow an observable lifecycle.
      tool-specific, reviewable step draft.
    - Do not create a skill from general natural-language knowledge alone.
 
-2. **Procedure artifacts and registry**
-   - Persist each skill's reviewed metadata and executable steps in a versioned YAML
-     artifact under the configured skills directory.
+2. **SQLite procedure records and review projections**
+   - Persist each skill's reviewed metadata and executable steps, including its version,
+     in SQLite as the sole L3 source of truth.
+   - Publish a versioned YAML projection from SQLite for human/Git review. YAML is not
+     read for execution, lifecycle, or state reconstruction.
    - Publish a JSON registry view containing non-archived skill summaries.
-   - Keep SQLite as the execution/history store; artifacts must be regenerated on each
-     skill mutation so the two views do not silently diverge.
+   - Regenerate the registry from SQLite on every skill mutation; registry data is never
+     read as an execution or lifecycle source.
 
 3. **Selection and execution budget**
    - Rank active skills deterministically by query relevance, success rate, and
@@ -33,7 +35,7 @@ be selected within an explicit budget, and follow an observable lifecycle.
 ## Test shape
 
 - Unit tests for repeatability rejection and promotion with a reviewed draft.
-- Repository tests for YAML artifact and registry synchronization.
+- Repository tests for SQLite versioning and registry synchronization.
 - Memory-context tests for deterministic ranking.
 - Execution tests proving the budget blocks tool invocation.
 - Lifecycle tests for inactivity-gated auto archive and history retention.
