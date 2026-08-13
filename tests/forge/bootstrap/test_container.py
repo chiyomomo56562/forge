@@ -10,7 +10,7 @@ from forge.adapters.outbound.tools import (
     StaticToolAuthorizationPolicy,
     build_langchain_tools,
 )
-from forge.bootstrap.container import _build_conversation_runtime
+from forge.bootstrap.container import _build_conversation_runtime, build_mcp_server_configs
 
 
 def test_shared_collection_contains_the_seven_decorated_tools(tmp_path: Path) -> None:
@@ -61,3 +61,30 @@ def test_agent_config_declares_generous_tool_round_budget() -> None:
     assert config["conversation"]["tools"]["max_tool_rounds"] == 30
     assert config["conversation"]["tools"]["allow_workspace_mutation"] is True
     assert config["conversation"]["tools"]["allow_verification"] is True
+
+
+def test_mcp_is_disabled_by_default(tmp_path: Path) -> None:
+    config = tmp_path / "agent.yml"
+    config.write_text("mcp:\n  enabled: false\n  servers: []\n", encoding="utf-8")
+
+    assert build_mcp_server_configs(str(config)) == ()
+
+
+def test_enabled_mcp_requires_an_explicit_allowlist_and_valid_transport(tmp_path: Path) -> None:
+    config = tmp_path / "agent.yml"
+    config.write_text(
+        """mcp:
+  enabled: true
+  servers:
+    - id: filesystem
+      transport: stdio
+      command: uvx
+      arguments: [example-mcp]
+      allowed_tools: [read_file]
+      timeout_seconds: 12
+      max_output_bytes: 1000
+""",
+        encoding="utf-8",
+    )
+
+    assert build_mcp_server_configs(str(config))[0].allowed_tools == ("read_file",)

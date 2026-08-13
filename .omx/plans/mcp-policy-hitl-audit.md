@@ -5,9 +5,9 @@
 외부 MCP 도구를 Forge에 연결하되, MCP 서버가 Forge의 권한 모델·헌법·감사를
 우회하지 않게 한다. 이 문서는 구현 전에 경계와 수용 기준을 고정한다.
 
-**선행 조건은 아직 충족되지 않았다.** L3 완료 게이트가 재검증·구현되기 전까지 이 문서는
-참조용 후속 계획이며, MCP 구현에는 착수하지 않는다. 이 계획은 MCP 구현만 다루며 L4 헌법
-개정이나 Meta Loop는 포함하지 않는다.
+**선행 조건 충족.** L3 완료 게이트가 2026-08-13에 전체 회귀로 검증되어, 이 계획의
+1단계(MCP 구성·수명 경계) 구현을 시작했다. 이 계획은 MCP 구현만 다루며 L4 헌법 개정이나
+Meta Loop는 포함하지 않는다.
 
 ## 현재 근거
 
@@ -37,6 +37,8 @@ MCP는 서버별 allowlist와 명시적 도구 metadata를 가진 **outbound ada
    - `adapters/outbound/mcp/`에 선택한 공식 MCP/LangChain adapter를 감싼 client를 둔다.
      import·연결 실패는 서버 ID를 포함한 안전한 typed error로 변환한다.
    - bootstrap은 활성 서버만 만들고 process 종료 시 client를 닫는다.
+   - 현재: disabled-by-default 설정과 `McpServerConfig`/`McpClient` fail-closed 계약 완료;
+     공식 SDK adapter와 lifecycle 연결은 다음 단위다.
 
 2. **정책 모델과 헌법 투영**
    - `ConstitutionPolicy`와 YAML repository가 `tool_policy.yml`의 forbidden,

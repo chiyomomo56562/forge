@@ -361,8 +361,8 @@ watermark가 전진한다. `build_outer_loop_service()`는 기존 L1 repository�
 | `inner-loop-l0-event-foundation.md` | ✅ 완료 | L0 이벤트 + L1 Episode 수직 슬라이스 |
 | `inner-loop-runtime-integration.md` | ✅ 완료 | Inner Loop runtime 통합 |
 | `forge-langchain-conversation-tools-mcp.md` | ✅ 완료 | LangChain 대화 전환 + 대화 도구 호출. 이 계획의 MCP 범위는 후속 계획으로 분리됨 |
-| `l3-procedural-memory-completion.md` | 🚧 진행 중 | SQLite 정본·YAML 검토 projection, 반복 도구 시퀀스 Seed gate, 최근 운영 지표 lifecycle, L4/L5 방향·M16 Seed 예산 gate 구현; procedure metadata·조건 enforcement 등 잔여 범위 계속 구현 |
-| `mcp-policy-hitl-audit.md` | ⏸️ L3 완료 후 | L3 완료 게이트가 검증된 뒤에만 계획 검토·구현 착수 |
+| `l3-procedural-memory-completion.md` | ✅ 완료 | SQLite 정본·YAML 검토 projection, 반복 도구 시퀀스 Seed gate, context/실행 예산, lifecycle 및 M16/M17 gate 검증 완료 |
+| `mcp-policy-hitl-audit.md` | 🚧 구현 중 | L3 완료 게이트 통과 후 MCP disabled-by-default 설정 및 fail-closed server/client 계약부터 구현 시작 |
 | `inner-loop-cognition-v1.md` | ✅ 완료 | Inner Loop 인지 책임 분리; L1~L5 문맥 주입은 제외 |
 | `l0-event-foundation.md` | — | 바이너리 파일 (읽기 불가) |
 
