@@ -1,6 +1,6 @@
 # Forge 프로젝트 진행 상황 요약
 
-> 작성일: 2026-08-12
+> 작성일: 2026-08-13
 > 기준: `src/forge`, `tests/forge`, `.omx/plans`, `config/`, `pyproject.toml`
 
 ---
@@ -306,7 +306,7 @@ watermark가 전진한다. `build_outer_loop_service()`는 기존 L1 repository�
 | `tests/forge/application/memory/test_finalize_episode.py` | L0 → L1 finalize | ✅ |
 | `tests/forge/domain/memory/test_models.py` | Episode/Evaluation/Reflection 검증 | ✅ |
 
-> **검증**: 2026-08-12 기준 전체 `pytest`는 717개 통과했고, 변경 범위 `ruff`도 통과했다.
+> **검증**: 2026-08-13 기준 전체 `pytest -q`는 740개 통과했다. 변경 범위 `ruff`도 통과했다.
 > `mypy`는 프로젝트 코드 검사 전 가상환경 NumPy 스텁의 Python 버전 충돌로 중단된다.
 
 ---
@@ -342,7 +342,8 @@ watermark가 전진한다. `build_outer_loop_service()`는 기존 L1 repository�
 | `inner-loop-tool-registry-and-execution.md` | ✅ 완료 | Inner Loop 도구 registry 및 실행 |
 | `inner-loop-l0-event-foundation.md` | ✅ 완료 | L0 이벤트 + L1 Episode 수직 슬라이스 |
 | `inner-loop-runtime-integration.md` | ✅ 완료 | Inner Loop runtime 통합 |
-| `forge-langchain-conversation-tools-mcp.md` | ⚠️ 진행 중 | LangChain 대화 전환 + tool calling (MCP는 미구현) |
+| `forge-langchain-conversation-tools-mcp.md` | ✅ 완료 | LangChain 대화 전환 + 대화 도구 호출. 이 계획의 MCP 범위는 후속 계획으로 분리됨 |
+| `mcp-policy-hitl-audit.md` | 📋 계획 예정 | MCP 연결과 헌법 정책 실행, HITL 승인, 감사 로그의 경계·수용 기준·검증을 설계한 뒤 구현 |
 | `inner-loop-cognition-v1.md` | ✅ 완료 | Inner Loop 인지 책임 분리; L1~L5 문맥 주입은 제외 |
 | `l0-event-foundation.md` | — | 바이너리 파일 (읽기 불가) |
 
@@ -361,7 +362,7 @@ watermark가 전진한다. `build_outer_loop_service()`는 기존 L1 repository�
 
 ### 다음 우선순위 (제안)
 
-1. **L3 완성** — pending hint→검토된 executable step 편성, lifecycle refresh·idle archive
+1. **MCP·정책/HITL·감사 계획 수립** — MCP adapter를 추가하기 전에 권한 경계, 사용자 승인 시점, 감사 이벤트와 실패 처리를 설계·테스트 명세로 고정
 2. **Outer Loop 확장** — 스케줄/이벤트 trigger, L3 lifecycle, M16/M17, Meta Loop trigger
 3. **L4 확장** — K-Scenario, 방향성 함수 C, 도구별 사용자 승인 정책 연결
 4. **L5 확장** — self_model CRUD, 칼리브레이션 에러, 윈도우 통계와 Outer Loop updater
