@@ -45,7 +45,12 @@ from forge.application.memory import (
     SearchEpisodesService,
     StartInnerLoopSessionService,
 )
-from forge.application.outer_loop import L3GrowthPolicy, OuterLoopPolicy, RunOuterLoopService
+from forge.application.outer_loop import (
+    GrowthRegulatorPolicy,
+    L3GrowthPolicy,
+    OuterLoopPolicy,
+    RunOuterLoopService,
+)
 from forge.application.procedural import (
     ProceduralMemoryService,
     SkillExecutor,
@@ -237,7 +242,11 @@ def build_inner_loop_service(
     )
 
 
-def build_outer_loop_service(config_path: str = "config/memory.yml") -> RunOuterLoopService:
+def build_outer_loop_service(
+    config_path: str = "config/memory.yml",
+    *,
+    agent_config_path: str = "config/agent.yml",
+) -> RunOuterLoopService:
     """L1 SQLite/Chroma repository와 checkpointed L1→L2 서비스를 조립한다.
 
     Args:
@@ -247,6 +256,7 @@ def build_outer_loop_service(config_path: str = "config/memory.yml") -> RunOuter
         명시적으로 실행할 Outer Loop application service.
     """
     config = _load_yaml_config(config_path)
+    agent_config = _load_yaml_config(agent_config_path)
     episodic = config["episodic"]
     settings = MemorySettings(
         sqlite_path=Path(episodic["sqlite_path"]),
@@ -263,6 +273,7 @@ def build_outer_loop_service(config_path: str = "config/memory.yml") -> RunOuter
     )
     consolidation = config.get("consolidation", {})
     l3_growth = consolidation.get("l3_growth", {})
+    growth_regulator = agent_config.get("growth_regulator", {})
     return RunOuterLoopService(
         repository,
         JsonOuterLoopStore(Path(config["semantic"]["outer_loop_state_path"])),
@@ -289,6 +300,29 @@ def build_outer_loop_service(config_path: str = "config/memory.yml") -> RunOuter
             min_capability_confidence=float(l3_growth.get("min_capability_confidence", 0.7)),
             min_capability_success_rate=float(
                 l3_growth.get("min_capability_success_rate", 0.7)
+            ),
+        ),
+        GrowthRegulatorPolicy(
+            crash_window=_positive_int(
+                growth_regulator.get("crash", {}).get("window", 20),
+                setting="growth_regulator.crash.window",
+            ),
+            crash_delta_threshold=float(
+                growth_regulator.get("crash", {}).get("delta_threshold", 0.15)
+            ),
+            stagnation_window=_positive_int(
+                growth_regulator.get("stagnation", {}).get("window", 50),
+                setting="growth_regulator.stagnation.window",
+            ),
+            stagnation_coherence_delta=float(
+                growth_regulator.get("stagnation", {}).get("coherence_delta", 0.01)
+            ),
+            overgrowth_days=_positive_int(
+                growth_regulator.get("overgrowth", {}).get("days", 7),
+                setting="growth_regulator.overgrowth.days",
+            ),
+            overgrowth_coherence_rise=float(
+                growth_regulator.get("overgrowth", {}).get("coherence_rise", 0.2)
             ),
         ),
     )
