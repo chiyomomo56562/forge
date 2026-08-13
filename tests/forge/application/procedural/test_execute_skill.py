@@ -100,6 +100,28 @@ def test_executor_blocks_a_skill_that_exceeds_its_step_budget(tmp_path):
     assert executor.steps == []
 
 
+def test_executor_stops_on_first_failed_step_and_records_failed_execution(tmp_path):
+    repository = SqliteProceduralRepository(tmp_path / "skills.sqlite3")
+    lifecycle = ProceduralMemoryService(repository, SkillLifecyclePolicy())
+    repository.upsert(_active_skill())
+    lifecycle.bind_executable_steps(
+        "skill_test",
+        (
+            SkillStep("inspect", "workspace.list_files", {"path": "."}),
+            SkillStep("status", "git.status"),
+        ),
+    )
+    executor = RecordingExecutor((ExecutionOutcome.FAILED, ExecutionOutcome.COMPLETED))
+
+    result = SkillExecutor(repository, executor, lifecycle).execute_active(
+        "skill_test", episode_id="ep_failure", cib_score=1.0
+    )
+
+    assert [step.step_id for step in executor.steps] == ["inspect"]
+    assert len(result.executions) == 1
+    assert repository.executions_for("skill_test")[0].success_score == 0.0
+
+
 def test_validation_execution_is_separate_from_normal_active_execution(tmp_path):
     repository = SqliteProceduralRepository(tmp_path / "skills.sqlite3")
     lifecycle = ProceduralMemoryService(repository, SkillLifecyclePolicy(min_samples=1))

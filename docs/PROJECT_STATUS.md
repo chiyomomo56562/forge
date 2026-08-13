@@ -97,7 +97,7 @@ L1 Episode를 후보 증거로 누적하고, 최소 증거 수와 confidence 기
 
 > **후속 범위**: NetworkX/GraphML projection, L2→L3 Seed 생성의 반복 가능성 판정 고도화
 
-#### 1.5 L3 절차 기억 — 🚧 완료 게이트 구현·재검증 중
+#### 1.5 L3 절차 기억 — ✅ 완료
 
 `SqliteProceduralRepository`가 L3 스킬·실행 이력·도구 종속 pending hint를 SQLite
 정본에 저장한다. skill 변경마다 SQLite에서만 생성하는 versioned YAML 검토 projection과
@@ -113,6 +113,10 @@ Inner Loop의 reflection 단계는 도구를 사용한 경우 `episode_id`를 so
 `l3.execute(skill_id)` 선택을 가로채어, 이번 요청의 vetted memory context에 포함된 skill ID만
 실행하고 평가 결과를 lifecycle 표본으로 기록한다. 자연어 Seed procedure나 reflection hint는
 도구 호출로 자동 변환하지 않는다.
+
+MemoryManager는 Active L3을 query relevance → success rate → recency → skill ID 순으로
+결정적으로 고르고, 항목 수와 `cognition.l3_context_max_chars` 하드 문자 예산을 함께 적용한다.
+예산을 넘는 procedure는 주입하지 않는다.
 
 L2 근거의 support/counterexample episode에 저장된 tool-specific reflection은 L3 Seed 갱신 시
 `SkillStepDraft`로 승격된다. draft에는 관찰된 도구명·source episode·hint만 들어가며 실행할
@@ -145,9 +149,9 @@ L1/L2 증거와 L2 knowledge는 보존된다.
 
 > **후속 범위**: draft 인자 제안 보조와 batch review, L4 K-Scenario와 L5 updater의 쓰기 경로
 
-> **완료 게이트**: L3의 SQLite 정본, 반복 가능성, 버전/YAML 검토 projection, deterministic
-> selection·실행 예산, lifecycle과 명시 Archive, L4/L5 방향·Seed 예산은 구현했다. 전체 L3
-> 완료 판정을 별도로 재검증하기 전에는 MCP, Meta Loop, L4/L5의 쓰기 확장에 착수하지 않는다.
+> **완료 게이트**: SQLite 정본, 반복 가능성, version/YAML 검토 projection, deterministic
+> selection·문자/실행 예산, lifecycle recovery, 명시 Archive·registry 제외, L4/L5 방향 및
+> M16/M17 Seed 예산을 회귀 테스트로 검증했다. 다음 구현 범위는 MCP·정책/HITL·감사다.
 
 #### 1.6 L4 헌법 — ⚠️ 최소 읽기·승격 guard 완료
 
@@ -320,7 +324,7 @@ watermark가 전진한다. `build_outer_loop_service()`는 기존 L1 repository�
 | `tests/forge/application/memory/test_finalize_episode.py` | L0 → L1 finalize | ✅ |
 | `tests/forge/domain/memory/test_models.py` | Episode/Evaluation/Reflection 검증 | ✅ |
 
-> **검증**: 2026-08-13 기준 전체 `pytest -q`는 755개 통과했다. 변경 범위 `ruff`도 통과했다.
+> **검증**: 2026-08-13 기준 전체 `pytest -q`는 759개 통과했다. 변경 범위 `ruff`도 통과했다.
 > `mypy`는 프로젝트 코드 검사 전 가상환경 NumPy 스텁의 Python 버전 충돌로 중단된다.
 
 ---
@@ -369,7 +373,7 @@ watermark가 전진한다. `build_outer_loop_service()`는 기존 L1 repository�
 | Phase | 진행도 | 상태 |
 -------|--------|------|
 | Phase 0: 인프라 | 100% | ✅ 완료 |
-| Phase 1: 메모리 계층 | ~75% | L1/L0/L2/L3 안전 실행 슬라이스, L4/L5 읽기 모델, MemoryManager 완료 |
+| Phase 1: 메모리 계층 | ~80% | L1/L0/L2/L3 안전 실행, L4/L5 읽기 모델, MemoryManager 완료 |
 | Phase 2: 이너 루프 | ~90% | LLM/Tools/대화 Runtime/CLI 및 Inner Loop Cognition v1 완료 |
 | Phase 3: 아우터 루프 | ~40% | L1→L2, L2→L3 Seed, L4/L5 방향 및 M16 동적 Seed 예산 gate 완료 |
 | Phase 4: 메타 루프 | 0% | ❌ 미구현 |
@@ -377,7 +381,6 @@ watermark가 전진한다. `build_outer_loop_service()`는 기존 L1 repository�
 
 ### 다음 우선순위 (제안)
 
-1. **L3 완료 재검증·구현** — 현재 slice가 충족하지 못한 절차 정본, Seed 근거, selection, lifecycle, 운영 검증 경계를 명확히 하고 구현·회귀 검증
-2. **MCP·정책/HITL·감사** — L3 완료 게이트가 검증된 뒤 MCP adapter의 권한 경계, 사용자 승인 시점, 감사 이벤트와 실패 처리를 설계·테스트 명세로 고정
-3. **Outer Loop 확장** — L3 완료 후 스케줄/이벤트 trigger, M16/M17, Meta Loop trigger를 확장
-4. **L4/L5 확장** — L3 완료 후 K-Scenario·도구별 승인 정책과 self_model CRUD·캘리브레이션·Outer Loop updater를 확장
+1. **MCP·정책/HITL·감사** — L3 완료 게이트가 검증됐으므로 MCP adapter의 권한 경계, 사용자 승인 시점, 감사 이벤트와 실패 처리를 설계·테스트 명세로 고정
+2. **Outer Loop 확장** — 스케줄/이벤트 trigger와 M17 기반 Meta Loop trigger를 확장
+3. **L4/L5 확장** — K-Scenario·도구별 승인 정책과 self_model CRUD·캘리브레이션·Outer Loop updater를 확장

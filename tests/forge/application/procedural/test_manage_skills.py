@@ -5,7 +5,7 @@ import pytest
 from forge.adapters.outbound.procedural import SqliteProceduralRepository
 from forge.application.procedural import ProceduralMemoryService, SkillLifecyclePolicy
 from forge.domain.outer_loop import L2Knowledge, L2KnowledgeStatus
-from forge.domain.procedural import SkillExecution, SkillStatus, SkillStep
+from forge.domain.procedural import ProceduralSkill, SkillExecution, SkillStatus, SkillStep
 
 
 def test_reviewed_validating_skill_with_safe_samples_promotes_to_active(tmp_path):
@@ -198,6 +198,33 @@ def test_explicit_archive_preserves_skill_and_execution_history(tmp_path):
     assert repository.executions_for(skill.skill_id) == [stale]
 
 
+def test_degrading_skill_recovers_after_safe_recent_execution_window(tmp_path):
+    repository = SqliteProceduralRepository(tmp_path / "skills.sqlite3")
+    service = ProceduralMemoryService(
+        repository,
+        SkillLifecyclePolicy(min_samples=2, recovery_threshold=0.7),
+    )
+    skill = ProceduralSkill(
+        "skill_recover",
+        "l2_recover",
+        ("inspect",),
+        (),
+        SkillStatus.DEGRADING,
+        0.0,
+        2,
+        datetime.now(UTC),
+    )
+    repository.upsert(skill)
+    for number in range(2):
+        service.record_execution(
+            SkillExecution(skill.skill_id, f"ep_recover_{number}", 1.0, 1.0, datetime.now(UTC))
+        )
+
+    recovered = service.refresh(repository.get(skill.skill_id))
+
+    assert recovered.status is SkillStatus.ACTIVE
+
+
 
 
 def test_skill_mutations_publish_versioned_review_projections(tmp_path):
@@ -232,3 +259,9 @@ def test_skill_mutations_publish_versioned_review_projections(tmp_path):
     assert repository.get(updated.skill_id).version == 2
     assert "version: 2" in projection.read_text(encoding="utf-8")
     assert '"version": 2' in registry_path.read_text(encoding="utf-8")
+
+    service.archive(updated.skill_id)
+
+    assert projection.exists()
+    assert repository.get(updated.skill_id).status is SkillStatus.ARCHIVED
+    assert updated.skill_id not in registry_path.read_text(encoding="utf-8")

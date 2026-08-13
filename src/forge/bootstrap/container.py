@@ -406,6 +406,10 @@ def _build_memory_manager(
             config.get("cognition", {}).get("memory_context_top_k", 3),
             setting="cognition.memory_context_top_k",
         ),
+        l3_context_max_chars=_positive_int(
+            config.get("cognition", {}).get("l3_context_max_chars", 1200),
+            setting="cognition.l3_context_max_chars",
+        ),
         procedural=_build_procedural_repository(config),
     )
 

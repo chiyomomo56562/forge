@@ -23,11 +23,7 @@ from forge.ports.outbound.procedural_repository import ProceduralRepository
 
 
 class MemoryManager:
-    """Routes safe reads across L1/L2/L4/L5 and classifies reflection destinations.
-
-    L3 has no repository yet. Tool-specific reflections therefore produce an explicit
-    pending route instead of being silently persisted somewhere else.
-    """
+    """Routes safe reads across L1/L2/L3/L4/L5 and classifies reflection destinations."""
 
     def __init__(
         self,
@@ -37,15 +33,17 @@ class MemoryManager:
         identity: IdentityRepository,
         *,
         top_k: int = 3,
+        l3_context_max_chars: int = 1200,
         procedural: ProceduralRepository | None = None,
     ) -> None:
-        if top_k <= 0:
-            raise ValueError("top_k must be positive")
+        if top_k <= 0 or l3_context_max_chars <= 0:
+            raise ValueError("Memory context limits must be positive")
         self._episodes = episodes
         self._l2_store = l2_store
         self._constitution = constitution
         self._identity = identity
         self._top_k = top_k
+        self._l3_context_max_chars = l3_context_max_chars
         self._procedural = procedural
 
     def read(self, *, query: str, task_category: str) -> MemoryReadResult:
@@ -132,4 +130,18 @@ class MemoryManager:
         candidates.sort(
             key=lambda item: (-item[0], -item[1], -item[2].timestamp(), item[3].skill_id)
         )
-        return [item[3] for item in candidates[: self._top_k]]
+        selected: list[ProceduralSkill] = []
+        remaining = self._l3_context_max_chars
+        for _, _, _, skill in candidates:
+            rendered = self._render_l3_skill(skill)
+            if len(rendered) > remaining:
+                continue
+            selected.append(skill)
+            remaining -= len(rendered)
+            if len(selected) == self._top_k:
+                break
+        return selected
+
+    @staticmethod
+    def _render_l3_skill(skill: ProceduralSkill) -> str:
+        return f"{skill.skill_id}: {' → '.join(skill.procedure)}"

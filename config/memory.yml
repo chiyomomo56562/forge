@@ -7,6 +7,7 @@ version: 1
 
 cognition:
   memory_context_top_k: 3        # planner에 주입할 L1/L2 각각의 최대 항목 수
+  l3_context_max_chars: 1200    # L3 procedure 주입 하드 문자 예산
 
 # --- L1: Episodic Memory (Chroma DB) ---
 episodic:

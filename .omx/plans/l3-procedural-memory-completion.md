@@ -24,7 +24,7 @@ be selected within an explicit budget, and follow an observable lifecycle.
 
 3. **Selection and execution budget**
    - Rank active skills deterministically by query relevance, success rate, and
-     recency, then return at most the configured context limit.
+     recency, then return at most the configured context count and character budget.
    - Enforce a maximum number of executable L3 steps per run before invoking tools.
 
 4. **Lifecycle and archive policy**
@@ -37,16 +37,18 @@ be selected within an explicit budget, and follow an observable lifecycle.
      category capability, and the per-run growth budget has capacity.
    - Apply the M16 rate regulator only to new Seeds: freeze after a success-rate crash or
      multiple operational-load breaches; throttle on one load breach, persisted consolidation
-     stagnation, or rapid-growth signals.
+     stagnation, or rapid-growth signals. M17 is the persisted global index
+     `w_cib × avg(CIB) + w_calibration × (1 - avg(|L5 confidence - outcome|))`.
    - Preserve L1/L2 evidence when growth is deferred; only the new L3 Seed is blocked.
 
 ## Test shape
 
 - Unit tests for repeatability rejection and promotion with a reviewed draft.
 - Repository tests for SQLite versioning and registry synchronization.
-- Memory-context tests for deterministic ranking.
+- Memory-context tests for deterministic ranking, tie breaking, and character-budget exclusion.
 - Execution tests proving the budget blocks tool invocation.
-- Lifecycle tests for recent-window performance metrics, explicit archive, and history retention.
+- Lifecycle tests for recent-window performance metrics, recovery, explicit archive, registry
+  exclusion, and history retention.
 
 ## Out of scope
 
