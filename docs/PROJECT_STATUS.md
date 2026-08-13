@@ -134,8 +134,9 @@ boolean 플래그로 섞이지 않는다.
 방향을 허용하고 L5 카테고리 역량의 confidence·success rate 기준을 통과하며, 실행당 생성
 예산이 남아 있을 때만 생성된다. M16은 최근 성공률 급락 시 신규 Seed를 동결하고, checkpoint에
 보존한 L2 consolidation coherence 관측값으로 정체·급성장을 감지하면 Seed 한도를 1개로
-throttle한다. 이는 향후 전역 M17 지수와 구분되는 L3 성장 전용 신호다. 보류되어도 L1/L2
-증거와 L2 knowledge는 보존된다.
+throttle한다. 최근 L1 평가의 pain index, retry ratio, tool-error ratio, budget-overrun ratio도
+운영 부하로 평가한다. 한 항목 초과는 1개로 감속하고 둘 이상 초과는 동결한다. 이는 향후 전역
+M17 지수와 구분되는 L3 성장 전용 신호다. 보류되어도 L1/L2 증거와 L2 knowledge는 보존된다.
 `Archived`는 명시적으로
 보존 처리한 스킬을 뜻하며, 유휴 시간이나 낮은 성공률로 자동 전이·삭제되지 않는다. Archive된
 스킬의 procedure, draft, 실행 이력은 SQLite에 그대로 유지된다. Outer Loop는 새 L1 배치가
@@ -320,7 +321,7 @@ watermark가 전진한다. `build_outer_loop_service()`는 기존 L1 repository�
 | `tests/forge/application/memory/test_finalize_episode.py` | L0 → L1 finalize | ✅ |
 | `tests/forge/domain/memory/test_models.py` | Episode/Evaluation/Reflection 검증 | ✅ |
 
-> **검증**: 2026-08-13 기준 전체 `pytest -q`는 751개 통과했다. 변경 범위 `ruff`도 통과했다.
+> **검증**: 2026-08-13 기준 전체 `pytest -q`는 753개 통과했다. 변경 범위 `ruff`도 통과했다.
 > `mypy`는 프로젝트 코드 검사 전 가상환경 NumPy 스텁의 Python 버전 충돌로 중단된다.
 
 ---

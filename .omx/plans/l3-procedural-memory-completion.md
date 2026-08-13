@@ -32,13 +32,21 @@ be selected within an explicit budget, and follow an observable lifecycle.
    - Preserve Degrading skills and their artifacts/history until an operator explicitly
      archives them; no performance or inactivity policy may archive or delete a skill.
 
+5. **L4/L5-directed growth**
+   - Create new L3 Seeds only when L4 permits the L2 direction, L5 reports sufficient
+     category capability, and the per-run growth budget has capacity.
+   - Apply the M16 rate regulator only to new Seeds: freeze after a success-rate crash or
+     multiple operational-load breaches; throttle on one load breach, persisted consolidation
+     stagnation, or rapid-growth signals.
+   - Preserve L1/L2 evidence when growth is deferred; only the new L3 Seed is blocked.
+
 ## Test shape
 
 - Unit tests for repeatability rejection and promotion with a reviewed draft.
 - Repository tests for SQLite versioning and registry synchronization.
 - Memory-context tests for deterministic ranking.
 - Execution tests proving the budget blocks tool invocation.
-- Lifecycle tests for inactivity-gated auto archive and history retention.
+- Lifecycle tests for recent-window performance metrics, explicit archive, and history retention.
 
 ## Out of scope
 

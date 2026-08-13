@@ -1,3 +1,4 @@
+from dataclasses import replace
 from datetime import UTC, datetime, timedelta
 
 from forge.adapters.outbound.outer_loop import JsonOuterLoopStore
@@ -314,3 +315,45 @@ def test_m16_throttles_stagnating_l3_growth_and_persists_observation(tmp_path):
     assert limit == 1
     assert reasons == ("consolidation_stagnation",)
     assert store.load_checkpoint().growth_observations == persisted.growth_observations
+
+
+def test_m16_throttles_new_seeds_when_one_operational_load_signal_exceeds_limit(tmp_path):
+    service, _store = _service(tmp_path, [])
+    service._growth_regulator = GrowthRegulatorPolicy(
+        operational_load_window=2,
+        pain_threshold=0.5,
+    )
+    batch = [
+        replace(_episode(1), evaluation=replace(_episode(1).evaluation, pain_index=0.7)),
+        replace(_episode(2), evaluation=replace(_episode(2).evaluation, pain_index=0.7)),
+    ]
+
+    limit, reasons = service._l3_growth_limit(batch, OuterLoopCheckpoint(), {})
+
+    assert limit == 1
+    assert reasons == ("operational_load:pain_index",)
+
+
+def test_m16_freezes_new_seeds_when_multiple_operational_load_signals_exceed_limits(tmp_path):
+    service, _store = _service(tmp_path, [])
+    service._growth_regulator = GrowthRegulatorPolicy(
+        operational_load_window=2,
+        pain_threshold=0.5,
+        tool_error_ratio_threshold=0.3,
+    )
+    batch = [
+        replace(
+            _episode(number),
+            evaluation=replace(
+                _episode(number).evaluation,
+                pain_index=0.7,
+                tool_error_ratio=0.5,
+            ),
+        )
+        for number in (1, 2)
+    ]
+
+    limit, reasons = service._l3_growth_limit(batch, OuterLoopCheckpoint(), {})
+
+    assert limit == 0
+    assert reasons == ("operational_load:pain_index", "operational_load:tool_error_ratio")

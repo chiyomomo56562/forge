@@ -274,6 +274,7 @@ def build_outer_loop_service(
     consolidation = config.get("consolidation", {})
     l3_growth = consolidation.get("l3_growth", {})
     growth_regulator = agent_config.get("growth_regulator", {})
+    operational_load = growth_regulator.get("operational_load", {})
     return RunOuterLoopService(
         repository,
         JsonOuterLoopStore(Path(config["semantic"]["outer_loop_state_path"])),
@@ -323,6 +324,18 @@ def build_outer_loop_service(
             ),
             overgrowth_coherence_rise=float(
                 growth_regulator.get("overgrowth", {}).get("coherence_rise", 0.2)
+            ),
+            operational_load_window=_positive_int(
+                operational_load.get("window", 20),
+                setting="growth_regulator.operational_load.window",
+            ),
+            pain_threshold=float(operational_load.get("pain_threshold", 0.5)),
+            retry_ratio_threshold=float(operational_load.get("retry_ratio_threshold", 0.4)),
+            tool_error_ratio_threshold=float(
+                operational_load.get("tool_error_ratio_threshold", 0.3)
+            ),
+            budget_overrun_ratio_threshold=float(
+                operational_load.get("budget_overrun_ratio_threshold", 0.2)
             ),
         ),
     )

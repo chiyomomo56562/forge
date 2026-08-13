@@ -131,6 +131,12 @@ growth_regulator:
   overgrowth:
     days: 7
     coherence_rise: 0.2       # 7일 내 코히어런스 상승 임계값
+  operational_load:
+    window: 20                # 최근 평가 표본 수
+    pain_threshold: 0.50
+    retry_ratio_threshold: 0.40
+    tool_error_ratio_threshold: 0.30
+    budget_overrun_ratio_threshold: 0.20
 
 # --- Coherence Index (M17) ---
 coherence:

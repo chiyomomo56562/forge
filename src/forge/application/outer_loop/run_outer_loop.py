@@ -73,9 +73,19 @@ class GrowthRegulatorPolicy:
     stagnation_coherence_delta: float = 0.01
     overgrowth_days: int = 7
     overgrowth_coherence_rise: float = 0.2
+    operational_load_window: int = 20
+    pain_threshold: float = 0.5
+    retry_ratio_threshold: float = 0.4
+    tool_error_ratio_threshold: float = 0.3
+    budget_overrun_ratio_threshold: float = 0.2
 
     def __post_init__(self) -> None:
-        if min(self.crash_window, self.stagnation_window, self.overgrowth_days) <= 0:
+        if min(
+            self.crash_window,
+            self.stagnation_window,
+            self.overgrowth_days,
+            self.operational_load_window,
+        ) <= 0:
             raise ValueError("M16 windows must be positive")
         if not all(
             0.0 <= value <= 1.0
@@ -83,6 +93,10 @@ class GrowthRegulatorPolicy:
                 self.crash_delta_threshold,
                 self.stagnation_coherence_delta,
                 self.overgrowth_coherence_rise,
+                self.pain_threshold,
+                self.retry_ratio_threshold,
+                self.tool_error_ratio_threshold,
+                self.budget_overrun_ratio_threshold,
             )
         ):
             raise ValueError("M16 thresholds are invalid")
@@ -136,7 +150,9 @@ class RunOuterLoopService:
         promoted: list[str] = []
         updated: list[str] = []
         deferred_l3: list[str] = []
-        growth_limit, growth_reasons = self._l3_growth_limit(batch, checkpoint, knowledge)
+        growth_limit, growth_reasons = self._l3_growth_limit(
+            self._growth_evaluation_window(batch), checkpoint, knowledge
+        )
         new_seed_count = 0
         for candidate_id, candidate in list(candidates.items()):
             revised, changed, is_promotion = self._evaluate_candidate(candidate, knowledge)
@@ -316,6 +332,13 @@ class RunOuterLoopService:
         if self._has_success_rate_crash(batch):
             return 0, ("success_rate_crash",)
 
+        operational_load = self._operational_load_reasons(batch)
+        if len(operational_load) >= 2:
+            return 0, tuple(f"operational_load:{item}" for item in operational_load)
+        if operational_load:
+            limit = min(limit, 1)
+            reasons.extend(f"operational_load:{item}" for item in operational_load)
+
         coherence = self._consolidation_coherence(knowledge.values())
         episode_count = len(checkpoint.processed_episode_ids) + len(batch)
         observations = checkpoint.growth_observations
@@ -326,6 +349,19 @@ class RunOuterLoopService:
             limit = min(limit, 1)
             reasons.append("rapid_consolidation_growth")
         return limit, tuple(reasons)
+
+    def _growth_evaluation_window(self, batch: list[Episode]) -> list[Episode]:
+        """Load enough L1 history for M16, rather than relying on one small batch."""
+        required = max(
+            self._growth_regulator.crash_window * 2,
+            self._growth_regulator.operational_load_window,
+        )
+        if len(batch) >= required:
+            return batch[-required:]
+        history = self._repository.list_after(
+            datetime.min.replace(tzinfo=UTC), filters=EpisodeSearchFilters()
+        )
+        return sorted(history, key=lambda item: item.created_at)[-required:]
 
     def _has_success_rate_crash(self, batch: list[Episode]) -> bool:
         window = self._growth_regulator.crash_window
@@ -341,6 +377,26 @@ class RunOuterLoopService:
         previous = sum(scores[-(window * 2) : -window]) / window
         current = sum(scores[-window:]) / window
         return previous - current >= self._growth_regulator.crash_delta_threshold
+
+    def _operational_load_reasons(self, batch: list[Episode]) -> tuple[str, ...]:
+        """Identify recent evaluation burdens that make new procedure growth unsafe."""
+        sample = batch[-self._growth_regulator.operational_load_window :]
+        thresholds = (
+            ("pain_index", self._growth_regulator.pain_threshold),
+            ("retry_ratio", self._growth_regulator.retry_ratio_threshold),
+            ("tool_error_ratio", self._growth_regulator.tool_error_ratio_threshold),
+            (
+                "budget_overrun_ratio",
+                self._growth_regulator.budget_overrun_ratio_threshold,
+            ),
+        )
+        overloaded: list[str] = []
+        for metric, threshold in thresholds:
+            values = [getattr(item.evaluation, metric) for item in sample]
+            measured = [value for value in values if value is not None]
+            if measured and sum(measured) / len(measured) >= threshold:
+                overloaded.append(metric)
+        return tuple(overloaded)
 
     def _is_stagnating(
         self, observations: tuple[GrowthObservation, ...], episode_count: int, coherence: float
