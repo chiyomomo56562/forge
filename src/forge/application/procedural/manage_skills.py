@@ -176,6 +176,10 @@ class ProceduralMemoryService:
         """Return all retained L3 skills, including archived records."""
         return tuple(self._repository.list_all())
 
+    def get_by_source_l2(self, knowledge_id: str) -> ProceduralSkill | None:
+        """Find the retained L3 skill derived from one L2 knowledge item."""
+        return self._repository.get_by_source_l2(knowledge_id)
+
     def _repeated_tool_sequence(
         self,
         records: list[tuple[str, str, tuple[str, ...]]],

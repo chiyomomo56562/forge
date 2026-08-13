@@ -22,6 +22,7 @@ class PatternCandidate:
     support_episode_ids: tuple[str, ...] = ()
     counterexample_episode_ids: tuple[str, ...] = ()
     knowledge_id: str | None = None
+    task_category: str = "general"
 
     def __post_init__(self) -> None:
         if not all((self.candidate_id.strip(), self.signature.strip(), self.statement.strip())):
@@ -49,6 +50,7 @@ class L2Knowledge:
     support_episode_ids: tuple[str, ...]
     counterexample_episode_ids: tuple[str, ...]
     updated_at: datetime
+    task_category: str = "general"
 
     def __post_init__(self) -> None:
         if not all((self.knowledge_id.strip(), self.candidate_id.strip(), self.statement.strip())):
@@ -77,3 +79,4 @@ class OuterLoopResult:
     promoted_knowledge_ids: tuple[str, ...]
     updated_knowledge_ids: tuple[str, ...]
     checkpoint: OuterLoopCheckpoint
+    deferred_l3_knowledge_ids: tuple[str, ...] = ()

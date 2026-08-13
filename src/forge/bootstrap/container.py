@@ -45,7 +45,7 @@ from forge.application.memory import (
     SearchEpisodesService,
     StartInnerLoopSessionService,
 )
-from forge.application.outer_loop import OuterLoopPolicy, RunOuterLoopService
+from forge.application.outer_loop import L3GrowthPolicy, OuterLoopPolicy, RunOuterLoopService
 from forge.application.procedural import (
     ProceduralMemoryService,
     SkillExecutor,
@@ -262,6 +262,7 @@ def build_outer_loop_service(config_path: str = "config/memory.yml") -> RunOuter
         settings,
     )
     consolidation = config.get("consolidation", {})
+    l3_growth = consolidation.get("l3_growth", {})
     return RunOuterLoopService(
         repository,
         JsonOuterLoopStore(Path(config["semantic"]["outer_loop_state_path"])),
@@ -278,6 +279,17 @@ def build_outer_loop_service(config_path: str = "config/memory.yml") -> RunOuter
         ProceduralMemoryService(
             _build_procedural_repository(config),
             _skill_lifecycle_policy(config),
+        ),
+        build_identity_repository(config_path),
+        L3GrowthPolicy(
+            max_new_seeds_per_run=_positive_int(
+                l3_growth.get("max_new_seeds_per_run", 2),
+                setting="consolidation.l3_growth.max_new_seeds_per_run",
+            ),
+            min_capability_confidence=float(l3_growth.get("min_capability_confidence", 0.7)),
+            min_capability_success_rate=float(
+                l3_growth.get("min_capability_success_rate", 0.7)
+            ),
         ),
     )
 

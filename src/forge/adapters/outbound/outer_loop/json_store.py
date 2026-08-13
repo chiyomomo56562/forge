@@ -86,6 +86,7 @@ class JsonOuterLoopStore:
             support_episode_ids=tuple(item["support_episode_ids"]),
             counterexample_episode_ids=tuple(item["counterexample_episode_ids"]),
             knowledge_id=item["knowledge_id"],
+            task_category=str(item.get("task_category", "general")),
         )
 
     @staticmethod
@@ -100,4 +101,5 @@ class JsonOuterLoopStore:
             support_episode_ids=tuple(item["support_episode_ids"]),
             counterexample_episode_ids=tuple(item["counterexample_episode_ids"]),
             updated_at=datetime.fromisoformat(str(item["updated_at"])),
+            task_category=str(item.get("task_category", "general")),
         )

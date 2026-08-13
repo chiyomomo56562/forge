@@ -7,6 +7,8 @@ from datetime import UTC, datetime
 from hashlib import sha256
 
 from forge.application.procedural import ProceduralMemoryService
+from forge.domain.constitution import CibDecision
+from forge.domain.identity import Capability
 from forge.domain.memory import Episode, EpisodeSearchFilters, EpisodeStatus, PromotionEligibility
 from forge.domain.outer_loop import (
     L2Knowledge,
@@ -15,7 +17,12 @@ from forge.domain.outer_loop import (
     OuterLoopResult,
     PatternCandidate,
 )
-from forge.ports.outbound import ConstitutionRepository, EpisodeRepository, OuterLoopStore
+from forge.ports.outbound import (
+    ConstitutionRepository,
+    EpisodeRepository,
+    IdentityRepository,
+    OuterLoopStore,
+)
 
 
 @dataclass(frozen=True)
@@ -32,6 +39,24 @@ class OuterLoopPolicy:
             raise ValueError("Outer Loop confidence thresholds are invalid.")
 
 
+@dataclass(frozen=True)
+class L3GrowthPolicy:
+    """Bound the direction and rate of new L3 learning, never L1/L2 retention."""
+
+    max_new_seeds_per_run: int = 2
+    min_capability_confidence: float = 0.7
+    min_capability_success_rate: float = 0.7
+
+    def __post_init__(self) -> None:
+        if self.max_new_seeds_per_run <= 0:
+            raise ValueError("L3 growth seed budget must be positive")
+        if not all(
+            0.0 <= value <= 1.0
+            for value in (self.min_capability_confidence, self.min_capability_success_rate)
+        ):
+            raise ValueError("L3 growth capability thresholds are invalid")
+
+
 class RunOuterLoopService:
     """Consolidates complete L1 episodes and atomically advances its checkpoint."""
 
@@ -42,12 +67,16 @@ class RunOuterLoopService:
         policy: OuterLoopPolicy,
         constitution: ConstitutionRepository | None = None,
         procedural: ProceduralMemoryService | None = None,
+        identity: IdentityRepository | None = None,
+        l3_growth: L3GrowthPolicy | None = None,
     ) -> None:
         self._repository = repository
         self._store = store
         self._policy = policy
         self._constitution = constitution
         self._procedural = procedural
+        self._identity = identity
+        self._l3_growth = l3_growth or L3GrowthPolicy()
 
     def handle(self, *, force: bool = False) -> OuterLoopResult:
         if self._procedural is not None:
@@ -73,13 +102,24 @@ class RunOuterLoopService:
 
         promoted: list[str] = []
         updated: list[str] = []
+        deferred_l3: list[str] = []
+        new_seed_count = 0
         for candidate_id, candidate in list(candidates.items()):
             revised, changed, is_promotion = self._evaluate_candidate(candidate, knowledge)
             candidates[candidate_id] = revised
             if changed is not None:
                 knowledge[changed.knowledge_id] = changed
                 if self._procedural is not None:
-                    self._procedural.seed_from_l2(changed)
+                    existing = self._procedural.get_by_source_l2(changed.knowledge_id)
+                    allowed = existing is not None or self._allows_l3_growth(
+                        changed, new_seed_count
+                    )
+                    if allowed:
+                        seeded = self._procedural.seed_from_l2(changed)
+                        if seeded is not None and existing is None:
+                            new_seed_count += 1
+                    else:
+                        deferred_l3.append(changed.knowledge_id)
                 (promoted if is_promotion else updated).append(changed.knowledge_id)
 
         processed = (*checkpoint.processed_episode_ids, *(item.episode_id for item in batch))
@@ -97,6 +137,7 @@ class RunOuterLoopService:
             tuple(promoted),
             tuple(updated),
             new_checkpoint,
+            tuple(deferred_l3),
         )
 
     @staticmethod
@@ -139,6 +180,7 @@ class RunOuterLoopService:
                     episode.reflection.what_worked.strip() or episode.reflection.next_hint.strip()
                 ),
                 condition=episode.reflection.causal_condition.strip(),
+                task_category=episode.task_category,
             )
         support = current.support_episode_ids
         counterexamples = current.counterexample_episode_ids
@@ -156,6 +198,7 @@ class RunOuterLoopService:
             current,
             support_episode_ids=support,
             counterexample_episode_ids=counterexamples,
+            task_category=episode.task_category,
         )
 
     def _evaluate_candidate(
@@ -178,6 +221,7 @@ class RunOuterLoopService:
                 candidate.support_episode_ids,
                 candidate.counterexample_episode_ids,
                 now,
+                candidate.task_category,
             )
             return replace(candidate, knowledge_id=knowledge_id), item, True
 
@@ -196,5 +240,24 @@ class RunOuterLoopService:
             support_episode_ids=candidate.support_episode_ids,
             counterexample_episode_ids=candidate.counterexample_episode_ids,
             updated_at=now,
+            task_category=candidate.task_category,
         )
         return candidate, revised if revised != previous else None, False
+
+    def _allows_l3_growth(self, knowledge: L2Knowledge, new_seed_count: int) -> bool:
+        if new_seed_count >= self._l3_growth.max_new_seeds_per_run:
+            return False
+        if self._constitution is not None:
+            decision: CibDecision = self._constitution.evaluate_memory_text(
+                f"{knowledge.condition}\n{knowledge.statement}"
+            )
+            if not decision.allowed:
+                return False
+        if self._identity is not None:
+            capability: Capability = self._identity.capability_for(knowledge.task_category)
+            if (
+                capability.confidence < self._l3_growth.min_capability_confidence
+                or capability.success_rate < self._l3_growth.min_capability_success_rate
+            ):
+                return False
+        return True

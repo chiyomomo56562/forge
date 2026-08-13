@@ -131,3 +131,7 @@ consolidation:
   min_episodes_for_generalization: 3  # 일반화에 필요한 최소 에피소드 수
   promotion_confidence: 0.8
   retire_confidence: 0.4
+  l3_growth:
+    max_new_seeds_per_run: 2
+    min_capability_confidence: 0.70
+    min_capability_success_rate: 0.70

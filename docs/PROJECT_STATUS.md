@@ -97,11 +97,14 @@ L1 Episode를 후보 증거로 누적하고, 최소 증거 수와 confidence 기
 
 > **후속 범위**: NetworkX/GraphML projection, L2→L3 Seed 생성의 반복 가능성 판정 고도화
 
-#### 1.5 L3 절차 기억 — ⚠️ 안전한 실행 경로 포함 최소 수직 슬라이스 완료
+#### 1.5 L3 절차 기억 — 🚧 완료 게이트 구현·재검증 중
 
-`SqliteProceduralRepository`가 L3 스킬·실행 이력·도구 종속 pending hint를 SQLite에
-저장한다. active L2 knowledge는 source L2 ID를 가진 Seed 스킬로 생성되고, 운영 표본이
-최소 3건이며 성공률 0.90 이상과 CIB 0.95 이상을 만족하면 Active로 승격한다.
+`SqliteProceduralRepository`가 L3 스킬·실행 이력·도구 종속 pending hint를 SQLite
+정본에 저장한다. skill 변경마다 SQLite에서만 생성하는 versioned YAML 검토 projection과
+비-Archive 스킬 JSON registry를 갱신하지만, 둘 다 실행·lifecycle·복구 입력으로 읽지 않는다.
+active L2 knowledge는 충분한 근거와 반복된 동일 도구 순서를 통과할 때만 source L2 ID를 가진
+Seed 스킬로 생성되고, 운영 표본이 최소 3건이며 성공률 0.90 이상과 CIB 0.95 이상을 만족하면
+Active로 승격한다.
 
 Inner Loop의 reflection 단계는 도구를 사용한 경우 `episode_id`를 source ID로 하여
 `pending_hints`에 자동 기록한다. Outer Loop는 L2 변경 뒤 L3 Seed 생성을 호출한다.
@@ -127,16 +130,20 @@ L2 근거의 support/counterexample episode에 저장된 tool-specific reflectio
 실행 API도 `execute_active()`와 `execute_validation()`으로 분리되어, 일반 실행과 승급 검증이
 boolean 플래그로 섞이지 않는다.
 
-`refresh_all()`은 전체 스킬의 lifecycle 지표만 재계산한다. `Archived`는 명시적으로
+`refresh_all()`은 전체 스킬의 lifecycle 지표만 재계산한다. L3 신규 Seed는 L4가 L2 절차
+방향을 허용하고 L5 카테고리 역량의 confidence·success rate 기준을 통과하며, 실행당 생성
+예산이 남아 있을 때만 생성된다. 보류되어도 L1/L2 증거와 L2 knowledge는 보존된다.
+`Archived`는 명시적으로
 보존 처리한 스킬을 뜻하며, 유휴 시간이나 낮은 성공률로 자동 전이·삭제되지 않는다. Archive된
 스킬의 procedure, draft, 실행 이력은 SQLite에 그대로 유지된다. Outer Loop는 새 L1 배치가
 부족해 조기 종료하더라도 이 refresh를 먼저 수행한다.
 
-> **후속 범위**: draft 인자 제안 보조와 batch review, 스킬 선택 ranking·실행 예산
+> **후속 범위**: draft 인자 제안 보조와 batch review, 실제 운영량 기반의 전역 성장 조절(M16),
+> L4 K-Scenario와 L5 updater의 쓰기 경로
 
-> **완료 게이트**: L3는 아직 최소 수직 슬라이스 단계다. 반복 가능성 판정, 버전 관리되는
-> 절차 정본·registry, ranking·실행 예산, 성과·미사용 기반 lifecycle/archive가 완료되기 전에는
-> MCP, Meta Loop, L4/L5 확장에 착수하지 않는다.
+> **완료 게이트**: L3의 SQLite 정본, 반복 가능성, 버전/YAML 검토 projection, deterministic
+> selection·실행 예산, lifecycle과 명시 Archive, L4/L5 방향·Seed 예산은 구현했다. 전체 L3
+> 완료 판정을 별도로 재검증하기 전에는 MCP, Meta Loop, L4/L5의 쓰기 확장에 착수하지 않는다.
 
 #### 1.6 L4 헌법 — ⚠️ 최소 읽기·승격 guard 완료
 
@@ -276,8 +283,8 @@ eligible L1 수집 → Pattern Candidate 증거 누적 → L1→L2 결정
 상태는 `semantic.outer_loop_state_path`의 단일 JSON 문서로 저장되며, 배치가 완료된 뒤에만
 watermark가 전진한다. `build_outer_loop_service()`는 기존 L1 repository와 이 저장소를 조립한다.
 
-> **후속 범위**: 스케줄/이벤트 trigger와 LangGraph orchestration, L3 lifecycle refresh,
-> M16 성장 제어, M17 코히어런스 지수, Meta Loop 트리거
+> **후속 범위**: 스케줄/이벤트 trigger와 LangGraph orchestration, 전역 M16 성장 제어,
+> M17 코히어런스 지수, Meta Loop 트리거
 
 ### Phase 4: 메타 루프 (Meta Loop) — ❌ 미구현
 
@@ -310,7 +317,7 @@ watermark가 전진한다. `build_outer_loop_service()`는 기존 L1 repository�
 | `tests/forge/application/memory/test_finalize_episode.py` | L0 → L1 finalize | ✅ |
 | `tests/forge/domain/memory/test_models.py` | Episode/Evaluation/Reflection 검증 | ✅ |
 
-> **검증**: 2026-08-13 기준 전체 `pytest -q`는 744개 통과했다. 변경 범위 `ruff`도 통과했다.
+> **검증**: 2026-08-13 기준 전체 `pytest -q`는 749개 통과했다. 변경 범위 `ruff`도 통과했다.
 > `mypy`는 프로젝트 코드 검사 전 가상환경 NumPy 스텁의 Python 버전 충돌로 중단된다.
 
 ---
@@ -347,7 +354,7 @@ watermark가 전진한다. `build_outer_loop_service()`는 기존 L1 repository�
 | `inner-loop-l0-event-foundation.md` | ✅ 완료 | L0 이벤트 + L1 Episode 수직 슬라이스 |
 | `inner-loop-runtime-integration.md` | ✅ 완료 | Inner Loop runtime 통합 |
 | `forge-langchain-conversation-tools-mcp.md` | ✅ 완료 | LangChain 대화 전환 + 대화 도구 호출. 이 계획의 MCP 범위는 후속 계획으로 분리됨 |
-| `l3-procedural-memory-completion.md` | 🚧 진행 중 | SQLite 정본 기준으로 현재 구현 범위와 남은 절차·검증·운영 경계를 재검증·구현 |
+| `l3-procedural-memory-completion.md` | 🚧 진행 중 | SQLite 정본·YAML 검토 projection, 반복 도구 시퀀스 Seed gate, 최근 운영 지표 lifecycle, L4/L5 방향·M16 Seed 예산 gate 구현; procedure metadata·조건 enforcement 등 잔여 범위 계속 구현 |
 | `mcp-policy-hitl-audit.md` | ⏸️ L3 완료 후 | L3 완료 게이트가 검증된 뒤에만 계획 검토·구현 착수 |
 | `inner-loop-cognition-v1.md` | ✅ 완료 | Inner Loop 인지 책임 분리; L1~L5 문맥 주입은 제외 |
 | `l0-event-foundation.md` | — | 바이너리 파일 (읽기 불가) |
@@ -361,7 +368,7 @@ watermark가 전진한다. `build_outer_loop_service()`는 기존 L1 repository�
 | Phase 0: 인프라 | 100% | ✅ 완료 |
 | Phase 1: 메모리 계층 | ~75% | L1/L0/L2/L3 안전 실행 슬라이스, L4/L5 읽기 모델, MemoryManager 완료 |
 | Phase 2: 이너 루프 | ~90% | LLM/Tools/대화 Runtime/CLI 및 Inner Loop Cognition v1 완료 |
-| Phase 3: 아우터 루프 | ~30% | L1→L2 및 L2→L3 Seed 연결 완료 |
+| Phase 3: 아우터 루프 | ~35% | L1→L2, L2→L3 Seed 및 L4/L5 방향·실행당 Seed 예산 gate 완료 |
 | Phase 4: 메타 루프 | 0% | ❌ 미구현 |
 | Phase 5: 한계 보완 | 0% | ❌ 미구현 |
 
