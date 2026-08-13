@@ -8,6 +8,7 @@ from typing import Any
 class SkillStatus(StrEnum):
     SEED = "seed"
     DEVELOPING = "developing"
+    VALIDATING = "validating"
     ACTIVE = "active"
     DEGRADING = "degrading"
     ARCHIVED = "archived"

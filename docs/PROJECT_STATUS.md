@@ -120,7 +120,19 @@ L2 근거의 support/counterexample episode에 저장된 tool-specific reflectio
 `forge --approve-l3-draft <draft> --l3-skill-id <id> --step-id <step> --tool-arguments '<JSON>'`
 는 검토자가 제공한 인자만 사용해 하나의 executable step을 승인한다.
 
-> **후속 범위**: draft 인자 제안 보조와 batch review, Degrading/Archived 전이와 미사용 기간 처리
+승급은 `Seed → (승인된 step) → Validating → Active`다. `Validating`은 일반 Inner Loop
+후보에 포함되지 않으며, `forge --begin-l3-validation <skill>`으로 명시 전이한 뒤
+`forge --validate-l3-skill <skill>`의 검증 실행·평가 표본이 lifecycle 기준을 만족할 때만
+`Active`가 된다. 따라서 Active 전용 실행기와 표본 축적 사이의 교착은 없다.
+실행 API도 `execute_active()`와 `execute_validation()`으로 분리되어, 일반 실행과 승급 검증이
+boolean 플래그로 섞이지 않는다.
+
+`refresh_all()`은 전체 스킬의 lifecycle 지표만 재계산한다. `Archived`는 명시적으로
+보존 처리한 스킬을 뜻하며, 유휴 시간이나 낮은 성공률로 자동 전이·삭제되지 않는다. Archive된
+스킬의 procedure, draft, 실행 이력은 SQLite에 그대로 유지된다. Outer Loop는 새 L1 배치가
+부족해 조기 종료하더라도 이 refresh를 먼저 수행한다.
+
+> **후속 범위**: draft 인자 제안 보조와 batch review, 스킬 선택 ranking·실행 예산
 
 #### 1.6 L4 헌법 — ⚠️ 최소 읽기·승격 guard 완료
 

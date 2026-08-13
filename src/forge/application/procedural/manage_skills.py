@@ -18,8 +18,15 @@ class SkillLifecyclePolicy:
     min_samples: int = 3
     active_threshold: float = 0.9
     degrading_threshold: float = 0.5
-    archive_threshold: float = 0.2
     recovery_threshold: float = 0.7
+
+    def __post_init__(self) -> None:
+        if self.min_samples <= 0:
+            raise ValueError("Lifecycle sample limit must be positive")
+        if not 0.0 <= self.degrading_threshold <= 1.0:
+            raise ValueError("Lifecycle degradation thresholds are invalid")
+        if not 0.0 <= self.recovery_threshold <= 1.0:
+            raise ValueError("Lifecycle recovery threshold is invalid")
 
 
 class ProceduralMemoryService:
@@ -57,10 +64,42 @@ class ProceduralMemoryService:
         skill = self._repository.get(execution.skill_id)
         if skill is None:
             raise ValueError("Unknown skill execution")
-        return self._recalculate(skill)
+        return self._recalculate(skill, touch=True)
 
     def refresh(self, skill: ProceduralSkill) -> ProceduralSkill:
         return self._recalculate(skill)
+
+    def refresh_all(self) -> tuple[ProceduralSkill, ...]:
+        """Recalculate all lifecycle metrics without deleting or archiving any skill."""
+        return tuple(self._recalculate(skill, touch=False) for skill in self._repository.list_all())
+
+    def archive(self, skill_id: str) -> ProceduralSkill:
+        """Explicitly retain a skill in the non-executable archive; never deletes it."""
+        skill = self._repository.get(skill_id)
+        if skill is None:
+            raise ValueError("Unknown skill")
+        archived = cast(
+            ProceduralSkill,
+            replace(skill, status=SkillStatus.ARCHIVED, updated_at=datetime.now(UTC)),
+        )
+        self._repository.upsert(archived)
+        return archived
+
+    def begin_validation(self, skill_id: str) -> ProceduralSkill:
+        """Move a reviewed skill into the explicit, non-production validation lane."""
+        skill = self._repository.get(skill_id)
+        if skill is None:
+            raise ValueError("Unknown skill")
+        if skill.status is SkillStatus.ARCHIVED:
+            raise ValueError("Archived skills cannot enter validation")
+        if not skill.executable_steps:
+            raise ValueError("Validation requires approved executable steps")
+        validating = cast(
+            ProceduralSkill,
+            replace(skill, status=SkillStatus.VALIDATING, updated_at=datetime.now(UTC)),
+        )
+        self._repository.upsert(validating)
+        return validating
 
     def bind_executable_steps(
         self, skill_id: str, steps: tuple[SkillStep, ...]
@@ -135,21 +174,23 @@ class ProceduralMemoryService:
                 known.add(key)
         return tuple(drafts)
 
-    def _recalculate(self, skill: ProceduralSkill) -> ProceduralSkill:
+    def _recalculate(self, skill: ProceduralSkill, *, touch: bool = True) -> ProceduralSkill:
         samples = self._repository.executions_for(skill.skill_id)
         rate = sum(item.success_score for item in samples) / len(samples) if samples else 0.0
         cib_ok = all(item.cib_score >= 0.95 for item in samples)
         status = skill.status
-        if len(samples) >= self._policy.min_samples:
-            if status is SkillStatus.DEGRADING and rate < self._policy.archive_threshold:
-                status = SkillStatus.ARCHIVED
-            elif (
+        if len(samples) >= self._policy.min_samples and status is not SkillStatus.ARCHIVED:
+            if (
                 status is SkillStatus.DEGRADING
                 and rate >= self._policy.recovery_threshold
                 and cib_ok
             ):
                 status = SkillStatus.ACTIVE
-            elif rate >= self._policy.active_threshold and cib_ok:
+            elif (
+                status is SkillStatus.VALIDATING
+                and rate >= self._policy.active_threshold
+                and cib_ok
+            ):
                 status = SkillStatus.ACTIVE
             elif rate < self._policy.degrading_threshold:
                 status = SkillStatus.DEGRADING
@@ -160,7 +201,7 @@ class ProceduralMemoryService:
             status=status,
             success_rate=rate,
             total_executions=len(samples),
-            updated_at=datetime.now(UTC),
+            updated_at=datetime.now(UTC) if touch else skill.updated_at,
         )
         self._repository.upsert(updated)
         return updated

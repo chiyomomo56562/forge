@@ -50,6 +50,7 @@ from forge.application.procedural import (
     ProceduralMemoryService,
     SkillExecutor,
     SkillLifecyclePolicy,
+    SkillValidationService,
 )
 from forge.ports.outbound import InnerLoopPlanner
 from forge.runtime import LangGraphConversationRuntime
@@ -287,6 +288,30 @@ def build_procedural_memory_service(
     )
 
 
+def build_skill_validation_service(
+    config_path: str = "config/memory.yml",
+    *,
+    agent_config_path: str = "config/agent.yml",
+) -> SkillValidationService:
+    """Build the explicit L3 validation executor using the normal tool policy boundary."""
+    config = _load_yaml_config(config_path)
+    agent_config = _load_yaml_config(agent_config_path)
+    tool_config = agent_config.get("tools", {})
+    registry = _build_tool_registry(tool_config)
+    tools = build_langchain_tools(
+        registry,
+        StaticToolAuthorizationPolicy(
+            allow_verification=bool(tool_config.get("allow_verification", True))
+        ),
+    )
+    repository = SqliteProceduralRepository(config["procedural"]["db_path"])
+    lifecycle = ProceduralMemoryService(repository, _skill_lifecycle_policy(config))
+    return SkillValidationService(
+        SkillExecutor(repository, RegistryPlanStepExecutor(tools), lifecycle),
+        DeterministicEvaluator(),
+    )
+
+
 def _load_yaml_config(config_path: str) -> dict[str, Any]:
     with open(config_path, encoding="utf-8") as config_file:
         return yaml.safe_load(config_file) or {}
@@ -313,7 +338,6 @@ def _skill_lifecycle_policy(config: dict[str, Any]) -> SkillLifecyclePolicy:
     return SkillLifecyclePolicy(
         active_threshold=float(lifecycle["active_threshold"]),
         degrading_threshold=float(lifecycle["degrading_threshold"]),
-        archive_threshold=float(lifecycle["archive_threshold"]),
         recovery_threshold=float(lifecycle["recovery_threshold"]),
     )
 

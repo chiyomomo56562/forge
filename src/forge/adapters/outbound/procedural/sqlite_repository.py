@@ -62,6 +62,11 @@ class SqliteProceduralRepository:
             rows = db.execute("SELECT * FROM skills WHERE status='active'").fetchall()
         return [self._skill(row) for row in rows]
 
+    def list_all(self) -> list[ProceduralSkill]:
+        with self._connect() as db:
+            rows = db.execute("SELECT * FROM skills ORDER BY updated_at ASC").fetchall()
+        return [self._skill(row) for row in rows]
+
     def upsert(self, skill: ProceduralSkill) -> None:
         import json
 

@@ -2,12 +2,14 @@ from datetime import UTC, datetime
 
 import pytest
 
+from forge.adapters.outbound.inner_loop import DeterministicEvaluator
 from forge.adapters.outbound.procedural import SqliteProceduralRepository
 from forge.application.procedural import (
     ProceduralMemoryService,
     SkillExecutionError,
     SkillExecutor,
     SkillLifecyclePolicy,
+    SkillValidationService,
 )
 from forge.domain.inner_loop import ToolExecution
 from forge.domain.memory import ExecutionOutcome
@@ -56,7 +58,7 @@ def test_executor_runs_reviewed_steps_in_order_and_records_success(tmp_path):
     )
     executor = RecordingExecutor((ExecutionOutcome.COMPLETED, ExecutionOutcome.COMPLETED))
 
-    result = SkillExecutor(repository, executor, lifecycle).execute(
+    result = SkillExecutor(repository, executor, lifecycle).execute_active(
         "skill_test", episode_id="ep_1", cib_score=1.0, session_id="session_1"
     )
 
@@ -72,6 +74,42 @@ def test_executor_rejects_active_skill_without_reviewed_tool_steps(tmp_path):
     repository.upsert(_active_skill())
 
     with pytest.raises(SkillExecutionError, match="reviewed executable steps"):
-        SkillExecutor(repository, RecordingExecutor(), lifecycle).execute(
+        SkillExecutor(repository, RecordingExecutor(), lifecycle).execute_active(
             "skill_test", episode_id="ep_1", cib_score=1.0
+        )
+
+
+def test_validation_execution_is_separate_from_normal_active_execution(tmp_path):
+    repository = SqliteProceduralRepository(tmp_path / "skills.sqlite3")
+    lifecycle = ProceduralMemoryService(repository, SkillLifecyclePolicy(min_samples=1))
+    skill = _active_skill()
+    repository.upsert(
+        ProceduralSkill(
+            skill.skill_id,
+            skill.source_l2_id,
+            skill.procedure,
+            skill.reflection_hints,
+            SkillStatus.VALIDATING,
+            skill.success_rate,
+            skill.total_executions,
+            skill.updated_at,
+            skill.executable_steps,
+            skill.step_drafts,
+        )
+    )
+    lifecycle.bind_executable_steps(
+        "skill_test", (SkillStep("inspect", "workspace.list_files", {"path": "."}),)
+    )
+    executor = RecordingExecutor()
+
+    result = SkillValidationService(
+        SkillExecutor(repository, executor, lifecycle), DeterministicEvaluator()
+    ).validate("skill_test", episode_id="validation_1")
+
+    assert result.evaluation.success_score == 1.0
+    assert repository.get("skill_test").status is SkillStatus.ACTIVE
+    assert [step.tool_name for step in executor.steps] == ["workspace.list_files"]
+    with pytest.raises(SkillExecutionError, match="validating"):
+        SkillExecutor(repository, executor, lifecycle).execute_validation(
+            "skill_test", episode_id="validation_2"
         )

@@ -36,7 +36,7 @@ class SkillExecutor:
         self._executor = executor
         self._lifecycle = lifecycle
 
-    def execute(
+    def execute_active(
         self,
         skill_id: str,
         *,
@@ -44,11 +44,42 @@ class SkillExecutor:
         cib_score: float | None = None,
         session_id: str = "",
     ) -> SkillRunResult:
+        """Run an Active skill as part of normal Inner Loop work."""
+        return self._execute(
+            skill_id,
+            required_status=SkillStatus.ACTIVE,
+            episode_id=episode_id,
+            cib_score=cib_score,
+            session_id=session_id,
+        )
+
+    def execute_validation(
+        self, skill_id: str, *, episode_id: str, session_id: str = ""
+    ) -> SkillRunResult:
+        """Run a Validating skill only in the explicit promotion lane."""
+        return self._execute(
+            skill_id,
+            required_status=SkillStatus.VALIDATING,
+            episode_id=episode_id,
+            session_id=session_id,
+        )
+
+    def _execute(
+        self,
+        skill_id: str,
+        *,
+        required_status: SkillStatus,
+        episode_id: str,
+        cib_score: float | None = None,
+        session_id: str = "",
+    ) -> SkillRunResult:
         skill = self._repository.get(skill_id)
         if skill is None:
             raise SkillExecutionError("Unknown skill")
-        if skill.status is not SkillStatus.ACTIVE:
-            raise SkillExecutionError("Only active skills may execute")
+        if skill.status is not required_status:
+            raise SkillExecutionError(
+                f"Skill must be {required_status.value} to execute in this lane"
+            )
         if not skill.executable_steps:
             raise SkillExecutionError("Skill has no reviewed executable steps")
 

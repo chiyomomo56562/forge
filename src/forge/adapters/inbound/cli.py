@@ -13,6 +13,7 @@ from forge.bootstrap import (
     build_inner_loop_service,
     build_procedural_memory_service,
     build_receive_message_service,
+    build_skill_validation_service,
 )
 from forge.domain.conversation import SendMessageCommand
 
@@ -108,6 +109,27 @@ def approve_l3_step_draft(
     return f"approved skill={skill.skill_id} draft={draft_id} step={step_id}"
 
 
+def begin_l3_validation(*, skill_id: str, memory_config_path: str = "config/memory.yml") -> str:
+    skill = build_procedural_memory_service(memory_config_path).begin_validation(skill_id)
+    return f"validating skill={skill.skill_id}"
+
+
+def validate_l3_skill(
+    *,
+    skill_id: str,
+    memory_config_path: str = "config/memory.yml",
+    agent_config_path: str = "config/agent.yml",
+) -> str:
+    """Run one explicit validation attempt for a reviewed validating skill."""
+    result = build_skill_validation_service(
+        memory_config_path, agent_config_path=agent_config_path
+    ).validate(skill_id, episode_id=f"validation_{uuid4()}")
+    return (
+        f"validated skill={skill_id} outcome={result.run.executions[-1].outcome.value} "
+        f"success_score={result.evaluation.success_score}"
+    )
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     """CLI 인자를 해석해 단일 호출 또는 REPL을 실행한다.
 
@@ -124,6 +146,16 @@ def main(argv: Sequence[str] | None = None) -> int:
         type=str,
         default=None,
         help="Run a single message and exit. If omitted, starts a conversation REPL.",
+    )
+    parser.add_argument(
+        "--begin-l3-validation",
+        type=str,
+        help="Move an approved L3 skill into the explicit validation lane.",
+    )
+    parser.add_argument(
+        "--validate-l3-skill",
+        type=str,
+        help="Run one explicit validation attempt for a validating L3 skill.",
     )
     parser.add_argument("--l3-skill-id", type=str, help="L3 skill ID for draft review operations.")
     parser.add_argument(
@@ -196,6 +228,23 @@ def main(argv: Sequence[str] | None = None) -> int:
                     step_id=args.step_id,
                     tool_arguments_json=args.tool_arguments,
                     memory_config_path=args.memory_config,
+                )
+            )
+            return 0
+        if args.begin_l3_validation:
+            print(
+                begin_l3_validation(
+                    skill_id=args.begin_l3_validation,
+                    memory_config_path=args.memory_config,
+                )
+            )
+            return 0
+        if args.validate_l3_skill:
+            print(
+                validate_l3_skill(
+                    skill_id=args.validate_l3_skill,
+                    memory_config_path=args.memory_config,
+                    agent_config_path=args.config,
                 )
             )
             return 0

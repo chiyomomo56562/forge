@@ -50,6 +50,8 @@ class RunOuterLoopService:
         self._procedural = procedural
 
     def handle(self, *, force: bool = False) -> OuterLoopResult:
+        if self._procedural is not None:
+            self._procedural.refresh_all()
         checkpoint = self._store.load_checkpoint()
         candidates = {item.candidate_id: item for item in self._store.load_candidates()}
         knowledge = {item.knowledge_id: item for item in self._store.load_knowledge()}

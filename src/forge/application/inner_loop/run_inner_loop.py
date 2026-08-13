@@ -312,7 +312,7 @@ class RunInnerLoopService:
                 None,
             )
         try:
-            run = self._skill_executor.execute(
+            run = self._skill_executor.execute_active(
                 skill_id,
                 episode_id=state["episode_id"],
                 session_id=state["session_id"],
